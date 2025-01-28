@@ -10,15 +10,15 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto flex-row">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Home</a>
+                        <RouterLink class="nav-link active" to="/home">Home</RouterLink>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Notes</a>
+                        <RouterLink class="nav-link" to="/note">Notes</RouterLink>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Projects</a>
+                        <RouterLink class="nav-link" to="#">Projects</RouterLink>
                     </li>
                 </ul>
             </div>
@@ -28,7 +28,4 @@
 </template>
 
 <style scoped>
-.{
-
-}
 </style>
