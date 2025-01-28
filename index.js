@@ -23,6 +23,50 @@ const mongoCredentials = {
 	site: "mongo_site232465"
 }
 const uri = `mongodb://${mongoCredentials.user}:${mongoCredentials.pwd}@${mongoCredentials.site}/${dbName}?retryWrites=true&w=majority&authSource=admin`;
+
+// Schemas
+const UserSchema = new Schema({
+    name: String,
+    username: String,
+    password: String,
+    surname: String,
+    email: String,
+    course: String
+});
+const User = model('users', UserSchema);
+
+const EventSchema = new Schema({
+    UserEmail: String,
+    begin: Date,
+    end: Date,
+    title: String,
+    description: String
+});
+const Event = model('events', EventSchema);
+
+const NoteSchema = new Schema({
+    userEmail: String,
+    creationDate: Date,
+    lastUpDate: Date,
+    Title: String,
+    Text: String,
+    Tags: [{
+        name: String
+    }]
+});
+const Note = model('notes', NoteSchema);
+
+// Query per note ordinate in base alla lunghezza di Text
+/*
+const notes = await Note.aggregate([
+        { $match: { userId: new mongoose.Types.ObjectId(userId) } }, // Filter notes by userId
+        { $addFields: { textLength: { $strLenCP: "$text" } } }, // Calculate text length
+        { $sort: { textLength: 1 } }, // Sort by text length (ascending)
+        { $project: { textLength: 0 } } // Exclude textLength from output
+    ]);
+*/
+
+
 /*const scoreSchema = new Schema({
     name: String,
     score: Number
