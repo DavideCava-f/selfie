@@ -2,6 +2,6 @@ import { ref } from 'vue';
 
 const store = ref({})
 
-export function useStore() {
+export default function useStore() {
     return store;
 }
