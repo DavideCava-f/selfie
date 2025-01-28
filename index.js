@@ -23,13 +23,11 @@ const mongoCredentials = {
 	site: "mongo_site232465"
 }
 const uri = `mongodb://${mongoCredentials.user}:${mongoCredentials.pwd}@${mongoCredentials.site}/${dbName}?retryWrites=true&w=majority&authSource=admin`;
-const scoreSchema = new Schema({
+/*const scoreSchema = new Schema({
     name: String,
     score: Number
 });
-const Score = model('scores', scoreSchema);
-
-
+const Score = model('scores', scoreSchema);*/
 
 // Functions
 
@@ -39,23 +37,17 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(global.rootDir, 'dist', 'index.html'));
 });
 
-app.post('/insertScore', async function(req, res) {
+app.post('/example', async function(req, res) {
     try {
         await mongoose.connect(uri);
-        const newScoreId = await Score.create({
-            name: req.body["name"],
-            score: req.body["score"]
-        });
     } finally {
         mongoose.connection.close();
     }
 });
 
-app.get('/leaderboard', async function(req, res) {
+app.get('/example', async function(req, res) {
     try {
         await mongoose.connect(uri);
-        const scores = await Score.find({}).sort({score: -1}).limit(10);
-        res.json(scores);
     } finally {
         mongoose.connection.close();
     }
@@ -64,8 +56,6 @@ app.get('/leaderboard', async function(req, res) {
 app.get('/dbdebug', async function(req, res) {
     try {
         await mongoose.connect(uri);
-        const test = await Score.find({});
-        res.json(test);
     } finally {
         mongoose.connection.close();
     }
