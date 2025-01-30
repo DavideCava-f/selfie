@@ -19,7 +19,7 @@ const currentRoute = computed(() => router.currentRoute.value["path"]);
             </div>
 
             <div class="col-10 d-flex justify-content-center my-1">
-                <div class="d-md-flex" id="navbar">
+                <div class="collapse d-md-flex" id="navbar">
                     <ul class="nav d-flex flex-row justify-content-center align-items-center">
                         <li class="nav-item">
                             <RouterLink v-if="currentRoute !== '/home'" class="nav-link active text-white" to="/home">
