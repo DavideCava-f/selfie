@@ -5,7 +5,7 @@ const route = useRoute();
 const router = useRouter();
 
 // Per debugging, l'app porta subito a CalendarView
-router.push('/calendar');
+//router.push('/calendar');
 
 </script>
 
