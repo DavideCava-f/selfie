@@ -57,7 +57,7 @@ const currentRoute = computed(() => router.currentRoute.value["path"]);
                 </div>
             </div>
 
-            <div class="col-1  my-1 me-0">
+            <div class="col-1 my-1 me-0">
                 <img src="https://dummyimage.com/100x100/ffff00/000000.png&text=USSR" class="rounded" width="41vh">
             </div>
         </div>
