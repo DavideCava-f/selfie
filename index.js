@@ -27,7 +27,7 @@ const uri = `mongodb://${mongoCredentials.user}:${mongoCredentials.pwd}@${mongoC
 
 
 // Entry points
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(global.rootDir, 'dist', 'index.html'));
 });
 
