@@ -8,9 +8,9 @@ import { store } from '@/composables/store';
 <template>
     <!-- <button @click="emits('click')"></button> -->
     <NavBar />
-    {{ store.formattedFakeTime }}
-    <br>
     {{ store.formattedRealTime }}
+    <br>
+    {{ store.formattedFakeTime }}
 </template>
 
 <style scoped>
