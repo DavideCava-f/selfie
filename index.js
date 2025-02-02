@@ -25,15 +25,24 @@ const uri = `mongodb://${mongoCredentials.user}:${mongoCredentials.pwd}@${mongoC
 
 // Functions
 
-
 // Entry points
 app.get('*', (req, res) => {
     res.sendFile(path.join(global.rootDir, 'dist', 'index.html'));
 });
 
-app.post('/example', async function(req, res) {
+app.post('/CreateNote', async function(req, res) {
     try {
         await mongoose.connect(uri);
+
+    } finally {
+        mongoose.connection.close();
+    }
+});
+
+app.get('/ReadNotes', async function(req, res) {
+    try {
+        await mongoose.connect(uri);
+
     } finally {
         mongoose.connection.close();
     }
@@ -50,6 +59,8 @@ app.get('/example', async function(req, res) {
 app.get('/dbdebug', async function(req, res) {
     try {
         await mongoose.connect(uri);
+        const test = await Note.find({});
+        res.json(test);
     } finally {
         mongoose.connection.close();
     }
