@@ -87,15 +87,15 @@ const eventsOfToday = [
             <div class="col-lg-4 col-12 mt-3 bg-warning rounded-4"> <!-- colonna day-->
                 <div class="d-flex flex-column justify-content-center">
                     <div class="d-flex justify-content-between flex-fill bg-light text-center mx-1 my-3 rounded-3">
-                        <button class="btn"> < </button>
+                        <button class="btn d-flex align-self-center"><img src="@/assets/Indietro.svg"></button>
                         <div class="align-self-center">TODAY</div>
-                        <button class="btn"> > </button>
+                        <button class="btn d-flex align-self-center"><img src="@/assets/avanti.svg"></button>
                     </div>
 
-                    <div class="overflow-scroll" style="max-height: 50vh;">
+                    <div class="overflow-scroll rounded-3" style="max-height: 50vh;">
                         <div v-for="event in eventsOfToday" class="flex-fill bg-light m-1 p-3 rounded-3">
                             <h4>{{ event.title }}</h4>
-                            {{ event.details.text }} 
+                            {{ event.details.text }}
                             
                             <footer>
                                 <a :href="event.details.link">LOCATION</a>
@@ -105,11 +105,11 @@ const eventsOfToday = [
                 </div>
             </div>
             <div class="col-lg-8 col-12 mt-3 bg-primary rounded-4">
-                <div></div>
-                <table>
-
+                
+                <table class="table">
+                    
                 </table>
-            </div> <!-- colonna calendario--> 
+            </div>
         </div>
     </div>
 </template>
