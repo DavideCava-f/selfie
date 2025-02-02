@@ -6,7 +6,7 @@ import CalendarView from '../views/CalendarView.vue'
 import NoteView from '../views/NoteView.vue'
 
 const routes = [
-  { path: '/', component: AccessView },
+  { path: '/', redirect: '/calendar' },
   { path: '/home', component: HomeView },
   { path: '/calendar', component: CalendarView },
   { path: '/notes', component: NoteView },
