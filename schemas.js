@@ -48,11 +48,10 @@ const NoteSchema = new Schema({
 });
 
 
-const User = model('users', UserSchema);
-const Event = model('events', EventSchema);
-const Note = model('notes', NoteSchema);
+export const User = model('users', UserSchema);
+export const Event = model('events', EventSchema);
+export const Note = model('notes', NoteSchema);
 
-export { User, Event, Note };
 // Query per note ordinate in base alla lunghezza di Text
 /*
 const notes = await Note.aggregate([

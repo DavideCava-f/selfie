@@ -1,7 +1,6 @@
 <script setup>
 import { computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import TimeMachine from './TimeMachine.vue';
 
 const router = useRouter();
 const currentRoute = computed(() => router.currentRoute.value["path"]);
@@ -20,7 +19,7 @@ const currentRoute = computed(() => router.currentRoute.value["path"]);
             </div>
 
             <div class="col-10 d-flex justify-content-center my-1">
-                <div class="collapse d-md-flex" id="navbar">
+                <div class="d-md-flex" id="navbar">
                     <ul class="nav d-flex flex-row justify-content-center align-items-center">
                         <li class="nav-item">
                             <RouterLink v-if="currentRoute !== '/home'" class="nav-link active text-white" to="/home">
@@ -50,23 +49,18 @@ const currentRoute = computed(() => router.currentRoute.value["path"]);
                         </li>
                         <li class="nav-item">
                             <!-- Non sara' un RouterLink -->
-                            <button class="nav-link text-white" data-bs-target="#timeMachineModal" data-bs-toggle="modal">
+                            <RouterLink class="nav-link text-white" to="#">
                                 <img src="@/assets/TimeMachineLogo.svg" alt="TimeMachine" class="w-100">
-                            </button>
+                            </RouterLink>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <div class="col-1 my-1 me-0">
+            <div class="col-1  my-1 me-0">
                 <img src="https://dummyimage.com/100x100/ffff00/000000.png&text=USSR" class="rounded" width="41vh">
             </div>
         </div>
-    </div>
-
-    <!-- Time Machine modal -->
-    <div class="modal fade" id="timeMachineModal" data-bs-backdrop="false" tabindex="-1" aria-labelledby="timeMachineModalLabel" aria-hidden="true">
-        <TimeMachine />
     </div>
 </template>
 

@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import path from 'path'
 import { fileURLToPath } from 'url';
-import { User, Event, Note } from './schemas.js';
+import { User, Event, Note } from './schemas';
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -25,24 +25,15 @@ const uri = `mongodb://${mongoCredentials.user}:${mongoCredentials.pwd}@${mongoC
 
 // Functions
 
+
 // Entry points
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(path.join(global.rootDir, 'dist', 'index.html'));
 });
 
-app.post('/CreateNote', async function(req, res) {
+app.post('/example', async function(req, res) {
     try {
         await mongoose.connect(uri);
-
-    } finally {
-        mongoose.connection.close();
-    }
-});
-
-app.get('/ReadNotes', async function(req, res) {
-    try {
-        await mongoose.connect(uri);
-
     } finally {
         mongoose.connection.close();
     }
@@ -59,8 +50,6 @@ app.get('/example', async function(req, res) {
 app.get('/dbdebug', async function(req, res) {
     try {
         await mongoose.connect(uri);
-        const test = await Note.find({});
-        res.json(test);
     } finally {
         mongoose.connection.close();
     }
