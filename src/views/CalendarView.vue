@@ -1,6 +1,6 @@
 <script setup>
 import NavBar from '@/components/NavBar.vue';
-import { store } from '@/composables/store';
+import { store } from '@/store';
 // const emits = defineEmits(['click', 'next'])
 
 </script>

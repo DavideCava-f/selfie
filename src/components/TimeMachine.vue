@@ -1,5 +1,5 @@
 <script setup>
-import { store } from "@/composables/store";
+import { store } from "@/store";
 </script>
 
 <template>
