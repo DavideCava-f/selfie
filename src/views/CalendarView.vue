@@ -1,8 +1,6 @@
 <script setup>
-import useStore from '@/composables/store';
 import NavBar from '@/components/NavBar.vue';
-
-const store = useStore();
+import { store } from '@/store';
 // const emits = defineEmits(['click', 'next'])
 
 </script>
@@ -10,6 +8,9 @@ const store = useStore();
 <template>
     <!-- <button @click="emits('click')"></button> -->
     <NavBar />
+    {{ store.formattedRealTime }}
+    <br>
+    {{ store.formattedFakeTime }}
 </template>
 
 <style scoped>
