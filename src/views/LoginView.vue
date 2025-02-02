@@ -5,7 +5,7 @@ import Form from "@/components/Form.vue";
 
 <template>
 <Form />
-
+dinoscoot
 </template>
 
 
