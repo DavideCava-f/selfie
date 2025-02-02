@@ -4,7 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import WelcomeView from '../views/WelcomeView.vue'
 import LoginView from '../views/LoginView.vue'
-import SignUpView from '@/views/signUpView.vue'
+import SignUpView from '@/views/SignUpView.vue'
 import HomeView from '../views/HomeView.vue'
 import CalendarView from '../views/CalendarView.vue'
 import NoteView from '../views/NoteView.vue'

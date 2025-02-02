@@ -135,4 +135,23 @@ function bubu(){
 </template>
 
 <style scoped>
+.offcanvas-size-xl {
+    --bs-offcanvas-width: min(90vw, 600px);
+}
+
+.fx-button{
+
+  position: fixed; /* Posiziona l'elemento in modo fisso */
+  bottom: 10vh; /* Distanza dal bordo superiore */
+  right: 15vw;
+  width: 10vh;
+  aspect-ratio: 1/1; /*Cerchio*/
+  
+  
+  text-align:center;
+   
+  justify-content: center; 
+  align-items: center;
+
+}
 </style>
