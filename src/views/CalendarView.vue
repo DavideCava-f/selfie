@@ -83,6 +83,10 @@ const eventsOfToday = [
     <!-- <button @click="emits('click')"></button> -->
     <NavBar />
     <div class="container-fluid">
+        <div class="row bg-dark d-flex justify-content-center flex-column">
+            <div class="text-white">{{ store.formattedRealTime }}</div>
+            <div class="text-white">{{ store.formattedSimTime }}</div>
+        </div>
         <div class="row bg-dark p-3" style="">
             <div class="col-lg-4 col-12 mt-3 bg-warning rounded-4"> <!-- colonna day-->
                 <div class="d-flex flex-column justify-content-center">
@@ -105,7 +109,6 @@ const eventsOfToday = [
                 </div>
             </div>
             <div class="col-lg-8 col-12 mt-3 bg-primary rounded-4">
-                
                 <table class="table">
                     
                 </table>
