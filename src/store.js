@@ -13,8 +13,7 @@ const store = ref({
   ),
   openai: new OpenAI({
     baseURL: "https://openrouter.ai/api/v1",
-    apiKey:
-      "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",
+    apiKey: import.meta.env.VITE_OPEN_AI_API_KEY,
     defaultHeaders: {},
     dangerouslyAllowBrowser: true,
   }),
