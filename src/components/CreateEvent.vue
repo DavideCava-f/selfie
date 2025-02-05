@@ -5,6 +5,11 @@ import { store } from "@/store";
 
 const eventTitle = ref(null);
 const eventText = ref(null);
+const eventBeginDate = ref(null);
+const eventBeginHourMinSec = ref(null);
+const eventEndDate = ref(null);
+const eventEndHourMinSec = ref(null);
+const ripetibile = ref(false);
 
 async function generateDetails() {
   const completion = await store.value.openai.chat.completions.create({
@@ -26,10 +31,43 @@ async function generateDetails() {
   });
   eventTitle.value = completion.choices[0].message.content;
 }
+function setBeginNow() {
+  eventBeginDate.value = store.value.formattedSimDate;
+  eventBeginHourMinSec.value = store.value.formattedSimHourMinSec;
+}
+
+function setEndNow() {
+  eventEndDate.value = store.value.formattedSimDate;
+  eventEndHourMinSec.value = store.value.formattedSimHourMinSec;
+}
+
+function resetBegin() {
+  eventBeginDate.value = "";
+  eventBeginHourMinSec.value = "00:00:00";
+}
+
+function resetEnd() {
+  eventEndDate.value = "";
+  eventEndHourMinSec.value = "00:00:00";
+}
+
+function resetFields() {
+  eventTitle.value = "";
+  eventText.value = "";
+  resetBegin();
+  resetEnd();
+}
+
+function allDay() {
+  eventBeginHourMinSec.value = "00:00:00";
+  eventEndHourMinSec.value = "23:59:59";
+}
+
+resetFields();
 </script>
 
 <template>
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="staticBackdropLabel">
@@ -40,6 +78,7 @@ async function generateDetails() {
           class="btn-close"
           data-bs-dismiss="modal"
           aria-label="Close"
+          @click="resetFields"
         ></button>
       </div>
       <div class="modal-body">
@@ -68,11 +107,76 @@ async function generateDetails() {
 
         <div class="my-2">
           <label>Inizio</label>
-          <input class="form-control" type="date" />
+          <div class="d-flex">
+            <input
+              class="form-control me-2"
+              type="date"
+              v-model="eventBeginDate"
+            />
+            <input
+              class="form-control me-2"
+              type="time"
+              v-model="eventBeginHourMinSec"
+            />
+            <button class="btn btn-outline-primary me-2" @click="setBeginNow">
+              Now
+            </button>
+            <button class="btn btn-outline-danger" @click="resetBegin">
+              Reset
+            </button>
+          </div>
+        </div>
+        <div class="my-2">
           <label>Fine</label>
-          <input class="form-control" type="date" />
-          <label>Tutto il giorno</label>
-          <input class="" type="checkbox" />
+          <div class="d-flex">
+            <input
+              class="form-control me-2"
+              type="date"
+              v-model="eventEndDate"
+            />
+            <input
+              class="form-control me-2"
+              type="time"
+              v-model="eventEndHourMinSec"
+            />
+            <button class="btn btn-outline-primary me-2" @click="setEndNow">
+              Now
+            </button>
+            <button class="btn btn-outline-danger" @click="resetEnd">
+              Reset
+            </button>
+          </div>
+        </div>
+        <div class="my-2">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="tuttoIlGiorno"
+              @change="(event) => (event.target.checked ? allDay() : null)"
+            />
+            <label class="form-check-label" for="tuttoIlGiorno"
+              >Tutto il giorno</label
+            >
+          </div>
+        </div>
+        <div class="form-check my-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="ripetibile"
+            @change="(event) => (ripetibile = event.target.checked)"
+          />
+          <label class="form-check-label" for="ripetibile">Ripetibile</label>
+        </div>
+        <div v-if="ripetibile" class="my-2"></div>
+        <div class="my-2">
+          <label>Link</label>
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Luogo fisico o virtuale"
+          />
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-end">
