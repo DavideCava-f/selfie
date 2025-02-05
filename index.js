@@ -29,14 +29,12 @@ const uri = `mongodb+srv://nicola1travaglini:testtest@test.pe0yf.mongodb.net/sel
 
 // Entry points
 
-
 app.post("/CreateUser", async function (req, res) {
   try {
     await mongoose.connect(uri);
     const user = await User.create(req.body);
     res.json(user);
   } finally {
-    res.json({ error: "good" });
     mongoose.connection.close();
   }
 });
@@ -67,7 +65,6 @@ app.get("/users", async function (req, res) {
   }
 });
 
-
 app.get("/example", async function (req, res) {
   try {
     await mongoose.connect(uri);
@@ -89,7 +86,6 @@ app.get("/dbdebug", async function (req, res) {
 app.get("*", (req, res) => {
   res.sendFile(path.join(global.rootDir, "dist", "index.html"));
 });
-
 
 app.listen(5173, function () {
   global.startDate = new Date();
