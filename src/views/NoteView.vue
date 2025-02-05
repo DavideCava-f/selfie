@@ -11,8 +11,10 @@ function CreateNote(){
     //Parsing tags
     let tagsArr = NCtags.value.split(',')
     let jsonT =tagsArr.map((el =>{ return '{"name":"'+el+'"}'}))
-    let jsonTags = "[" + jsonT.toString() + "]"
+    let jsonTags = "["+jsonT.toString() + "]"
     console.log(jsonTags)
+    console.log(typeof jsonTags)
+
 
     
     fetch("http://localhost:5173/CreateNote", {
@@ -38,8 +40,23 @@ function CreateNote(){
 }
 
 
-function GetNotes(){
+function getNotes(){
 //Use marked before writing on NotesArea(markdown)
+
+    fetch("http://localhost:5173/ReadNotes", {
+  method: "get",
+  headers: {
+   'Accept': 'application/json',
+   'Content-Type': 'application/json'
+  }
+
+})
+
+.then( (response) => response.json()) 
+.then((data) => { 
+    console.log(data)
+   //do something awesome that makes the world a better place
+});
 
 }
 function bubu(){
@@ -103,6 +120,7 @@ function bubu(){
     <button class="btn btn-danger border-5  rounded-circle btn-outline-danger fx-button" style="" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
         +
     </button>
+    <button @click="getNotes()">GetNotes</button>
     </div>
   </div>
 </div>

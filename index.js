@@ -42,21 +42,25 @@ app.post("/CreateNote", async function (req, res) {
         creationDate: "",
         lastUpDate:"",
         Title: req.body.title,
-        Text: req.body.content,
-        Tags: req.body.tags
+        Text: req.body.content, //Campi singoli va bene stringa
+        Tags: JSON.parse(req.body.tags) //Array di oggetti vuole l'oggetto
         
     })
-    res.json({mess:"Ciao"});
   } finally {
+    res.json({mess:"GOOD"});
     mongoose.connection.close();
   }
 });
 
 app.get("/ReadNotes", async function (req, res) {
   try {
-    await mongoose.connect(uri);
+    let a;
+    //await mongoose.connect(uri);
+  //  const FoundNotes = await Note.find({})
+    //console.log(FoundNotes)
   } finally {
-    mongoose.connection.close();
+    res.json({mess:"GOOD"});
+    //mongoose.connection.close();
   }
 });
 
