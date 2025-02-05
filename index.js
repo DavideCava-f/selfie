@@ -4,6 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose";
 import { User, Event, Note } from "./schemas.js";
+import mongoose from "mongoose";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -28,6 +29,16 @@ const uri = `mongodb+srv://nicola1travaglini:testtest@test.pe0yf.mongodb.net/sel
 // Functions
 
 // Entry points
+app.post("/CreateUser", async function (req, res) {
+  try {
+    await mongoose.connect(uri);
+    const user = await User.create(req.body);
+    res.json(user);
+  } finally {
+    mongoose.connection.close();
+  }
+});
+
 app.post("/CreateNote", async function (req, res) {
   console.log("ci sono nella create");
   try {
@@ -53,6 +64,16 @@ app.get("/ReadNotes", async function (req, res) {
     await mongoose.connect(uri);
       const FoundNotes = await Note.find({})
     res.json(FoundNotes);
+  } finally {
+    mongoose.connection.close();
+  }
+});
+
+app.get("/users", async function (req, res) {
+  try {
+    await mongoose.connect(uri);
+    const users = await User.find({});
+    res.json(users);
   } finally {
     mongoose.connection.close();
   }
