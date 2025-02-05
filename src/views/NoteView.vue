@@ -38,6 +38,31 @@ function CreateNote() {
     });
 }
 
+function DeleteNote(id) {
+  //Use marked before writing on NotesArea(markdown)
+  console.log(typeof id)
+  fetch("http://localhost:5173/DeleteNote", {
+    method: "delete",
+    headers: {
+      'Accept': "application/json",
+      "Content-Type": "application/json",
+    },
+
+    //make sure to serialize your JSON body
+    body: JSON.stringify({
+      id_Note: id
+    }),
+  })
+
+    .then((response) => {
+      console.log(response);
+      return response.json();
+    })
+    .then(() => {
+      NotesList.value = NotesList.value.filter(el => el._id.toString() != id)
+      //do something awesome that makes the world a better place
+    });
+}
 function getNotes() {
   //Use marked before writing on NotesArea(markdown)
   fetch("http://localhost:5173/ReadNotes")
@@ -78,7 +103,7 @@ function bubu() {
             <div class="card-body">
               <h5 class="card-title fw-bold">{{note.Title}}</h5>
               <p class="card-text">{{note.Text}}</p>
-              <button>Delete Note</button>
+              <button @click="DeleteNote(note._id)">Delete Note</button>
            </div>
          </div>
         </div>

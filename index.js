@@ -4,7 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose";
 import { User, Event, Note } from "./schemas.js";
-
+import { ObjectId } from 'mongodb';
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
 global.rootDir = __dirname;
@@ -44,6 +44,18 @@ app.post("/CreateNote", async function (req, res) {
     });
   } finally {
     res.json({ mess: "GOOD" });
+    mongoose.connection.close();
+  }
+});
+
+app.delete("/DeleteNote", async function (req, res) {
+  try {
+    await mongoose.connect(uri);
+    let idNote = req.body.id_Note;
+    console.log(idNote)
+    await Note.deleteOne({_id: new ObjectId(idNote)})
+    res.json({mess:"ciao"});
+  } finally {
     mongoose.connection.close();
   }
 });
