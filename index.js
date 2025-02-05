@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 import { User, Event, Note } from "./schemas.js";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
@@ -23,31 +23,27 @@ const mongoCredentials = {
 };
 // const uri = `mongodb://${mongoCredentials.user}:${mongoCredentials.pwd}@${mongoCredentials.site}/${dbName}?retryWrites=true&w=majority&authSource=admin`;
 // Atlas dev database
-const uri = `mongodb+srv://nicola1travaglini:testtest@test.pe0yf.mongodb.net/keybench?retryWrites=true&w=majority&appName=Test"`;
+const uri = `mongodb+srv://nicola1travaglini:testtest@test.pe0yf.mongodb.net/selfie?retryWrites=true&w=majority&appName=Test"`;
 
 // Functions
 
 // Entry points
-app.get("*", (req, res) => {
-  res.sendFile(path.join(global.rootDir, "dist", "index.html"));
-});
-
 app.post("/CreateNote", async function (req, res) {
+  console.log("ci sono nella create");
   try {
     await mongoose.connect(uri);
-   // let tags = JSON.parse(req.body.tags)
+    // let tags = JSON.parse(req.body.tags)
     //console.log(JSON.stringify(tags[0]))
     const notes = await Note.create({
-        userEmail : "fk@mail.com",
-        creationDate: "",
-        lastUpDate:"",
-        Title: req.body.title,
-        Text: req.body.content, //Campi singoli va bene stringa
-        Tags: JSON.parse(req.body.tags) //Array di oggetti vuole l'oggetto
-        
-    })
+      userEmail: "fk@mail.com",
+      creationDate: "",
+      lastUpDate: "",
+      Title: req.body.title,
+      Text: req.body.content, //Campi singoli va bene stringa
+      Tags: JSON.parse(req.body.tags), //Array di oggetti vuole l'oggetto
+    });
   } finally {
-    res.json({mess:"GOOD"});
+    res.json({ mess: "GOOD" });
     mongoose.connection.close();
   }
 });
@@ -56,10 +52,10 @@ app.get("/ReadNotes", async function (req, res) {
   try {
     let a;
     //await mongoose.connect(uri);
-  //  const FoundNotes = await Note.find({})
+    //  const FoundNotes = await Note.find({})
     //console.log(FoundNotes)
+    res.json({ mess: "GOOD" });
   } finally {
-    res.json({mess:"GOOD"});
     //mongoose.connection.close();
   }
 });
@@ -80,6 +76,10 @@ app.get("/dbdebug", async function (req, res) {
   } finally {
     mongoose.connection.close();
   }
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(global.rootDir, "dist", "index.html"));
 });
 
 app.listen(5173, function () {
