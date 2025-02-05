@@ -78,6 +78,7 @@ function bubu() {
             <div class="card-body">
               <h5 class="card-title fw-bold">{{note.Title}}</h5>
               <p class="card-text">{{note.Text}}</p>
+              <button>Delete Note</button>
            </div>
          </div>
         </div>
