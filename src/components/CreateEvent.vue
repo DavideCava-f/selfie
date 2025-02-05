@@ -8,7 +8,7 @@ const eventText = ref(null);
 
 async function generateDetails() {
   const completion = await store.value.openai.chat.completions.create({
-    model: "meta-llama/llama-3.1-70b-instruct:free",
+    model: "deepseek/deepseek-r1-distill-llama-70b:free",
     messages: [
       {
         role: "user",
@@ -51,6 +51,7 @@ async function generateDetails() {
             v-model="eventTitle"
           />
         </div>
+
         <div class="mb-3">
           <label>Details</label>
           <textarea
