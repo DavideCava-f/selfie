@@ -58,10 +58,21 @@ async function generateDetails() {
           <label>Details</label>
           <textarea
             class="form-control"
-            rows="10"
+            rows="4"
             placeholder="Start typing the details..."
             v-model="eventText"
           ></textarea>
+        </div>
+
+        <br />
+
+        <div class="my-2">
+          <label>Inizio</label>
+          <input class="form-control" type="date" />
+          <label>Fine</label>
+          <input class="form-control" type="date" />
+          <label>Tutto il giorno</label>
+          <input class="" type="checkbox" />
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-end">
