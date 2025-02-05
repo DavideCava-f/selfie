@@ -43,18 +43,21 @@ async function generateDetails() {
         ></button>
       </div>
       <div class="modal-body">
-        <div class="mb-3">
-          <label>Title</label>
+        <div class="my-2">
+          <label for="title">Title</label>
           <input
+            class="form-control"
             type="text"
             placeholder="Enter event title"
             v-model="eventTitle"
+            name="value"
           />
         </div>
 
-        <div class="mb-3">
+        <div class="my-2">
           <label>Details</label>
           <textarea
+            class="form-control"
             rows="10"
             placeholder="Start typing the details..."
             v-model="eventText"
