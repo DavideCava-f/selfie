@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+import mongoose from "mongoose";
 import { User, Event, Note } from "./schemas.js";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
@@ -22,19 +23,37 @@ const mongoCredentials = {
 };
 // const uri = `mongodb://${mongoCredentials.user}:${mongoCredentials.pwd}@${mongoCredentials.site}/${dbName}?retryWrites=true&w=majority&authSource=admin`;
 // Atlas dev database
-const uri = `mongodb+srv://nicola1travaglini:testtest@test.pe0yf.mongodb.net/keybench?retryWrites=true&w=majority&appName=Test"`;
+const uri = `mongodb+srv://nicola1travaglini:testtest@test.pe0yf.mongodb.net/selfie?retryWrites=true&w=majority&appName=Test"`;
 
 // Functions
 
 // Entry points
-app.get("*", (req, res) => {
-  res.sendFile(path.join(global.rootDir, "dist", "index.html"));
+app.post("/CreateUser", async function (req, res) {
+  try {
+    await mongoose.connect(uri);
+    const user = await User.create(req.body);
+    res.json(user);
+  } finally {
+    mongoose.connection.close();
+  }
 });
 
 app.post("/CreateNote", async function (req, res) {
+  console.log("ci sono nella create");
   try {
     await mongoose.connect(uri);
+    // let tags = JSON.parse(req.body.tags)
+    //console.log(JSON.stringify(tags[0]))
+    const notes = await Note.create({
+      userEmail: "fk@mail.com",
+      creationDate: "",
+      lastUpDate: "",
+      Title: req.body.title,
+      Text: req.body.content, //Campi singoli va bene stringa
+      Tags: JSON.parse(req.body.tags), //Array di oggetti vuole l'oggetto
+    });
   } finally {
+    res.json({ mess: "GOOD" });
     mongoose.connection.close();
   }
 });
@@ -42,6 +61,18 @@ app.post("/CreateNote", async function (req, res) {
 app.get("/ReadNotes", async function (req, res) {
   try {
     await mongoose.connect(uri);
+    const FoundNotes = await Note.find({});
+    res.json(FoundNotes);
+  } finally {
+    mongoose.connection.close();
+  }
+});
+
+app.get("/users", async function (req, res) {
+  try {
+    await mongoose.connect(uri);
+    const users = await User.find({});
+    res.json(users);
   } finally {
     mongoose.connection.close();
   }
@@ -65,9 +96,13 @@ app.get("/dbdebug", async function (req, res) {
   }
 });
 
-app.listen(8000, function () {
+app.get("*", (req, res) => {
+  res.sendFile(path.join(global.rootDir, "dist", "index.html"));
+});
+
+app.listen(5173, function () {
   global.startDate = new Date();
   console.log(
-    `App listening on port 8000 started ${global.startDate.toLocaleString()}`,
+    `App listening on port 5173 started ${global.startDate.toLocaleString()}`,
   );
 });
