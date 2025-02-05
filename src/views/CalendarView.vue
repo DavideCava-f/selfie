@@ -144,4 +144,5 @@ const eventsOfToday = [
   </div>
 </template>
 
+
 <style scoped></style>
