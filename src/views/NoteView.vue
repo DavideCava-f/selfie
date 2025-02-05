@@ -5,6 +5,7 @@ import { ref } from "vue";
 var NCtitle = ref("");
 var NCcontent = ref("");
 var NCtags = ref("");
+var NotesList = ref("");
 
 function CreateNote() {
   //Parsing tags
@@ -38,7 +39,6 @@ function CreateNote() {
 }
 
 function getNotes() {
-  console.log("sto gettando le notes");
   //Use marked before writing on NotesArea(markdown)
   fetch("http://localhost:5173/ReadNotes")
     .then((response) => {
@@ -46,7 +46,8 @@ function getNotes() {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
+      NotesList.value = data;
+      console.log(NotesList.value)
       //do something awesome that makes the world a better place
     });
 }
@@ -71,47 +72,19 @@ function bubu() {
   </div>
   <div class="container">
     <div class="row justify-content-center">
-      <div @click="bubu()" class="col-md-7 mb-4">
-        <div class="card rounded-3">
-          <div class="card-body">
-            <h5 class="card-title fw-bold">Titolo della card</h5>
-            <p class="card-text">Testo della card.</p>
-          </div>
+		  <div v-for="note in NotesList" :key="note._id">
+        <div @click="bubu()" class="col-md-7 mb-4">
+         <div class="card rounded-3">
+            <div class="card-body">
+              <h5 class="card-title fw-bold">{{note.Title}}</h5>
+              <p class="card-text">{{note.Text}}</p>
+           </div>
+         </div>
         </div>
-      </div>
-      <div class="col-md-7 mb-4">
-        <div class="card rounded-3">
-          <div class="card-body">
-            <h5 class="card-title fw-bold">Titolo della card</h5>
-            <p class="card-text">Testo della card.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-7 mb-4">
-        <div class="card rounded-3">
-          <div class="card-body">
-            <h5 class="card-title fw-bold">Titolo della card</h5>
-            <p class="card-text">Testo della card.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-7 mb-4">
-        <div class="card rounded-3">
-          <div class="card-body">
-            <h5 class="card-title fw-bold">Titolo della card</h5>
-            <p class="card-text">Testo della card.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-7 mb-4">
-        <div class="card rounded-3">
-          <div class="card-body">
-            <h5 class="card-title fw-bold">Titolo della card</h5>
-            <p class="card-text">Testo della card.</p>
-          </div>
-        </div>
-      </div>
-      <div class="">
+     </div>
+    </div> 
+  </div>    
+      <div>
         <button
           class="btn btn-danger border-5 rounded-circle btn-outline-danger fx-button"
           style=""
@@ -124,8 +97,6 @@ function bubu() {
         </button>
         <button @click.prevent="getNotes">GetNotes</button>
       </div>
-    </div>
-  </div>
 
   <div
     class="offcanvas offcanvas-end offcanvas-size-xl"

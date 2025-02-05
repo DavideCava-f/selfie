@@ -50,13 +50,11 @@ app.post("/CreateNote", async function (req, res) {
 
 app.get("/ReadNotes", async function (req, res) {
   try {
-    let a;
-    //await mongoose.connect(uri);
-    //  const FoundNotes = await Note.find({})
-    //console.log(FoundNotes)
-    res.json({ mess: "GOOD" });
+    await mongoose.connect(uri);
+      const FoundNotes = await Note.find({})
+    res.json(FoundNotes);
   } finally {
-    //mongoose.connection.close();
+    mongoose.connection.close();
   }
 });
 
