@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+import mongoose from "mongoose";
 import { User, Event, Note } from "./schemas.js";
 import mongoose from "mongoose";
 
@@ -28,7 +29,6 @@ const uri = `mongodb+srv://nicola1travaglini:testtest@test.pe0yf.mongodb.net/sel
 // Functions
 
 // Entry points
-
 app.post("/CreateUser", async function (req, res) {
   try {
     await mongoose.connect(uri);
@@ -40,9 +40,21 @@ app.post("/CreateUser", async function (req, res) {
 });
 
 app.post("/CreateNote", async function (req, res) {
+  console.log("ci sono nella create");
   try {
     await mongoose.connect(uri);
+    // let tags = JSON.parse(req.body.tags)
+    //console.log(JSON.stringify(tags[0]))
+    const notes = await Note.create({
+      userEmail: "fk@mail.com",
+      creationDate: "",
+      lastUpDate: "",
+      Title: req.body.title,
+      Text: req.body.content, //Campi singoli va bene stringa
+      Tags: JSON.parse(req.body.tags), //Array di oggetti vuole l'oggetto
+    });
   } finally {
+    res.json({ mess: "GOOD" });
     mongoose.connection.close();
   }
 });
@@ -50,6 +62,8 @@ app.post("/CreateNote", async function (req, res) {
 app.get("/ReadNotes", async function (req, res) {
   try {
     await mongoose.connect(uri);
+      const FoundNotes = await Note.find({})
+    res.json(FoundNotes);
   } finally {
     mongoose.connection.close();
   }
