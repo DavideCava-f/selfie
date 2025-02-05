@@ -4,7 +4,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose";
 import { User, Event, Note } from "./schemas.js";
-import mongoose from "mongoose";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -62,7 +61,7 @@ app.post("/CreateNote", async function (req, res) {
 app.get("/ReadNotes", async function (req, res) {
   try {
     await mongoose.connect(uri);
-      const FoundNotes = await Note.find({})
+    const FoundNotes = await Note.find({});
     res.json(FoundNotes);
   } finally {
     mongoose.connection.close();
