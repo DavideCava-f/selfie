@@ -8,11 +8,35 @@ var NCtags = ref('');
 
 function CreateNote(){
 
-    console.log(NCtitle.value)
-    console.log(NCcontent.value)
-    console.log(NCtags.value)
+    //Parsing tags
+    let tagsArr = NCtags.value.split(',')
+    let jsonT =tagsArr.map((el =>{ return '{"name":"'+el+'"}'}))
+    let jsonTags = "[" + jsonT.toString() + "]"
+    console.log(jsonTags)
+
+    
+    fetch("http://localhost:5173/CreateNote", {
+  method: "post",
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+
+  //make sure to serialize your JSON body
+  body: JSON.stringify({
+    title: NCtitle.value,
+    content: NCcontent.value,
+    tags:jsonTags
+  })
+})
+.then( (response) => response.json()) 
+.then((data) => { 
+    console.log(data)
+   //do something awesome that makes the world a better place
+});
 
 }
+
 
 function GetNotes(){
 //Use marked before writing on NotesArea(markdown)

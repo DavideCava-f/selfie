@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+import mongoose from 'mongoose';
 import { User, Event, Note } from "./schemas.js";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
@@ -34,6 +35,18 @@ app.get("*", (req, res) => {
 app.post("/CreateNote", async function (req, res) {
   try {
     await mongoose.connect(uri);
+   // let tags = JSON.parse(req.body.tags)
+    //console.log(JSON.stringify(tags[0]))
+    const notes = await Note.create({
+        userEmail : "fk@mail.com",
+        creationDate: "",
+        lastUpDate:"",
+        Title: req.body.title,
+        Text: req.body.content,
+        Tags: req.body.tags
+        
+    })
+    res.json({mess:"Ciao"});
   } finally {
     mongoose.connection.close();
   }
@@ -65,9 +78,9 @@ app.get("/dbdebug", async function (req, res) {
   }
 });
 
-app.listen(8000, function () {
+app.listen(5173, function () {
   global.startDate = new Date();
   console.log(
-    `App listening on port 8000 started ${global.startDate.toLocaleString()}`,
+    `App listening on port 5173 started ${global.startDate.toLocaleString()}`,
   );
 });
