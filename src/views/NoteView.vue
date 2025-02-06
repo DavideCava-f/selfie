@@ -6,6 +6,11 @@ var NCtitle = ref("");
 var NCcontent = ref("");
 var NCtags = ref("");
 var NotesList = ref("");
+var NUtitle = ref("");
+var NUcontent = ref("");
+var NUtags = ref("");
+var NUid = ref("")
+
 
 function CreateNote() {
   //Parsing tags
@@ -34,6 +39,7 @@ function CreateNote() {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
+      getNotes()
       //do something awesome that makes the world a better place
     });
 }
@@ -80,6 +86,65 @@ function getNotes() {
 function bubu() {
   console.log("bubusettete");
 }
+
+function UpdateNote(id){
+
+  console.log(id)
+  let tagsStr = "";
+  const Note2Update = NotesList.value.find(el => el._id.toString() === id)
+  NUtitle.value = Note2Update.Title
+  NUcontent.value = Note2Update.Text
+  NUtags.value = Note2Update.Tags
+  NUtags.value.forEach(el => { 
+    tagsStr += el.name + ","
+    
+  });
+  NUtags.value = tagsStr.slice(0,-1)
+  NUid.value = Note2Update._id
+  console.log(NUid.value)
+  //console.log(Note2Update)
+  
+}
+
+function SaveAfterUpdate(){
+  console.log(NUtags.value)
+  let tagsArr = NUtags.value.split(",");
+  let jsonT = tagsArr.map((el) => {
+    return '{"name":"' + el + '"}';
+  });
+  let UjsonTags = "[" + jsonT.toString() + "]";
+
+    console.log(NUid.value)
+    console.log(NUtitle.value)
+    console.log(NUcontent.value)
+    console.log(UjsonTags)
+
+  fetch("http://localhost:5173/UpdateNote", {
+    method: "put",
+    headers: {
+      'Accept': "application/json",
+      "Content-Type": "application/json",
+    },
+    //make sure to serialize your JSON body
+    body: JSON.stringify({
+      id_Note: NUid.value,
+      title_note: NUtitle.value,
+      content_note: NUcontent.value,
+      tags_note:UjsonTags
+
+    }),
+  })
+
+    .then((response) => {
+      console.log(response);
+      return response.json();
+    })
+    .then(() => {
+      //NotesList.value = NotesList.value.filter(el => el._id.toString() != id)
+      getNotes()
+      //do something awesome that makes the world a better place
+    });
+}
 </script>
 
 <template>
@@ -103,7 +168,8 @@ function bubu() {
             <div class="card-body">
               <h5 class="card-title fw-bold">{{note.Title}}</h5>
               <p class="card-text">{{note.Text}}</p>
-              <button @click="DeleteNote(note._id)">Delete Note</button>
+              <span><button @click="DeleteNote(note._id)">Delete Note</button></span>
+              <span><button data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" @click="UpdateNote(note._id)">UpdateNote</button></span>
            </div>
          </div>
         </div>
@@ -187,6 +253,75 @@ function bubu() {
                   </button>
                 </div>
                 <button @click.prevent="CreateNote" class="btn btn-primary">
+                  <i class="fas fa-save me-2"></i>Save Note
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Enable both scrolling & backdrop</button>
+  <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+  <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasExampleLabel">Notes Update</h5>
+      <button
+        type="button"
+        class="btn-close text-reset ms-1"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+      ></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="col-md-12">
+        <div class="card">
+          <div class="card-header bg-white">
+            <h5 class="mb-0">UpdateNote</h5>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="mb-3">
+                <label class="form-label">Title</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  v-model="NUtitle"
+                  placeholder="Enter note title"
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Content</label>
+                <textarea
+                  v-model="NUcontent"
+                  rows="10"
+                  class="form-control"
+                  placeholder="Start typing your note..."
+                ></textarea>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Tags</label>
+                <input
+                  v-model="NUtags"
+                  type="text"
+                  class="form-control"
+                  placeholder="Add tags (comma separated)"
+                />
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-outline-secondary">
+                    <i class="fas fa-bold"></i>
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary">
+                    <i class="fas fa-italic"></i>
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary">
+                    <i class="fas fa-list"></i>
+                  </button>
+                </div>
+                <button @click.prevent="SaveAfterUpdate()" class="btn btn-primary">
                   <i class="fas fa-save me-2"></i>Save Note
                 </button>
               </div>
