@@ -1,6 +1,7 @@
 <script setup>
 import NavBar from "@/components/NavBar.vue";
 import { ref } from "vue";
+import { marked } from 'marked';
 
 var NCtitle = ref("");
 var NCcontent = ref("");
@@ -166,8 +167,9 @@ function SaveAfterUpdate(){
         <div @click="bubu()" class="col-md-7 mb-4">
          <div class="card rounded-3">
             <div class="card-body">
-              <h5 class="card-title fw-bold">{{note.Title}}</h5>
-              <p class="card-text">{{note.Text}}</p>
+              <h1 class="card-title fw-bold">{{note.Title}}</h1>
+              <hr>
+              <p class="card-text" v-html="marked.parse(note.Text)"></p>
               <span><button @click="DeleteNote(note._id)">Delete Note</button></span>
               <span><button data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" @click="UpdateNote(note._id)">UpdateNote</button></span>
            </div>
