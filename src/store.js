@@ -19,12 +19,23 @@ const store = ref({
   formattedSimHourMinSec: computed(() =>
     store.value.formattedSimTime.split("T")[1].slice(0, 8),
   ),
+  formattedRealDay: computed(() => new Date(store.value.realTime).getDay()),
+  formattedSimDay: computed(() => new Date(store.value.simTime).getDay()),
   openai: new OpenAI({
     baseURL: "https://openrouter.ai/api/v1",
     apiKey: import.meta.env.VITE_OPEN_AI_API_KEY,
     defaultHeaders: {},
     dangerouslyAllowBrowser: true,
   }),
+  week: [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ],
 });
 
 setInterval(() => (store.value.realTime = Date.now()), 1000);

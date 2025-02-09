@@ -9,7 +9,15 @@ const eventBeginDate = ref(null);
 const eventBeginHourMinSec = ref(null);
 const eventEndDate = ref(null);
 const eventEndHourMinSec = ref(null);
-const ripetibile = ref(false);
+const repeatable = ref(false);
+const frequenceSelected = ref({
+  type: "d",
+  option: "",
+});
+const repetitionSelected = ref({
+  type: "i",
+  option: "",
+});
 const eventLink = ref(null);
 
 async function generateDetails() {
@@ -58,12 +66,19 @@ function resetFields() {
   eventText.value = "";
   resetBegin();
   resetEnd();
+  repeatable.value = false;
+  repetitionSelected.value = { type: "i", option: "" };
   eventLink.value = "";
 }
 
 function allDay() {
   eventBeginHourMinSec.value = "00:00:00";
   eventEndHourMinSec.value = "23:59:59";
+}
+
+function canCreateEvent() {
+  // TODO
+  return true;
 }
 
 function createEvent() {
@@ -113,7 +128,7 @@ resetFields();
         <br />
 
         <div class="my-2">
-          <label>Inizio</label>
+          <label>Start</label>
           <div class="d-flex flex-sm-nowrap flex-wrap">
             <input
               class="form-control me-sm-2"
@@ -134,7 +149,7 @@ resetFields();
           </div>
         </div>
         <div class="my-2">
-          <label>Fine</label>
+          <label>End</label>
           <div class="d-flex flex-sm-nowrap flex-wrap">
             <input
               class="form-control me-sm-2"
@@ -162,24 +177,80 @@ resetFields();
               id="tuttoIlGiorno"
               @change="(event) => (event.target.checked ? allDay() : null)"
             />
-            <label class="form-check-label" for="tuttoIlGiorno"
-              >Tutto il giorno</label
-            >
+            <label class="form-check-label" for="tuttoIlGiorno">All day</label>
           </div>
         </div>
         <div class="form-check my-2">
           <input
             class="form-check-input"
             type="checkbox"
-            id="ripetibile"
-            @change="(event) => (ripetibile = event.target.checked)"
+            id="repeatable"
+            v-model="repeatable"
           />
-          <label class="form-check-label" for="ripetibile">Ripetibile</label>
+          <label class="form-check-label" for="repeatable">Repeatable</label>
         </div>
-        <div v-if="ripetibile" class="row my-2">
+        <div v-if="repeatable" class="row my-2">
           <!-- TODO -->
-          <div class="col-6">Frequenza</div>
-          <div class="col-6">Ripetizioni</div>
+          <div class="col-sm-6 col-12">
+            <label>Frequence</label>
+            <div>
+              <select class="form-select" v-model="frequenceSelected.type">
+                <option value="d">Every day</option>
+                <option value="1w">One day a week</option>
+                <option value="+w">More days a week</option>
+                <option value="m">Every month this day</option>
+              </select>
+            </div>
+            <br />
+            <div
+              v-if="frequenceSelected.type === '+w'"
+              class="d-flex flex-wrap gap-1"
+            >
+              <button
+                type="button"
+                class="btn btn-outline-primary rounded-circle"
+                data-bs-toggle="button"
+                v-for="day in store.week"
+                :key="day"
+              >
+                {{ day.slice(0, 2) }}
+              </button>
+            </div>
+          </div>
+          <div class="col-sm-6 col-12">
+            <label>Repetition</label>
+            <div>
+              <select
+                class="form-select"
+                v-model="repetitionSelected.type"
+                @change="repetitionSelected.option = ''"
+              >
+                <option value="i">Repeat indefinitely</option>
+                <option value="n">Repeat n times</option>
+                <option value="u">Repeat until</option>
+              </select>
+            </div>
+            <br />
+            <div v-if="repetitionSelected.type === 'n'">
+              <input
+                class="form-control"
+                type="number"
+                min="1"
+                max="3650"
+                placeholder="Insert n"
+                v-model="repetitionSelected.option"
+              />
+              <div class="form-text">Min. 1, Max. 3650</div>
+            </div>
+            <div v-else-if="repetitionSelected.type === 'u'">
+              <input
+                class="form-control"
+                type="date"
+                :min="store.formattedSimDate"
+                v-model="repetitionSelected.option"
+              />
+            </div>
+          </div>
         </div>
         <div class="my-2">
           <label>Link</label>
@@ -203,6 +274,7 @@ resetFields();
           type="button"
           class="btn btn-primary"
           data-bs-dismiss="modal"
+          :disabled="!canCreateEvent"
           @click="createEvent"
         >
           Create
