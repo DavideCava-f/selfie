@@ -10,6 +10,7 @@ const eventBeginHourMinSec = ref(null);
 const eventEndDate = ref(null);
 const eventEndHourMinSec = ref(null);
 const ripetibile = ref(false);
+const eventLink = ref(null);
 
 async function generateDetails() {
   const completion = await store.value.openai.chat.completions.create({
@@ -24,13 +25,14 @@ async function generateDetails() {
                   Note: you MUST reply ONLY with the title you've came up with \
                   (in the recognized language). \
                   Do NOT add anything else, just the words (i.e. not quotation marks).
-                  The description is \
+                  The description is: \
                   ${eventText.value}.`,
       },
     ],
   });
   eventTitle.value = completion.choices[0].message.content;
 }
+
 function setBeginNow() {
   eventBeginDate.value = store.value.formattedSimDate;
   eventBeginHourMinSec.value = store.value.formattedSimHourMinSec;
@@ -56,11 +58,16 @@ function resetFields() {
   eventText.value = "";
   resetBegin();
   resetEnd();
+  eventLink.value = "";
 }
 
 function allDay() {
   eventBeginHourMinSec.value = "00:00:00";
   eventEndHourMinSec.value = "23:59:59";
+}
+
+function createEvent() {
+  resetFields();
 }
 
 resetFields();
@@ -107,14 +114,14 @@ resetFields();
 
         <div class="my-2">
           <label>Inizio</label>
-          <div class="d-flex">
+          <div class="d-flex flex-sm-nowrap flex-wrap">
             <input
-              class="form-control me-2"
+              class="form-control me-sm-2"
               type="date"
               v-model="eventBeginDate"
             />
             <input
-              class="form-control me-2"
+              class="form-control me-sm-2"
               type="time"
               v-model="eventBeginHourMinSec"
             />
@@ -128,14 +135,14 @@ resetFields();
         </div>
         <div class="my-2">
           <label>Fine</label>
-          <div class="d-flex">
+          <div class="d-flex flex-sm-nowrap flex-wrap">
             <input
-              class="form-control me-2"
+              class="form-control me-sm-2"
               type="date"
               v-model="eventEndDate"
             />
             <input
-              class="form-control me-2"
+              class="form-control me-sm-2"
               type="time"
               v-model="eventEndHourMinSec"
             />
@@ -169,13 +176,18 @@ resetFields();
           />
           <label class="form-check-label" for="ripetibile">Ripetibile</label>
         </div>
-        <div v-if="ripetibile" class="my-2"></div>
+        <div v-if="ripetibile" class="row my-2">
+          <!-- TODO -->
+          <div class="col-6">Frequenza</div>
+          <div class="col-6">Ripetizioni</div>
+        </div>
         <div class="my-2">
           <label>Link</label>
           <input
             class="form-control"
             type="text"
             placeholder="Luogo fisico o virtuale"
+            v-model="eventLink"
           />
         </div>
       </div>
@@ -187,7 +199,12 @@ resetFields();
         >
           AI
         </button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-dismiss="modal"
+          @click="createEvent"
+        >
           Create
         </button>
       </div>
