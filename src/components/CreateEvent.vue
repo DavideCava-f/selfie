@@ -1,6 +1,6 @@
 <script setup>
 import OpenAI from "openai";
-import { ref } from "vue";
+import { ref, watchEffect, reactive } from "vue";
 import { store } from "@/store";
 
 const eventTitle = ref(null);
@@ -12,8 +12,9 @@ const eventEndHourMinSec = ref(null);
 const repeatable = ref(false);
 const frequenceSelected = ref({
   type: "d",
-  option: "",
+  option: [...Array(7)],
 });
+console.log(frequenceSelected.value);
 const repetitionSelected = ref({
   type: "i",
   option: "",
@@ -53,12 +54,12 @@ function setEndNow() {
 
 function resetBegin() {
   eventBeginDate.value = "";
-  eventBeginHourMinSec.value = "00:00:00";
+  eventBeginHourMinSec.value = "00:00";
 }
 
 function resetEnd() {
   eventEndDate.value = "";
-  eventEndHourMinSec.value = "00:00:00";
+  eventEndHourMinSec.value = "00:00";
 }
 
 function resetFields() {
@@ -67,13 +68,14 @@ function resetFields() {
   resetBegin();
   resetEnd();
   repeatable.value = false;
+  frequenceSelected.value = { type: "d", option: [...Array(7)] };
   repetitionSelected.value = { type: "i", option: "" };
   eventLink.value = "";
 }
 
 function allDay() {
-  eventBeginHourMinSec.value = "00:00:00";
-  eventEndHourMinSec.value = "23:59:59";
+  eventBeginHourMinSec.value = "00:00";
+  eventEndHourMinSec.value = "23:59";
 }
 
 function canCreateEvent() {
@@ -82,6 +84,7 @@ function canCreateEvent() {
 }
 
 function createEvent() {
+  console.log(frequenceSelected.value);
   resetFields();
 }
 
@@ -129,18 +132,14 @@ resetFields();
 
         <div class="my-2">
           <label>Start</label>
-          <div class="d-flex flex-sm-nowrap flex-wrap">
+          <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
+            <input class="form-control" type="date" v-model="eventBeginDate" />
             <input
-              class="form-control me-sm-2"
-              type="date"
-              v-model="eventBeginDate"
-            />
-            <input
-              class="form-control me-sm-2"
+              class="form-control"
               type="time"
               v-model="eventBeginHourMinSec"
             />
-            <button class="btn btn-outline-primary me-2" @click="setBeginNow">
+            <button class="btn btn-outline-primary" @click="setBeginNow">
               Now
             </button>
             <button class="btn btn-outline-danger" @click="resetBegin">
@@ -150,18 +149,14 @@ resetFields();
         </div>
         <div class="my-2">
           <label>End</label>
-          <div class="d-flex flex-sm-nowrap flex-wrap">
+          <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
+            <input class="form-control" type="date" v-model="eventEndDate" />
             <input
-              class="form-control me-sm-2"
-              type="date"
-              v-model="eventEndDate"
-            />
-            <input
-              class="form-control me-sm-2"
+              class="form-control"
               type="time"
               v-model="eventEndHourMinSec"
             />
-            <button class="btn btn-outline-primary me-2" @click="setEndNow">
+            <button class="btn btn-outline-primary" @click="setEndNow">
               Now
             </button>
             <button class="btn btn-outline-danger" @click="resetEnd">
@@ -190,34 +185,39 @@ resetFields();
           <label class="form-check-label" for="repeatable">Repeatable</label>
         </div>
         <div v-if="repeatable" class="row my-2">
-          <!-- TODO -->
           <div class="col-sm-6 col-12">
             <label>Frequence</label>
             <div>
-              <select class="form-select" v-model="frequenceSelected.type">
+              <select
+                class="form-select"
+                v-model="frequenceSelected.type"
+                @change="frequenceSelected.option = [...Array(7)]"
+              >
                 <option value="d">Every day</option>
-                <option value="1w">One day a week</option>
-                <option value="+w">More days a week</option>
+                <option value="w">One/more days a week</option>
                 <option value="m">Every month this day</option>
               </select>
             </div>
             <br />
             <div
-              v-if="frequenceSelected.type === '+w'"
-              class="d-flex flex-wrap gap-1"
+              v-if="frequenceSelected.type === 'w'"
+              class="d-flex flex-wrap gap-1 justify-content-between gap-1 mx-2"
             >
-              <button
-                type="button"
-                class="btn btn-outline-primary rounded-circle"
-                data-bs-toggle="button"
-                v-for="day in store.week"
-                :key="day"
-              >
-                {{ day.slice(0, 2) }}
-              </button>
+              <div v-for="day in store.week" :key="day">
+                <input
+                  type="checkbox"
+                  class="btn-check"
+                  autocomplete="off"
+                  v-model="frequenceSelected.option[store.week.indexOf(day)]"
+                  :id="day"
+                />
+                <label class="btn btn-outline-primary rounded-pill" :for="day"
+                  >{{ day.slice(0, 2) }}
+                </label>
+              </div>
             </div>
           </div>
-          <div class="col-sm-6 col-12">
+          <div class="col-sm-6 col-12 my-sm-0 my-3">
             <label>Repetition</label>
             <div>
               <select
@@ -231,7 +231,10 @@ resetFields();
               </select>
             </div>
             <br />
-            <div v-if="repetitionSelected.type === 'n'">
+            <div
+              class="d-flex align-items-center gap-1"
+              v-if="repetitionSelected.type === 'n'"
+            >
               <input
                 class="form-control"
                 type="number"
@@ -240,7 +243,7 @@ resetFields();
                 placeholder="Insert n"
                 v-model="repetitionSelected.option"
               />
-              <div class="form-text">Min. 1, Max. 3650</div>
+              <div class="form-text text-nowrap">Min. 1, Max. 3650</div>
             </div>
             <div v-else-if="repetitionSelected.type === 'u'">
               <input
@@ -252,6 +255,7 @@ resetFields();
             </div>
           </div>
         </div>
+        <br />
         <div class="my-2">
           <label>Link</label>
           <input
