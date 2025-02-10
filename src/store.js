@@ -14,10 +14,10 @@ const store = ref({
   ),
   formattedSimDate: computed(() => store.value.formattedSimTime.split("T")[0]),
   formattedRealHourMinSec: computed(() =>
-    store.value.formattedRealTime.split("T")[1].slice(0, 8),
+    store.value.formattedRealTime.split("T")[1].slice(0, 5),
   ),
   formattedSimHourMinSec: computed(() =>
-    store.value.formattedSimTime.split("T")[1].slice(0, 8),
+    store.value.formattedSimTime.split("T")[1].slice(0, 5),
   ),
   formattedRealDay: computed(() => new Date(store.value.realTime).getDay()),
   formattedSimDay: computed(() => new Date(store.value.simTime).getDay()),

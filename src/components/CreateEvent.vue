@@ -14,7 +14,6 @@ const frequenceSelected = ref({
   type: "d",
   option: [...Array(7)],
 });
-console.log(frequenceSelected.value);
 const repetitionSelected = ref({
   type: "i",
   option: "",
@@ -59,7 +58,7 @@ function resetBegin() {
 
 function resetEnd() {
   eventEndDate.value = "";
-  eventEndHourMinSec.value = "00:00";
+  eventEndHourMinSec.value = "00:01";
 }
 
 function resetFields() {
@@ -84,7 +83,25 @@ function canCreateEvent() {
 }
 
 function createEvent() {
-  console.log(frequenceSelected.value);
+  if (frequenceSelected.value.type === "d") {
+    if (repetitionSelected.value.type === "i") {
+      // TODO: inserisci 3650 dates
+    } else if (repetitionSelected.value.type === "n") {
+      // TODO: inserisci n dates
+    } else if (repetitionSelected.value.type === "u") {
+      // TODO: inserisci fino a date
+    }
+  } else if (frequenceSelected.value.type === "w") {
+    // TODO: rifletterci per bene
+  } else if (frequenceSelected.value.type === "m") {
+    if (repetitionSelected.value.type === "i") {
+      // TODO: inserisci 3650 dates
+    } else if (repetitionSelected.value.type === "n") {
+      // TODO: inserisci n dates
+    } else if (repetitionSelected.value.type === "u") {
+      // TODO: inserisci fino a date
+    }
+  }
   resetFields();
 }
 
@@ -150,7 +167,12 @@ resetFields();
         <div class="my-2">
           <label>End</label>
           <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
-            <input class="form-control" type="date" v-model="eventEndDate" />
+            <input
+              class="form-control"
+              type="date"
+              :min="eventBeginDate"
+              v-model="eventEndDate"
+            />
             <input
               class="form-control"
               type="time"
@@ -165,21 +187,21 @@ resetFields();
           </div>
         </div>
         <div class="my-2">
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="tuttoIlGiorno"
-              @change="(event) => (event.target.checked ? allDay() : null)"
-            />
-            <label class="form-check-label" for="tuttoIlGiorno">All day</label>
-          </div>
+          <button
+            class="btn btn-outline-success"
+            type="button"
+            id="tuttoIlGiorno"
+            @click="allDay"
+          >
+            All day
+          </button>
         </div>
         <div class="form-check my-2">
           <input
             class="form-check-input"
             type="checkbox"
             id="repeatable"
+            :disabled="eventBeginDate !== eventEndDate"
             v-model="repeatable"
           />
           <label class="form-check-label" for="repeatable">Repeatable</label>
