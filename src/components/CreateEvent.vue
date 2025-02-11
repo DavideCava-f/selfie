@@ -88,6 +88,33 @@ function createEvent() {
       // TODO: inserisci 3650 dates
     } else if (repetitionSelected.value.type === "n") {
       // TODO: inserisci n dates
+      const n = parseInt(repetitionSelected.value.option);
+      const event = {
+        UserEmail: "test@test.it",
+        dates: [],
+        title: eventTitle.value,
+        details: {
+          text: eventText.value,
+          link: eventLink.value
+        }
+      };
+      for (let i=0; i<n; i++) {
+        const baseBeginTime = `${eventBeginDate.value}T${eventBeginHourMinSec.value}:00.000Z`;
+        const baseEndTime = `${eventEndDate.value}T${eventEndHourMinSec.value}:00.000Z`;
+        event.dates.push({
+          begin: new Date(Date.parse(baseBeginTime) + i*86400000).toISOString(),
+          end: new Date(Date.parse(baseEndTime) + i*86400000).toISOString(),
+        });
+      }
+      console.log(event);
+      fetch("http://localhost:8000/events", {
+        method: "POST",
+        body: JSON.stringify(event),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => console.log("t'apposto"))
     } else if (repetitionSelected.value.type === "u") {
       // TODO: inserisci fino a date
     }
