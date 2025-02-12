@@ -1,16 +1,28 @@
 <script setup>
-import { ref } from 'vue';
+import { ref } from "vue";
 import { store } from "@/store";
+import { Temporal } from "@js-temporal/polyfill";
 
-const dateSelector = ref(store.value.formattedSimDate);
-const hourSelector = ref(store.value.formattedSimHourMinSec);
+const dateSelector = ref(store.value.simDate);
+const timeSelector = ref(store.value.simTime);
 
 function save() {
-  store.value.deltaTime = new Date(dateSelector.value + "T" + hourSelector.value + ".000Z").getTime() - store.value.realTime;
+  store.value.deltaDateTime = store.value.realDateTime.until(
+    Temporal.PlainDateTime.from(
+      `${dateSelector.value}T${timeSelector.value}:00.000`,
+    ),
+  );
 }
 
 function reset() {
-  store.value.deltaTime = 0;
+  store.value.deltaDateTime = Temporal.Duration.from({
+    years: 0,
+    months: 0,
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
 }
 </script>
 
@@ -19,16 +31,11 @@ function reset() {
     <div class="modal-content">
       <div class="modal-header bg-danger">
         <h1 class="modal-title fs-4" id="staticBackdropLabel">Time Machine</h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <input type="date" v-model="dateSelector">
-        <input type="time" v-model="hourSelector">
+        <input type="date" v-model="dateSelector" />
+        <input type="time" v-model="timeSelector" />
       </div>
       <div class="modal-footer d-flex justify-content-end">
         <button type="button" @click="reset" class="btn btn-secondary" data-bs-dismiss="modal">

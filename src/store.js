@@ -1,32 +1,34 @@
 import { computed, ref } from "vue";
 import OpenAI from "openai";
+import { Temporal } from "@js-temporal/polyfill";
 
 const store = ref({
-  realTime: Date.now(),
-  deltaTime: 0,
-  simTime: computed(() => store.value.realTime + store.value.deltaTime),
-  formattedRealTime: computed(() =>
-    new Date(store.value.realTime).toISOString(),
-  ),
-  formattedSimTime: computed(() => new Date(store.value.simTime).toISOString()),
-  formattedRealDate: computed(
-    () => store.value.formattedRealTime.split("T")[0],
-  ),
-  formattedSimDate: computed(() => store.value.formattedSimTime.split("T")[0]),
-  formattedRealHourMinSec: computed(() =>
-    store.value.formattedRealTime.split("T")[1].slice(0, 5),
-  ),
-  formattedSimHourMinSec: computed(() =>
-    store.value.formattedSimTime.split("T")[1].slice(0, 5),
-  ),
-  formattedRealDay: computed(() => new Date(store.value.realTime).getDay()),
-  formattedSimDay: computed(() => new Date(store.value.simTime).getDay()),
-  openai: new OpenAI({
-    baseURL: "https://openrouter.ai/api/v1",
-    apiKey: import.meta.env.VITE_OPEN_AI_API_KEY,
-    defaultHeaders: {},
-    dangerouslyAllowBrowser: true,
+  realDateTime: Temporal.Now.plainDateTimeISO(),
+  deltaDateTime: Temporal.Duration.from({
+    years: 0,
+    months: 0,
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
   }),
+  simDateTime: computed(() =>
+    store.value.realDateTime.add(store.value.deltaDateTime),
+  ),
+
+  realDate: computed(() => store.value.realDateTime.toPlainDate()),
+  simDate: computed(() => store.value.simDateTime.toPlainDate()),
+
+  realTime: computed(() =>
+    store.value.realDateTime.toPlainTime().toString().slice(0, 5),
+  ),
+  simTime: computed(() =>
+    store.value.simDateTime.toPlainTime().toString().slice(0, 5),
+  ),
+
+  realDay: computed(() => store.value.realDate.dayOfWeek - 1),
+  simDay: computed(() => store.value.simDate.dayOfWeek - 1),
+
   week: [
     "Sunday",
     "Monday",
@@ -36,8 +38,18 @@ const store = ref({
     "Friday",
     "Saturday",
   ],
+
+  openai: new OpenAI({
+    baseURL: "https://openrouter.ai/api/v1",
+    apiKey: import.meta.env.VITE_OPEN_AI_API_KEY,
+    defaultHeaders: {},
+    dangerouslyAllowBrowser: true,
+  }),
 });
 
-setInterval(() => (store.value.realTime = Date.now()), 1000);
+setInterval(
+  () => (store.value.realDateTime = Temporal.Now.plainDateTimeISO()),
+  1000,
+);
 
 export { store };
