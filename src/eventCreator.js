@@ -78,6 +78,7 @@ class EventCreator {
     eventEndDate,
     eventEndHourMinSec,
   ) {
+    // FIXME: gestire i mesi (non tutti hanno 30 giorni)
     const event = {
       UserEmail: userEmail,
       dates: [],
@@ -87,12 +88,9 @@ class EventCreator {
         link: eventLink,
       },
     };
-    console.log("qui arrivo");
     for (let i = 0; i < n; i++) {
       const baseBeginTime = `${eventBeginDate}T${eventBeginHourMinSec}:00.000Z`;
       const baseEndTime = `${eventEndDate}T${eventEndHourMinSec}:00.000Z`;
-      console.log("i: " + i);
-      console.log("n: " + n);
       event.dates.push({
         begin: new Date(
           Date.parse(baseBeginTime) + i * 2629800000,
