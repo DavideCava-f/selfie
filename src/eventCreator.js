@@ -87,9 +87,12 @@ class EventCreator {
         link: eventLink,
       },
     };
+    console.log("qui arrivo");
     for (let i = 0; i < n; i++) {
       const baseBeginTime = `${eventBeginDate}T${eventBeginHourMinSec}:00.000Z`;
       const baseEndTime = `${eventEndDate}T${eventEndHourMinSec}:00.000Z`;
+      console.log("i: " + i);
+      console.log("n: " + n);
       event.dates.push({
         begin: new Date(
           Date.parse(baseBeginTime) + i * 2629800000,
@@ -140,3 +143,5 @@ class EventCreator {
     } while (Date.parse(eventEndDate) + i * 2629800000 < Date.parse(untilDate));
   }
 }
+
+export { EventCreator };
