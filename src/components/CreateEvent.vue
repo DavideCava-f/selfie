@@ -138,6 +138,46 @@ function createEvent() {
       }
     } else if (frequenceSelected.value.type === "w") {
       // TODO: rifletterci per bene
+      if (repetitionSelected.value.type === "i") {
+        EventCreator.insertNWeekly(
+          3650,
+          frequenceSelected.value.option,
+          "test@test.com"
+          eventTitle.value,
+          eventText.value,
+          eventLink.value,
+          eventBeginDate.value,
+          eventBeginTime.value,
+          eventEndDate.value,
+          eventEndTime.value,
+        )
+      } else if (repetitionSelected.value.type === "n") {
+        EventCreator.insertNWeekly(
+          parseInt(repetitionSelected.value.option),
+          frequenceSelected.value.option,
+          "test@test.com"
+          eventTitle.value,
+          eventText.value,
+          eventLink.value,
+          eventBeginDate.value,
+          eventBeginTime.value,
+          eventEndDate.value,
+          eventEndTime.value,
+        )
+      } else if (repetitionSelected.value.type === "u") {
+        EventCreator.insertUntilWeekly(
+          repetitionSelected.value.option,
+          frequenceSelected.value.option,
+          "test@test.com"
+          eventTitle.value,
+          eventText.value,
+          eventLink.value,
+          eventBeginDate.value,
+          eventBeginTime.value,
+          eventEndDate.value,
+          eventEndTime.value,
+        )
+      }
     } else if (frequenceSelected.value.type === "m") {
       if (repetitionSelected.value.type === "i") {
         EventCreator.insertNMonthly(

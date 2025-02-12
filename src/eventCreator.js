@@ -90,6 +90,44 @@ class EventCreator {
       },
     }).then((response) => console.log("t'apposto"));
   }
+  static insertNWeekly(
+    n,
+    weekDays,
+    userEmail,
+    eventTitle,
+    eventText,
+    eventLink,
+    eventBeginDate,
+    eventBeginTime,
+    eventEndDate,
+    eventEndTime,
+  ) {
+    const event = {
+      UserEmail: userEmail,
+      dates: [],
+      title: eventTitle,
+      details: {
+        text: eventText,
+        link: eventLink,
+      },
+    };
+    const baseBeginDateTime = Temporal.PlainDateTime.from(
+      `${eventBeginDate}T${eventBeginTime}:00.000`,
+    );
+    const baseEndDateTime = Temporal.PlainDateTime.from(
+      `${eventEndDate}T${eventEndTime}:00.000`,
+    );
+    const weekDaysOn = weekDays.filter((w) => weekDays[w]);
+    for (let i = 0; i < n; i++) {
+      // FIXME:
+      weekDaysOn.forEach((day) => {
+        event.dates.push({
+          begin: baseBeginDateTime.add({ weeks: i }),
+          end: baseEndDateTime.add({ weeks: i })
+        })
+      });
+    }
+  }
   static insertNMonthly(
     n,
     userEmail,
