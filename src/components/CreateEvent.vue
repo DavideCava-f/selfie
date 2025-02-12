@@ -2,6 +2,7 @@
 import OpenAI from "openai";
 import { ref, watchEffect, reactive } from "vue";
 import { store } from "@/store";
+import { EventCreator } from "@/eventCreator";
 
 const eventTitle = ref(null);
 const eventText = ref(null);
@@ -83,50 +84,95 @@ function canCreateEvent() {
 }
 
 function createEvent() {
-  if (frequenceSelected.value.type === "d") {
-    if (repetitionSelected.value.type === "i") {
-      // TODO: inserisci 3650 dates
-    } else if (repetitionSelected.value.type === "n") {
-      // TODO: inserisci n dates
-      const n = parseInt(repetitionSelected.value.option);
-      const event = {
-        UserEmail: "test@test.it",
-        dates: [],
-        title: eventTitle.value,
-        details: {
-          text: eventText.value,
-          link: eventLink.value
-        }
-      };
-      for (let i=0; i<n; i++) {
-        const baseBeginTime = `${eventBeginDate.value}T${eventBeginHourMinSec.value}:00.000Z`;
-        const baseEndTime = `${eventEndDate.value}T${eventEndHourMinSec.value}:00.000Z`;
-        event.dates.push({
-          begin: new Date(Date.parse(baseBeginTime) + i*86400000).toISOString(),
-          end: new Date(Date.parse(baseEndTime) + i*86400000).toISOString(),
-        });
+  if (!repeatable.value) {
+    EventCreator.insertNDaily(
+      1,
+      "test@test.com",
+      eventTitle.value,
+      eventText.value,
+      eventLink.value,
+      eventBeginDate.value,
+      eventBeginHourMinSec.value,
+      eventEndDate.value,
+      eventEndHourMinSec.value,
+    );
+  } else {
+    if (frequenceSelected.value.type === "d") {
+      if (repetitionSelected.value.type === "i") {
+        EventCreator.insertNDaily(
+          3650,
+          "test@test.com",
+          eventTitle.value,
+          eventText.value,
+          eventLink.value,
+          eventBeginDate.value,
+          eventBeginHourMinSec.value,
+          eventEndDate.value,
+          eventEndHourMinSec.value,
+        );
+      } else if (repetitionSelected.value.type === "n") {
+        EventCreator.insertNDaily(
+          parseInt(repetitionSelected.value.option),
+          "test@test.com",
+          eventTitle.value,
+          eventText.value,
+          eventLink.value,
+          eventBeginDate.value,
+          eventBeginHourMinSec.value,
+          eventEndDate.value,
+          eventEndHourMinSec.value,
+        );
+      } else if (repetitionSelected.value.type === "u") {
+        EventCreator.insertUntilDaily(
+          repetitionSelected.value.option,
+          "test@test.com",
+          eventTitle.value,
+          eventText.value,
+          eventLink.value,
+          eventBeginDate.value,
+          eventBeginHourMinSec.value,
+          eventEndDate.value,
+          eventEndHourMinSec.value,
+        );
       }
-      console.log(event);
-      fetch("http://localhost:8000/events", {
-        method: "POST",
-        body: JSON.stringify(event),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => console.log("t'apposto"))
-    } else if (repetitionSelected.value.type === "u") {
-      // TODO: inserisci fino a date
-    }
-  } else if (frequenceSelected.value.type === "w") {
-    // TODO: rifletterci per bene
-  } else if (frequenceSelected.value.type === "m") {
-    if (repetitionSelected.value.type === "i") {
-      // TODO: inserisci 3650 dates
-    } else if (repetitionSelected.value.type === "n") {
-      // TODO: inserisci n dates
-    } else if (repetitionSelected.value.type === "u") {
-      // TODO: inserisci fino a date
+    } else if (frequenceSelected.value.type === "w") {
+      // TODO: rifletterci per bene
+    } else if (frequenceSelected.value.type === "m") {
+      if (repetitionSelected.value.type === "i") {
+        EventCreator.insertNMonthly(
+          3650,
+          eventTitle.value,
+          eventText.value,
+          eventLink.value,
+          eventBeginDate.value,
+          eventBeginHourMinSec.value,
+          eventEndDate.value,
+          eventEndHourMinSec.value,
+        );
+      } else if (repetitionSelected.value.type === "n") {
+        EventCreator.insertNMonthly(
+          parseInt(repetitionSelected.value.option),
+          eventTitle.value,
+          eventText.value,
+          eventLink.value,
+          eventBeginDate.value,
+          eventBeginHourMinSec.value,
+          eventEndDate.value,
+          eventEndHourMinSec.value,
+        );
+      } else if (repetitionSelected.value.type === "u") {
+        EventCreator.insertUntilMonthly(
+          repetitionSelected.value.option,
+          "test@test.com",
+          eventTitle.value,
+          eventText.value,
+          eventLink.value,
+          eventBeginDate.value,
+          eventBeginHourMinSec.value,
+          eventEndDate.value,
+          eventEndHourMinSec.value,
+        );
+      }
     }
   }
   resetFields();
