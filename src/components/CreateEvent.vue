@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import { ref, watchEffect, reactive } from "vue";
 import { store } from "@/store";
 import { EventCreator } from "@/eventCreator";
+import { Temporal } from "@js-temporal/polyfill";
 
 const eventTitle = ref(null);
 const eventText = ref(null);
@@ -43,13 +44,13 @@ async function generateDetails() {
 }
 
 function setBeginNow() {
-  eventBeginDate.value = store.value.formattedSimDate;
-  eventBeginHourMinSec.value = store.value.formattedSimHourMinSec;
+  eventBeginDate.value = store.value.simDate;
+  eventBeginHourMinSec.value = store.value.simTime;
 }
 
 function setEndNow() {
-  eventEndDate.value = store.value.formattedSimDate;
-  eventEndHourMinSec.value = store.value.formattedSimHourMinSec;
+  eventEndDate.value = store.value.simDate;
+  eventEndHourMinSec.value = store.value.simTime;
 }
 
 function resetBegin() {
@@ -239,8 +240,8 @@ resetFields();
           </button>
         </div>
         <div class="form-check my-2">
-          <input class="form-check-input" type="checkbox" id="repeatable" :disabled="eventBeginDate !== eventEndDate"
-            v-model="repeatable" />
+          <input class="form-check-input" type="checkbox" id="repeatable"
+            :disabled="eventBeginDate.toString() !== eventEndDate.toString()" v-model="repeatable" />
           <label class="form-check-label" for="repeatable">Repeatable</label>
         </div>
         <div v-if="repeatable" class="row my-2">
@@ -281,8 +282,7 @@ resetFields();
               <div class="form-text text-nowrap">Min. 1, Max. 3650</div>
             </div>
             <div v-else-if="repetitionSelected.type === 'u'">
-              <input class="form-control" type="date" :min="store.formattedSimDate"
-                v-model="repetitionSelected.option" />
+              <input class="form-control" type="date" :min="store.simDate" v-model="repetitionSelected.option" />
             </div>
           </div>
         </div>
