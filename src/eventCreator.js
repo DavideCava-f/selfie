@@ -79,8 +79,16 @@ class EventCreator {
       Temporal.PlainDate.compare(
         Temporal.PlainDate.from(eventEndDate).add({ days: i }),
         Temporal.PlainDate.from(untilDate),
-      ) === -1
+      ) !== 1
     );
+    console.log(event);
+    fetch("http://localhost:8000/events", {
+      method: "POST",
+      body: JSON.stringify(event),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((response) => console.log("t'apposto"));
   }
   static insertNMonthly(
     n,
@@ -160,8 +168,16 @@ class EventCreator {
       Temporal.PlainDate.compare(
         Temporal.PlainDate.from(eventEndDate).add({ months: i }),
         Temporal.PlainDate.from(untilDate),
-      ) === -1
+      ) !== 1
     );
+    console.log(event);
+    fetch("http://localhost:8000/events", {
+      method: "POST",
+      body: JSON.stringify(event),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((response) => console.log("t'apposto"));
   }
 }
 
