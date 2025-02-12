@@ -8,9 +8,9 @@ import { Temporal } from "@js-temporal/polyfill";
 const eventTitle = ref(null);
 const eventText = ref(null);
 const eventBeginDate = ref(null);
-const eventBeginHourMinSec = ref(null);
+const eventBeginTime = ref(null);
 const eventEndDate = ref(null);
-const eventEndHourMinSec = ref(null);
+const eventEndTime = ref(null);
 const repeatable = ref(false);
 const frequenceSelected = ref({
   type: "d",
@@ -45,22 +45,22 @@ async function generateDetails() {
 
 function setBeginNow() {
   eventBeginDate.value = store.value.simDate;
-  eventBeginHourMinSec.value = store.value.simTime;
+  eventBeginTime.value = store.value.simTime;
 }
 
 function setEndNow() {
   eventEndDate.value = store.value.simDate;
-  eventEndHourMinSec.value = store.value.simTime;
+  eventEndTime.value = store.value.simTime;
 }
 
 function resetBegin() {
   eventBeginDate.value = "";
-  eventBeginHourMinSec.value = "00:00";
+  eventBeginTime.value = "00:00";
 }
 
 function resetEnd() {
   eventEndDate.value = "";
-  eventEndHourMinSec.value = "00:01";
+  eventEndTime.value = "00:01";
 }
 
 function resetFields() {
@@ -75,8 +75,8 @@ function resetFields() {
 }
 
 function allDay() {
-  eventBeginHourMinSec.value = "00:00";
-  eventEndHourMinSec.value = "23:59";
+  eventBeginTime.value = "00:00";
+  eventEndTime.value = "23:59";
 }
 
 function canCreateEvent() {
@@ -93,9 +93,9 @@ function createEvent() {
       eventText.value,
       eventLink.value,
       eventBeginDate.value,
-      eventBeginHourMinSec.value,
+      eventBeginTime.value,
       eventEndDate.value,
-      eventEndHourMinSec.value,
+      eventEndTime.value,
     );
   } else {
     if (frequenceSelected.value.type === "d") {
@@ -107,9 +107,9 @@ function createEvent() {
           eventText.value,
           eventLink.value,
           eventBeginDate.value,
-          eventBeginHourMinSec.value,
+          eventBeginTime.value,
           eventEndDate.value,
-          eventEndHourMinSec.value,
+          eventEndTime.value,
         );
       } else if (repetitionSelected.value.type === "n") {
         EventCreator.insertNDaily(
@@ -119,9 +119,9 @@ function createEvent() {
           eventText.value,
           eventLink.value,
           eventBeginDate.value,
-          eventBeginHourMinSec.value,
+          eventBeginTime.value,
           eventEndDate.value,
-          eventEndHourMinSec.value,
+          eventEndTime.value,
         );
       } else if (repetitionSelected.value.type === "u") {
         EventCreator.insertUntilDaily(
@@ -131,9 +131,9 @@ function createEvent() {
           eventText.value,
           eventLink.value,
           eventBeginDate.value,
-          eventBeginHourMinSec.value,
+          eventBeginTime.value,
           eventEndDate.value,
-          eventEndHourMinSec.value,
+          eventEndTime.value,
         );
       }
     } else if (frequenceSelected.value.type === "w") {
@@ -147,9 +147,9 @@ function createEvent() {
           eventText.value,
           eventLink.value,
           eventBeginDate.value,
-          eventBeginHourMinSec.value,
+          eventBeginTime.value,
           eventEndDate.value,
-          eventEndHourMinSec.value,
+          eventEndTime.value,
         );
       } else if (repetitionSelected.value.type === "n") {
         EventCreator.insertNMonthly(
@@ -159,9 +159,9 @@ function createEvent() {
           eventText.value,
           eventLink.value,
           eventBeginDate.value,
-          eventBeginHourMinSec.value,
+          eventBeginTime.value,
           eventEndDate.value,
-          eventEndHourMinSec.value,
+          eventEndTime.value,
         );
       } else if (repetitionSelected.value.type === "u") {
         EventCreator.insertUntilMonthly(
@@ -171,9 +171,9 @@ function createEvent() {
           eventText.value,
           eventLink.value,
           eventBeginDate.value,
-          eventBeginHourMinSec.value,
+          eventBeginTime.value,
           eventEndDate.value,
-          eventEndHourMinSec.value,
+          eventEndTime.value,
         );
       }
     }
@@ -212,7 +212,7 @@ resetFields();
           <label>Start</label>
           <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
             <input class="form-control" type="date" v-model="eventBeginDate" />
-            <input class="form-control" type="time" v-model="eventBeginHourMinSec" />
+            <input class="form-control" type="time" v-model="eventBeginTime" />
             <button class="btn btn-outline-primary" @click="setBeginNow">
               Now
             </button>
@@ -225,7 +225,7 @@ resetFields();
           <label>End</label>
           <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
             <input class="form-control" type="date" :min="eventBeginDate" v-model="eventEndDate" />
-            <input class="form-control" type="time" v-model="eventEndHourMinSec" />
+            <input class="form-control" type="time" v-model="eventEndTime" />
             <button class="btn btn-outline-primary" @click="setEndNow">
               Now
             </button>

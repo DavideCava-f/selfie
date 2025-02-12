@@ -1,3 +1,5 @@
+import { Temporal } from "@js-temporal/polyfill";
+
 class EventCreator {
   static insertNDaily(
     n,
@@ -6,9 +8,9 @@ class EventCreator {
     eventText,
     eventLink,
     eventBeginDate,
-    eventBeginHourMinSec,
+    eventBeginTime,
     eventEndDate,
-    eventEndHourMinSec,
+    eventEndTime,
   ) {
     const event = {
       UserEmail: userEmail,
@@ -19,12 +21,16 @@ class EventCreator {
         link: eventLink,
       },
     };
+    const baseBeginDateTime = Temporal.PlainDateTime.from(
+      `${eventBeginDate}T${eventBeginTime}:00.000`,
+    );
+    const baseEndDateTime = Temporal.PlainDateTime.from(
+      `${eventEndDate}T${eventEndTime}:00.000`,
+    );
     for (let i = 0; i < n; i++) {
-      const baseBeginTime = `${eventBeginDate}T${eventBeginHourMinSec}:00.000Z`;
-      const baseEndTime = `${eventEndDate}T${eventEndHourMinSec}:00.000Z`;
       event.dates.push({
-        begin: new Date(Date.parse(baseBeginTime) + i * 86400000).toISOString(),
-        end: new Date(Date.parse(baseEndTime) + i * 86400000).toISOString(),
+        begin: baseBeginDateTime.add({ days: i }),
+        end: baseEndDateTime.add({ days: i }),
       });
     }
     console.log(event);
@@ -43,9 +49,9 @@ class EventCreator {
     eventText,
     eventLink,
     eventBeginDate,
-    eventBeginHourMinSec,
+    eventBeginTime,
     eventEndDate,
-    eventEndHourMinSec,
+    eventEndTime,
   ) {
     const event = {
       UserEmail: userEmail,
@@ -56,16 +62,25 @@ class EventCreator {
         link: eventLink,
       },
     };
+    const baseBeginDateTime = Temporal.PlainDateTime.from(
+      `${eventBeginDate}T${eventBeginTime}:00.000`,
+    );
+    const baseEndDateTime = Temporal.PlainDateTime.from(
+      `${eventEndDate}T${eventEndTime}:00.000`,
+    );
     let i = 0;
     do {
-      const baseBeginTime = `${eventBeginDate}T${eventBeginHourMinSec}:00.000Z`;
-      const baseEndTime = `${eventEndDate}T${eventEndHourMinSec}:00.000Z`;
       event.dates.push({
-        begin: new Date(Date.parse(baseBeginTime) + i * 86400000).toISOString(),
-        end: new Date(Date.parse(baseEndTime) + i * 86400000).toISOString(),
+        begin: baseBeginDateTime.add({ days: i }),
+        end: baseEndDateTime.add({ days: i }),
       });
       i++;
-    } while (Date.parse(eventEndDate) + i * 86400000 < Date.parse(untilDate));
+    } while (
+      Temporal.PlainDate.compare(
+        Temporal.PlainDate.from(eventEndDate).add({ days: i }),
+        Temporal.PlainDate.from(untilDate),
+      ) === -1
+    );
   }
   static insertNMonthly(
     n,
@@ -74,11 +89,10 @@ class EventCreator {
     eventText,
     eventLink,
     eventBeginDate,
-    eventBeginHourMinSec,
+    eventBeginTime,
     eventEndDate,
-    eventEndHourMinSec,
+    eventEndTime,
   ) {
-    // FIXME: gestire i mesi (non tutti hanno 30 giorni)
     const event = {
       UserEmail: userEmail,
       dates: [],
@@ -88,14 +102,16 @@ class EventCreator {
         link: eventLink,
       },
     };
+    const baseBeginDateTime = Temporal.PlainDateTime.from(
+      `${eventBeginDate}T${eventBeginTime}:00.000`,
+    );
+    const baseEndDateTime = Temporal.PlainDateTime.from(
+      `${eventEndDate}T${eventEndTime}:00.000`,
+    );
     for (let i = 0; i < n; i++) {
-      const baseBeginTime = `${eventBeginDate}T${eventBeginHourMinSec}:00.000Z`;
-      const baseEndTime = `${eventEndDate}T${eventEndHourMinSec}:00.000Z`;
       event.dates.push({
-        begin: new Date(
-          Date.parse(baseBeginTime) + i * 2629800000,
-        ).toISOString(),
-        end: new Date(Date.parse(baseEndTime) + i * 2629800000).toISOString(),
+        begin: baseBeginDateTime.add({ months: i }),
+        end: baseEndDateTime.add({ months: i }),
       });
     }
     console.log(event);
@@ -114,9 +130,9 @@ class EventCreator {
     eventText,
     eventLink,
     eventBeginDate,
-    eventBeginHourMinSec,
+    eventBeginTime,
     eventEndDate,
-    eventEndHourMinSec,
+    eventEndTime,
   ) {
     const event = {
       UserEmail: userEmail,
@@ -127,18 +143,25 @@ class EventCreator {
         link: eventLink,
       },
     };
+    const baseBeginDateTime = Temporal.PlainDateTime.from(
+      `${eventBeginDate}T${eventBeginTime}:00.000`,
+    );
+    const baseEndDateTime = Temporal.PlainDateTime.from(
+      `${eventEndDate}T${eventEndTime}:00.000`,
+    );
     let i = 0;
     do {
-      const baseBeginTime = `${eventBeginDate}T${eventBeginHourMinSec}:00.000Z`;
-      const baseEndTime = `${eventEndDate}T${eventEndHourMinSec}:00.000Z`;
       event.dates.push({
-        begin: new Date(
-          Date.parse(baseBeginTime) + i * 2629800000,
-        ).toISOString(),
-        end: new Date(Date.parse(baseEndTime) + i * 2629800000).toISOString(),
+        begin: baseBeginDateTime.add({ months: i }),
+        end: baseEndDateTime.add({ months: i }),
       });
       i++;
-    } while (Date.parse(eventEndDate) + i * 2629800000 < Date.parse(untilDate));
+    } while (
+      Temporal.PlainDate.compare(
+        Temporal.PlainDate.from(eventEndDate).add({ months: i }),
+        Temporal.PlainDate.from(untilDate),
+      ) === -1
+    );
   }
 }
 
