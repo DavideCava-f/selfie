@@ -34,10 +34,11 @@ app.post("/CreateNote", async function (req, res) {
     await mongoose.connect(uri);
     // let tags = JSON.parse(req.body.tags)
     //console.log(JSON.stringify(tags[0]))
+    var creationDate = new Date().toISOString()
     const notes = await Note.create({
       userEmail: "fk@mail.com",
-      creationDate: "",
-      lastUpDate: "",
+      creationDate: creationDate,
+      lastUpDate: creationDate,
       Title: req.body.title,
       Text: req.body.content, //Campi singoli va bene stringa
       Tags: JSON.parse(req.body.tags), //Array di oggetti vuole l'oggetto
@@ -64,8 +65,9 @@ app.put("/UpdateNote", async function (req, res) {
   try {
     await mongoose.connect(uri);
     let idNote = req.body.id_Note;
+    let UpdateDate = new Date().toISOString()
     console.log(idNote)
-    await Note.updateOne({_id: new ObjectId(idNote)},{ $set: {Title:req.body.title_note, Text:req.body.content_note, Tags:JSON.parse(req.body.tags_note)}})
+    await Note.updateOne({_id: new ObjectId(idNote)},{ $set: {Title:req.body.title_note, lastUpDate: UpdateDate,Text:req.body.content_note, Tags:JSON.parse(req.body.tags_note)}})
     res.json({mess:"ciao"});
   } finally {
     mongoose.connection.close();

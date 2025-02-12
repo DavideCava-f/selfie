@@ -11,6 +11,7 @@ var NUtitle = ref("");
 var NUcontent = ref("");
 var NUtags = ref("");
 var NUid = ref("")
+var showing = ref("From Oldest to Newest(Creation)")
 
 
 function CreateNote() {
@@ -20,9 +21,10 @@ function CreateNote() {
     return '{"name":"' + el + '"}';
   });
   let jsonTags = "[" + jsonT.toString() + "]";
-  console.log(jsonTags);
-  console.log(typeof jsonTags);
 
+  var Title = NCtitle.value || "New Note"
+  var Content = NCcontent.value || "No Content"
+    console.log(Title)
   fetch("http://localhost:5173/CreateNote", {
     method: "post",
     headers: {
@@ -32,8 +34,8 @@ function CreateNote() {
 
     //make sure to serialize your JSON body
     body: JSON.stringify({
-      title: NCtitle.value,
-      content: NCcontent.value,
+      title: Title,
+      content: Content,
       tags: jsonTags,
     }),
   })
@@ -44,7 +46,28 @@ function CreateNote() {
       //do something awesome that makes the world a better place
     });
 }
+function DuplicateNote(id){
+  var tagsStr = ""
+      var elem = NotesList.value.find(el => el._id.toString() == id)
+      NCtitle.value = elem.Title
+      NCcontent.value = elem.Text
+      var ArrTags = elem.Tags
+      ArrTags.forEach(el => { 
+      tagsStr += el.name + ","
+      })
+      tagsStr = tagsStr.slice(0,-1)
+      NCtags.value= tagsStr
+      console.log(NCtitle.value)
+      console.log(NCcontent.value)
+      console.log(NCtags.value)
 
+      CreateNote()
+    
+      NCtags.value= ""
+      NCtitle.value = ""
+      NCcontent.value = ""
+ 
+}
 function DeleteNote(id) {
   //Use marked before writing on NotesArea(markdown)
   console.log(typeof id)
@@ -129,8 +152,8 @@ function SaveAfterUpdate(){
     //make sure to serialize your JSON body
     body: JSON.stringify({
       id_Note: NUid.value,
-      title_note: NUtitle.value,
-      content_note: NUcontent.value,
+      title_note: NUtitle.value || "No Title",
+      content_note: NUcontent.value || "No Content",
       tags_note:UjsonTags
 
     }),
@@ -146,21 +169,65 @@ function SaveAfterUpdate(){
       //do something awesome that makes the world a better place
     });
 }
+
+function SortByDate(v){
+  
+  if(v==0){
+  NotesList.value.sort((i,j) => {return (new Date(i.creationDate).getTime() < new Date(j.creationDate).getTime()) ? 1:-1})
+  }else if(v==1){
+
+  NotesList.value.sort((i,j) => {return (new Date(i.creationDate).getTime() > new Date(j.creationDate).getTime()) ? 1:-1})
+  }else if(v==2){
+  NotesList.value.sort((i,j) => {return (new Date(i.lastUpDate).getTime() < new Date(j.lastUpDate).getTime()) ? 1:-1})
+  }else{
+
+  NotesList.value.sort((i,j) => {return (new Date(i.lastUpDate).getTime() > new Date(j.lastUpDate).getTime()) ? 1:-1})
+
+  }
+  }
+
+
+
+function getVisibleDate(date){
+
+ /* NotesList.value = NotesList.value.sort((i,j) => {
+    
+  } )*/
+
+   //var no= NotesList.value[0].lastUpDate
+   var str = new Date(date).toDateString() + " " + new Date(date).toTimeString().split(" ")[0]
+   str = str.slice(0,-3)
+   return str
+
+}
 </script>
 
 <template>
   <NavBar />
-  <div class="m-3 d-flex justify-content-center input-group">
-    <input
-      placeholder="Find Note"
-      class="rounded-start"
-      type="search"
-      aria-label="Search"
-    />
-    <button class="btn btn-outline-success rounded-end my-sm-0" type="submit">
-      Search
+ 
+  <div class="m-3 d-flex justify-content-evenly input-group">
+   <div class="m-3">
+    SortByCreationDate:
+    <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByDate(0)">
+      Newest to Oldest
     </button>
+    <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByDate(1)">
+      Oldest to Newest
+    </button>
+
+   </div>
+   <div class="m-3">
+    SortByLastUpdate:
+    <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByDate(2)">
+      Newest to Oldest
+    </button>
+    <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByDate(3)">
+      Oldest to Newest
+    </button>
+   </div>
   </div>
+  
+    
   <div class="container">
     <div class="row justify-content-center">
 		  <div v-for="note in NotesList" :key="note._id">
@@ -171,7 +238,14 @@ function SaveAfterUpdate(){
               <hr>
               <p class="card-text" v-html="marked.parse(note.Text)"></p>
               <span><button @click="DeleteNote(note._id)">Delete Note</button></span>
+              <span><button @click="DuplicateNote(note._id)">Duplicate Note</button></span>
               <span><button data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" @click="UpdateNote(note._id)">UpdateNote</button></span>
+              <div>
+
+                <span> Last Updated:<b> {{ getVisibleDate(note.lastUpDate)}}</b> </span>
+                <span> Creation:<b> {{ getVisibleDate(note.creationDate) }}</b> </span>
+
+              </div>
            </div>
          </div>
         </div>
