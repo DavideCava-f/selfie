@@ -13,6 +13,7 @@ var NUtags = ref("");
 var NUid = ref("")
 const redIn = /^(\w+(,\w+)*)?$/
 var enabled = computed(() => redIn.test(NCtags.value));
+var enabledUpdate = computed(() => redIn.test(NUtags.value));
 
 function CreateNote() {
   //Parsing tags
@@ -378,7 +379,7 @@ function getVisibleDate(date){
               </div>
               <div class="mb-3">
                 <label class="form-label">Tags</label>
-                <input
+                <input :class="{'border':!enabledUpdate,'border-danger':!enabledUpdate}"
                   v-model="NUtags"
                   type="text"
                   class="form-control"
@@ -397,7 +398,7 @@ function getVisibleDate(date){
                     <i class="fas fa-list"></i>
                   </button>
                 </div>
-                <button @click.prevent="SaveAfterUpdate()" class="btn btn-primary">
+                <button @click.prevent="SaveAfterUpdate()" :disabled="!enabledUpdate" class="btn btn-primary">
                   <i class="fas fa-save me-2"></i>Save Note
                 </button>
               </div>
