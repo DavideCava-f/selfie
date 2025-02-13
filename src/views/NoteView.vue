@@ -1,6 +1,6 @@
 <script setup>
 import NavBar from "@/components/NavBar.vue";
-import { ref } from "vue";
+import { computed,ref } from "vue";
 import { marked } from 'marked';
 
 var NCtitle = ref("");
@@ -11,8 +11,8 @@ var NUtitle = ref("");
 var NUcontent = ref("");
 var NUtags = ref("");
 var NUid = ref("")
-var showing = ref("From Oldest to Newest(Creation)")
-
+const redIn = /^(\w+(,\w+)*)?$/
+var enabled = computed(() => redIn.test(NCtags.value));
 
 function CreateNote() {
   //Parsing tags
@@ -309,7 +309,7 @@ function getVisibleDate(date){
               </div>
               <div class="mb-3">
                 <label class="form-label">Tags</label>
-                <input
+                <input :class="{'border':!enabled,'border-danger':!enabled}"
                   v-model="NCtags"
                   type="text"
                   class="form-control"
@@ -328,7 +328,7 @@ function getVisibleDate(date){
                     <i class="fas fa-list"></i>
                   </button>
                 </div>
-                <button @click.prevent="CreateNote" class="btn btn-primary">
+                <button @click.prevent="CreateNote" :disabled="!enabled" class="btn btn-primary">
                   <i class="fas fa-save me-2"></i>Save Note
                 </button>
               </div>
