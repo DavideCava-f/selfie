@@ -1,4 +1,5 @@
 <script setup>
+//Rimasto da 1 gestire focus sulle note 2 finire il sorting delle note(Titolo, lunghezza contenuto)
 import NavBar from "@/components/NavBar.vue";
 import { computed,ref } from "vue";
 import { marked } from 'marked';
@@ -237,10 +238,18 @@ function getVisibleDate(date){
             <div class="card-body">
               <h1 class="card-title fw-bold">{{note.Title}}</h1>
               <hr>
-              <p class="card-text" v-html="marked.parse(note.Text)"></p>
+              <p class="card-text" v-html="marked.parse(note.Text)" style="max-height:50px; overflow:scroll"></p>
+              <span v-for="tag in note.Tags">
+                <span class="badge text-bg-warning mx-1 mb-1">{{ tag.name }}</span>
+
+              </span>
+              <div>
+
               <span><button @click="DeleteNote(note._id)">Delete Note</button></span>
               <span><button @click="DuplicateNote(note._id)">Duplicate Note</button></span>
               <span><button data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" @click="UpdateNote(note._id)">UpdateNote</button></span>
+
+              </div>
               <div>
 
                 <span> Last Updated:<b> {{ getVisibleDate(note.lastUpDate)}}</b> </span>
