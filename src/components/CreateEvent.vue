@@ -1,6 +1,6 @@
 <script setup>
 import OpenAI from "openai";
-import { ref, watchEffect, reactive } from "vue";
+import { ref, watch, watchEffect, reactive } from "vue";
 import { store } from "@/store";
 import { EventCreator } from "@/eventCreator";
 import { Temporal } from "@js-temporal/polyfill";
@@ -11,6 +11,7 @@ const eventBeginDate = ref(null);
 const eventBeginTime = ref(null);
 const eventEndDate = ref(null);
 const eventEndTime = ref(null);
+const dayOfWeek = ref(null);
 const repeatable = ref(false);
 const frequenceSelected = ref({
   type: "d",
@@ -79,6 +80,13 @@ function allDay() {
   eventEndTime.value = "23:59";
 }
 
+function setDayOfWeek() {
+  // FIXME: la data deve sempre essere selezionata, non puo' non esserci
+  frequenceSelected.value.option = [...Array(7)];
+  dayOfWeek.value = Temporal.PlainDate.from(eventBeginDate.value).dayOfWeek - 1;
+  frequenceSelected.value.option[dayOfWeek.value] = true;
+}
+
 function canCreateEvent() {
   // TODO
   return true;
@@ -142,7 +150,7 @@ function createEvent() {
         EventCreator.insertNWeekly(
           3650,
           frequenceSelected.value.option,
-          "test@test.com"
+          "test@test.com",
           eventTitle.value,
           eventText.value,
           eventLink.value,
@@ -150,12 +158,12 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-        )
+        );
       } else if (repetitionSelected.value.type === "n") {
         EventCreator.insertNWeekly(
           parseInt(repetitionSelected.value.option),
           frequenceSelected.value.option,
-          "test@test.com"
+          "test@test.com",
           eventTitle.value,
           eventText.value,
           eventLink.value,
@@ -163,12 +171,12 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-        )
+        );
       } else if (repetitionSelected.value.type === "u") {
         EventCreator.insertUntilWeekly(
           repetitionSelected.value.option,
           frequenceSelected.value.option,
-          "test@test.com"
+          "test@test.com",
           eventTitle.value,
           eventText.value,
           eventLink.value,
@@ -176,7 +184,7 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-        )
+        );
       }
     } else if (frequenceSelected.value.type === "m") {
       if (repetitionSelected.value.type === "i") {
@@ -222,6 +230,8 @@ function createEvent() {
 }
 
 resetFields();
+
+watch(eventBeginDate, setDayOfWeek);
 </script>
 
 <template>
@@ -231,19 +241,34 @@ resetFields();
         <h1 class="modal-title fs-4" id="staticBackdropLabel">
           Create new event
         </h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-          @click="resetFields"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          @click="resetFields"
+        ></button>
       </div>
       <div class="modal-body">
         <div class="my-2">
           <label for="title">Title</label>
-          <input class="form-control" type="text" placeholder="Enter event title" v-model="eventTitle" name="value" />
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Enter event title"
+            v-model="eventTitle"
+            name="value"
+          />
         </div>
 
         <div class="my-2">
           <label>Details</label>
-          <textarea class="form-control" rows="4" placeholder="Start typing the details..."
-            v-model="eventText"></textarea>
+          <textarea
+            class="form-control"
+            rows="4"
+            placeholder="Start typing the details..."
+            v-model="eventText"
+          ></textarea>
         </div>
 
         <br />
@@ -251,7 +276,12 @@ resetFields();
         <div class="my-2">
           <label>Start</label>
           <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
-            <input class="form-control" type="date" v-model="eventBeginDate" />
+            <input
+              class="form-control"
+              type="date"
+              v-model="eventBeginDate"
+              @change="setDayOfWeek"
+            />
             <input class="form-control" type="time" v-model="eventBeginTime" />
             <button class="btn btn-outline-primary" @click="setBeginNow">
               Now
@@ -264,7 +294,12 @@ resetFields();
         <div class="my-2">
           <label>End</label>
           <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
-            <input class="form-control" type="date" :min="eventBeginDate" v-model="eventEndDate" />
+            <input
+              class="form-control"
+              type="date"
+              :min="eventBeginDate"
+              v-model="eventEndDate"
+            />
             <input class="form-control" type="time" v-model="eventEndTime" />
             <button class="btn btn-outline-primary" @click="setEndNow">
               Now
@@ -275,33 +310,55 @@ resetFields();
           </div>
         </div>
         <div class="my-2">
-          <button class="btn btn-outline-success" type="button" id="tuttoIlGiorno" @click="allDay">
+          <button
+            class="btn btn-outline-success"
+            type="button"
+            id="tuttoIlGiorno"
+            @click="allDay"
+          >
             All day
           </button>
         </div>
         <div class="form-check my-2">
-          <input class="form-check-input" type="checkbox" id="repeatable"
-            :disabled="eventBeginDate.toString() !== eventEndDate.toString()" v-model="repeatable" />
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="repeatable"
+            :disabled="eventBeginDate.toString() !== eventEndDate.toString()"
+            v-model="repeatable"
+          />
           <label class="form-check-label" for="repeatable">Repeatable</label>
         </div>
         <div v-if="repeatable" class="row my-2">
           <div class="col-sm-6 col-12">
             <label>Frequence</label>
             <div>
-              <select class="form-select" v-model="frequenceSelected.type"
-                @change="frequenceSelected.option = [...Array(7)]">
+              <select
+                class="form-select"
+                v-model="frequenceSelected.type"
+                @change="setDayOfWeek"
+              >
                 <option value="d">Every day</option>
                 <option value="w">One/more days a week</option>
                 <option value="m">Every month this day</option>
               </select>
             </div>
             <br />
-            <div v-if="frequenceSelected.type === 'w'"
-              class="d-flex flex-wrap gap-1 justify-content-between gap-1 mx-2">
+            <div
+              v-if="frequenceSelected.type === 'w'"
+              class="d-flex flex-wrap gap-1 justify-content-between gap-1 mx-2"
+            >
               <div v-for="day in store.week" :key="day">
-                <input type="checkbox" class="btn-check" autocomplete="off"
-                  v-model="frequenceSelected.option[store.week.indexOf(day)]" :id="day" />
-                <label class="btn btn-outline-primary rounded-pill" :for="day">{{ day.slice(0, 2) }}
+                <input
+                  type="checkbox"
+                  class="btn-check"
+                  autocomplete="off"
+                  v-model="frequenceSelected.option[store.week.indexOf(day)]"
+                  :checked="store.week.indexOf(day) === dayOfWeek"
+                  :id="day"
+                />
+                <label class="btn btn-outline-primary rounded-pill" :for="day"
+                  >{{ day.slice(0, 2) }}
                 </label>
               </div>
             </div>
@@ -309,35 +366,67 @@ resetFields();
           <div class="col-sm-6 col-12 my-sm-0 my-3">
             <label>Repetition</label>
             <div>
-              <select class="form-select" v-model="repetitionSelected.type" @change="repetitionSelected.option = ''">
+              <select
+                class="form-select"
+                v-model="repetitionSelected.type"
+                @change="repetitionSelected.option = ''"
+              >
                 <option value="i">Repeat indefinitely</option>
                 <option value="n">Repeat n times</option>
                 <option value="u">Repeat until</option>
               </select>
             </div>
             <br />
-            <div class="d-flex align-items-center gap-1" v-if="repetitionSelected.type === 'n'">
-              <input class="form-control" type="number" min="1" max="3650" placeholder="Insert n"
-                v-model="repetitionSelected.option" />
+            <div
+              class="d-flex align-items-center gap-1"
+              v-if="repetitionSelected.type === 'n'"
+            >
+              <input
+                class="form-control"
+                type="number"
+                min="1"
+                max="3650"
+                placeholder="Insert n"
+                v-model="repetitionSelected.option"
+              />
               <div class="form-text text-nowrap">Min. 1, Max. 3650</div>
             </div>
             <div v-else-if="repetitionSelected.type === 'u'">
-              <input class="form-control" type="date" :min="store.simDate" v-model="repetitionSelected.option" />
+              <input
+                class="form-control"
+                type="date"
+                :min="store.simDate"
+                v-model="repetitionSelected.option"
+              />
             </div>
           </div>
         </div>
         <br />
         <div class="my-2">
           <label>Link</label>
-          <input class="form-control" type="text" placeholder="Luogo fisico o virtuale" v-model="eventLink" />
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Luogo fisico o virtuale"
+            v-model="eventLink"
+          />
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-end">
-        <button class="btn btn-secondary" :disabled="!eventText" @click="generateDetails">
+        <button
+          class="btn btn-secondary"
+          :disabled="!eventText"
+          @click="generateDetails"
+        >
           AI
         </button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" :disabled="!canCreateEvent"
-          @click="createEvent">
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-dismiss="modal"
+          :disabled="!canCreateEvent"
+          @click="createEvent"
+        >
           Create
         </button>
       </div>

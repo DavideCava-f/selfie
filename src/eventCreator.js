@@ -1,4 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { store } from "@/store";
 
 class EventCreator {
   static insertNDaily(
@@ -117,14 +118,17 @@ class EventCreator {
     const baseEndDateTime = Temporal.PlainDateTime.from(
       `${eventEndDate}T${eventEndTime}:00.000`,
     );
-    const weekDaysOn = weekDays.filter((w) => weekDays[w]);
+    const weekDaysOn = weekDays
+      .map((o, i) => [o, i])
+      .filter((d) => d[0])
+      .map((d) => d[1]);
     for (let i = 0; i < n; i++) {
       // FIXME:
       weekDaysOn.forEach((day) => {
         event.dates.push({
           begin: baseBeginDateTime.add({ weeks: i }),
-          end: baseEndDateTime.add({ weeks: i })
-        })
+          end: baseEndDateTime.add({ weeks: i }),
+        });
       });
     }
   }
