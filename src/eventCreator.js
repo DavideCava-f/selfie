@@ -122,19 +122,30 @@ class EventCreator {
       .map((o, i) => [o, i])
       .filter((d) => d[0])
       .map((d) => d[1]);
-    console.log(weekDaysOn);
-    // Devo:
-    // 1. vedere il giorno di baseBeginDateTime
-    // 2. far partire il baseBeginDateTime al primo giorno in weekDaysOn successivo al giorno corrente
+    const baseWeekDay = baseBeginDateTime.dayOfWeek - 1;
+    const weekDaysOnDateTime = weekDaysOn.map((d) => {
+      return {
+        start: baseBeginDateTime.add({ days: d - baseWeekDay }),
+        end: baseEndDateTime.add({ days: d - baseWeekDay }),
+      };
+    });
     for (let i = 0; i < n; i++) {
-      // FIXME:
-      weekDaysOn.forEach((day) => {
+      weekDaysOnDateTime.forEach((d) => {
         event.dates.push({
-          begin: baseBeginDateTime.add({ weeks: i }).with({ weekday: day }),
-          end: baseEndDateTime.add({ weeks: i }).with({ weekday: day }),
+          begin: d.start.add({ weeks: i }),
+          end: d.end.add({ weeks: i }),
         });
       });
     }
+    // TODO: the days before baseBeginDateTime should not be considered
+    console.log(event);
+    fetch("http://localhost:8000/events", {
+      method: "POST",
+      body: JSON.stringify(event),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((response) => console.log("t'apposto"));
   }
   static insertNMonthly(
     n,

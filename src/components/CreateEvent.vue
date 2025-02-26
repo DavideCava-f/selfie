@@ -81,7 +81,7 @@ function allDay() {
 }
 
 function setDayOfWeek() {
-  // FIXME: la data deve sempre essere selezionata, non puo' non esserci
+  if (!eventBeginDate.value) return;
   frequenceSelected.value.option = [...Array(7)];
   dayOfWeek.value = Temporal.PlainDate.from(eventBeginDate.value).dayOfWeek - 1;
   frequenceSelected.value.option[dayOfWeek.value] = true;
@@ -276,12 +276,7 @@ watch(eventBeginDate, setDayOfWeek);
         <div class="my-2">
           <label>Start</label>
           <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
-            <input
-              class="form-control"
-              type="date"
-              v-model="eventBeginDate"
-              @change="setDayOfWeek"
-            />
+            <input class="form-control" type="date" v-model="eventBeginDate" />
             <input class="form-control" type="time" v-model="eventBeginTime" />
             <button class="btn btn-outline-primary" @click="setBeginNow">
               Now
@@ -333,11 +328,7 @@ watch(eventBeginDate, setDayOfWeek);
           <div class="col-sm-6 col-12">
             <label>Frequence</label>
             <div>
-              <select
-                class="form-select"
-                v-model="frequenceSelected.type"
-                @change="setDayOfWeek"
-              >
+              <select class="form-select" v-model="frequenceSelected.type">
                 <option value="d">Every day</option>
                 <option value="w">One/more days a week</option>
                 <option value="m">Every month this day</option>
@@ -355,6 +346,7 @@ watch(eventBeginDate, setDayOfWeek);
                   autocomplete="off"
                   v-model="frequenceSelected.option[store.week.indexOf(day)]"
                   :checked="store.week.indexOf(day) === dayOfWeek"
+                  :disabled="store.week.indexOf(day) === dayOfWeek"
                   :id="day"
                 />
                 <label class="btn btn-outline-primary rounded-pill" :for="day"

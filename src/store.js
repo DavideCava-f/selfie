@@ -30,13 +30,13 @@ const store = ref({
   simDay: computed(() => store.value.simDate.dayOfWeek - 1),
 
   week: [
-    "Sunday",
     "Monday",
     "Tuesday",
     "Wednesday",
     "Thursday",
     "Friday",
     "Saturday",
+    "Sunday",
   ],
 
   openai: new OpenAI({
