@@ -15,6 +15,7 @@ var NUid = ref("")
 const redIn = /^(\w+(,\w+)*)?$/
 var enabled = computed(() => redIn.test(NCtags.value));
 var enabledUpdate = computed(() => redIn.test(NUtags.value));
+var selectedCard = ref(-1)
 
 function CreateNote() {
   //Parsing tags
@@ -233,12 +234,20 @@ function getVisibleDate(date){
   <div class="container">
     <div class="row justify-content-center">
 		  <div v-for="note in NotesList" :key="note._id">
-        <div @click="bubu()" class="col-md-7 mb-4">
+        <div @click="() => {
+          if(selectedCard!= note._id)
+          {
+            selectedCard = note._id
+          } else{
+            selectedCard = -1
+          }
+          console.log(selectedCard)
+          }" class="col-md-7 mb-4">
          <div class="card rounded-3">
             <div class="card-body">
               <h1 class="card-title fw-bold">{{note.Title}}</h1>
               <hr>
-              <p class="card-text" v-html="marked.parse(note.Text)" style="max-height:50px; overflow:scroll"></p>
+              <p :class="[{selected: selectedCard==note._id}, 'card-text','notSelected']" v-html="marked.parse(note.Text)" style=""></p>
               <span v-for="tag in note.Tags">
                 <span class="badge text-bg-warning mx-1 mb-1">{{ tag.name }}</span>
 
@@ -420,6 +429,17 @@ function getVisibleDate(date){
 </template>
 
 <style scoped>
+.notSelected{
+
+max-height:50px; 
+overflow:hidden
+
+}
+.selected{
+  /*background-color: blue;*/
+  max-height:unset
+}
+
 .offcanvas-size-xl {
   --bs-offcanvas-width: min(90vw, 600px);
 }
