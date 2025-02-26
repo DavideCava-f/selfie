@@ -125,20 +125,99 @@ class EventCreator {
     const baseWeekDay = baseBeginDateTime.dayOfWeek - 1;
     const weekDaysOnDateTime = weekDaysOn.map((d) => {
       return {
-        start: baseBeginDateTime.add({ days: d - baseWeekDay }),
+        begin: baseBeginDateTime.add({ days: d - baseWeekDay }),
         end: baseEndDateTime.add({ days: d - baseWeekDay }),
       };
     });
     for (let i = 0; i < n; i++) {
       weekDaysOnDateTime.forEach((d) => {
         event.dates.push({
-          begin: d.start.add({ weeks: i }),
+          begin: d.begin.add({ weeks: i }),
           end: d.end.add({ weeks: i }),
         });
       });
     }
-    // TODO: the days before baseBeginDateTime should not be considered
-    console.log(event);
+    event.dates
+      .filter(
+        (d) => Temporal.PlainDateTime.compare(baseBeginDateTime, d.begin) === 1,
+      )
+      .forEach((d) => {
+        d.begin = d.begin.add({ weeks: n });
+        d.end = d.end.add({ weeks: n });
+      });
+
+    fetch("http://localhost:8000/events", {
+      method: "POST",
+      body: JSON.stringify(event),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((response) => console.log("t'apposto"));
+  }
+  static insertUntilWeekly(
+    untilDate,
+    weekDays,
+    userEmail,
+    eventTitle,
+    eventText,
+    eventLink,
+    eventBeginDate,
+    eventBeginTime,
+    eventEndDate,
+    eventEndTime,
+  ) {
+    const event = {
+      UserEmail: userEmail,
+      dates: [],
+      title: eventTitle,
+      details: {
+        text: eventText,
+        link: eventLink,
+      },
+    };
+    const baseBeginDateTime = Temporal.PlainDateTime.from(
+      `${eventBeginDate}T${eventBeginTime}:00.000`,
+    );
+    const baseEndDateTime = Temporal.PlainDateTime.from(
+      `${eventEndDate}T${eventEndTime}:00.000`,
+    );
+    const weekDaysOn = weekDays
+      .map((o, i) => [o, i])
+      .filter((d) => d[0])
+      .map((d) => d[1]);
+    const baseWeekDay = baseBeginDateTime.dayOfWeek - 1;
+    const weekDaysOnDateTime = weekDaysOn.map((d) => {
+      return {
+        begin: baseBeginDateTime.add({ days: d - baseWeekDay }),
+        end: baseEndDateTime.add({ days: d - baseWeekDay }),
+      };
+    });
+    let i = 0;
+    do {
+      weekDaysOnDateTime.forEach((d) => {
+        event.dates.push({
+          begin: d.begin.add({ weeks: i }),
+          end: d.end.add({ weeks: i }),
+        });
+      });
+      i++;
+    } while (
+      Temporal.PlainDate.compare(
+        Temporal.PlainDate.from(event.dates.slice(-1)[0].end),
+        Temporal.PlainDate.from(untilDate),
+      ) !== 1
+    );
+    event.dates = event.dates
+      .filter(
+        (d) => Temporal.PlainDateTime.compare(baseBeginDateTime, d.begin) !== 1,
+      )
+      .filter(
+        (d) =>
+          Temporal.PlainDateTime.compare(
+            untilDate,
+            Temporal.PlainDate.from(d.end),
+          ) !== -1,
+      );
     fetch("http://localhost:8000/events", {
       method: "POST",
       body: JSON.stringify(event),

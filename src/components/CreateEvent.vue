@@ -88,8 +88,18 @@ function setDayOfWeek() {
 }
 
 function canCreateEvent() {
-  // TODO
-  return true;
+  return (
+    eventTitle.value &&
+    eventBeginDate.value &&
+    eventBeginTime.value &&
+    eventEndDate.value &&
+    eventEndTime.value &&
+    (repetitionSelected.value.type &&
+    (repetitionSelected.value.type === "n" ||
+      repetitionSelected.value.type === "u")
+      ? repetitionSelected.value.option
+      : true)
+  );
 }
 
 function createEvent() {
@@ -145,7 +155,6 @@ function createEvent() {
         );
       }
     } else if (frequenceSelected.value.type === "w") {
-      // TODO: rifletterci per bene
       if (repetitionSelected.value.type === "i") {
         EventCreator.insertNWeekly(
           3650,
@@ -319,7 +328,10 @@ watch(eventBeginDate, setDayOfWeek);
             class="form-check-input"
             type="checkbox"
             id="repeatable"
-            :disabled="eventBeginDate.toString() !== eventEndDate.toString()"
+            :disabled="
+              eventBeginDate.toString() !== eventEndDate.toString() ||
+              !eventBeginDate
+            "
             v-model="repeatable"
           />
           <label class="form-check-label" for="repeatable">Repeatable</label>
@@ -416,7 +428,7 @@ watch(eventBeginDate, setDayOfWeek);
           type="button"
           class="btn btn-primary"
           data-bs-dismiss="modal"
-          :disabled="!canCreateEvent"
+          :disabled="!canCreateEvent()"
           @click="createEvent"
         >
           Create
