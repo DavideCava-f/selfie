@@ -126,18 +126,12 @@ class EventCreator {
     // Devo:
     // 1. vedere il giorno di baseBeginDateTime
     // 2. far partire il baseBeginDateTime al primo giorno in weekDaysOn successivo al giorno corrente
-    const baseWeekDay = baseBeginDateTime.dayOfWeek - 1;
-    const firstValidWeekDay = weekDaysOn.find((d) => d >= baseWeekDay);
-    baseBeginDateTime.add({ days: firstValidWeekDay - baseWeekDay });
-    baseEndDateTime.add({ days: firstValidWeekDay - baseWeekDay });
-    console.log(baseWeekDay);
-    console.log(firstValidWeekDay);
     for (let i = 0; i < n; i++) {
       // FIXME:
       weekDaysOn.forEach((day) => {
         event.dates.push({
-          begin: baseBeginDateTime.add({ weeks: i }),
-          end: baseEndDateTime.add({ weeks: i }),
+          begin: baseBeginDateTime.add({ weeks: i }).with({ weekday: day }),
+          end: baseEndDateTime.add({ weeks: i }).with({ weekday: day }),
         });
       });
     }
