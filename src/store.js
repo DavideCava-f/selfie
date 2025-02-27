@@ -39,12 +39,12 @@ const store = ref({
     "Sunday",
   ],
 
-  openai: new OpenAI({
-    baseURL: "https://openrouter.ai/api/v1",
-    apiKey: import.meta.env.VITE_OPEN_AI_API_KEY,
-    defaultHeaders: {},
-    dangerouslyAllowBrowser: true,
-  }),
+  // openai: new OpenAI({
+  // baseURL: "https://openrouter.ai/api/v1",
+  // apiKey: import.meta.env.VITE_OPEN_AI_API_KEY,
+  // defaultHeaders: {},
+  // dangerouslyAllowBrowser: true,
+  // }),
 });
 
 setInterval(
