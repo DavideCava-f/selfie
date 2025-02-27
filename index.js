@@ -29,7 +29,7 @@ const uri = `mongodb+srv://nicola1travaglini:testtest@test.pe0yf.mongodb.net/sel
 // Functions
 
 // Entry points
-app.post("/CreateNote", async function (req, res) {
+app.post("/CreateNote", async function(req, res) {
   try {
     await mongoose.connect(uri);
     // let tags = JSON.parse(req.body.tags)
@@ -44,37 +44,37 @@ app.post("/CreateNote", async function (req, res) {
       Tags: JSON.parse(req.body.tags), //Array di oggetti vuole l'oggetto
     });
   } finally {
-    res.json({ note: req.body});
+    res.json({ note: req.body });
     mongoose.connection.close();
   }
 });
 
-app.delete("/DeleteNote", async function (req, res) {
+app.delete("/DeleteNote", async function(req, res) {
   try {
     await mongoose.connect(uri);
     let idNote = req.body.id_Note;
     console.log(idNote)
-    await Note.deleteOne({_id: new ObjectId(idNote)})
-    res.json({mess:"ciao"});
+    await Note.deleteOne({ _id: new ObjectId(idNote) })
+    res.json({ mess: "ciao" });
   } finally {
     mongoose.connection.close();
   }
 });
 
-app.put("/UpdateNote", async function (req, res) {
+app.put("/UpdateNote", async function(req, res) {
   try {
     await mongoose.connect(uri);
     let idNote = req.body.id_Note;
     let UpdateDate = new Date().toISOString()
     console.log(idNote)
-    await Note.updateOne({_id: new ObjectId(idNote)},{ $set: {Title:req.body.title_note, lastUpDate: UpdateDate,Text:req.body.content_note, Tags:JSON.parse(req.body.tags_note)}})
-    res.json({mess:"ciao"});
+    await Note.updateOne({ _id: new ObjectId(idNote) }, { $set: { Title: req.body.title_note, lastUpDate: UpdateDate, Text: req.body.content_note, Tags: JSON.parse(req.body.tags_note) } })
+    res.json({ mess: "ciao" });
   } finally {
     mongoose.connection.close();
   }
 });
 
-app.post("/events", async function (req, res) {
+app.post("/events", async function(req, res) {
   try {
     console.log(req.body);
     await mongoose.connect(uri);
@@ -85,8 +85,9 @@ app.post("/events", async function (req, res) {
   }
 });
 
-app.get("/ReadNotes", async function (req, res) {
+app.get("/ReadNotes", async function(req, res) {
   try {
+    console.log("arrivata ReadNotes");
     await mongoose.connect(uri);
     const FoundNotes = await Note.find({});
     res.json(FoundNotes);
@@ -95,7 +96,7 @@ app.get("/ReadNotes", async function (req, res) {
   }
 });
 
-app.get("/users", async function (req, res) {
+app.get("/users", async function(req, res) {
   try {
     await mongoose.connect(uri);
     const users = await User.find({});
@@ -105,7 +106,7 @@ app.get("/users", async function (req, res) {
   }
 });
 
-app.get("/events", async function (req, res) {
+app.get("/events", async function(req, res) {
   try {
     console.log("arrivata");
     await mongoose.connect(uri);
@@ -116,7 +117,7 @@ app.get("/events", async function (req, res) {
   }
 });
 
-app.get("/example", async function (req, res) {
+app.get("/example", async function(req, res) {
   try {
     await mongoose.connect(uri);
   } finally {
@@ -124,7 +125,7 @@ app.get("/example", async function (req, res) {
   }
 });
 
-app.get("/dbdebug", async function (req, res) {
+app.get("/dbdebug", async function(req, res) {
   try {
     await mongoose.connect(uri);
     const test = await Note.find({});
@@ -138,7 +139,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(global.rootDir, "dist", "index.html"));
 });
 
-app.listen(8000, function () {
+app.listen(8000, function() {
   global.startDate = new Date();
   console.log(
     `App listening on port 8000 started ${global.startDate.toLocaleString()}`,
