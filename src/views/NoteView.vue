@@ -3,6 +3,7 @@
 import NavBar from "@/components/NavBar.vue";
 import { computed,ref } from "vue";
 import { marked } from 'marked';
+import {store} from '@/store' 
 
 var NCtitle = ref("");
 var NCcontent = ref("");
@@ -28,7 +29,7 @@ function CreateNote() {
   var Title = NCtitle.value || "New Note"
   var Content = NCcontent.value || "No Content"
     console.log(Title)
-  fetch("http://localhost:5173/CreateNote", {
+  fetch("http://localhost:"+store.port+"/CreateNote", {
     method: "post",
     headers: {
       Accept: "application/json",
@@ -74,7 +75,7 @@ function DuplicateNote(id){
 function DeleteNote(id) {
   //Use marked before writing on NotesArea(markdown)
   console.log(typeof id)
-  fetch("http://localhost:5173/DeleteNote", {
+  fetch("http://localhost:"+store.port+"/DeleteNote", {
     method: "delete",
     headers: {
       'Accept': "application/json",
@@ -98,7 +99,7 @@ function DeleteNote(id) {
 }
 function getNotes() {
   //Use marked before writing on NotesArea(markdown)
-  fetch("http://localhost:5173/ReadNotes")
+  fetch("http://localhost:"+store.port+"/ReadNotes")
     .then((response) => {
       console.log(response);
       return response.json();
@@ -146,7 +147,7 @@ function SaveAfterUpdate(){
     console.log(NUcontent.value)
     console.log(UjsonTags)
 
-  fetch("http://localhost:5173/UpdateNote", {
+  fetch("http://localhost:"+store.port+"/UpdateNote", {
     method: "put",
     headers: {
       'Accept': "application/json",

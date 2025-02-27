@@ -45,6 +45,7 @@ const store = ref({
     defaultHeaders: {},
     dangerouslyAllowBrowser: true,
   }),
+  port:800
 });
 
 setInterval(
