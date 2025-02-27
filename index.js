@@ -12,7 +12,7 @@ global.rootDir = __dirname;
 let app = express();
 app.use(express.static(path.join(global.rootDir, "dist")));
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 
 // MongoDB & Mongoose
 const dbName = "selfie232465";
@@ -39,7 +39,6 @@ app.post("/CreateUser", async function (req, res) {
 });
 
 app.post("/CreateNote", async function (req, res) {
-  console.log("ci sono nella create");
   try {
     await mongoose.connect(uri);
     // let tags = JSON.parse(req.body.tags)
@@ -52,6 +51,17 @@ app.post("/CreateNote", async function (req, res) {
       Text: req.body.content, //Campi singoli va bene stringa
       Tags: JSON.parse(req.body.tags), //Array di oggetti vuole l'oggetto
     });
+  } finally {
+    res.json({ mess: "GOOD" });
+    mongoose.connection.close();
+  }
+});
+
+app.post("/events", async function (req, res) {
+  try {
+    console.log(req.body);
+    await mongoose.connect(uri);
+    await Event.create(req.body);
   } finally {
     res.json({ mess: "GOOD" });
     mongoose.connection.close();
@@ -73,6 +83,17 @@ app.get("/users", async function (req, res) {
     await mongoose.connect(uri);
     const users = await User.find({});
     res.json(users);
+  } finally {
+    mongoose.connection.close();
+  }
+});
+
+app.get("/events", async function (req, res) {
+  try {
+    console.log("arrivata");
+    await mongoose.connect(uri);
+    const events = await Event.find({});
+    res.json(events);
   } finally {
     mongoose.connection.close();
   }
@@ -100,9 +121,9 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(global.rootDir, "dist", "index.html"));
 });
 
-app.listen(5173, function () {
+app.listen(8000, function () {
   global.startDate = new Date();
   console.log(
-    `App listening on port 5173 started ${global.startDate.toLocaleString()}`,
+    `App listening on port 8000 started ${global.startDate.toLocaleString()}`,
   );
 });
