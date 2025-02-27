@@ -1,11 +1,12 @@
 <script setup>
-import { computed } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { ref } from "vue";
+import { computed } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { ref } from 'vue';
 
 var UsersList = ref("");
 const router = useRouter();
 const currentRoute = computed(() => router.currentRoute.value["path"]);
+
 
 const corsi = ["informatica", "elettronica", "informatica per il management"];
 
@@ -103,6 +104,7 @@ async function addUser() {
     }
 }
 </script>
+
 
 <template>
     <section class="h-100 gradient-form" style="background-color: #eee">
@@ -328,14 +330,18 @@ async function addUser() {
                         aliqua. Ut enim ad minim veniam, quis nostrud exercitation
                         ullamco laboris nisi ut aliquip ex ea commodo consequat.
                     </p>
-                    </div>
-                </div>
-                </div>
-            </div>
-            </div>
-        </div>
-        </div>
-    </section>
+
+    </div>
+    </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</section>
 </template>
 
-<style scoped></style>
+
+<style scoped>
+
+</style>

@@ -4,6 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose";
 import { User, Event, Note } from "./schemas.js";
+import { ObjectId } from 'mongodb';
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -28,31 +29,47 @@ const uri = `mongodb+srv://nicola1travaglini:testtest@test.pe0yf.mongodb.net/sel
 // Functions
 
 // Entry points
-app.post("/CreateUser", async function (req, res) {
-  try {
-    await mongoose.connect(uri);
-    const user = await User.create(req.body);
-    res.json(user);
-  } finally {
-    mongoose.connection.close();
-  }
-});
-
 app.post("/CreateNote", async function (req, res) {
   try {
     await mongoose.connect(uri);
     // let tags = JSON.parse(req.body.tags)
     //console.log(JSON.stringify(tags[0]))
+    var creationDate = new Date().toISOString()
     const notes = await Note.create({
       userEmail: "fk@mail.com",
-      creationDate: "",
-      lastUpDate: "",
+      creationDate: creationDate,
+      lastUpDate: creationDate,
       Title: req.body.title,
       Text: req.body.content, //Campi singoli va bene stringa
       Tags: JSON.parse(req.body.tags), //Array di oggetti vuole l'oggetto
     });
   } finally {
-    res.json({ mess: "GOOD" });
+    res.json({ note: req.body});
+    mongoose.connection.close();
+  }
+});
+
+app.delete("/DeleteNote", async function (req, res) {
+  try {
+    await mongoose.connect(uri);
+    let idNote = req.body.id_Note;
+    console.log(idNote)
+    await Note.deleteOne({_id: new ObjectId(idNote)})
+    res.json({mess:"ciao"});
+  } finally {
+    mongoose.connection.close();
+  }
+});
+
+app.put("/UpdateNote", async function (req, res) {
+  try {
+    await mongoose.connect(uri);
+    let idNote = req.body.id_Note;
+    let UpdateDate = new Date().toISOString()
+    console.log(idNote)
+    await Note.updateOne({_id: new ObjectId(idNote)},{ $set: {Title:req.body.title_note, lastUpDate: UpdateDate,Text:req.body.content_note, Tags:JSON.parse(req.body.tags_note)}})
+    res.json({mess:"ciao"});
+  } finally {
     mongoose.connection.close();
   }
 });
