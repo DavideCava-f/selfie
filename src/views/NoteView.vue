@@ -29,7 +29,7 @@ function CreateNote() {
   var Title = NCtitle.value || "New Note"
   var Content = NCcontent.value || "No Content"
   console.log(Title)
-  fetch("http://localhost:" + store.value.port + "/notes", {
+  fetch("http://localhost:" + store.value.port + "/note", {
     method: "post",
     headers: {
       Accept: "application/json",
@@ -75,7 +75,7 @@ function DuplicateNote(id) {
 function DeleteNote(id) {
   //Use marked before writing on NotesArea(markdown)
   console.log(typeof id)
-  fetch("http://localhost:" + store.value.port + "/notes", {
+  fetch("http://localhost:" + store.value.port + "/note", {
     method: "delete",
     headers: {
       'Accept': "application/json",
@@ -100,7 +100,7 @@ function DeleteNote(id) {
 function getNotes() {
 
   //Use marked before writing on NotesArea(markdown)
-  fetch("http://localhost:" + store.value.port + "/notes")
+  fetch("http://localhost:" + store.value.port + "/note")
     .then((response) => {
       console.log(response);
       return response.json();
@@ -148,7 +148,7 @@ function SaveAfterUpdate() {
   console.log(NUcontent.value)
   console.log(UjsonTags)
 
-  fetch("http://localhost:" + store.value.port + "/notes", {
+  fetch("http://localhost:" + store.value.port + "/note", {
     method: "put",
     headers: {
       'Accept': "application/json",
