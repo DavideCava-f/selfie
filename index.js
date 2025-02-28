@@ -74,17 +74,6 @@ app.put("/notes", async function(req, res) {
   }
 });
 
-app.post("/events", async function(req, res) {
-  try {
-    console.log(req.body);
-    await mongoose.connect(uri);
-    await Event.create(req.body);
-  } finally {
-    res.json({ mess: "GOOD" });
-    mongoose.connection.close();
-  }
-});
-
 app.get("/notes", async function(req, res) {
   try {
     console.log("arrivata ReadNotes");
@@ -106,6 +95,16 @@ app.get("/users", async function(req, res) {
   }
 });
 
+app.post("/events", async function(req, res) {
+  try {
+    console.log(req.body);
+    await mongoose.connect(uri);
+    await Event.create(req.body);
+  } finally {
+    res.json({ mess: "GOOD" });
+    mongoose.connection.close();
+  }
+});
 app.get("/events", async function(req, res) {
   try {
     console.log("arrivata");
