@@ -29,7 +29,7 @@ const uri = `mongodb+srv://nicola1travaglini:testtest@test.pe0yf.mongodb.net/sel
 // Functions
 
 // Entry points
-app.post("/CreateNote", async function(req, res) {
+app.post("/notes", async function(req, res) {
   try {
     await mongoose.connect(uri);
     // let tags = JSON.parse(req.body.tags)
@@ -49,7 +49,7 @@ app.post("/CreateNote", async function(req, res) {
   }
 });
 
-app.delete("/DeleteNote", async function(req, res) {
+app.delete("/notes", async function(req, res) {
   try {
     await mongoose.connect(uri);
     let idNote = req.body.id_Note;
@@ -61,7 +61,7 @@ app.delete("/DeleteNote", async function(req, res) {
   }
 });
 
-app.put("/UpdateNote", async function(req, res) {
+app.put("/notes", async function(req, res) {
   try {
     await mongoose.connect(uri);
     let idNote = req.body.id_Note;
@@ -85,7 +85,7 @@ app.post("/events", async function(req, res) {
   }
 });
 
-app.get("/ReadNotes", async function(req, res) {
+app.get("/notes", async function(req, res) {
   try {
     console.log("arrivata ReadNotes");
     await mongoose.connect(uri);
