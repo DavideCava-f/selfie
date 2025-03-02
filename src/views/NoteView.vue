@@ -191,7 +191,38 @@ function SortByDate(v) {
   }
 }
 
+function SortByTitle(v) {
 
+  if (v == 0) {
+    NotesList.value.sort((i, j) => { return (i.Title[0] > j.Title[0]) ? 1 : -1 })
+  } else if (v == 1) {
+
+    NotesList.value.sort((i, j) => { return (i.Title[0] < j.Title[0]) ? 1 : -1 })
+  }
+}
+         
+function SortByLength(v) {
+
+  if (v == 0) { 
+    NotesList.value.sort((i, j) => {/* return (i.Text.length > j.Text.lenght) ? 1 : -1*/
+      if(i.Text.length > j.Text.length){
+        return 1
+      }
+      return -1
+
+     })
+  } else if (v == 1) {
+
+    //NotesList.value.sort((i, j) => { return (i.Text.length > j.Text.lenght) ? 1 : -1 })
+    NotesList.value.sort((i, j) => {
+      if(i.Text.length < j.Text.length){
+        return 1
+      }
+      return -1
+
+     })
+  }
+}
 
 function getVisibleDate(date) {
 
@@ -230,6 +261,24 @@ function getVisibleDate(date) {
         Oldest to Newest
       </button>
     </div>
+    <div class="m-3">
+      SortByTitle:
+      <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByTitle(0)">
+        A-Z
+      </button>
+      <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByTitle(1)">
+        Z-A
+      </button>
+    </div>
+    <div class="m-3">
+      SortByTitle:
+      <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByLength(0)">
+        Length Cresc
+      </button>
+      <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByLength(1)">
+        Length Decr
+      </button>
+    </div>
   </div>
 
 
@@ -242,7 +291,7 @@ function getVisibleDate(date) {
           } else {
             selectedCard = -1
           }
-          console.log(selectedCard)
+          console.log(note.Text.length)
         }" class="col-md-7 mb-4">
           <div class="card rounded-3">
             <div class="card-body">
