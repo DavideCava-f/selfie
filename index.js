@@ -3,6 +3,7 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose";
+import jwt from 'jsonwebtoken';
 import { User, Event, Note } from "./schemas.js";
 import { ObjectId } from 'mongodb';
 import notesRoutes from './routes/notesRoutes.js'
@@ -110,6 +111,27 @@ app.get("/users", async function(req, res) {
     mongoose.connection.close();
   }
 });
+
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(401).json({ error: 'Authentication failed' });
+    }
+    const passwordMatch = password === user.password;
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Authentication failed' });
+    }
+    // FIXME: la chiave segreta del server dev'essere dinamica
+    const token = jwt.sign({ userId: user._id }, 'CHIAVE CON LA Q', {
+      expiresIn: '1h',
+    });
+    res.status(200).json({ token });
+  } catch (error) {
+    res.status(500).json({ error: 'Login failed' });
+  }
+})
 
 app.post("/events", async function(req, res) {
   try {
