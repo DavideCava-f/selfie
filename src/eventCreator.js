@@ -35,7 +35,7 @@ class EventCreator {
       });
     }
     console.log(event);
-    fetch("http://localhost:8000/events", {
+    fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       body: JSON.stringify(event),
       headers: {
@@ -83,7 +83,7 @@ class EventCreator {
       ) !== 1
     );
     console.log(event);
-    fetch("http://localhost:8000/events", {
+    fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       body: JSON.stringify(event),
       headers: {
@@ -146,7 +146,7 @@ class EventCreator {
         d.end = d.end.add({ weeks: n });
       });
 
-    fetch("http://localhost:8000/events", {
+    fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       body: JSON.stringify(event),
       headers: {
@@ -218,7 +218,7 @@ class EventCreator {
             Temporal.PlainDate.from(d.end),
           ) !== -1,
       );
-    fetch("http://localhost:8000/events", {
+    fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       body: JSON.stringify(event),
       headers: {
@@ -259,7 +259,7 @@ class EventCreator {
       });
     }
     console.log(event);
-    fetch("http://localhost:8000/events", {
+    fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       body: JSON.stringify(event),
       headers: {
@@ -307,7 +307,7 @@ class EventCreator {
       ) !== 1
     );
     console.log(event);
-    fetch("http://localhost:8000/events", {
+    fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       body: JSON.stringify(event),
       headers: {

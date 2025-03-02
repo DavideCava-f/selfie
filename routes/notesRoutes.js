@@ -1,7 +1,7 @@
-import express from 'express';
+import express from "express";
 import mongoose from "mongoose";
-import { User, Event, Note } from "../schemas.js";
-import { ObjectId } from 'mongodb';
+import { Note } from "../schemas.js";
+import { ObjectId } from "mongodb";
 const router = express.Router();
 
 const uri = `mongodb+srv://nicola1travaglini:testtest@test.pe0yf.mongodb.net/selfie?retryWrites=true&w=majority&appName=Test"`;
@@ -9,9 +9,7 @@ const uri = `mongodb+srv://nicola1travaglini:testtest@test.pe0yf.mongodb.net/sel
 router.post("/", async function(req, res) {
   try {
     await mongoose.connect(uri);
-    // let tags = JSON.parse(req.body.tags)
-    //console.log(JSON.stringify(tags[0]))
-    var creationDate = new Date().toISOString()
+    var creationDate = new Date().toISOString();
     const notes = await Note.create({
       userEmail: "fk@mail.com",
       creationDate: creationDate,
@@ -30,8 +28,7 @@ router.delete("/", async function(req, res) {
   try {
     await mongoose.connect(uri);
     let idNote = req.body.id_Note;
-    console.log(idNote)
-    await Note.deleteOne({ _id: new ObjectId(idNote) })
+    await Note.deleteOne({ _id: new ObjectId(idNote) });
     res.json({ mess: "ciao" });
   } finally {
     mongoose.connection.close();
@@ -42,9 +39,18 @@ router.put("/", async function(req, res) {
   try {
     await mongoose.connect(uri);
     let idNote = req.body.id_Note;
-    let UpdateDate = new Date().toISOString()
-    console.log(idNote)
-    await Note.updateOne({ _id: new ObjectId(idNote) }, { $set: { Title: req.body.title_note, lastUpDate: UpdateDate, Text: req.body.content_note, Tags: JSON.parse(req.body.tags_note) } })
+    let UpdateDate = new Date().toISOString();
+    await Note.updateOne(
+      { _id: new ObjectId(idNote) },
+      {
+        $set: {
+          Title: req.body.title_note,
+          lastUpDate: UpdateDate,
+          Text: req.body.content_note,
+          Tags: JSON.parse(req.body.tags_note),
+        },
+      },
+    );
     res.json({ mess: "ciao" });
   } finally {
     mongoose.connection.close();
@@ -53,7 +59,6 @@ router.put("/", async function(req, res) {
 
 router.get("/", async function(req, res) {
   try {
-    console.log("arrivata ReadNotes");
     await mongoose.connect(uri);
     const FoundNotes = await Note.find({});
     res.json(FoundNotes);
@@ -61,6 +66,5 @@ router.get("/", async function(req, res) {
     mongoose.connection.close();
   }
 });
-
 
 export default router;

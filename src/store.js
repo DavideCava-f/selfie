@@ -45,7 +45,10 @@ const store = ref({
   // defaultHeaders: {},
   // dangerouslyAllowBrowser: true,
   // }),
-  port: 8000
+
+  // url: "https://site232465.tw.cs.unibo.it"
+  url: "http://localhost",
+  port: 8000,
 });
 
 setInterval(
