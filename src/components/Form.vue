@@ -2,8 +2,13 @@
 import { computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { ref } from 'vue';
+import { use } from 'marked';
 
 var UsersList = ref("");
+var pswdStatus = ref(null);
+var User = ref("");
+var Password = ref("");
+var SignUp = ref(null);
 const router = useRouter();
 const currentRoute = computed(() => router.currentRoute.value["path"]);
 
@@ -28,26 +33,52 @@ let UserEx = [
         email: "nicotra@gmail.com",
         course: "informatica",
     },
+    {
+        name: "admin",
+        username: "admin",
+        password: "admin",
+        surname: "admin",
+        email: "admin",
+        course: "informatica",
+    }
 ];
 
+function resetValues(){
+    User.value= "";
+    Password.value= "";
+}
+
 async function validateForm() {
-    let username = document.forms["login"]["username"].value;
-    let pswd = document.forms["login"]["password"].value;
-
-
+    //appena Trava mette a posto le credenziali usa i ref nei controlli per il login
+    /*
     await fetch("http://localhost:5173/users")
     .then((response) => {
         return response.json();
     })
     .then((data) => {
         UsersList.value = data;
-    });
+    });*/
 
     // faccio i controlli prima per vedere se l'utente esiste poi per vedere se la password è corretta
-    if(UsersList.value.find((user) => user.email === username)){
-        console.log(UsersList.value.find((user) => user.email === username).name);
-        let Usr=UsersList.value.find((user) => user.email === username);
-        if(Usr.password === pswd){
+    /*
+    if(UsersList.value.find((user) => user.email === User.value)){
+        console.log(UsersList.value.find((user) => user.email === User.value).name);
+        let Usr=UsersList.value.find((user) => user.email === User.value);
+        if(Usr.password === Password.value){
+            console.log("Login effettuato");
+            router.push("/home");
+        }
+        else{
+            alert("Username o password errati");
+        }
+    }
+    else{
+        alert("Utente non trovato");
+    }*/
+    if(UserEx.find((user) => user.email === User.value)){
+        console.log(UserEx.find((user) => user.email === User.value).name);
+        let Usr=UserEx.find((user) => user.email === User.value);
+        if(Usr.password == Password.value){
             console.log("Login effettuato");
             router.push("/home");
         }
@@ -59,7 +90,7 @@ async function validateForm() {
         alert("Utente non trovato");
     }
 }
-
+//NOTE: fare i controlli non con variabili locali ma con i ref.
 async function addUser() {
     let name = document.forms["signup"]["name"].value;
     let surname = document.forms["signup"]["surname"].value;
@@ -107,12 +138,14 @@ async function addUser() {
 
 
 function seePswd() {
-    let status=document.getElementById("see").style.display;
-    if(status === "none"){
+
+    if(pswdStatus === false){
+        pswdStatus = true;
         document.getElementById("see").style.display = "block";
         document.getElementById("notsee").style.display = "none";
     }
     else{
+        pswdStatus = false;
         document.getElementById("see").style.display = "none";
         document.getElementById("notsee").style.display = "block";
     }
@@ -167,12 +200,12 @@ function cseePswd() {
                         />
                     </div>
 
-                    <form name="login" v-if="currentRoute === '/login'" action="validateForm" class="novalidate">
+                    <form name="login" v-if="!SignUp" action="validateForm" class="novalidate">
                         <p>Please login to your account</p>
 
                         <div data-mdb-input-init class="form-outline mb-4">
                         <label class="form-label" for="username">Username</label>
-                        <input type="email" id="username" class="form-control" placeholder="Phone number or email address" name="username" required/>
+                        <input type="email" id="username" v-model="User" class="form-control" placeholder="Phone number or email address" name="username" required/>
                         <div class="invalid-feedback">
                             Please enter a valid email address.
                         </div>
@@ -186,6 +219,7 @@ function cseePswd() {
                             id="password"
                             class="form-control"
                             name="password"
+                            v-model="Password"
                             required
                         />
                         <div class="input-group-text">
@@ -217,19 +251,20 @@ function cseePswd() {
                         class="d-flex align-items-center justify-content-center pb-4"
                         >
                         <p class="mb-0 me-2">Don't have an account?</p>
-                        <router-link to="/signup">
+                        
                             <button
                             type="button"
                             data-mdb-button-init
                             data-mdb-ripple-init
                             class="btn btn-outline-danger"
+                            @click="SignUp = true; resetValues()"
                             >
                             Create new
                             </button>
-                        </router-link>
+                        
                         </div>
                     </form>
-                    <form name="signup" v-if="currentRoute === '/signup'" class="was-validated" onsubmit="addUser">
+                    <form name="signup" v-if="SignUp" class="was-validated" onsubmit="addUser">
                         <p>Create your account</p>
 
                         <div data-mdb-input-init class="form-outline mb-1">
@@ -346,16 +381,16 @@ function cseePswd() {
                         class="d-flex align-items-center justify-content-center pb-4"
                         >
                         <p class="mb-0 me-2">You already have an account?</p>
-                        <router-link to="/login">
                             <button
                             type="button"
                             data-mdb-button-init
                             data-mdb-ripple-init
                             class="btn btn-outline-primary"
+                            @click="SignUp = false"
                             >
                             Log in
                             </button>
-                        </router-link>
+                        
                         </div>
                     </form>
                     </div>
