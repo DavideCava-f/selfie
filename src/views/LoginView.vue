@@ -12,5 +12,4 @@ import Form from "@/components/Form.vue";
 
 <style scoped>
 
-    
 </style>
