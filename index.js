@@ -26,6 +26,7 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.static(path.join(global.rootDir, "dist")));
 app.use("/note", notesRoutes);
 app.use("/event", eventsRoutes);
+app.use("/user", usersRoutes);
 
 app.post("/login", async (req, res) => {
   try {
@@ -49,7 +50,6 @@ app.post("/login", async (req, res) => {
 
 app.get("/users", async function (req, res) {
   try {
-    console.log("boh?");
     await mongoose.connect(uri);
     const users = await User.find({});
     res.json(users);

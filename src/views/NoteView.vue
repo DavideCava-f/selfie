@@ -2,8 +2,8 @@
 //Rimasto da 1 gestire focus sulle note 2 finire il sorting delle note(Titolo, lunghezza contenuto)
 import NavBar from "@/components/NavBar.vue";
 import { computed, ref } from "vue";
-import { marked } from 'marked';
-import { store } from '@/store'
+import { marked } from "marked";
+import { store } from "@/store";
 
 var NCtitle = ref("");
 var NCcontent = ref("");
@@ -12,11 +12,11 @@ var NotesList = ref("");
 var NUtitle = ref("");
 var NUcontent = ref("");
 var NUtags = ref("");
-var NUid = ref("")
-const redIn = /^(\w+(,\w+)*)?$/
+var NUid = ref("");
+const redIn = /^(\w+(,\w+)*)?$/;
 var enabled = computed(() => redIn.test(NCtags.value));
 var enabledUpdate = computed(() => redIn.test(NUtags.value));
-var selectedCard = ref(-1)
+var selectedCard = ref(-1);
 
 function CreateNote() {
   //Parsing tags
@@ -26,9 +26,9 @@ function CreateNote() {
   });
   let jsonTags = "[" + jsonT.toString() + "]";
 
-  var Title = NCtitle.value || "New Note"
-  var Content = NCcontent.value || "No Content"
-  console.log(Title)
+  var Title = NCtitle.value || "New Note";
+  var Content = NCcontent.value || "No Content";
+  console.log(Title);
   fetch("http://localhost:" + store.value.port + "/note", {
     method: "post",
     headers: {
@@ -46,59 +46,56 @@ function CreateNote() {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
-      getNotes()
+      getNotes();
       //do something awesome that makes the world a better place
     });
 }
 function DuplicateNote(id) {
-  var tagsStr = ""
-  var elem = NotesList.value.find(el => el._id.toString() == id)
-  NCtitle.value = elem.Title
-  NCcontent.value = elem.Text
-  var ArrTags = elem.Tags
-  ArrTags.forEach(el => {
-    tagsStr += el.name + ","
-  })
-  tagsStr = tagsStr.slice(0, -1)
-  NCtags.value = tagsStr
-  console.log(NCtitle.value)
-  console.log(NCcontent.value)
-  console.log(NCtags.value)
+  var tagsStr = "";
+  var elem = NotesList.value.find((el) => el._id.toString() == id);
+  NCtitle.value = elem.Title;
+  NCcontent.value = elem.Text;
+  var ArrTags = elem.Tags;
+  ArrTags.forEach((el) => {
+    tagsStr += el.name + ",";
+  });
+  tagsStr = tagsStr.slice(0, -1);
+  NCtags.value = tagsStr;
+  console.log(NCtitle.value);
+  console.log(NCcontent.value);
+  console.log(NCtags.value);
 
-  CreateNote()
+  CreateNote();
 
-  NCtags.value = ""
-  NCtitle.value = ""
-  NCcontent.value = ""
-
+  NCtags.value = "";
+  NCtitle.value = "";
+  NCcontent.value = "";
 }
 function DeleteNote(id) {
   //Use marked before writing on NotesArea(markdown)
-  console.log(typeof id)
+  console.log(typeof id);
   fetch("http://localhost:" + store.value.port + "/note", {
     method: "delete",
     headers: {
-      'Accept': "application/json",
+      Accept: "application/json",
       "Content-Type": "application/json",
     },
 
     //make sure to serialize your JSON body
     body: JSON.stringify({
-      id_Note: id
+      id_Note: id,
     }),
   })
-
     .then((response) => {
       console.log(response);
       return response.json();
     })
     .then(() => {
-      NotesList.value = NotesList.value.filter(el => el._id.toString() != id)
+      NotesList.value = NotesList.value.filter((el) => el._id.toString() != id);
       //do something awesome that makes the world a better place
     });
 }
 function getNotes() {
-
   //Use marked before writing on NotesArea(markdown)
   fetch("http://localhost:" + store.value.port + "/note")
     .then((response) => {
@@ -107,7 +104,7 @@ function getNotes() {
     })
     .then((data) => {
       NotesList.value = data;
-      console.log(NotesList.value)
+      console.log(NotesList.value);
       //do something awesome that makes the world a better place
     });
 }
@@ -117,41 +114,38 @@ function bubu() {
 }
 
 function UpdateNote(id) {
-
-  console.log(id)
+  console.log(id);
   let tagsStr = "";
-  const Note2Update = NotesList.value.find(el => el._id.toString() === id)
-  NUtitle.value = Note2Update.Title
-  NUcontent.value = Note2Update.Text
-  NUtags.value = Note2Update.Tags
-  NUtags.value.forEach(el => {
-    tagsStr += el.name + ","
-
+  const Note2Update = NotesList.value.find((el) => el._id.toString() === id);
+  NUtitle.value = Note2Update.Title;
+  NUcontent.value = Note2Update.Text;
+  NUtags.value = Note2Update.Tags;
+  NUtags.value.forEach((el) => {
+    tagsStr += el.name + ",";
   });
-  NUtags.value = tagsStr.slice(0, -1)
-  NUid.value = Note2Update._id
-  console.log(NUid.value)
+  NUtags.value = tagsStr.slice(0, -1);
+  NUid.value = Note2Update._id;
+  console.log(NUid.value);
   //console.log(Note2Update)
-
 }
 
 function SaveAfterUpdate() {
-  console.log(NUtags.value)
+  console.log(NUtags.value);
   let tagsArr = NUtags.value.split(",");
   let jsonT = tagsArr.map((el) => {
     return '{"name":"' + el + '"}';
   });
   let UjsonTags = "[" + jsonT.toString() + "]";
 
-  console.log(NUid.value)
-  console.log(NUtitle.value)
-  console.log(NUcontent.value)
-  console.log(UjsonTags)
+  console.log(NUid.value);
+  console.log(NUtitle.value);
+  console.log(NUcontent.value);
+  console.log(UjsonTags);
 
   fetch("http://localhost:" + store.value.port + "/note", {
     method: "put",
     headers: {
-      'Accept': "application/json",
+      Accept: "application/json",
       "Content-Type": "application/json",
     },
     //make sure to serialize your JSON body
@@ -159,82 +153,94 @@ function SaveAfterUpdate() {
       id_Note: NUid.value,
       title_note: NUtitle.value || "No Title",
       content_note: NUcontent.value || "No Content",
-      tags_note: UjsonTags
-
+      tags_note: UjsonTags,
     }),
   })
-
     .then((response) => {
       console.log(response);
       return response.json();
     })
     .then(() => {
       //NotesList.value = NotesList.value.filter(el => el._id.toString() != id)
-      getNotes()
+      getNotes();
       //do something awesome that makes the world a better place
     });
 }
 
 function SortByDate(v) {
-
   if (v == 0) {
-    NotesList.value.sort((i, j) => { return (new Date(i.creationDate).getTime() < new Date(j.creationDate).getTime()) ? 1 : -1 })
+    NotesList.value.sort((i, j) => {
+      return new Date(i.creationDate).getTime() <
+        new Date(j.creationDate).getTime()
+        ? 1
+        : -1;
+    });
   } else if (v == 1) {
-
-    NotesList.value.sort((i, j) => { return (new Date(i.creationDate).getTime() > new Date(j.creationDate).getTime()) ? 1 : -1 })
+    NotesList.value.sort((i, j) => {
+      return new Date(i.creationDate).getTime() >
+        new Date(j.creationDate).getTime()
+        ? 1
+        : -1;
+    });
   } else if (v == 2) {
-    NotesList.value.sort((i, j) => { return (new Date(i.lastUpDate).getTime() < new Date(j.lastUpDate).getTime()) ? 1 : -1 })
+    NotesList.value.sort((i, j) => {
+      return new Date(i.lastUpDate).getTime() < new Date(j.lastUpDate).getTime()
+        ? 1
+        : -1;
+    });
   } else {
-
-    NotesList.value.sort((i, j) => { return (new Date(i.lastUpDate).getTime() > new Date(j.lastUpDate).getTime()) ? 1 : -1 })
-
+    NotesList.value.sort((i, j) => {
+      return new Date(i.lastUpDate).getTime() > new Date(j.lastUpDate).getTime()
+        ? 1
+        : -1;
+    });
   }
 }
 
 function SortByTitle(v) {
-
   if (v == 0) {
-    NotesList.value.sort((i, j) => { return (i.Title[0] > j.Title[0]) ? 1 : -1 })
+    NotesList.value.sort((i, j) => {
+      return i.Title[0] > j.Title[0] ? 1 : -1;
+    });
   } else if (v == 1) {
-
-    NotesList.value.sort((i, j) => { return (i.Title[0] < j.Title[0]) ? 1 : -1 })
+    NotesList.value.sort((i, j) => {
+      return i.Title[0] < j.Title[0] ? 1 : -1;
+    });
   }
 }
-         
+
 function SortByLength(v) {
-
-  if (v == 0) { 
-    NotesList.value.sort((i, j) => {/* return (i.Text.length > j.Text.lenght) ? 1 : -1*/
-      if(i.Text.length > j.Text.length){
-        return 1
+  if (v == 0) {
+    NotesList.value.sort((i, j) => {
+      /* return (i.Text.length > j.Text.lenght) ? 1 : -1*/
+      if (i.Text.length > j.Text.length) {
+        return 1;
       }
-      return -1
-
-     })
+      return -1;
+    });
   } else if (v == 1) {
-
     //NotesList.value.sort((i, j) => { return (i.Text.length > j.Text.lenght) ? 1 : -1 })
     NotesList.value.sort((i, j) => {
-      if(i.Text.length < j.Text.length){
-        return 1
+      if (i.Text.length < j.Text.length) {
+        return 1;
       }
-      return -1
-
-     })
+      return -1;
+    });
   }
 }
 
 function getVisibleDate(date) {
-
   /* NotesList.value = NotesList.value.sort((i,j) => {
      
    } )*/
 
   //var no= NotesList.value[0].lastUpDate
-  var str = new Date(date).toDateString() + " " + new Date(date).toTimeString().split(" ")[0]
-  str = str.slice(0, -3)
-  return str
-
+  var str =
+    new Date(date).toDateString() +
+    " " +
+    new Date(date).toTimeString().split(" ")[0];
+  str = str.slice(0, -3);
+  return str;
 }
 </script>
 
@@ -250,7 +256,6 @@ function getVisibleDate(date) {
       <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByDate(1)">
         Oldest to Newest
       </button>
-
     </div>
     <div class="m-3">
       SortByLastUpdate:
@@ -281,41 +286,51 @@ function getVisibleDate(date) {
     </div>
   </div>
 
-
   <div class="container">
     <div class="row justify-content-center">
       <div v-for="note in NotesList" :key="note._id">
         <div @click="() => {
-          if (selectedCard != note._id) {
-            selectedCard = note._id
-          } else {
-            selectedCard = -1
+            if (selectedCard != note._id) {
+              selectedCard = note._id;
+            } else {
+              selectedCard = -1;
+            }
+            console.log(note.Text.length);
           }
-          console.log(note.Text.length)
-        }" class="col-md-7 mb-4">
+          " class="col-md-7 mb-4">
           <div class="card rounded-3">
             <div class="card-body">
               <h1 class="card-title fw-bold">{{ note.Title }}</h1>
-              <hr>
-              <p :class="[{ selected: selectedCard == note._id }, 'card-text', 'notSelected']"
-                v-html="marked.parse(note.Text)" style=""></p>
+              <hr />
+              <p :class="[
+                { selected: selectedCard == note._id },
+                'card-text',
+                'notSelected',
+              ]" v-html="marked.parse(note.Text)" style=""></p>
               <span v-for="tag in note.Tags">
-                <span class="badge text-bg-warning mx-1 mb-1">{{ tag.name }}</span>
-
+                <span class="badge text-bg-warning mx-1 mb-1">{{
+                  tag.name
+                  }}</span>
               </span>
               <div>
-
-                <span><button @click="DeleteNote(note._id)">Delete Note</button></span>
-                <span><button @click="DuplicateNote(note._id)">Duplicate Note</button></span>
+                <span><button @click="DeleteNote(note._id)">
+                    Delete Note
+                  </button></span>
+                <span><button @click="DuplicateNote(note._id)">
+                    Duplicate Note
+                  </button></span>
                 <span><button data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
-                    @click="UpdateNote(note._id)">UpdateNote</button></span>
-
+                    @click="UpdateNote(note._id)">
+                    UpdateNote
+                  </button></span>
               </div>
               <div>
-
-                <span> Last Updated:<b> {{ getVisibleDate(note.lastUpDate) }}</b> </span>
-                <span> Creation:<b> {{ getVisibleDate(note.creationDate) }}</b> </span>
-
+                <span>
+                  Last Updated:<b> {{ getVisibleDate(note.lastUpDate) }}</b>
+                </span>
+                <span>
+                  Creation:<b> {{ getVisibleDate(note.creationDate) }}</b>
+                </span>
               </div>
             </div>
           </div>
@@ -356,7 +371,7 @@ function getVisibleDate(date) {
               </div>
               <div class="mb-3">
                 <label class="form-label">Tags</label>
-                <input :class="{ 'border': !enabled, 'border-danger': !enabled }" v-model="NCtags" type="text"
+                <input :class="{ border: !enabled, 'border-danger': !enabled }" v-model="NCtags" type="text"
                   class="form-control" placeholder="Add tags (comma separated)" />
               </div>
               <div class="d-flex justify-content-between align-items-center">
@@ -383,7 +398,9 @@ function getVisibleDate(date) {
   </div>
 
   <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
-    aria-controls="offcanvasWithBothOptions">Enable both scrolling & backdrop</button>
+    aria-controls="offcanvasWithBothOptions">
+    Enable both scrolling & backdrop
+  </button>
   <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions"
     aria-labelledby="offcanvasWithBothOptionsLabel">
     <div class="offcanvas-header">
@@ -409,8 +426,10 @@ function getVisibleDate(date) {
               </div>
               <div class="mb-3">
                 <label class="form-label">Tags</label>
-                <input :class="{ 'border': !enabledUpdate, 'border-danger': !enabledUpdate }" v-model="NUtags"
-                  type="text" class="form-control" placeholder="Add tags (comma separated)" />
+                <input :class="{
+                  border: !enabledUpdate,
+                  'border-danger': !enabledUpdate,
+                }" v-model="NUtags" type="text" class="form-control" placeholder="Add tags (comma separated)" />
               </div>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
@@ -438,14 +457,13 @@ function getVisibleDate(date) {
 
 <style scoped>
 .notSelected {
-
   max-height: 50px;
-  overflow: hidden
+  overflow: hidden;
 }
 
 .selected {
   /*background-color: blue;*/
-  max-height: unset
+  max-height: unset;
 }
 
 .offcanvas-size-xl {
