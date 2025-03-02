@@ -31,6 +31,7 @@ function CreateNote() {
   console.log(Title);
   fetch("http://localhost:" + store.value.port + "/note", {
     method: "post",
+    credentials: "include",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -76,6 +77,7 @@ function DeleteNote(id) {
   console.log(typeof id);
   fetch("http://localhost:" + store.value.port + "/note", {
     method: "delete",
+    credentials: "include",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -97,7 +99,10 @@ function DeleteNote(id) {
 }
 function getNotes() {
   //Use marked before writing on NotesArea(markdown)
-  fetch("http://localhost:" + store.value.port + "/note")
+  fetch("http://localhost:" + store.value.port + "/note", {
+
+    credentials: "include",
+  })
     .then((response) => {
       console.log(response);
       return response.json();
@@ -144,6 +149,7 @@ function SaveAfterUpdate() {
 
   fetch("http://localhost:" + store.value.port + "/note", {
     method: "put",
+    credentials: "include",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -290,14 +296,14 @@ function getVisibleDate(date) {
     <div class="row justify-content-center">
       <div v-for="note in NotesList" :key="note._id">
         <div @click="() => {
-            if (selectedCard != note._id) {
-              selectedCard = note._id;
-            } else {
-              selectedCard = -1;
-            }
-            console.log(note.Text.length);
+          if (selectedCard != note._id) {
+            selectedCard = note._id;
+          } else {
+            selectedCard = -1;
           }
-          " class="col-md-7 mb-4">
+          console.log(note.Text.length);
+        }
+        " class="col-md-7 mb-4">
           <div class="card rounded-3">
             <div class="card-body">
               <h1 class="card-title fw-bold">{{ note.Title }}</h1>
@@ -310,7 +316,7 @@ function getVisibleDate(date) {
               <span v-for="tag in note.Tags">
                 <span class="badge text-bg-warning mx-1 mb-1">{{
                   tag.name
-                  }}</span>
+                }}</span>
               </span>
               <div>
                 <span><button @click="DeleteNote(note._id)">
