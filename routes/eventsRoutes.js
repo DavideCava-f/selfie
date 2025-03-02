@@ -1,11 +1,12 @@
 import express from "express";
 import mongoose from "mongoose";
 import { Event } from "../schemas.js";
+import verifyToken from "./middleware.js";
 const router = express.Router();
 
-const uri = `mongodb+srv://nicola1travaglini:testtest@test.pe0yf.mongodb.net/selfie?retryWrites=true&w=majority&appName=Test"`;
+const uri = process.env.MONGODB_DEV;
 
-router.post("/", async function(req, res) {
+router.post("/", verifyToken, async function (req, res) {
   try {
     await mongoose.connect(uri);
     await Event.create(req.body);
@@ -15,7 +16,7 @@ router.post("/", async function(req, res) {
   }
 });
 
-router.get("/", async function(req, res) {
+router.get("/", verifyToken, async function (req, res) {
   try {
     await mongoose.connect(uri);
     const events = await Event.find({});

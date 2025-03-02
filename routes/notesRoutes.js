@@ -2,11 +2,12 @@ import express from "express";
 import mongoose from "mongoose";
 import { Note } from "../schemas.js";
 import { ObjectId } from "mongodb";
+import verifyToken from "./middleware.js";
 const router = express.Router();
 
-const uri = `mongodb+srv://nicola1travaglini:testtest@test.pe0yf.mongodb.net/selfie?retryWrites=true&w=majority&appName=Test"`;
+const uri = process.env.MONGODB_DEV;
 
-router.post("/", async function(req, res) {
+router.post("/", verifyToken, async function (req, res) {
   try {
     await mongoose.connect(uri);
     var creationDate = new Date().toISOString();
@@ -24,7 +25,7 @@ router.post("/", async function(req, res) {
   }
 });
 
-router.delete("/", async function(req, res) {
+router.delete("/", verifyToken, async function (req, res) {
   try {
     await mongoose.connect(uri);
     let idNote = req.body.id_Note;
@@ -35,7 +36,7 @@ router.delete("/", async function(req, res) {
   }
 });
 
-router.put("/", async function(req, res) {
+router.put("/", verifyToken, async function (req, res) {
   try {
     await mongoose.connect(uri);
     let idNote = req.body.id_Note;
@@ -57,7 +58,7 @@ router.put("/", async function(req, res) {
   }
 });
 
-router.get("/", async function(req, res) {
+router.get("/", verifyToken, async function (req, res) {
   try {
     await mongoose.connect(uri);
     const FoundNotes = await Note.find({});
