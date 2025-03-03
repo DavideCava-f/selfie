@@ -23,40 +23,13 @@ let listaCorsi = [
 ];
 const corsi = listaCorsi.sort();
 
-let UserEx = [
-  {
-    name: "Alessandro",
-    username: "ale",
-    password: "suca",
-    surname: "Roncaglia",
-    email: "aleron04@gmail.com",
-    course: "informatica",
-  },
-  {
-    name: "Nicola",
-    username: "nico",
-    password: "chiara",
-    surname: "Travaglini",
-    email: "nicotra@gmail.com",
-    course: "informatica",
-  },
-  {
-    name: "admin",
-    username: "admin",
-    password: "admin",
-    surname: "admin",
-    email: "admin",
-    course: "informatica",
-  },
-];
-
 function resetValues() {
   User.value = "";
   Password.value = "";
 }
 
 async function validateForm() {
-  const response = await fetch(`${store.value.url}:${store.value.port}/user?email=${User.value}&password=${Password.value}`)
+  const response = await fetch(`${store.value.url}:${store.value.port}/user/login?email=${User.value}&password=${Password.value}`)
   if (response.status === 401) {
     alert("Email o password errati");
   } else if (response.status === 500) {
@@ -69,8 +42,8 @@ async function validateForm() {
   }
 }
 
-//NOTE: fare i controlli non con variabili locali ma con i ref.
 async function addUser() {
+  // NOTE: fare i controlli non con variabili locali ma con i ref.
   let name = document.forms["signup"]["name"].value;
   let surname = document.forms["signup"]["surname"].value;
   let username = document.forms["signup"]["username"].value;
@@ -78,39 +51,34 @@ async function addUser() {
   let y = document.getElementById("corsi").options;
   let pswd = document.forms["signup"]["password"].value;
   let confirmPswd = document.forms["signup"]["confirmPswd"].value;
-  if (pswd === confirmPswd) {
-    await fetch("http://localhost:5173/users")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        UsersList.value = data;
-      });
-
-    if (UsersList.value.find((user) => user.email === username)) {
-      alert("Utente già esistente");
-      document.getElementById("username").value = "";
-      return;
-    } else {
-      fetch("http://localhost:5173/CreateUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: name,
-          password: pswd,
-          surname: surname,
-          email: username,
-          course: y[course].text,
-        }),
-      });
-      console.log("Utente aggiunto");
-      console.log(UserEx[UserEx.length - 1]);
-      router.push("/login");
-    }
-  } else {
+  if (pswd !== confirmPswd) {
     alert("Le password non coincidono");
+    return;
+  }
+  const response = await fetch(`${store.value.url}:${store.value.port}/user/isnew?email=${username}`)
+  if (response.status === 400) {
+    alert("Utente già esistente");
+    document.getElementById("username").value = "";
+  } else if (response.status === 500) {
+    alert("Errore interno al server");
+  } else if (response.status === 200) {
+    fetch(`${store.value.url}:${store.value.port}/user/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        password: pswd,
+        surname: surname,
+        email: username,
+        course: y[course].text,
+      }),
+    });
+    console.log("Registrazione effettuata");
+    router.push("/home");
+  } else {
+    alert("Errore generale");
   }
 }
 
