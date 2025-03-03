@@ -78,7 +78,7 @@ const eventsOfToday = [
 
 <template>
     <NavBar />
-    <div class="bg">
+    <div class="">
         <div class="row justify-content-center  p-4 ">
             <div class="col-lg-3 col-12 "> 
                 <div class="align-items-center">
