@@ -47,7 +47,7 @@ async function validateForm() {
 }
 
 async function addUser() {
-  console.log(UserSU.value);
+  console.log(UserSU.value.username);
   console.log(Password.value);
   console.log(Confirm.value);
   // NOTE: fare i controlli non con variabili locali ma con i ref.
@@ -60,7 +60,7 @@ async function addUser() {
   let pswd = document.forms["signup"]["password"].value;
   let confirmPswd = document.forms["signup"]["confirmPswd"].value;
   */
-  
+
   if (Password.value !== Confirm.value) {
     alert("Le password non coincidono");
     return;
@@ -80,7 +80,7 @@ async function addUser() {
       },
       body: JSON.stringify({
         name: UserSU.value.name,
-        password: Password,
+        password: Password.value,
         surname: UserSU.value.surname,
         email: UserSU.value.username,
         course: UserSU.value.prog,
