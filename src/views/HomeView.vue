@@ -78,17 +78,17 @@ const eventsOfToday = [
 
 <template>
     <NavBar />
-    <div class="">
+    <div>
         <div class="row justify-content-center  p-4 ">
             <div class="col-lg-3 col-12 "> 
                 <div class="align-items-center">
                     <h2 class="mx-auto">Eventi prossimi</h2>
                 </div>
                 <div class="container-fluid bg-danger d-flex flex-column overflow-scroll rounded-4" style="max-height: 80vh">
-                    <RouterLink v-for="event in eventsOfToday" class="bg-success rounded-3 text-black m-2">
+                    <div v-for="event in eventsOfToday" class="bg-success rounded-3 text-black m-2">
                         <h4>{{ event.title }}</h4>
                         {{ event.details.text }}
-                    </RouterLink>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-3 col-12">
@@ -96,10 +96,10 @@ const eventsOfToday = [
                     <h2 class="mx-auto">Ultima nota modificata</h2>
                 </div>
                 <div class="container-fluid bg-danger d-flex flex-column overflow-scroll rounded-4" style="max-height: 80vh">
-                    <RouterLink v-for="event in eventsOfToday" class="bg-success rounded-3 text-black m-2">
+                    <div v-for="event in eventsOfToday" class="bg-success rounded-3 text-black m-2">
                         <h4>{{ event.title }}</h4>
                         {{ event.details.text }}
-                    </RouterLink>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-3 col-12">
@@ -107,10 +107,10 @@ const eventsOfToday = [
                     <h2 class="mx-auto">Eventi prossimi</h2>
                 </div>
                 <div class="container-fluid bg-danger d-flex flex-column overflow-scroll rounded-4" style="max-height: 80vh">
-                    <RouterLink v-for="event in eventsOfToday" class="bg-success rounded-3 text-black m-2">
+                    <div v-for="event in eventsOfToday" class="bg-success rounded-3 text-black m-2">
                         <h4>{{ event.title }}</h4>
                         {{ event.details.text }}
-                    </RouterLink>
+                    </div>
                 </div>
             </div>
         </div>
