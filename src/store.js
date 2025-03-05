@@ -49,6 +49,13 @@ const store = ref({
   // url: "https://site232465.tw.cs.unibo.it"
   url: "http://localhost",
   port: 8000,
+
+  checkAuth: async () => {
+    const response = await fetch(`${store.value.url}:${store.value.port}/checkauth`, {
+      credentials: "include"
+    });
+    return response.ok;
+  },
 });
 
 setInterval(

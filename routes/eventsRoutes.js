@@ -1,12 +1,14 @@
 import express from "express";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 import { Event } from "../schemas.js";
 import verifyToken from "./middleware.js";
 const router = express.Router();
 
+dotenv.config();
 const uri = process.env.MONGODB_DEV;
 
-router.post("/", verifyToken, async function (req, res) {
+router.post("/", verifyToken, async function(req, res) {
   try {
     await mongoose.connect(uri);
     await Event.create(req.body);
@@ -16,7 +18,7 @@ router.post("/", verifyToken, async function (req, res) {
   }
 });
 
-router.get("/", verifyToken, async function (req, res) {
+router.get("/", verifyToken, async function(req, res) {
   try {
     await mongoose.connect(uri);
     const events = await Event.find({});

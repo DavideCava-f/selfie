@@ -37,6 +37,7 @@ class EventCreator {
     console.log(event);
     fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify(event),
       headers: {
         "Content-Type": "application/json",
@@ -85,6 +86,7 @@ class EventCreator {
     console.log(event);
     fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify(event),
       headers: {
         "Content-Type": "application/json",
@@ -148,6 +150,7 @@ class EventCreator {
 
     fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify(event),
       headers: {
         "Content-Type": "application/json",
@@ -220,6 +223,7 @@ class EventCreator {
       );
     fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify(event),
       headers: {
         "Content-Type": "application/json",
@@ -261,6 +265,7 @@ class EventCreator {
     console.log(event);
     fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify(event),
       headers: {
         "Content-Type": "application/json",
@@ -309,6 +314,7 @@ class EventCreator {
     console.log(event);
     fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify(event),
       headers: {
         "Content-Type": "application/json",

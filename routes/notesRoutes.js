@@ -2,12 +2,14 @@ import express from "express";
 import mongoose from "mongoose";
 import { Note } from "../schemas.js";
 import { ObjectId } from "mongodb";
+import dotenv from "dotenv";
 import verifyToken from "./middleware.js";
 const router = express.Router();
 
+dotenv.config();
 const uri = process.env.MONGODB_DEV;
 
-router.post("/", verifyToken, async function (req, res) {
+router.post("/", verifyToken, async function(req, res) {
   try {
     await mongoose.connect(uri);
     var creationDate = new Date().toISOString();
@@ -25,7 +27,7 @@ router.post("/", verifyToken, async function (req, res) {
   }
 });
 
-router.delete("/", verifyToken, async function (req, res) {
+router.delete("/", verifyToken, async function(req, res) {
   try {
     await mongoose.connect(uri);
     let idNote = req.body.id_Note;
@@ -36,7 +38,7 @@ router.delete("/", verifyToken, async function (req, res) {
   }
 });
 
-router.put("/", verifyToken, async function (req, res) {
+router.put("/", verifyToken, async function(req, res) {
   try {
     await mongoose.connect(uri);
     let idNote = req.body.id_Note;
@@ -58,7 +60,7 @@ router.put("/", verifyToken, async function (req, res) {
   }
 });
 
-router.get("/", verifyToken, async function (req, res) {
+router.get("/", verifyToken, async function(req, res) {
   try {
     await mongoose.connect(uri);
     const FoundNotes = await Note.find({});
