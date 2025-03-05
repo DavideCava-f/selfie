@@ -9,6 +9,7 @@ import { User, Event, Note } from "./schemas.js";
 import notesRoutes from "./routes/notesRoutes.js";
 import eventsRoutes from "./routes/eventsRoutes.js";
 import usersRoutes from "./routes/usersRoute.js";
+import verifyToken from "./routes/middleware.js";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -30,7 +31,8 @@ app.use("/note", notesRoutes);
 app.use("/event", eventsRoutes);
 app.use("/user", usersRoutes);
 
-app.post("/login", async (req, res) => {
+app.get("/checkauth", verifyToken, async function(req, res) {
+  res.status(200).send();
 });
 
 app.get("/users", async function(req, res) {
