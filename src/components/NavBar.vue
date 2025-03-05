@@ -12,8 +12,13 @@ const pfpSrc = ref("");
 async function setUserPfp() {
     const response = await fetch(`${store.value.url}:${store.value.port}/user/info`);
     const user = await response.json();
-    const username = user.username.replaceAll(/[aeiou]/g, '');
+    const username = user.name.slice(0, 3);
     pfpSrc.value = `https://dummyimage.com/100x100/ffff00/000000.png&text=${username}`;
+}
+
+async function logout() {
+    const response = await fetch(`${store.value.url}:${store.value.port}/user/logout`);
+    router.push("/login");
 }
 
 setUserPfp();
@@ -70,8 +75,11 @@ setUserPfp();
                 </div>
             </div>
 
-            <div class="col-1 my-1 me-0 d-flex justify-content-end">
-                <img :src="pfpSrc" class="rounded" width="41vh">
+            <div class="col-1 my-1 me-0 d-flex justify-content-end dropdown">
+                <img :src="pfpSrc" class="rounded dropdown-toggle" width="41vh" data-bs-toggle="dropdown">
+                <ul class="dropdown-menu">
+                    <li><button class="dropdown-item" @click="logout">Logout</button></li>
+                </ul>
             </div>
         </div>
     </div>
