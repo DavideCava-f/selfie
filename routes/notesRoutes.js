@@ -63,10 +63,13 @@ router.put("/", verifyToken, async function(req, res) {
 router.get("/", verifyToken, async function(req, res) {
   try {
     await mongoose.connect(uri);
+    console.log("ciao");
     const FoundNotes = await Note.find({});
     res.json(FoundNotes);
   } finally {
+    console.log("addio");
     mongoose.connection.close();
+    console.log("davvero addio");
   }
 });
 
