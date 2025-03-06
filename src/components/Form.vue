@@ -8,7 +8,9 @@ import { store } from "@/store";
 var pswdStatus = ref(null);
 var User = ref("");
 var Password = ref("");
+var Confirm = ref("");
 var SignUp = ref(null);
+var UserSU = ref({})
 const router = useRouter();
 const currentRoute = computed(() => router.currentRoute.value["path"]);
 
@@ -26,6 +28,8 @@ const corsi = listaCorsi.sort();
 function resetValues() {
   User.value = "";
   Password.value = "";
+  Confirm.value = "";
+  UserSU.value = {};
 }
 
 async function validateForm() {
@@ -43,7 +47,11 @@ async function validateForm() {
 }
 
 async function addUser() {
+  console.log(UserSU.value.username);
+  console.log(Password.value);
+  console.log(Confirm.value);
   // NOTE: fare i controlli non con variabili locali ma con i ref.
+  /*
   let name = document.forms["signup"]["name"].value;
   let surname = document.forms["signup"]["surname"].value;
   let username = document.forms["signup"]["username"].value;
@@ -51,11 +59,14 @@ async function addUser() {
   let y = document.getElementById("corsi").options;
   let pswd = document.forms["signup"]["password"].value;
   let confirmPswd = document.forms["signup"]["confirmPswd"].value;
-  if (pswd !== confirmPswd) {
+  */
+
+  if (Password.value !== Confirm.value) {
     alert("Le password non coincidono");
     return;
   }
-  const response = await fetch(`${store.value.url}:${store.value.port}/user/isnew?email=${username}`)
+  const response = await fetch(`${store.value.url}:${store.value.port}/user/isnew?email=${UserSU.value.username}`)
+  console.log(response.status);
   if (response.status === 400) {
     alert("Utente già esistente");
     document.getElementById("username").value = "";
@@ -68,11 +79,11 @@ async function addUser() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: name,
-        password: pswd,
-        surname: surname,
-        email: username,
-        course: y[course].text,
+        name: UserSU.value.name,
+        password: Password.value,
+        surname: UserSU.value.surname,
+        email: UserSU.value.username,
+        course: UserSU.value.prog,
       }),
     });
     console.log("Registrazione effettuata");
@@ -199,13 +210,13 @@ function cseePswd() {
 
                     <div data-mdb-input-init class="form-outline mb-1">
                       <label class="form-label" for="name">Name</label>
-                      <input type="text" id="name" class="form-control" name="name" required />
+                      <input type="text" id="name" class="form-control" name="name" v-model="UserSU.name" required />
                       <div class="invalid-feedback">Please choose a name.</div>
                     </div>
 
                     <div data-mdb-input-init class="form-outline mb-1">
                       <label class="form-label" for="surname">Surname</label>
-                      <input type="text" id="surname" class="form-control" name="surname" required />
+                      <input type="text" id="surname" class="form-control" name="surname" v-model="UserSU.surname" required />
                       <div class="invalid-feedback">
                         Please choose a surname.
                       </div>
@@ -213,7 +224,7 @@ function cseePswd() {
 
                     <div data-mdb-input-init class="form-outline mb-1">
                       <label class="form-label" for="form2Example11">Username</label>
-                      <input type="text" id="username" class="form-control" placeholder="Email address" name="username"
+                      <input type="text" id="username" class="form-control" placeholder="Email address" name="username" v-model="UserSU.username"
                         required />
                       <div class="invalid-feedback">
                         Please choose a username.
@@ -222,7 +233,7 @@ function cseePswd() {
 
                     <label class="form-label" for="corsi">Programme</label>
                     <!-- corso di studi -->
-                    <select class="form-select mb-1" aria-label="Programme" id="corsi" required>
+                    <select class="form-select mb-1" aria-label="Programme" id="corsi" v-model="UserSU.prog" required>
                       <option selected disabled id="choose">Choose...</option>
                       <option v-for="corso in corsi" class="text-black">
                         {{ corso }}
@@ -235,7 +246,7 @@ function cseePswd() {
                     <div data-mdb-input-init class="form-outline mb-4">
                       <label class="form-label" for="password">Password</label>
                       <div class="input-group">
-                        <input type="password" id="password" class="form-control" required />
+                        <input type="password" id="password" class="form-control" v-model="Password" required />
 
                         <div class="input-group-text">
                           <svg style="display: none" xmlns="http://www.w3.org/2000/svg" id="see" @click="seePswd"
@@ -264,7 +275,7 @@ function cseePswd() {
                     <div data-mdb-input-init class="form-outline mb-4">
                       <label class="form-label" for="confirmPswd">Confirm password</label>
                       <div class="input-group">
-                        <input type="password" id="confirmPswd" class="form-control" required />
+                        <input type="password" id="confirmPswd" class="form-control" v-model="Confirm" required />
                         <div class="input-group-text">
                           <svg style="display: none" xmlns="http://www.w3.org/2000/svg" id="csee" @click="cseePswd"
                             width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
@@ -300,7 +311,7 @@ function cseePswd() {
                     <div class="d-flex align-items-center justify-content-center pb-4">
                       <p class="mb-0 me-2">You already have an account?</p>
                       <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary"
-                        @click="SignUp = false">
+                        @click="SignUp = false; resetValues();">
                         Log in
                       </button>
                     </div>
