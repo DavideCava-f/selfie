@@ -1,5 +1,9 @@
 <script setup>
 import NavBar from "@/components/NavBar.vue";
+import { store } from "@/store";
+import { ref, onMounted } from "vue";
+
+let lastnote = ref("");
 
 const eventsOfToday = [
     {
@@ -74,6 +78,36 @@ const eventsOfToday = [
     }
 ]
 
+function getLastNote(){
+    fetch(`${store.value.url}:${store.value.port}/note/last`)
+    .then(response => {
+        console.log(response);
+        return response.json();
+    }).then(data => {
+        console.log(data);
+        lastnote.value = data;
+        console.log(lastnote.value.Text);
+        //console.log(lastnote.value);
+        console.log("mounted");
+    });
+}
+
+/*
+onMounted(()=>{
+    fetch(`${store.value.url}:${store.value.port}/note`)
+    .then(response => {
+        console.log(response);
+        return response.json();
+    }).then(data => {
+        console.log(data);
+        lastnote.value = data;
+        console.log(lastnote.value.Text);
+        //console.log(lastnote.value);
+        console.log("mounted");
+    });
+    
+});
+*/
 </script>
 
 <template>
@@ -95,11 +129,10 @@ const eventsOfToday = [
                 <div class="align-items-center">
                     <h2 class="mx-auto">Ultima nota modificata</h2>
                 </div>
-                <div class="container-fluid bg-danger d-flex flex-column overflow-scroll rounded-4" style="max-height: 80vh">
-                    <div v-for="event in eventsOfToday" class="bg-success rounded-3 text-black m-2">
-                        <h4>{{ event.title }}</h4>
-                        {{ event.details.text }}
-                    </div>
+                <div @click="getLastNote" class="container-fluid bg-danger d-flex flex-column overflow-scroll rounded-4" style="max-height: 80vh">
+                    <button  class="btn bg-success rounded-3 text-black m-2">
+                        suca
+                    </button>
                 </div>
             </div>
             <div class="col-lg-3 col-12">

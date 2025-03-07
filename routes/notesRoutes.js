@@ -1,4 +1,4 @@
-import express from "express";
+import express, { json } from "express";
 import mongoose from "mongoose";
 import { Note } from "../schemas.js";
 import { ObjectId } from "mongodb";
@@ -65,6 +65,18 @@ router.get("/", verifyToken, async function(req, res) {
     await mongoose.connect(uri);
     const FoundNotes = await Note.find({});
     res.json(FoundNotes);
+  } finally {
+    mongoose.connection.close();
+  }
+});
+
+router.get("/last", verifyToken, async function(req, res) {
+  try {
+    await mongoose.connect(uri);
+  
+    const lastNote = await Note.find({}).sort({ lastUpDate: -1 }).limit(1);
+    console.log(lastNote);
+    res.json(lastNote) ;
   } finally {
     mongoose.connection.close();
   }
