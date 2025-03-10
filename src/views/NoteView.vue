@@ -29,7 +29,7 @@ function CreateNote() {
   var Title = NCtitle.value || "New Note";
   var Content = NCcontent.value || "No Content";
   console.log(Title);
-  fetch("http://localhost:" + store.value.port + "/note", {
+  fetch(`${store.value.url}:${store.value.port}/note`, {
     method: "post",
     credentials: "include",
     headers: {
@@ -72,10 +72,11 @@ function DuplicateNote(id) {
   NCtitle.value = "";
   NCcontent.value = "";
 }
+
 function DeleteNote(id) {
   //Use marked before writing on NotesArea(markdown)
   console.log(typeof id);
-  fetch("http://localhost:" + store.value.port + "/note", {
+  fetch(`${store.value.url}:${store.value.port}/note`, {
     method: "delete",
     credentials: "include",
     headers: {
@@ -97,10 +98,10 @@ function DeleteNote(id) {
       //do something awesome that makes the world a better place
     });
 }
+
 function getNotes() {
   //Use marked before writing on NotesArea(markdown)
-  fetch("http://localhost:" + store.value.port + "/note", {
-
+  fetch(`${store.value.url}:${store.value.port}/note`, {
     credentials: "include",
   })
     .then((response) => {
@@ -147,7 +148,7 @@ function SaveAfterUpdate() {
   console.log(NUcontent.value);
   console.log(UjsonTags);
 
-  fetch("http://localhost:" + store.value.port + "/note", {
+  fetch(`${store.value.url}:${store.value.port}/note`, {
     method: "put",
     credentials: "include",
     headers: {
