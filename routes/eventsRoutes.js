@@ -1,7 +1,6 @@
 import express from "express";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
-import { Event } from "../schemas.js";
+import { Event, User } from "../schemas.js";
 import verifyToken from "./middleware.js";
 const router = express.Router();
 
@@ -10,21 +9,27 @@ const uri = process.env.MONGODB_DEV;
 
 router.post("/", verifyToken, async function(req, res) {
   try {
-    await mongoose.connect(uri);
-    await Event.create(req.body);
+    const user = await User.findOne({ _id: req.userId });
+    await Event.create({
+      userEmail: user.email,
+      dates: req.body.dates,
+      title: req.body.title,
+      details: req.body.details
+    });
+  } catch {
+    res.status(500).send();
   } finally {
-    res.json({ mess: "GOOD" });
-    mongoose.connection.close();
+    res.status(200).send();
   }
 });
 
 router.get("/", verifyToken, async function(req, res) {
   try {
-    await mongoose.connect(uri);
-    const events = await Event.find({});
-    res.json(events);
+    const events = await Event.find({ userId: req.userId });
+    res.status(200).json(events);
+  } catch {
+    res.status(500).send();
   } finally {
-    mongoose.connection.close();
   }
 });
 

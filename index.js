@@ -22,6 +22,8 @@ const uri = process.env.MONGODB_DEV;
 
 let app = express();
 
+mongoose.connect(uri);
+
 // Routes
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
@@ -37,21 +39,17 @@ app.get("/checkauth", verifyToken, async function(req, res) {
 
 app.get("/users", async function(req, res) {
   try {
-    await mongoose.connect(uri);
     const users = await User.find({});
     res.json(users);
   } finally {
-    mongoose.connection.close();
   }
 });
 
 app.get("/dbdebug", async function(req, res) {
   try {
-    await mongoose.connect(uri);
     const test = await Note.find({});
     res.json(test);
   } finally {
-    mongoose.connection.close();
   }
 });
 
@@ -64,4 +62,9 @@ app.listen(process.env.PORT_PROD, function() {
   console.log(
     `App listening on port ${process.env.PORT_PROD} started ${global.startDate.toLocaleString()}`,
   );
+});
+
+process.on('SIGINT', async () => {
+  await mongoose.connection.close();
+  process.exit(0);
 });

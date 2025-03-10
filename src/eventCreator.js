@@ -4,7 +4,6 @@ import { store } from "@/store";
 class EventCreator {
   static insertNDaily(
     n,
-    userEmail,
     eventTitle,
     eventText,
     eventLink,
@@ -14,7 +13,6 @@ class EventCreator {
     eventEndTime,
   ) {
     const event = {
-      UserEmail: userEmail,
       dates: [],
       title: eventTitle,
       details: {
@@ -46,7 +44,6 @@ class EventCreator {
   }
   static insertUntilDaily(
     untilDate,
-    userEmail,
     eventTitle,
     eventText,
     eventLink,
@@ -56,7 +53,6 @@ class EventCreator {
     eventEndTime,
   ) {
     const event = {
-      UserEmail: userEmail,
       dates: [],
       title: eventTitle,
       details: {
@@ -96,7 +92,6 @@ class EventCreator {
   static insertNWeekly(
     n,
     weekDays,
-    userEmail,
     eventTitle,
     eventText,
     eventLink,
@@ -106,7 +101,6 @@ class EventCreator {
     eventEndTime,
   ) {
     const event = {
-      UserEmail: userEmail,
       dates: [],
       title: eventTitle,
       details: {
@@ -160,7 +154,6 @@ class EventCreator {
   static insertUntilWeekly(
     untilDate,
     weekDays,
-    userEmail,
     eventTitle,
     eventText,
     eventLink,
@@ -170,7 +163,6 @@ class EventCreator {
     eventEndTime,
   ) {
     const event = {
-      UserEmail: userEmail,
       dates: [],
       title: eventTitle,
       details: {
@@ -232,7 +224,6 @@ class EventCreator {
   }
   static insertNMonthly(
     n,
-    userEmail,
     eventTitle,
     eventText,
     eventLink,
@@ -242,7 +233,6 @@ class EventCreator {
     eventEndTime,
   ) {
     const event = {
-      UserEmail: userEmail,
       dates: [],
       title: eventTitle,
       details: {
@@ -274,7 +264,6 @@ class EventCreator {
   }
   static insertUntilMonthly(
     untilDate,
-    userEmail,
     eventTitle,
     eventText,
     eventLink,
@@ -284,7 +273,6 @@ class EventCreator {
     eventEndTime,
   ) {
     const event = {
-      UserEmail: userEmail,
       dates: [],
       title: eventTitle,
       details: {

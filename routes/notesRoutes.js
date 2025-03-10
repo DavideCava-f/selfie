@@ -1,7 +1,5 @@
 import express from "express";
-import mongoose from "mongoose";
 import { Note } from "../schemas.js";
-import { ObjectId } from "mongodb";
 import dotenv from "dotenv";
 import verifyToken from "./middleware.js";
 const router = express.Router();
@@ -11,10 +9,9 @@ const uri = process.env.MONGODB_DEV;
 
 router.post("/", verifyToken, async function(req, res) {
   try {
-    await mongoose.connect(uri);
     var creationDate = new Date().toISOString();
-    const notes = await Note.create({
-      userEmail: "fk@mail.com",
+    await Note.create({
+      userId: req.userId,
       creationDate: creationDate,
       lastUpDate: creationDate,
       Title: req.body.title,
@@ -23,28 +20,24 @@ router.post("/", verifyToken, async function(req, res) {
     });
   } finally {
     res.json({ note: req.body });
-    mongoose.connection.close();
   }
 });
 
 router.delete("/", verifyToken, async function(req, res) {
   try {
-    await mongoose.connect(uri);
     let idNote = req.body.id_Note;
-    await Note.deleteOne({ _id: new ObjectId(idNote) });
+    await Note.deleteOne({ _id: idNote });
     res.json({ mess: "ciao" });
   } finally {
-    mongoose.connection.close();
   }
 });
 
 router.put("/", verifyToken, async function(req, res) {
   try {
-    await mongoose.connect(uri);
     let idNote = req.body.id_Note;
     let UpdateDate = new Date().toISOString();
     await Note.updateOne(
-      { _id: new ObjectId(idNote) },
+      { _id: idNote },
       {
         $set: {
           Title: req.body.title_note,
@@ -56,20 +49,14 @@ router.put("/", verifyToken, async function(req, res) {
     );
     res.json({ mess: "ciao" });
   } finally {
-    mongoose.connection.close();
   }
 });
 
 router.get("/", verifyToken, async function(req, res) {
   try {
-    await mongoose.connect(uri);
-    console.log("ciao");
-    const FoundNotes = await Note.find({});
+    const FoundNotes = await Note.find({ userId: req.userId });
     res.json(FoundNotes);
   } finally {
-    console.log("addio");
-    mongoose.connection.close();
-    console.log("davvero addio");
   }
 });
 
