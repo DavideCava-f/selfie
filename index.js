@@ -22,7 +22,8 @@ const uri = process.env.MONGODB_DEV;
 
 let app = express();
 
-mongoose.connect(uri);
+await mongoose.connect(uri);
+console.log("MongoDB connection settled");
 
 // Routes
 app.use(cors());
@@ -66,5 +67,6 @@ app.listen(process.env.PORT_PROD, function() {
 
 process.on('SIGINT', async () => {
   await mongoose.connection.close();
+  console.log("MongoDB connection closed");
   process.exit(0);
 });
