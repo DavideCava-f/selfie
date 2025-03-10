@@ -9,9 +9,8 @@ const uri = process.env.MONGODB_DEV;
 
 router.post("/", verifyToken, async function(req, res) {
   try {
-    const user = await User.findOne({ _id: req.userId });
     await Event.create({
-      userEmail: user.email,
+      userId: req.userId,
       dates: req.body.dates,
       title: req.body.title,
       details: req.body.details
