@@ -60,4 +60,13 @@ router.get("/", verifyToken, async function(req, res) {
   }
 });
 
+router.get("/last", verifyToken, async function(req, res) {
+  try{
+    const lastnote = await Note.findOne({}).sort({lastUpDate: -1}).limit(1);
+    res.json(lastnote);
+  } finally{
+
+  }
+});
+
 export default router;

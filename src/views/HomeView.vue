@@ -1,9 +1,10 @@
 <script setup>
 import NavBar from "@/components/NavBar.vue";
 import { store } from "@/store";
-import { ref, onMounted } from "vue";
+import { ref, onBeforeMount } from "vue";
 
-let lastnote = ref("");
+let lastnote = ref({});
+let loaded = ref(Boolean);
 
 const eventsOfToday = [
     {
@@ -85,29 +86,22 @@ function getLastNote(){
         return response.json();
     }).then(data => {
         console.log(data);
-        lastnote.value = data;
-        console.log(lastnote.value.Text);
-        //console.log(lastnote.value);
-        console.log("mounted");
+        lastnote.value = data;        
     });
 }
 
-/*
-onMounted(()=>{
-    fetch(`${store.value.url}:${store.value.port}/note`)
-    .then(response => {
-        console.log(response);
-        return response.json();
-    }).then(data => {
-        console.log(data);
-        lastnote.value = data;
-        console.log(lastnote.value.Text);
-        //console.log(lastnote.value);
-        console.log("mounted");
-    });
-    
+onBeforeMount(async () => {
+    await getLastNote();
+    console.log("suca")
+    console.log(lastnote.value);
+    loaded.value = true;
 });
-*/
+
+function test(){
+    console.log(lastnote.value.Text);
+    console.log(lastnote.value.Title);
+}
+
 </script>
 
 <template>
@@ -129,9 +123,21 @@ onMounted(()=>{
                 <div class="align-items-center">
                     <h2 class="mx-auto">Ultima nota modificata</h2>
                 </div>
-                <div @click="getLastNote" class="container-fluid bg-danger d-flex flex-column overflow-scroll rounded-4" style="max-height: 80vh">
+                <div @click="test" class="container-fluid bg-danger d-flex flex-column overflow-scroll rounded-4" style="max-height: 80vh">
                     <button  class="btn bg-success rounded-3 text-black m-2">
-                        suca
+                        <h1 v-if="loaded">
+                            {{ lastnote.Title }}  
+                        </h1>
+                        <h1 v-else>
+                            caricamento in corso...
+                        </h1>
+                        <p v-if="loaded">
+                            {{ lastnote.Text }}
+                        </p>
+                        <p v-else>
+                            caricamento in corso...
+                        </p>
+                        
                     </button>
                 </div>
             </div>
@@ -141,8 +147,8 @@ onMounted(()=>{
                 </div>
                 <div class="container-fluid bg-danger d-flex flex-column overflow-scroll rounded-4" style="max-height: 80vh">
                     <div v-for="event in eventsOfToday" class="bg-success rounded-3 text-black m-2">
-                        <h4>{{ event.title }}</h4>
-                        {{ event.details.text }}
+                        <h4>{{ event.title|| "suca" }}</h4>
+                        {{ event.details.text || "suca" }}
                     </div>
                 </div>
             </div>

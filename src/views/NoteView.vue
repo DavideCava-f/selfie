@@ -1,7 +1,7 @@
 <script setup>
 //Rimasto da 1 gestire focus sulle note 2 finire il sorting delle note(Titolo, lunghezza contenuto)
 import NavBar from "@/components/NavBar.vue";
-import { computed, ref } from "vue";
+import { computed, ref, onBeforeMount } from "vue";
 import { marked } from "marked";
 import { store } from "@/store";
 
@@ -249,6 +249,12 @@ function getVisibleDate(date) {
   str = str.slice(0, -3);
   return str;
 }
+
+onBeforeMount(() => {
+  getNotes();
+});
+
+
 </script>
 
 <template>
