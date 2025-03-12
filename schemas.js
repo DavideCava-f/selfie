@@ -21,7 +21,7 @@ Il campo link in description vale sia per luoghi fisici (Google Maps)
 che virtuali.
 */
 const EventSchema = new Schema({
-    UserEmail: String,
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
     dates: [
         {
             begin: Date,
@@ -36,7 +36,7 @@ const EventSchema = new Schema({
 });
 
 const NoteSchema = new Schema({
-    userEmail: String,
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
     creationDate: Date,
     lastUpDate: Date,
     Title: String,
@@ -47,9 +47,9 @@ const NoteSchema = new Schema({
 });
 
 
-const User = model('users', UserSchema);
-const Event = model('events', EventSchema);
-const Note = model('notes', NoteSchema);
+const User = model('User', UserSchema);
+const Event = model('Event', EventSchema);
+const Note = model('Note', NoteSchema);
 
 export { User, Event, Note };
 // Query per note ordinate in base alla lunghezza di Text

@@ -12,6 +12,7 @@ function save() {
       `${dateSelector.value}T${timeSelector.value}:00.000`,
     ),
   );
+  store.value.getEventsOfDay(store.value.simDate);
 }
 
 function reset() {
@@ -23,6 +24,7 @@ function reset() {
     minutes: 0,
     seconds: 0,
   });
+  store.value.getEventsOfDay(store.value.simDate);
 }
 </script>
 

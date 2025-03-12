@@ -4,7 +4,6 @@ import { store } from "@/store";
 class EventCreator {
   static insertNDaily(
     n,
-    userEmail,
     eventTitle,
     eventText,
     eventLink,
@@ -14,7 +13,6 @@ class EventCreator {
     eventEndTime,
   ) {
     const event = {
-      UserEmail: userEmail,
       dates: [],
       title: eventTitle,
       details: {
@@ -35,18 +33,17 @@ class EventCreator {
       });
     }
     console.log(event);
-    fetch(`${store.value.url}:${store.value.port}/event`, {
+    return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(event),
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((response) => console.log("t'apposto"));
+    });
   }
   static insertUntilDaily(
     untilDate,
-    userEmail,
     eventTitle,
     eventText,
     eventLink,
@@ -56,7 +53,6 @@ class EventCreator {
     eventEndTime,
   ) {
     const event = {
-      UserEmail: userEmail,
       dates: [],
       title: eventTitle,
       details: {
@@ -84,19 +80,18 @@ class EventCreator {
       ) !== 1
     );
     console.log(event);
-    fetch(`${store.value.url}:${store.value.port}/event`, {
+    return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(event),
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((response) => console.log("t'apposto"));
+    });
   }
   static insertNWeekly(
     n,
     weekDays,
-    userEmail,
     eventTitle,
     eventText,
     eventLink,
@@ -106,7 +101,6 @@ class EventCreator {
     eventEndTime,
   ) {
     const event = {
-      UserEmail: userEmail,
       dates: [],
       title: eventTitle,
       details: {
@@ -147,20 +141,18 @@ class EventCreator {
         d.begin = d.begin.add({ weeks: n });
         d.end = d.end.add({ weeks: n });
       });
-
-    fetch(`${store.value.url}:${store.value.port}/event`, {
+    return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(event),
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((response) => console.log("t'apposto"));
+    });
   }
   static insertUntilWeekly(
     untilDate,
     weekDays,
-    userEmail,
     eventTitle,
     eventText,
     eventLink,
@@ -170,7 +162,6 @@ class EventCreator {
     eventEndTime,
   ) {
     const event = {
-      UserEmail: userEmail,
       dates: [],
       title: eventTitle,
       details: {
@@ -221,18 +212,17 @@ class EventCreator {
             Temporal.PlainDate.from(d.end),
           ) !== -1,
       );
-    fetch(`${store.value.url}:${store.value.port}/event`, {
+    return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(event),
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((response) => console.log("t'apposto"));
+    });
   }
   static insertNMonthly(
     n,
-    userEmail,
     eventTitle,
     eventText,
     eventLink,
@@ -242,7 +232,6 @@ class EventCreator {
     eventEndTime,
   ) {
     const event = {
-      UserEmail: userEmail,
       dates: [],
       title: eventTitle,
       details: {
@@ -263,18 +252,17 @@ class EventCreator {
       });
     }
     console.log(event);
-    fetch(`${store.value.url}:${store.value.port}/event`, {
+    return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(event),
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((response) => console.log("t'apposto"));
+    });
   }
   static insertUntilMonthly(
     untilDate,
-    userEmail,
     eventTitle,
     eventText,
     eventLink,
@@ -284,7 +272,6 @@ class EventCreator {
     eventEndTime,
   ) {
     const event = {
-      UserEmail: userEmail,
       dates: [],
       title: eventTitle,
       details: {
@@ -312,14 +299,14 @@ class EventCreator {
       ) !== 1
     );
     console.log(event);
-    fetch(`${store.value.url}:${store.value.port}/event`, {
+    return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(event),
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((response) => console.log("t'apposto"));
+    });
   }
 }
 
