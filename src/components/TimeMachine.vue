@@ -9,7 +9,7 @@ const timeSelector = ref(store.value.simTime);
 function save() {
   store.value.deltaDateTime = store.value.realDateTime.until(
     Temporal.PlainDateTime.from(
-      `${dateSelector.value}T${timeSelector.value}:00.000`,
+      `${dateSelector.value}T${timeSelector.value}.000`,
     ),
   );
   store.value.getEventsOfDay(store.value.simDate);

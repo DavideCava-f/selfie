@@ -22,10 +22,10 @@ const store = ref({
   simDate: computed(() => store.value.simDateTime.toPlainDate()),
 
   realTime: computed(() =>
-    store.value.realDateTime.toPlainTime().toString().slice(0, 5),
+    store.value.realDateTime.toPlainTime().toString().slice(0, 8),
   ),
   simTime: computed(() =>
-    store.value.simDateTime.toPlainTime().toString().slice(0, 5),
+    store.value.simDateTime.toPlainTime().toString().slice(0, 8),
   ),
 
   realDay: computed(() => store.value.realDate.dayOfWeek - 1),

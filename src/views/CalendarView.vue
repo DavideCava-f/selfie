@@ -13,9 +13,6 @@ store.value.getEventsOfDay(store.value.simDate);
     <!-- <button @click="emits('click')"></button> -->
     <NavBar />
     <div class="container-fluid">
-        {{ store.realDateTime }}
-        <br />
-        {{ store.simDateTime }}
         <div class="row bg-dark p-3" style="">
             <div class="col-lg-4 col-12 mt-3 bg-warning rounded-4">
                 <!-- colonna day-->

@@ -1,8 +1,6 @@
 
 import { NotesList } from "@/store";
 
-
-
 export function SortByDate(v) {
   if (v == 0) {
     NotesList.value.sort((i, j) => {

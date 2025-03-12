@@ -75,11 +75,19 @@ setUserPfp();
                 </div>
             </div>
 
-            <div class="col-1 my-1 me-0 d-flex justify-content-end dropdown">
-                <img :src="pfpSrc" class="rounded dropdown-toggle" width="41vh" data-bs-toggle="dropdown">
-                <ul class="dropdown-menu">
-                    <li><button class="dropdown-item" @click="logout">Logout</button></li>
-                </ul>
+            <div class="col-1 my-1 me-0 d-flex justify-content-end gap-3">
+                <div class="fw-light text-white d-flex align-items-center justify-content-center"
+                    style="font-size: 75%;">
+                    {{ store.simDate }}
+                    <br>
+                    {{ store.simTime }}
+                </div>
+                <div class="dropdown">
+                    <img :src="pfpSrc" class="rounded dropdown-toggle" width="41vh" data-bs-toggle="dropdown">
+                    <ul class="dropdown-menu">
+                        <li><button class="dropdown-item" @click="logout">Logout</button></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

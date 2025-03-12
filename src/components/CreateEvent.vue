@@ -50,12 +50,12 @@ async function generateDetails() {
 
 function setBeginNow() {
   eventBeginDate.value = store.value.simDate;
-  eventBeginTime.value = store.value.simTime;
+  eventBeginTime.value = store.value.simTime.slice(0, 5);
 }
 
 function setEndNow() {
   eventEndDate.value = store.value.simDate;
-  eventEndTime.value = store.value.simTime;
+  eventEndTime.value = store.value.simTime.slice(0, 5);
 }
 
 function resetBegin() {
