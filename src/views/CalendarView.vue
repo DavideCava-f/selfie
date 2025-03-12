@@ -6,23 +6,7 @@ import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
 
 // Impegni giornalieri per test
-const eventsOfToday = ref([]);
-
-
-async function getEventsOfDay(day) {
-    const response = await fetch(`${store.value.url}:${store.value.port}/event`);
-    eventsOfToday.value = (await response.json()).filter((event) => {
-        return event.dates.every((date) => {
-            console.log(day);
-            console.log(date.begin);
-            return Temporal.PlainDate.compare(Temporal.PlainDate.from(day), Temporal.PlainDate.from(date.begin.slice(0, -1))) === 0;
-        });
-    });
-    console.log(eventsOfToday.value);
-}
-
-getEventsOfDay(store.value.simDate);
-
+store.value.getEventsOfDay(store.value.simDate);
 </script>
 
 <template>
@@ -47,7 +31,7 @@ getEventsOfDay(store.value.simDate);
                     </div>
 
                     <div class="overflow-scroll rounded-3" style="max-height: 50vh">
-                        <div v-for="event in eventsOfToday" class="flex-fill bg-light m-1 p-3 rounded-3">
+                        <div v-for="event in store.eventsOfDay" class="flex-fill bg-light m-1 p-3 rounded-3">
                             <h4>{{ event.title }}</h4>
                             {{ event.details.text }}
 
@@ -69,7 +53,7 @@ getEventsOfDay(store.value.simDate);
                 <!-- Finestra MODALE di inserimento evento -->
                 <div class="modal fade" id="createEventModal" data-bs-backdrop="false" tabindex="-1"
                     aria-labelledby="createEventModal" aria-hidden="true">
-                    <CreateEvent />
+                    <CreateEvent @update="store.getEventsOfDay(store.simDate)" />
                 </div>
             </div>
         </div>

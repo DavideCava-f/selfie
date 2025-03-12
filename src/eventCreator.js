@@ -33,14 +33,14 @@ class EventCreator {
       });
     }
     console.log(event);
-    fetch(`${store.value.url}:${store.value.port}/event`, {
+    return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(event),
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((response) => console.log("t'apposto"));
+    });
   }
   static insertUntilDaily(
     untilDate,
@@ -80,14 +80,14 @@ class EventCreator {
       ) !== 1
     );
     console.log(event);
-    fetch(`${store.value.url}:${store.value.port}/event`, {
+    return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(event),
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((response) => console.log("t'apposto"));
+    });
   }
   static insertNWeekly(
     n,
@@ -141,15 +141,14 @@ class EventCreator {
         d.begin = d.begin.add({ weeks: n });
         d.end = d.end.add({ weeks: n });
       });
-
-    fetch(`${store.value.url}:${store.value.port}/event`, {
+    return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(event),
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((response) => console.log("t'apposto"));
+    });
   }
   static insertUntilWeekly(
     untilDate,
@@ -213,14 +212,14 @@ class EventCreator {
             Temporal.PlainDate.from(d.end),
           ) !== -1,
       );
-    fetch(`${store.value.url}:${store.value.port}/event`, {
+    return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(event),
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((response) => console.log("t'apposto"));
+    });
   }
   static insertNMonthly(
     n,
@@ -253,14 +252,14 @@ class EventCreator {
       });
     }
     console.log(event);
-    fetch(`${store.value.url}:${store.value.port}/event`, {
+    return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(event),
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((response) => console.log("t'apposto"));
+    });
   }
   static insertUntilMonthly(
     untilDate,
@@ -300,14 +299,14 @@ class EventCreator {
       ) !== 1
     );
     console.log(event);
-    fetch(`${store.value.url}:${store.value.port}/event`, {
+    return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(event),
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((response) => console.log("t'apposto"));
+    });
   }
 }
 
