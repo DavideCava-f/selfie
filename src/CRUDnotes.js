@@ -2,14 +2,14 @@ import { ref } from "vue";
 import { store } from "@/store";
 import { NotesList } from "@/store";
 
-var NCtitle = ref("");
-var NCcontent = ref("");
-var NCtags = ref("");
+export var NCtitle = ref("");
+export var NCcontent = ref("");
+export var NCtags = ref("");
 //var NotesList = ref("");
-var NUtitle = ref("");
-var NUcontent = ref("");
-var NUtags = ref("");
-var NUid = ref("");
+export var NUtitle = ref("");
+export var NUcontent = ref("");
+export var NUtags = ref("");
+export var NUid = ref("");
 
 export function CreateNote() {
   //Parsing tags
