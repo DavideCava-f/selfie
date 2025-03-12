@@ -3,7 +3,6 @@
 import NavBar from "@/components/NavBar.vue";
 import { computed, ref } from "vue";
 import { marked } from "marked";
-import { store } from "@/store";
 import { CreateNote, DuplicateNote, DeleteNote, UpdateNote, SaveAfterUpdate,getNotes } from "@/CRUDnotes";
 import {
   NCtitle,
@@ -90,13 +89,14 @@ var selectedCard = ref(-1);
                 }}</span>
               </span>
               <div>
-                <span><button @click="DeleteNote(note._id)">
+                <span><button class="btn btn-outline-danger" @click="DeleteNote(note._id)">
                     Delete Note
+                  </button>
+                </span>
+                <span><button class="btn btn-outline-primary" @click="DuplicateNote(note._id)">
+                     Duplicate Note
                   </button></span>
-                <span><button @click="DuplicateNote(note._id)">
-                    Duplicate Note
-                  </button></span>
-                <span><button data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
+                <span><button class="btn btn-outline-info" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
                     @click="UpdateNote(note._id)">
                     UpdateNote
                   </button></span>
