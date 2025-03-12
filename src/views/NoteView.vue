@@ -4,20 +4,24 @@ import NavBar from "@/components/NavBar.vue";
 import { computed, ref } from "vue";
 import { marked } from "marked";
 import { store } from "@/store";
+import { CreateNote, DuplicateNote, DeleteNote, UpdateNote, SaveAfterUpdate } from "@/CRUDnotes";
+import { SortByDate, SortByTitle, SortByLength, getVisibleDate } from "@/NotesUtils";
+import { NotesList } from "@/store";
 
+/*
 var NCtitle = ref("");
 var NCcontent = ref("");
 var NCtags = ref("");
-var NotesList = ref("");
+//var NotesList = ref("");
 var NUtitle = ref("");
 var NUcontent = ref("");
 var NUtags = ref("");
-var NUid = ref("");
+var NUid = ref("");*/
 const redIn = /^(\w+(,\w+)*)?$/;
 var enabled = computed(() => redIn.test(NCtags.value));
 var enabledUpdate = computed(() => redIn.test(NUtags.value));
 var selectedCard = ref(-1);
-
+/*
 function CreateNote() {
   //Parsing tags
   let tagsArr = NCtags.value.split(",");
@@ -219,7 +223,7 @@ function SortByTitle(v) {
 function SortByLength(v) {
   if (v == 0) {
     NotesList.value.sort((i, j) => {
-      /* return (i.Text.length > j.Text.lenght) ? 1 : -1*/
+      // return (i.Text.length > j.Text.lenght) ? 1 : -1
       if (i.Text.length > j.Text.length) {
         return 1;
       }
@@ -239,7 +243,7 @@ function SortByLength(v) {
 function getVisibleDate(date) {
   /* NotesList.value = NotesList.value.sort((i,j) => {
      
-   } )*/
+   } )
 
   //var no= NotesList.value[0].lastUpDate
   var str =
@@ -249,6 +253,8 @@ function getVisibleDate(date) {
   str = str.slice(0, -3);
   return str;
 }
+
+*/
 </script>
 
 <template>

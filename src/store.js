@@ -2,6 +2,8 @@ import { computed, ref } from "vue";
 import OpenAI from "openai";
 import { Temporal } from "@js-temporal/polyfill";
 
+export const NotesList = ref([]);
+
 const store = ref({
   realDateTime: Temporal.Now.plainDateTimeISO(),
   deltaDateTime: Temporal.Duration.from({
