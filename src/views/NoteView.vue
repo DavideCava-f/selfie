@@ -1,6 +1,7 @@
 <script setup>
 //Rimasto da 1 gestire focus sulle note 2 finire il sorting delle note(Titolo, lunghezza contenuto)
 import NavBar from "@/components/NavBar.vue";
+import { useRouter, useRoute } from 'vue-router';
 import { computed, ref } from "vue";
 import { marked } from "marked";
 import { CreateNote, DuplicateNote, DeleteNote, UpdateNote, SaveAfterUpdate,getNotes } from "@/CRUDnotes";
@@ -116,10 +117,14 @@ var selectedCard = ref(-1);
     </div>
   </div>
   <div>
+    <RouterLink to="#create-note">
+
     <button class="btn btn-danger border-5 rounded-circle btn-outline-danger fx-button" style="" type="button"
       data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
       +
     </button>
+
+  </RouterLink>
     <button @click.prevent="getNotes">GetNotes</button>
   </div>
 
