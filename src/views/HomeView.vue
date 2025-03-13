@@ -23,7 +23,7 @@ function getLastNote(){
 }
 
 async function getNearEvents(){
-    fetch(`${store.value.url}:${store.value.port}/event/nearEvents`)
+    fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}`)
     .then(response => {
         console.log(response);
         return response.json();
@@ -73,7 +73,11 @@ function getVisibleDate(date) {
                     <h2 class="mx-auto">Eventi prossimi</h2>
                 </div>
                 <div class="container-fluid bg-danger d-flex flex-column overflow-scroll rounded-4" style="max-height: 80vh">
-                    <div v-for="event in nearEvents" class="bg-success rounded-3 text-black m-2">
+                    <div v-if="nearEvents.length == 0">
+                        <h1>Non ci sono eventi prossimi</h1>
+                    </div>
+                    <div v-else>
+                        <div v-for="event in nearEvents" class="bg-success rounded-3 text-black m-2">
                         <div v-for="date in event.dates">
                             <h4>{{ event.title }}</h4>
                             {{ event.details.text }}
@@ -82,6 +86,8 @@ function getVisibleDate(date) {
                             <p>{{ getVisibleDate(date.end) }}</p>
                         </div>
                     </div>
+                    </div>
+                    
                 </div>
             </div>
             <div class="col-lg-3 col-12">

@@ -2,7 +2,7 @@
 //Rimasto da 1 gestire focus sulle note 2 finire il sorting delle note(Titolo, lunghezza contenuto)
 import NavBar from "@/components/NavBar.vue";
 import { useRouter, useRoute } from 'vue-router';
-import { computed, ref } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { marked } from "marked";
 import { CreateNote, DuplicateNote, DeleteNote, UpdateNote, SaveAfterUpdate,getNotes } from "@/CRUDnotes";
 import {
@@ -19,6 +19,11 @@ const redIn = /^(\w+(,\w+)*)?$/;
 var enabled = computed(() => redIn.test(NCtags.value));
 var enabledUpdate = computed(() => redIn.test(NUtags.value));
 var selectedCard = ref(-1);
+
+onMounted(() => {
+  getNotes();
+});
+
 </script>
 
 <template>

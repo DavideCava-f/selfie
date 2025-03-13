@@ -34,11 +34,8 @@ router.get("/", verifyToken, async function(req, res) {
 
 router.get("/nearEvents", verifyToken, async function(req, res) {
   try{
-    
-    //console.log(events[0].dates);
-    const todayTime = Temporal.Now.plainDateTimeISO().toPlainTime();
-    const todayDate = Temporal.Now.plainDateTimeISO().toPlainDate();
-    const today = `${todayDate}T${todayTime}`; 
+    const today = req.query.today;
+    console.log(req.query);
     console.log(today);
 
     var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today } });
