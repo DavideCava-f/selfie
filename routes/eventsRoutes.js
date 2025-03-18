@@ -32,6 +32,15 @@ router.get("/", verifyToken, async function(req, res) {
   }
 });
 
+router.get("/OneEvent", verifyToken, async function(req, res) {
+  try {
+    const event = await Event.findOne({ _id:req.query.id });
+    res.status(200).json(event);
+  } catch {
+    res.status(500).send();
+  } finally {
+  }
+});
 router.get("/nearEvents", verifyToken, async function(req, res) {
   try{
     const today = req.query.today;

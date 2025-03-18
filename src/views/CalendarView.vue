@@ -2,15 +2,16 @@
 import { ref } from "vue";
 import NavBar from '@/components/NavBar.vue';
 import CreateEvent from "@/components/CreateEvent.vue";
+import VisualizeEvent from "@/components/VisualizeEvent.vue";
 import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
-import MonthlyView from "@/components/MonthlyView.vue";
-import weeklyView from "@/components/weeklyView.vue";
-
-const isWeekly = ref(Boolean);
 
 // Impegni giornalieri per test
 store.value.getEventsOfDay(store.value.simDate);
+var activeEventId = ref("");
+
+
+
 </script>
 
 <template>
@@ -33,6 +34,9 @@ store.value.getEventsOfDay(store.value.simDate);
 
                     <div class="overflow-scroll rounded-3" style="max-height: 50vh">
                         <div v-for="event in store.eventsOfDay" class="flex-fill bg-light m-1 p-3 rounded-3">
+                            <div>
+                               <button @click="activeEventId = event._id" data-bs-target="#VisualizeEventModal"data-bs-toggle="modal">Visualize</button>
+                               <button  @click="activeEventId = event._id" data-bs-target="#ModifyEventModal" data-bs-toggle="modal">Modify</button>
                             <h4>{{ event.title }}</h4>
                             {{ event.details.text }}
 
@@ -40,26 +44,14 @@ store.value.getEventsOfDay(store.value.simDate);
                                 <a :href="event.details.link">LOCATION</a>
                             </footer>
 
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-8 col-12 mt-3 bg-primary rounded-4" style="position: relative">
-                <div>
-                    <button class="btn" @click="isWeekly.value = true">
-                        Weekly
-                    </button>
-                    <button class="btn" @click="isWeekly.value = false">
-                        Monthly
-                    </button>
-                </div>
-                <!-- colonna calendario -->
-                <div v-if="isWeekly">
-                    <weeklyView/>
-                </div>
-                <div v-else>
-                    <MonthlyView/>
-                </div>
+                <table class="table"></table>
 
                 <button class="btn bg-danger rounded-5 m-3" style="position: absolute; right: 0; bottom: 0"
                     data-bs-target="#createEventModal" data-bs-toggle="modal">
@@ -69,6 +61,10 @@ store.value.getEventsOfDay(store.value.simDate);
                 <div class="modal fade" id="createEventModal" data-bs-backdrop="false" tabindex="-1"
                     aria-labelledby="createEventModal" aria-hidden="true">
                     <CreateEvent @update="store.getEventsOfDay(store.simDate)" />
+                </div>
+                <div class="modal fade" id="VisualizeEventModal" data-bs-backdrop="false" tabindex="-1"
+                     aria-hidden="true">
+                    <VisualizeEvent :idEvent="activeEventId"/>
                 </div>
             </div>
         </div>
