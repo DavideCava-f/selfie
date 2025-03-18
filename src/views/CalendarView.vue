@@ -4,6 +4,10 @@ import NavBar from '@/components/NavBar.vue';
 import CreateEvent from "@/components/CreateEvent.vue";
 import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
+import MonthlyView from "@/components/MonthlyView.vue";
+import weeklyView from "@/components/weeklyView.vue";
+
+const isWeekly = ref(Boolean);
 
 // Impegni giornalieri per test
 store.value.getEventsOfDay(store.value.simDate);
@@ -41,7 +45,21 @@ store.value.getEventsOfDay(store.value.simDate);
                 </div>
             </div>
             <div class="col-lg-8 col-12 mt-3 bg-primary rounded-4" style="position: relative">
-                <table class="table"></table>
+                <div>
+                    <button class="btn" @click="isWeekly.value = true">
+                        Weekly
+                    </button>
+                    <button class="btn" @click="isWeekly.value = false">
+                        Monthly
+                    </button>
+                </div>
+                <!-- colonna calendario -->
+                <div v-if="isWeekly">
+                    <weeklyView/>
+                </div>
+                <div v-else>
+                    <MonthlyView/>
+                </div>
 
                 <button class="btn bg-danger rounded-5 m-3" style="position: absolute; right: 0; bottom: 0"
                     data-bs-target="#createEventModal" data-bs-toggle="modal">
