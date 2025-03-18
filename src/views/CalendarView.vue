@@ -5,7 +5,7 @@ import CreateEvent from "@/components/CreateEvent.vue";
 import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
 import MonthlyView from "@/components/MonthlyView.vue";
-import weeklyView from "@/components/weeklyView.vue";
+import WeeklyView from "@/components/WeeklyView.vue";
 
 const isWeekly = ref(Boolean);
 
@@ -46,19 +46,19 @@ store.value.getEventsOfDay(store.value.simDate);
             </div>
             <div class="col-lg-8 col-12 mt-3 bg-primary rounded-4" style="position: relative">
                 <div>
-                    <button class="btn" @click="isWeekly.value = true">
+                    <button class="btn" @click="isWeekly = true">
                         Weekly
                     </button>
-                    <button class="btn" @click="isWeekly.value = false">
+                    <button class="btn" @click="isWeekly = false">
                         Monthly
                     </button>
                 </div>
                 <!-- colonna calendario -->
                 <div v-if="isWeekly">
-                    <weeklyView/>
+                    <WeeklyView />
                 </div>
                 <div v-else>
-                    <MonthlyView/>
+                    <MonthlyView />
                 </div>
 
                 <button class="btn bg-danger rounded-5 m-3" style="position: absolute; right: 0; bottom: 0"
