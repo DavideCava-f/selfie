@@ -21,18 +21,18 @@ const router = createRouter({
   routes,
 });
 
-// router.beforeEach(async (to, from, next) => {
-//   if (to.meta.requiresAuth) {
-//     const authenticated = await store.value.checkAuth();
-//     if (!authenticated)
-//       return next("/login");
-//     next();
-//   } else if (to.meta.login) {
-//     const authenticated = await store.value.checkAuth();
-//     if (authenticated)
-//       return next("/home");
-//     next();
-//   }
-// });
+router.beforeEach(async (to, from, next) => {
+  if (to.meta.requiresAuth) {
+    const authenticated = await store.value.checkAuth();
+    if (!authenticated)
+      return next("/login");
+    next();
+  } else if (to.meta.login) {
+    const authenticated = await store.value.checkAuth();
+    if (authenticated)
+      return next("/home");
+    next();
+  }
+});
 
 export default router;

@@ -61,17 +61,18 @@ const store = ref({
 
   eventsOfDay: [],
   getEventsOfDay: async (day) => {
-    console.log("ciao");
+    // FIXME: farlo lato server (query database)
     const response = await fetch(`${store.value.url}:${store.value.port}/event`);
     store.value.eventsOfDay = (await response.json()).filter((event) => event.dates.every((date) => Temporal.PlainDate.compare(Temporal.PlainDate.from(day), Temporal.PlainDate.from(date.begin.slice(0, -1))) === 0));
   },
 
   eventsOfWeek: [],
   getEventsOfWeek: async (baseDay) => {
-    const response = await fetch(`${store.value.url}:${store.value.port}/event`);
     const thisMonday = Temporal.PlainDate.from(baseDay).subtract({ days: Temporal.PlainDate.from(baseDay).dayOfWeek - 1 });
-    console.log(thisMonday.toLocaleString());
-    store.value.eventsOfWeek = (await response.json()).filter((event) => event.dates.every((date) => Temporal.PlainDate.compare(Temporal.PlainDate.from(thisMonday), Temporal.PlainDate.from(date.begin.slice(0, -1))) <= 0 && Temporal.PlainDate.compare(Temporal.PlainDate.from(thisMonday.add({ days: 6 })), Temporal.PlainDate.from(date.begin.slice(0, -1))) >= 0)).reduce((c, ));
+    const response = await fetch(`${store.value.url}:${store.value.port}/event/ofweek?monday=${thisMonday}`);
+    store.value.eventsOfWeek = (await response.json()).map((date) => {
+      return { day: Temporal.PlainDate.from(date._id).dayOfWeek - 1, events: date.events }
+    });
     console.log(store.value.eventsOfWeek);
   }
 });
