@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import { Temporal } from "@js-temporal/polyfill";
 
 export const NotesList = ref([]);
+const MonthEvents = ref([]);
 
 const store = ref({
   realDateTime: Temporal.Now.plainDateTimeISO(),
@@ -64,7 +65,24 @@ const store = ref({
     console.log("ciao");
     const response = await fetch(`${store.value.url}:${store.value.port}/event`);
     store.value.eventsOfDay = (await response.json()).filter((event) => event.dates.every((date) => Temporal.PlainDate.compare(Temporal.PlainDate.from(day), Temporal.PlainDate.from(date.begin.slice(0, -1))) === 0));
+  },
+
+  eventsOfMonth:[],
+  getEventsOfMonth: async (firstday) => {
+    try{
+    console.log(firstday);
+    const response = await fetch(`${store.value.url}:${store.value.port}/event/eventOfMonth?firstday=${firstday}`);
+    store.value.eventsOfMonth = (await response.json()).map((date)=> {return {
+      day: Temporal.PlainDate.from(date._id).day, 
+      events: date.events
+    }});
+    console.log(store.value.eventsOfMonth);
+    }
+    catch(err){
+      console.log(err);
+    }
   }
+  
 });
 
 setInterval(
