@@ -3,13 +3,14 @@ import { ref } from "vue";
 import NavBar from '@/components/NavBar.vue';
 import CreateEvent from "@/components/CreateEvent.vue";
 import VisualizeEvent from "@/components/VisualizeEvent.vue";
+import ModifyEvent from "@/components/ModifyEvent.vue";
 import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
 
 // Impegni giornalieri per test
 store.value.getEventsOfDay(store.value.simDate);
 var activeEventId = ref("");
-
+var isActive = ref(false)
 
 
 </script>
@@ -35,7 +36,9 @@ var activeEventId = ref("");
                     <div class="overflow-scroll rounded-3" style="max-height: 50vh">
                         <div v-for="event in store.eventsOfDay" class="flex-fill bg-light m-1 p-3 rounded-3">
                             <div>
-                               <button @click="activeEventId = event._id" data-bs-target="#VisualizeEventModal"data-bs-toggle="modal">Visualize</button>
+                               <button @click="() => {activeEventId = event._id
+                                isActive=true
+                               }" data-bs-target="#VisualizeEventModal"data-bs-toggle="modal">Visualize</button>
                                <button  @click="activeEventId = event._id" data-bs-target="#ModifyEventModal" data-bs-toggle="modal">Modify</button>
                             <h4>{{ event.title }}</h4>
                             {{ event.details.text }}
@@ -64,7 +67,11 @@ var activeEventId = ref("");
                 </div>
                 <div class="modal fade" id="VisualizeEventModal" data-bs-backdrop="false" tabindex="-1"
                      aria-hidden="true">
-                    <VisualizeEvent :idEvent="activeEventId"/>
+                    <VisualizeEvent :IdEvent="activeEventId" :isActive="isActive"/>
+                </div>
+                <div class="modal fade" id="ModifyEventModal" data-bs-backdrop="false" tabindex="-1"
+                     aria-hidden="true">
+                    <ModifyEvent :IdEvent="activeEventId" :isActive="isActive"/>
                 </div>
             </div>
         </div>

@@ -36,6 +36,25 @@ router.get("/OneEvent", verifyToken, async function(req, res) {
   try {
     const event = await Event.findOne({ _id:req.query.id });
     res.status(200).json(event);
+    //res.status(200).send("aa")
+  } catch {
+    res.status(500).send();
+  } finally {
+  }
+});
+
+router.put("/OneEvent", verifyToken, async function(req, res) {
+  try {
+    const event = await Event.updateOne({ _id:req.body.id }, { 
+      $set: {
+        "title":req.body.title,
+        "details.text":req.body.text,
+        "details.link":req.body.link
+      }
+    
+    });
+    res.json({ mess: "ciao" });
+    //res.status(200).send("aa")
   } catch {
     res.status(500).send();
   } finally {
