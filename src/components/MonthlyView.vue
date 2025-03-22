@@ -32,6 +32,7 @@ async function changeMonth(direction){
         firstDay = firstDay.add({months: -1});
     }
     updateWeekDays(firstDay);
+    getEvents();
 
 }
 
@@ -45,14 +46,22 @@ onMounted(async () => {
 
 });
 
+function conta(i){
+    console.log("suca");
+    return store.value.eventsOfMonth.find((d)=> (d.day) ===i).events.length;
+}
+
+function getOtherEvents(i){
+    console.log(store.value.eventsOfMonth.find((d)=> (d.day) ===i).events);
+}
 </script>
 
 <template>
     <div class="container-fluid text-light border border-danger w-100">
-        <div class="d-flex bg-dark flex-fill justify-content-between" id="uppercalendar">
-            <button class="btn d-flex align-self-center" @click="changeMonth(-1)" >
+        <div class="d-flex bg-dark flex-fill justify-content-between w-100" id="uppercalendar"> <!-- barra superiore del calendario -->
+            <div class="btn d-flex align-self-center" @click="changeMonth(-1)" >
                             <img src="@/assets/Indietro.svg" />
-            </button>
+            </div>
             <div v-for="day in weekdays" class="d-flex flex-fill justify-content-center border border-white">
                     <p>{{ day }}</p>
             </div>
@@ -61,15 +70,25 @@ onMounted(async () => {
             </button>
         </div>
         <div class="d-flex flex-wrap"> <!-- celle dei giorni nel mense -->
-            <div v-for="i in dayInMonth" class="d-flex flex-column flex-fill justify-content-start border border-white" style="width: 14%;">
-                <div>
-                    <p>{{ i }}</p>
+            <div v-for="i in dayInMonth" class="d-flex flex-column flex-fill justify-content-start border border-white" style="min-width: 14%;max-width: 14%;width: 14%; height: 15vh">
+                <div class="d-flex justify-content-center text-wrap">
+                    {{ i }}
                 </div>
-                <div class="list-group">
-                    <div v-if="store.eventsOfMonth.find((d)=> (d.day) === i)" v-for="event in store.eventsOfMonth.find((d)=> (d.day) ===i).events" class="list-group-item list-group-item-action text-dark">
-                            <p>{{ event.title }}</p>
+                <div class="m-0 p-0 d-flex flex-column" style="overflow: hidden;">
+                    <div v-if="store.eventsOfMonth.find((d)=> (d.day) ===i) && (conta(i)>2)">
+                        <div v-if="store.eventsOfMonth.find((d)=> (d.day) === i)" v-for="event in (store.eventsOfMonth.find((d)=> (d.day) ===i).events).slice(0,2)" class="btn d-inline-block text-truncate" style="line-height: 1; max-width: 100%;min-height: 25%">
+                        {{ event.title }}
+                        </div>
+                        <div class="btn" @click="getOtherEvents(i)" style="line-height: 1; max-width: 100%;min-height: 25%">
+                            altri eventi
+                        </div>
                     </div>
-                </div>    
+                    <div v-else>
+                        <div v-if="store.eventsOfMonth.find((d)=> (d.day) === i)" v-for="event in store.eventsOfMonth.find((d)=> (d.day) ===i).events" class="btn d-inline-block text-truncate" style="line-height: 1; max-width: 100%;min-height: 25%">
+                        {{ event.title }}
+                        </div>
+                    </div>
+                </div>
                 
             </div>
         </div>
