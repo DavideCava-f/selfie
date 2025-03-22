@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import NavBar from '@/components/NavBar.vue';
 import CreateEvent from "@/components/CreateEvent.vue";
 import { store } from '@/store';
@@ -10,7 +10,14 @@ import WeeklyView from "@/components/WeeklyView.vue";
 const isWeekly = ref(Boolean);
 
 // Impegni giornalieri per test
-store.value.getEventsOfDay(store.value.simDate);
+function update() {
+    store.value.getEventsOfDay(store.value.simDate);
+    store.value.getEventsOfWeek(store.value.simDate);
+}
+
+onMounted(() => {
+    update();
+});
 </script>
 
 <template>
@@ -68,7 +75,7 @@ store.value.getEventsOfDay(store.value.simDate);
                 <!-- Finestra MODALE di inserimento evento -->
                 <div class="modal fade" id="createEventModal" data-bs-backdrop="false" tabindex="-1"
                     aria-labelledby="createEventModal" aria-hidden="true">
-                    <CreateEvent @update="store.getEventsOfDay(store.simDate)" />
+                    <CreateEvent @update="update" />
                 </div>
             </div>
         </div>

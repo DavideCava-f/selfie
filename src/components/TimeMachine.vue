@@ -13,6 +13,7 @@ function save() {
     ),
   );
   store.value.getEventsOfDay(store.value.simDate);
+  store.value.getEventsOfWeek(store.value.simDate);
 }
 
 function reset() {
@@ -25,6 +26,7 @@ function reset() {
     seconds: 0,
   });
   store.value.getEventsOfDay(store.value.simDate);
+  store.value.getEventsOfWeek(store.value.simDate);
 }
 </script>
 

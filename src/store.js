@@ -75,6 +75,7 @@ const store = ref({
     });
     console.log(store.value.eventsOfWeek);
   }
+
 });
 
 setInterval(
