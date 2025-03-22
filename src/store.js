@@ -41,6 +41,8 @@ const store = ref({
     "Sunday",
   ],
 
+  timeZone: "Europe/Rome",
+
   // openai: new OpenAI({
   // baseURL: "https://openrouter.ai/api/v1",
   // apiKey: import.meta.env.VITE_OPEN_AI_API_KEY,
@@ -61,7 +63,7 @@ const store = ref({
 
   eventsOfDay: [],
   getEventsOfDay: async (day) => {
-    // FIXME: farlo lato server (query database)
+    // FIXME: farlo lato server (query database) + gestire timeZone
     const response = await fetch(`${store.value.url}:${store.value.port}/event`);
     store.value.eventsOfDay = (await response.json()).filter((event) => event.dates.every((date) => Temporal.PlainDate.compare(Temporal.PlainDate.from(day), Temporal.PlainDate.from(date.begin.slice(0, -1))) === 0));
   },

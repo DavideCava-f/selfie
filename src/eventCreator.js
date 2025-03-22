@@ -28,8 +28,8 @@ class EventCreator {
     );
     for (let i = 0; i < n; i++) {
       event.dates.push({
-        begin: baseBeginDateTime.add({ days: i }),
-        end: baseEndDateTime.add({ days: i }),
+        begin: baseBeginDateTime.add({ days: i }).toZonedDateTime(store.value.timeZone).toInstant(),
+        end: baseEndDateTime.add({ days: i }).toZonedDateTime(store.value.timeZone).toInstant(),
       });
     }
     console.log(event);

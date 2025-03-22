@@ -10,14 +10,15 @@ dotenv.config();
 
 router.post("/", verifyToken, async function(req, res) {
   try {
+    console.log(req.body.dates);
     await Event.create({
       userId: req.userId,
       dates: req.body.dates,
       title: req.body.title,
       details: req.body.details
     });
-  } catch {
-    res.status(500).send();
+  } catch (error) {
+    res.status(500).send(error);
   } finally {
     res.status(200).send();
   }
