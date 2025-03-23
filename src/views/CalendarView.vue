@@ -50,7 +50,7 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8 col-12 mt-3 bg-primary rounded-4" style="position: relative">
+            <div class="col-lg-8 col-12 mt-3 bg-primary rounded-4" style="">
                 <div>
                     <button class="btn" @click="isWeekly = true">
                         Weekly
@@ -67,7 +67,7 @@ onMounted(() => {
                     <MonthlyView />
                 </div>
 
-                <button class="btn bg-danger rounded-5 m-3" style="position: absolute; right: 0; bottom: 0"
+                <button class="btn bg-danger rounded-5 m-3" style="position: fixed; right: 0; bottom: 0"
                     data-bs-target="#createEventModal" data-bs-toggle="modal">
                     +
                 </button>

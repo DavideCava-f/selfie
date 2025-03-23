@@ -81,7 +81,7 @@ onMounted();
   </div>
 
   <div class="container d-flex flex-column justify-content-between w-100 m-1" style="min-height: 70vh;">
-    <div v-for="day in store.week" class="row w-100 p-2 border fillable">
+    <div v-for="day in store.week" class="row w-100 p-2 border fillable align-items-center">
 
       <div class="col-1 h-100 p-0 d-flex justify-content-center align-items-center">
         <div class="d-flex flex-column align-items-begin text-white rounded-circle p-1 text-wrap">
