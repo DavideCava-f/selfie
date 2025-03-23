@@ -9,7 +9,6 @@ import WeeklyView from "@/components/WeeklyView.vue";
 
 const isWeekly = ref(Boolean);
 
-// Impegni giornalieri per test
 function update() {
     store.value.getEventsOfDay(store.value.simDate);
     store.value.getEventsOfWeek(store.value.simDate);
@@ -24,7 +23,7 @@ onMounted(() => {
     <!-- <button @click="emits('click')"></button> -->
     <NavBar />
     <div class="container-fluid">
-        <div class="row bg-dark p-3" style="">
+        <div class="row bg-dark p-3 h-100" style="">
             <div class="col-lg-4 col-12 mt-3 bg-warning rounded-4">
                 <!-- colonna day-->
                 <div class="d-flex flex-column justify-content-center">
@@ -38,7 +37,7 @@ onMounted(() => {
                         </button>
                     </div>
 
-                    <div class="overflow-scroll rounded-3" style="max-height: 50vh">
+                    <div class="overflow-scroll rounded-3" style="max-height: 100vh">
                         <div v-for="event in store.eventsOfDay" class="flex-fill bg-light m-1 p-3 rounded-3">
                             <h4>{{ event.title }}</h4>
                             {{ event.details.text }}

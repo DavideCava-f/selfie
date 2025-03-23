@@ -63,7 +63,7 @@ const store = ref({
 
   eventsOfDay: [],
   getEventsOfDay: async (day) => {
-    // FIXME: farlo lato server (query database) + gestire timeZone
+    // FIXME: farlo lato server (query database) + offset
     const response = await fetch(`${store.value.url}:${store.value.port}/event`);
     store.value.eventsOfDay = (await response.json()).filter((event) => event.dates.every((date) => Temporal.PlainDate.compare(Temporal.PlainDate.from(day), Temporal.PlainDate.from(date.begin.slice(0, -1))) === 0));
   },

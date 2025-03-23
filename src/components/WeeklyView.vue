@@ -1,7 +1,10 @@
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
+
+
+const thisMonday = computed(() => store.value.simDate.subtract({ days: store.value.simDate.dayOfWeek - 1 }).add({ weeks: store.value.weekOffset }));
 
 function getColorFromTitle(title) {
   // Create a hash from the title string
@@ -49,29 +52,44 @@ function getInvertedColor(hex) {
   return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
 }
 
-onMounted();
-
 function nextWeek() {
   store.value.weekOffset++;
   store.value.getEventsOfWeek(store.value.simDate);
 }
+
 function prevWeek() {
   store.value.weekOffset--;
   store.value.getEventsOfWeek(store.value.simDate);
 }
+
+onMounted();
 </script>
 
 
 <template>
-  <button @click="prevWeek">P</button>
-  <button @click="nextWeek">N</button>
+  <div class="d-flex justify-content-between flex-fill bg-light text-center mx-1 my-3 rounded-3">
+    <button class="btn d-flex align-self-center" @click="prevWeek">
+      <img src="@/assets/Indietro.svg" />
+    </button>
+    <div class="align-self-center">{{ thisMonday }} - {{ thisMonday.add({ days: 6 }) }}
+      <button v-if="store.weekOffset !== 0" class="btn"
+        @click="store.weekOffset = 0; store.getEventsOfWeek(store.simDate)">R</button>
+    </div>
+    <button class="btn d-flex align-self-center" @click="nextWeek">
+      <img src="@/assets/avanti.svg" />
+    </button>
+  </div>
+
   <div class="container d-flex flex-column justify-content-between w-100 m-3" style="height: 70vh">
     <div v-for="day in store.week" class="row w-100 p-2 border fillable">
       <div class="col-1 h-100 p-0 d-flex justify-content-center align-items-center">
-        <div
-          :class="['d-flex', 'flex-column', 'align-items-center', 'text-white', 'rounded-circle', 'p-1', day === store.week[store.simDay] ? 'bg-danger' : '']">
-          <div class="fw-bold fs-5">{{ day.slice(0, 3) }}</div>
-          <div class="fw-thin fs-6">
+        <div class="d-flex flex-column align-items-begin text-white rounded-circle p-1">
+          <div class="fw-bold" style="font-size: 100%;">
+            {{ day.slice(0, 3) }}
+            <span v-if="day === store.week[store.simDay] && store.weekOffset === 0" class="text-danger">*</span>
+          </div>
+          <div class="fw-thin" style="font-size: 75%;">
+            {{ thisMonday.add({ days: store.week.indexOf(day) }) }}
           </div>
         </div>
       </div>

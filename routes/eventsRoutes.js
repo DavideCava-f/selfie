@@ -10,7 +10,7 @@ dotenv.config();
 
 router.post("/", verifyToken, async function(req, res) {
   try {
-    console.log("Stampa date:\n");
+    console.log("Stampa date:");
     console.log(req.body.dates);
     await Event.create({
       userId: req.userId,
@@ -76,6 +76,8 @@ router.get("/ofweek", verifyToken, async function(req, res) {
 
       // 3. Filter out dates that are not in the current week
       { $match: { "dates.beginDateOnly": { $gte: new Date(monday).toISOString().split("T")[0], $lte: new Date(sunday).toISOString().split("T")[0] } } },
+
+      { $sort: { "dates.begin": 1 } },
 
       // 4. Group the events by the date (dates.begin)
       {
