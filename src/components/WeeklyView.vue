@@ -2,8 +2,10 @@
 import { ref, onMounted, watch, computed } from "vue";
 import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
+import VisualizeEvent from "@/components/VisualizeEvent.vue";
 
 const thisMonday = computed(() => store.value.simDate.subtract({ days: store.value.simDate.dayOfWeek - 1 }).add({ weeks: store.value.weekOffset }));
+var activeEventId = ref("");
 
 function getColorFromTitle(title) {
   // Create a hash from the title string
@@ -94,10 +96,11 @@ onMounted();
       </div>
 
       <div class="col-11 h-100 d-flex flex-row justify-content-between border-start gap-1 flex-wrap">
-        <div v-if="store.eventsOfWeek.find((d) => d.day === store.week.indexOf(day))"
+        <button v-if="store.eventsOfWeek.find((d) => d.day === store.week.indexOf(day))"
           v-for="event in store.eventsOfWeek.find((d) => d.day === store.week.indexOf(day)).events"
-          class="fillable p-2 d-flex justify-content-between align-items-start gap-3"
-          :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
+          class="btn fillable p-2 d-flex justify-content-between align-items-start gap-3"
+          :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }"
+          @click="activeEventId = event._id" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal">
           <div class="fw-bold text-start event">
             {{ event.title }}
           </div>
@@ -110,9 +113,12 @@ onMounted();
               v-if="Temporal.PlainDateTime.compare(store.simDateTime, event.dates.begin.slice(0, -1)) >= 0 && Temporal.PlainDateTime.compare(store.simDateTime, event.dates.end.slice(0, -1)) <= 0"
               class="text-danger">*</span>
           </div>
-        </div>
+        </button>
       </div>
     </div>
+  </div>
+  <div class="modal fade" id="VisualizeEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
+    <VisualizeEvent :IdEvent="activeEventId" />
   </div>
 </template>
 
@@ -131,4 +137,3 @@ onMounted();
   text-overflow: ellipsis;
 }
 </style>
-

@@ -45,10 +45,8 @@ var isActive = ref(false)
                     <div class="overflow-scroll rounded-3" style="max-height: 100vh">
                         <div v-for="event in store.eventsOfDay" class="flex-fill bg-light m-1 p-3 rounded-3">
                             <div>
-                                <button @click="() => {
-                                    activeEventId = event._id
-                                    isActive = true
-                                }" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal">Visualize</button>
+                                <button @click="activeEventId = event._id" data-bs-target="#VisualizeEventModal"
+                                    data-bs-toggle="modal">Visualize</button>
                                 <button @click="activeEventId = event._id" data-bs-target="#ModifyEventModal"
                                     data-bs-toggle="modal">Modify</button>
                                 <h4>{{ event.title }}</h4>
@@ -91,12 +89,11 @@ var isActive = ref(false)
                     <CreateEvent @update="update" />
                 </div>
                 <div class="modal fade" id="VisualizeEventModal" data-bs-backdrop="false" tabindex="-1"
-                     aria-hidden="true">
-                    <VisualizeEvent :IdEvent="activeEventId" :isActive="isActive"/>
+                    aria-hidden="true">
+                    <VisualizeEvent :IdEvent="activeEventId" :isActive="isActive" />
                 </div>
-                <div class="modal fade" id="ModifyEventModal" data-bs-backdrop="false" tabindex="-1"
-                     aria-hidden="true">
-                    <ModifyEvent :IdEvent="activeEventId" :isActive="isActive"/>
+                <div class="modal fade" id="ModifyEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
+                    <ModifyEvent :IdEvent="activeEventId" :isActive="isActive" />
                 </div>
             </div>
         </div>
