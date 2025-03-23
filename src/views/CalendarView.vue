@@ -1,23 +1,29 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import NavBar from '@/components/NavBar.vue';
 import CreateEvent from "@/components/CreateEvent.vue";
 import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
 import MonthlyView from "@/components/MonthlyView.vue";
-import weeklyView from "@/components/weeklyView.vue";
+import WeeklyView from "@/components/WeeklyView.vue";
 
 const isWeekly = ref(Boolean);
 
-// Impegni giornalieri per test
-store.value.getEventsOfDay(store.value.simDate);
+function update() {
+    store.value.getEventsOfDay(store.value.simDate);
+    store.value.getEventsOfWeek(store.value.simDate);
+}
+
+onMounted(() => {
+    update();
+});
 </script>
 
 <template>
     <!-- <button @click="emits('click')"></button> -->
     <NavBar />
     <div class="container-fluid">
-        <div class="row bg-dark p-3" style="">
+        <div class="row bg-dark p-3 h-100" style="">
             <div class="col-lg-4 col-12 mt-3 bg-warning rounded-4">
                 <!-- colonna day-->
                 <div class="d-flex flex-column justify-content-center">
@@ -31,7 +37,7 @@ store.value.getEventsOfDay(store.value.simDate);
                         </button>
                     </div>
 
-                    <div class="overflow-scroll rounded-3" style="max-height: 50vh">
+                    <div class="overflow-scroll rounded-3" style="max-height: 100vh">
                         <div v-for="event in store.eventsOfDay" class="flex-fill bg-light m-1 p-3 rounded-3">
                             <h4>{{ event.title }}</h4>
                             {{ event.details.text }}
@@ -44,31 +50,31 @@ store.value.getEventsOfDay(store.value.simDate);
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8 col-12 mt-3 bg-primary rounded-4" style="position: relative">
+            <div class="col-lg-8 col-12 mt-3 bg-primary rounded-4" style="">
                 <div>
-                    <button class="btn" @click="isWeekly.value = true">
+                    <button class="btn" @click="isWeekly = true">
                         Weekly
                     </button>
-                    <button class="btn" @click="isWeekly.value = false">
+                    <button class="btn" @click="isWeekly = false">
                         Monthly
                     </button>
                 </div>
                 <!-- colonna calendario -->
                 <div v-if="isWeekly">
-                    <weeklyView/>
+                    <WeeklyView />
                 </div>
                 <div v-else>
-                    <MonthlyView/>
+                    <MonthlyView />
                 </div>
 
-                <button class="btn bg-danger rounded-5 m-3" style="position: absolute; right: 0; bottom: 0"
+                <button class="btn bg-danger rounded-5 m-3" style="position: fixed; right: 0; bottom: 0"
                     data-bs-target="#createEventModal" data-bs-toggle="modal">
                     +
                 </button>
                 <!-- Finestra MODALE di inserimento evento -->
                 <div class="modal fade" id="createEventModal" data-bs-backdrop="false" tabindex="-1"
                     aria-labelledby="createEventModal" aria-hidden="true">
-                    <CreateEvent @update="store.getEventsOfDay(store.simDate)" />
+                    <CreateEvent @update="update" />
                 </div>
             </div>
         </div>
