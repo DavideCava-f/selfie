@@ -3,7 +3,6 @@ import { ref, onMounted, watch, computed } from "vue";
 import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
 
-
 const thisMonday = computed(() => store.value.simDate.subtract({ days: store.value.simDate.dayOfWeek - 1 }).add({ weeks: store.value.weekOffset }));
 
 function getColorFromTitle(title) {
@@ -65,7 +64,6 @@ function prevWeek() {
 onMounted();
 </script>
 
-
 <template>
   <div class="d-flex justify-content-between flex-fill bg-light text-center mx-1 my-3 rounded-3">
     <button class="btn d-flex align-self-center" @click="prevWeek">
@@ -114,7 +112,6 @@ onMounted();
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -134,3 +131,4 @@ onMounted();
   text-overflow: ellipsis;
 }
 </style>
+
