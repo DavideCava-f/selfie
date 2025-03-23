@@ -88,154 +88,77 @@ router.get("/ofweek", verifyToken, async function(req, res) {
     const sunday = Temporal.PlainDate.from(monday).add({ days: 6 }).toString();
 
     const eventsOfWeek = await Event.aggregate([
-      // 1. Filter events by the current user.
       { $match: { userId: new mongoose.Types.ObjectId(req.userId) } },
-
-      // 2. Unwind the dates array.
       { $unwind: "$dates" },
-
-      // 3. Sort by the original begin date.
       { $sort: { "dates.begin": 1 } },
-
-      // 4. Calculate the number of days spanned by the event (inclusive).
       {
         $addFields: {
           totalDays: {
             $add: [
-              {
-                $dateDiff: {
-                  startDate: "$dates.begin",
-                  endDate: "$dates.end",
-                  unit: "day"
-                }
-              },
+              { $dateDiff: { startDate: "$dates.begin", endDate: "$dates.end", unit: "day" } },
               1
             ]
           }
         }
       },
-
-      // 5. Generate an array of day offsets (0, 1, ..., totalDays - 1).
+      { $addFields: { dayOffsets: { $range: [0, "$totalDays"] } } },
+      { $unwind: "$dayOffsets" },
+      // 1. Compute the "currentDay" (midnight of the split day)
       {
         $addFields: {
-          dayOffsets: { $range: [0, "$totalDays"] }
+          currentDay: {
+            $dateAdd: {
+              startDate: { $dateTrunc: { date: "$dates.begin", unit: "day" } },
+              unit: "day",
+              amount: "$dayOffsets"
+            }
+          }
         }
       },
-
-      // 6. Unwind the dayOffsets so that each event is repeated per day offset.
-      { $unwind: "$dayOffsets" },
-
-      // 7. Calculate new begin and end for each split day.
+      // 2. Calculate newBegin and newEnd based on currentDay
       {
         $addFields: {
-          // newBegin: For the first segment, keep the original begin.
-          // Otherwise, add the day offset (in days) to the truncated (midnight) of the original begin.
           newBegin: {
             $cond: [
               { $eq: ["$dayOffsets", 0] },
-              "$dates.begin",
-              {
-                $dateAdd: {
-                  startDate: { $dateTrunc: { date: "$dates.begin", unit: "day" } },
-                  unit: "day",
-                  amount: "$dayOffsets"
-                }
-              }
+              "$dates.begin", // Keep original start time for the first day
+              "$currentDay"   // For subsequent days, start at midnight
             ]
           },
-          // newEnd:
-          // For non-final segments, use the midnight of the next day.
-          // For the final segment (dayOffsets == totalDays - 1):
-          //   If the original event end is exactly at midnight (all-day event),
-          //   set newEnd to the end of the day (midnight plus 23:59, i.e. 1439 minutes).
-          //   Otherwise, use the original event end.
           newEnd: {
             $cond: [
+              // Check if this is the last segment
               { $eq: ["$dayOffsets", { $subtract: ["$totalDays", 1] }] },
               {
-                // If it's the last segment of the event
+                // For the last segment, use original end time unless it's midnight
                 $cond: [
                   {
-                    // Check if the original end time is exactly at midnight
                     $eq: [
-                      {
-                        $dateDiff: {
-                          startDate: { $dateTrunc: { date: "$dates.end", unit: "day" } },
-                          endDate: "$dates.end",
-                          unit: "minute"
-                        }
-                      },
-                      0
+                      "$dates.end",
+                      { $dateTrunc: { date: "$dates.end", unit: "day" } }
                     ]
                   },
-                  // If the event originally ended at midnight, set it to 23:59
-                  {
-                    $dateAdd: {
-                      startDate: { $dateTrunc: { date: "$dates.begin", unit: "day" } },
-                      unit: "minute",
-                      amount: 1439 // 23:59
-                    }
-                  },
-                  "$dates.end"
+                  // If original end is midnight, set to 23:59 of currentDay
+                  { $dateAdd: { startDate: "$currentDay", unit: "minute", amount: 1439 } },
+                  "$dates.end" // Otherwise, use original end time
                 ]
               },
-              // For all other segments, set the end to 23:59 of the same day
-              {
-                $dateAdd: {
-                  startDate: { $dateTrunc: { date: "$dates.begin", unit: "day" } },
-                  unit: "minute",
-                  amount: 1439
-                }
-              }
+              // For non-final segments, set end to 23:59 of currentDay
+              { $dateAdd: { startDate: "$currentDay", unit: "minute", amount: 1439 } }
             ]
           }
         }
       },
-
-      // 8. Overwrite the original dates.begin and dates.end with the new computed values.
-      {
-        $addFields: {
-          "dates.begin": "$newBegin",
-          "dates.end": "$newEnd"
-        }
-      },
-
-      // 9. Add a normalized "day" field (using the new dates.begin) for grouping.
-      {
-        $addFields: {
-          day: { $dateToString: { format: "%Y-%m-%d", date: "$dates.begin" } }
-        }
-      },
-
-      // 10. Remove temporary fields.
-      {
-        $project: {
-          totalDays: 0,
-          dayOffsets: 0,
-          newBegin: 0,
-          newEnd: 0
-        }
-      },
-
-      // 11. Filter events that fall within the current week (using the computed day field).
-      {
-        $match: {
-          day: {
-            $gte: monday,
-            $lte: sunday
-          }
-        }
-      },
-
-      // 12. Group events by the normalized "day" field.
-      {
-        $group: {
-          _id: "$day",
-          events: { $push: "$$ROOT" }
-        }
-      },
-
-      // 13. Optionally, sort groups by day.
+      // 3. Overwrite dates.begin/end with computed values
+      { $set: { "dates.begin": "$newBegin", "dates.end": "$newEnd" } },
+      // 4. Add normalized day field for filtering/grouping
+      { $addFields: { day: { $dateToString: { format: "%Y-%m-%d", date: "$dates.begin" } } } },
+      // 5. Cleanup temporary fields
+      { $project: { totalDays: 0, dayOffsets: 0, newBegin: 0, newEnd: 0, currentDay: 0 } },
+      // 6. Filter by week
+      { $match: { day: { $gte: monday, $lte: sunday } } },
+      // 7. Group by day
+      { $group: { _id: "$day", events: { $push: "$$ROOT" } } },
       { $sort: { _id: 1 } }
     ]);
     // const eventsOfWeek = await Event.aggregate([
