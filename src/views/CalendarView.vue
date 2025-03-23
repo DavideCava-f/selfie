@@ -89,6 +89,14 @@ var isActive = ref(false)
                     aria-labelledby="createEventModal" aria-hidden="true">
                     <CreateEvent @update="update" />
                 </div>
+                <div class="modal fade" id="VisualizeEventModal" data-bs-backdrop="false" tabindex="-1"
+                     aria-hidden="true">
+                    <VisualizeEvent :IdEvent="activeEventId" :isActive="isActive"/>
+                </div>
+                <div class="modal fade" id="ModifyEventModal" data-bs-backdrop="false" tabindex="-1"
+                     aria-hidden="true">
+                    <ModifyEvent :IdEvent="activeEventId" :isActive="isActive"/>
+                </div>
             </div>
         </div>
     </div>
