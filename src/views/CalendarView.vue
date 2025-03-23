@@ -24,6 +24,17 @@ function update() {
     store.value.getEventsOfWeek( VisualizedDate.value);
 }
 
+function printDay(){
+
+    if (Temporal.PlainDate.compare(VisualizedDate.value , store.value.simDate) == 0 ){
+        return "TODAY "+ VisualizedDate.value.toString()
+    }else if( Temporal.PlainDate.compare(VisualizedDate.value.add({days : -1}) , store.value.simDate) == 0 ){
+        return "TOMORROW " + VisualizedDate.value.toString()
+    }else{
+        return VisualizedDate.value.toString()
+    }
+
+}
 
 function getDate(i){
 
@@ -63,7 +74,10 @@ var isActive = ref(false)
                         <button class="btn d-flex align-self-center">
                             <img src="@/assets/Indietro.svg" @click="getDate(0)"/>
                         </button>
-                        <div class="align-self-center">{{ VisualizedDate.toString() }}</div>
+                    
+                        <div class="align-self-center">{{ printDay() }}</div>
+                        
+                        <div></div>
                         <button class="btn d-flex align-self-center">
                             <img src="@/assets/avanti.svg" @click="getDate(1)" />
                         </button>
