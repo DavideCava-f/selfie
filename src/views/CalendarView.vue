@@ -22,7 +22,6 @@ onMounted(() => {
 var activeEventId = ref("");
 var isActive = ref(false)
 
-
 </script>
 
 <template>
@@ -46,16 +45,18 @@ var isActive = ref(false)
                     <div class="overflow-scroll rounded-3" style="max-height: 100vh">
                         <div v-for="event in store.eventsOfDay" class="flex-fill bg-light m-1 p-3 rounded-3">
                             <div>
-                               <button @click="() => {activeEventId = event._id
-                                isActive=true
-                               }" data-bs-target="#VisualizeEventModal"data-bs-toggle="modal">Visualize</button>
-                               <button  @click="activeEventId = event._id" data-bs-target="#ModifyEventModal" data-bs-toggle="modal">Modify</button>
-                            <h4>{{ event.title }}</h4>
-                            {{ event.details.text }}
+                                <button @click="() => {
+                                    activeEventId = event._id
+                                    isActive = true
+                                }" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal">Visualize</button>
+                                <button @click="activeEventId = event._id" data-bs-target="#ModifyEventModal"
+                                    data-bs-toggle="modal">Modify</button>
+                                <h4>{{ event.title }}</h4>
+                                {{ event.details.text }}
 
-                            <footer>
-                                <a :href="event.details.link">LOCATION</a>
-                            </footer>
+                                <footer>
+                                    <a :href="event.details.link">LOCATION</a>
+                                </footer>
 
                             </div>
 
@@ -65,19 +66,19 @@ var isActive = ref(false)
             </div>
             <div class="col-lg-8 col-12 mt-3 bg-primary rounded-4" style="position: relative">
                 <div>
-                    <button class="btn" @click="isWeekly.value = true">
+                    <button class="btn" @click="isWeekly = true">
                         Weekly
                     </button>
-                    <button class="btn" @click="isWeekly.value = false">
+                    <button class="btn" @click="isWeekly = false">
                         Monthly
                     </button>
                 </div>
                 <!-- colonna calendario -->
                 <div v-if="isWeekly">
-                    <WeeklyView/>
+                    <WeeklyView />
                 </div>
                 <div v-else>
-                    <MonthlyView/>
+                    <MonthlyView />
                 </div>
 
                 <button class="btn bg-danger rounded-5 m-3" style="position: fixed; right: 0; bottom: 0"
