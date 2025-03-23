@@ -80,10 +80,11 @@ onMounted();
     </button>
   </div>
 
-  <div class="container d-flex flex-column justify-content-between w-100 m-3" style="height: 70vh">
+  <div class="container d-flex flex-column justify-content-between w-100 m-1" style="min-height: 70vh;">
     <div v-for="day in store.week" class="row w-100 p-2 border fillable">
+
       <div class="col-1 h-100 p-0 d-flex justify-content-center align-items-center">
-        <div class="d-flex flex-column align-items-begin text-white rounded-circle p-1">
+        <div class="d-flex flex-column align-items-begin text-white rounded-circle p-1 text-wrap">
           <div class="fw-bold" style="font-size: 100%;">
             {{ day.slice(0, 3) }}
             <span v-if="day === store.week[store.simDay] && store.weekOffset === 0" class="text-danger">*</span>
@@ -93,25 +94,43 @@ onMounted();
           </div>
         </div>
       </div>
-      <div class="col-11 h-100 d-flex flex-row justify-content-between border-start gap-1">
+
+      <div class="col-11 h-100 d-flex flex-row justify-content-between border-start gap-1 flex-wrap">
         <div v-if="store.eventsOfWeek.find((d) => d.day === store.week.indexOf(day))"
           v-for="event in store.eventsOfWeek.find((d) => d.day === store.week.indexOf(day)).events"
-          class="fillable h-100 text-dark p-3" :style="{ 'background-color': getColorFromTitle(event.title) }">
-          <div class="fw-bold"
-            :style="{ 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
-            {{ event.title }} | {{ Temporal.PlainDateTime.from(event.dates.begin.slice(0,
+          class="fillable p-2 d-flex justify-content-between align-items-start gap-3"
+          :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
+          <div class="fw-bold text-start event">
+            {{ event.title }}
+          </div>
+          <div class="text-end flex-fill text-nowrap">
+            {{ Temporal.PlainDateTime.from(event.dates.begin.slice(0,
               -1)).toPlainTime().toString().slice(0, 5)
             }} - {{
               Temporal.PlainDateTime.from(event.dates.end.slice(0, -1)).toPlainTime().toString().slice(0, 5) }}
+            <span
+              v-if="Temporal.PlainDateTime.compare(store.simDateTime, event.dates.begin.slice(0, -1)) >= 0 && Temporal.PlainDateTime.compare(store.simDateTime, event.dates.end.slice(0, -1)) <= 0"
+              class="text-danger">*</span>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </template>
 
 <style scoped>
 .fillable {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.event {
+  /* Se vuoi che si adatti allo spazio */
+  max-width: 50%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 </style>
