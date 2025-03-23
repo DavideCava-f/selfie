@@ -110,7 +110,8 @@ onMounted();
             }} - {{
               Temporal.PlainDateTime.from(event.dates.end.slice(0, -1)).toPlainTime().toString().slice(0, 5) }}
             <span
-              v-if="Temporal.PlainDateTime.compare(store.simDateTime, event.dates.begin.slice(0, -1)) >= 0 && Temporal.PlainDateTime.compare(store.simDateTime, event.dates.end.slice(0, -1)) <= 0"
+              v-if="Temporal.PlainDateTime.compare(store.simDateTime, Temporal.PlainDateTime.from(event.dates.begin.slice(0, -1))) >= 0 &&
+                Temporal.PlainDateTime.compare(store.simDateTime, Temporal.PlainDateTime.from(event.dates.end.slice(0, -1))) <= 0"
               class="text-danger">*</span>
           </div>
         </button>
