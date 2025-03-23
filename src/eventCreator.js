@@ -28,8 +28,8 @@ class EventCreator {
     );
     for (let i = 0; i < n; i++) {
       event.dates.push({
-        begin: baseBeginDateTime.add({ days: i }).toZonedDateTime(store.value.timeZone).toInstant(),
-        end: baseEndDateTime.add({ days: i }).toZonedDateTime(store.value.timeZone).toInstant(),
+        begin: baseBeginDateTime.add({ days: i }).toString() + "Z",
+        end: baseEndDateTime.add({ days: i }).toString() + "Z",
       });
     }
     console.log(event);
@@ -69,8 +69,8 @@ class EventCreator {
     let i = 0;
     do {
       event.dates.push({
-        begin: baseBeginDateTime.add({ days: i }),
-        end: baseEndDateTime.add({ days: i }),
+        begin: baseBeginDateTime.add({ days: i }).toString() + "Z",
+        end: baseEndDateTime.add({ days: i }).toString() + "Z",
       });
       i++;
     } while (
@@ -128,8 +128,8 @@ class EventCreator {
     for (let i = 0; i < n; i++) {
       weekDaysOnDateTime.forEach((d) => {
         event.dates.push({
-          begin: d.begin.add({ weeks: i }),
-          end: d.end.add({ weeks: i }),
+          begin: d.begin.add({ weeks: i }).toString() + "Z",
+          end: d.end.add({ weeks: i }).toString() + "Z",
         });
       });
     }
@@ -190,8 +190,8 @@ class EventCreator {
     do {
       weekDaysOnDateTime.forEach((d) => {
         event.dates.push({
-          begin: d.begin.add({ weeks: i }),
-          end: d.end.add({ weeks: i }),
+          begin: d.begin.add({ weeks: i }).toString() + "Z",
+          end: d.end.add({ weeks: i }).toString() + "Z",
         });
       });
       i++;
@@ -247,8 +247,8 @@ class EventCreator {
     );
     for (let i = 0; i < n; i++) {
       event.dates.push({
-        begin: baseBeginDateTime.add({ months: i }),
-        end: baseEndDateTime.add({ months: i }),
+        begin: baseBeginDateTime.add({ months: i }).toString() + "Z",
+        end: baseEndDateTime.add({ months: i }).toString() + "Z",
       });
     }
     console.log(event);
@@ -288,8 +288,8 @@ class EventCreator {
     let i = 0;
     do {
       event.dates.push({
-        begin: baseBeginDateTime.add({ months: i }),
-        end: baseEndDateTime.add({ months: i }),
+        begin: baseBeginDateTime.add({ months: i }).toString() + "Z",
+        end: baseEndDateTime.add({ months: i }).toString() + "Z",
       });
       i++;
     } while (

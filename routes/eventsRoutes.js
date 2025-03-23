@@ -10,6 +10,7 @@ dotenv.config();
 
 router.post("/", verifyToken, async function(req, res) {
   try {
+    console.log("Stampa date:\n");
     console.log(req.body.dates);
     await Event.create({
       userId: req.userId,
