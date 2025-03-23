@@ -16,12 +16,11 @@ function update() {
     store.value.getEventsOfWeek(store.value.simDate);
 }
 
+var activeEventId = ref("");
+
 onMounted(() => {
     update();
 });
-var activeEventId = ref("");
-var isActive = ref(false)
-
 </script>
 
 <template>
@@ -90,10 +89,10 @@ var isActive = ref(false)
                 </div>
                 <div class="modal fade" id="VisualizeEventModal" data-bs-backdrop="false" tabindex="-1"
                     aria-hidden="true">
-                    <VisualizeEvent :IdEvent="activeEventId" :isActive="isActive" />
+                    <VisualizeEvent :IdEvent="activeEventId" />
                 </div>
                 <div class="modal fade" id="ModifyEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
-                    <ModifyEvent :IdEvent="activeEventId" :isActive="isActive" />
+                    <ModifyEvent :IdEvent="activeEventId" />
                 </div>
             </div>
         </div>

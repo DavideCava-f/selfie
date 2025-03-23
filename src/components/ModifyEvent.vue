@@ -9,17 +9,17 @@ const emits = defineEmits([
   "update"
 ]);
 
-const props = defineProps(['IdEvent','isActive'])
+const props = defineProps(['IdEvent', 'isActive'])
 var event = ref(
-    {
-    title:"",
-    details:"",
-    dates:[]
-});
+  {
+    title: "",
+    details: "",
+    dates: []
+  });
 
-watch(() =>props.IdEvent,() => {
-        getEvent();
-    
+watch(() => props.IdEvent, () => {
+  getEvent();
+
 
 })
 
@@ -41,61 +41,61 @@ const repetitionSelected = ref({
 });
 const eventLink = ref(null);
 
-function updateEvent(){
+function updateEvent() {
 
-    console.log(props.IdEvent)
-    console.log(eventTitle.value)
-    console.log(eventText.value)
-    console.log(eventLink.value)
+  console.log(props.IdEvent)
+  console.log(eventTitle.value)
+  console.log(eventText.value)
+  console.log(eventLink.value)
 
-   // var isoBegin = new Date(`${eventBeginDate.value}T${eventBeginTime.value}:00Z`).toISOString();
+  // var isoBegin = new Date(`${eventBeginDate.value}T${eventBeginTime.value}:00Z`).toISOString();
   //  var isoEnd = new Date(`${eventEndDate.value}T${eventEndTime.value}:00Z`).toISOString();
 
   fetch(`${store.value.url}:${store.value.port}/event/OneEvent`, {
 
-   method:"PUT",
-   headers: {
+    method: "PUT",
+    headers: {
       Accept: "application/json",
-        'Content-Type': 'application/json', // Tells the server you're sending JSON
+      'Content-Type': 'application/json', // Tells the server you're sending JSON
     },
-   body: JSON.stringify({
-        id : props.IdEvent,
-        title : eventTitle.value,
-        text : eventText.value,
-        link : eventLink.value,
+    body: JSON.stringify({
+      id: props.IdEvent,
+      title: eventTitle.value,
+      text: eventText.value,
+      link: eventLink.value,
 
-    
-   })
+
+    })
   }
-  ).then(response =>{return response.json()})
-  .then(data => {
-    var i = data
+  ).then(response => { return response.json() })
+    .then(data => {
+      var i = data
 
 
-store.value.getEventsOfDay(store.value.simDate);
-               //Success prompt 
-  });
+      store.value.getEventsOfDay(store.value.simDate);
+      //Success prompt 
+    });
 
 }
 
-function getEvent(){
+function getEvent() {
 
-    console.log(props.IdEvent)
+  console.log(props.IdEvent)
   fetch(`${store.value.url}:${store.value.port}/event/OneEvent?id=${props.IdEvent}`, {
 
-   method:"get"
+    method: "get"
   }
-  ).then(response =>{return response.json()})
-  .then(data => {
+  ).then(response => { return response.json() })
+    .then(data => {
 
-    eventTitle.value=data.title
-    eventText.value=data.details.text
-    eventLink.value=data.details.link
-    eventBeginDate.value = data.dates[0].begin.split("T")[0]
-    eventBeginTime.value = data.dates[0].begin.split("T")[1].substring(0,5);
-    eventEndDate.value = data.dates[0].end.split("T")[0]
-    eventEndTime.value = data.dates[0].end.split("T")[1].substring(0,5);
-  });
+      eventTitle.value = data.title
+      eventText.value = data.details.text
+      eventLink.value = data.details.link
+      eventBeginDate.value = data.dates[0].begin.split("T")[0]
+      eventBeginTime.value = data.dates[0].begin.split("T")[1].substring(0, 5);
+      eventEndDate.value = data.dates[0].end.split("T")[0]
+      eventEndTime.value = data.dates[0].end.split("T")[1].substring(0, 5);
+    });
 
 }
 function setBeginNow() {
