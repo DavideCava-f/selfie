@@ -69,8 +69,9 @@ const store = ref({
   },
 
   eventsOfWeek: [],
+  weekOffset: 0,
   getEventsOfWeek: async (baseDay) => {
-    const thisMonday = Temporal.PlainDate.from(baseDay).subtract({ days: Temporal.PlainDate.from(baseDay).dayOfWeek - 1 });
+    const thisMonday = Temporal.PlainDate.from(baseDay).subtract({ days: Temporal.PlainDate.from(baseDay).dayOfWeek - 1 }).add({ weeks: store.value.weekOffset });
     const response = await fetch(`${store.value.url}:${store.value.port}/event/ofweek?monday=${thisMonday}`);
     store.value.eventsOfWeek = (await response.json()).map((date) => {
       return { day: Temporal.PlainDate.from(date._id).dayOfWeek - 1, events: date.events }

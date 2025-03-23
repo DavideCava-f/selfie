@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
 
@@ -50,18 +50,30 @@ function getInvertedColor(hex) {
 }
 
 onMounted();
+
+function nextWeek() {
+  store.value.weekOffset++;
+  store.value.getEventsOfWeek(store.value.simDate);
+}
+function prevWeek() {
+  store.value.weekOffset--;
+  store.value.getEventsOfWeek(store.value.simDate);
+}
 </script>
 
 
 <template>
+  <button @click="prevWeek">P</button>
+  <button @click="nextWeek">N</button>
   <div class="container d-flex flex-column justify-content-between w-100 m-3" style="height: 70vh">
     <div v-for="day in store.week" class="row w-100 p-2 border fillable">
       <div class="col-1 h-100 p-0 d-flex justify-content-center align-items-center">
         <div
-          :class="['fw-bold', 'fs-5', 'text-white', 'rounded-circle', 'p-1', day === store.week[store.simDay] ? 'bg-danger' : '']">
-          {{
-            day.slice(0, 3)
-          }}</div>
+          :class="['d-flex', 'flex-column', 'align-items-center', 'text-white', 'rounded-circle', 'p-1', day === store.week[store.simDay] ? 'bg-danger' : '']">
+          <div class="fw-bold fs-5">{{ day.slice(0, 3) }}</div>
+          <div class="fw-thin fs-6">
+          </div>
+        </div>
       </div>
       <div class="col-11 h-100 d-flex flex-row justify-content-between border-start gap-1">
         <div v-if="store.eventsOfWeek.find((d) => d.day === store.week.indexOf(day))"
