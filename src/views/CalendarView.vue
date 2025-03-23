@@ -10,13 +10,40 @@ import MonthlyView from "@/components/MonthlyView.vue";
 import WeeklyView from "@/components/WeeklyView.vue";
 
 const isWeekly = ref(Boolean);
+//const VisualizedDate = ref(store.value.simDate)
+const VisualizedDate = ref("")
+
+
+function f(){
+
+    VisualizedDate.value = store.value.simDate
+}
 
 function update() {
-    store.value.getEventsOfDay(store.value.simDate);
-    store.value.getEventsOfWeek(store.value.simDate);
+    store.value.getEventsOfDay( VisualizedDate.value);
+    store.value.getEventsOfWeek( VisualizedDate.value);
+}
+
+
+function getDate(i){
+
+    
+    if(i==1){
+    VisualizedDate.value = VisualizedDate.value.add({days : 1})
+    }else{
+
+    VisualizedDate.value = VisualizedDate.value.add({days : -1})
+
+    }
+
+    console.log(VisualizedDate.value.toString())
+
+ update();
+
 }
 
 onMounted(() => {
+    f()
     update();
 });
 var activeEventId = ref("");
@@ -34,11 +61,11 @@ var isActive = ref(false)
                 <div class="d-flex flex-column justify-content-center">
                     <div class="d-flex justify-content-between flex-fill bg-light text-center mx-1 my-3 rounded-3">
                         <button class="btn d-flex align-self-center">
-                            <img src="@/assets/Indietro.svg" />
+                            <img src="@/assets/Indietro.svg" @click="getDate(0)"/>
                         </button>
-                        <div class="align-self-center">TODAY</div>
+                        <div class="align-self-center">{{ VisualizedDate.toString() }}</div>
                         <button class="btn d-flex align-self-center">
-                            <img src="@/assets/avanti.svg" />
+                            <img src="@/assets/avanti.svg" @click="getDate(1)" />
                         </button>
                     </div>
 
