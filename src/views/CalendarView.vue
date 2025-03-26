@@ -66,7 +66,7 @@ onMounted(() => {
     <NavBar />
     <div class="container-fluid">
         <div class="row bg-dark p-3 h-100" style="">
-            <div class="col-lg-4 col-12 mt-3 bg-warning rounded-4">
+            <div class="col-lg-4 col-12 order-2 order-lg-1 mt-3 bg-warning rounded-4">
                 <!-- colonna day-->
                 <div class="d-flex flex-column justify-content-center">
                     <div class="d-flex justify-content-between flex-fill bg-light text-center mx-1 my-3 rounded-3">
@@ -74,9 +74,15 @@ onMounted(() => {
                             <img src="@/assets/Indietro.svg" />
                         </button>
                     
-                        <div class="align-self-center">{{ printDay() }}</div>
-                        
-                        <div></div>
+                        <div v-if="Temporal.PlainDate.compare(VisualizedDate , store.simDate) === 0 " class="align-self-center">
+                            TODAY {{ VisualizedDate.toString() }}
+                        </div>
+                        <div v-else-if="Temporal.PlainDate.compare(VisualizedDate.add({days : -1}) , store.simDate) === 0 " class="align-self-center">
+                            TOMORROW {{ VisualizedDate.toString() }}
+                        </div>
+                        <div v-else class="align-self-center">
+                            {{ VisualizedDate.toString() }}
+                        </div>
                         <button class="btn d-flex align-self-center" @click="getDate(1)">
                             <img src="@/assets/avanti.svg"  />
                         </button>
@@ -100,7 +106,7 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8 col-12 mt-3 bg-primary rounded-4" style="position: relative">
+            <div class="col-lg-8 col-12 order-1 order-lg-2 mt-3 bg-primary rounded-4" style="position: relative">
                 <div>
                     <button class="btn" @click="isWeekly = true">
                         Weekly
