@@ -11,7 +11,7 @@ import WeeklyView from "@/components/WeeklyView.vue";
 
 const isWeekly = ref(Boolean);
 //const VisualizedDate = ref(store.value.simDate)
-const VisualizedDate = ref("")
+const VisualizedDate = ref({});
 
 
 function f() {    // perche' il mio cognome e' frocio
@@ -19,30 +19,17 @@ function f() {    // perche' il mio cognome e' frocio
 }
 
 function update() {
-    store.value.getEventsOfDay(VisualizedDate.value);
-    store.value.getEventsOfWeek(VisualizedDate.value);
-}
-
-function printDay() {
-    if (Temporal.PlainDate.compare(VisualizedDate.value, store.value.simDate) == 0) {
-        return "TODAY " + VisualizedDate.value.toString()
-    } else if (Temporal.PlainDate.compare(VisualizedDate.value.add({ days: -1 }), store.value.simDate) == 0) {
-        return "TOMORROW " + VisualizedDate.value.toString()
-    } else {
-        return VisualizedDate.value.toString()
-    }
+    store.value.getEventsOfDay(store.value.simDate);
+    store.value.getEventsOfWeek(store.value.simDate);
 }
 
 function getDate(i) {
-    if (i == 1) {
-        VisualizedDate.value = VisualizedDate.value.add({ days: 1 })
-    } else {
-        VisualizedDate.value = VisualizedDate.value.add({ days: -1 })
-    }
-    console.log(VisualizedDate.value.toString())
+    store.value.dayOffset += i;
+    console.log(VisualizedDate.value.toString());
+    VisualizedDate.value = VisualizedDate.value.add({ days: i });
+    console.log(VisualizedDate.value.toString());
     update();
 }
-
 
 onMounted(() => {
     f()
@@ -59,19 +46,22 @@ onMounted(() => {
                 <!-- colonna day-->
                 <div class="d-flex flex-column justify-content-center">
                     <div class="d-flex justify-content-between flex-fill bg-light text-center mx-1 my-3 rounded-3">
-                        <button class="btn d-flex align-self-center" @click="getDate(0)">
+                        <button class="btn d-flex align-self-center" @click="getDate(-1)">
                             <img src="@/assets/Indietro.svg" />
                         </button>
-                    
-                        <div v-if="Temporal.PlainDate.compare(VisualizedDate , store.simDate) === 0 " class="align-self-center">
+
+                        <div v-if="store.dayOffset === 0" class="align-self-center">
                             TODAY {{ VisualizedDate.toString() }}
                         </div>
-                        <div v-else-if="Temporal.PlainDate.compare(VisualizedDate.add({days : -1}) , store.simDate) === 0 " class="align-self-center">
+                        <div v-else-if="store.dayOffset === 1" class="align-self-center">
                             TOMORROW {{ VisualizedDate.toString() }}
                         </div>
                         <div v-else class="align-self-center">
                             {{ VisualizedDate.toString() }}
                         </div>
+                        <button v-if="store.dayOffset !== 0" class="btn" @click="store.dayOffset = 0; f(); update();">
+                            R
+                        </button>
                         <button class="btn d-flex align-self-center" @click="getDate(1)">
                             <img src="@/assets/avanti.svg" />
                         </button>

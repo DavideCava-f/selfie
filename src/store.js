@@ -62,12 +62,13 @@ const store = ref({
   },
 
   activeEventId: null,
+  activeDate: null,
 
   eventsOfDay: [],
+  dayOffset: 0,
   getEventsOfDay: async (day) => {
-    // FIXME: farlo lato server (query database) + offset
-    const response = await fetch(`${store.value.url}:${store.value.port}/event`);
-    store.value.eventsOfDay = (await response.json()).filter((event) => event.dates.every((date) => Temporal.PlainDate.compare(Temporal.PlainDate.from(day), Temporal.PlainDate.from(date.begin.slice(0, -1))) === 0));
+    const response = await fetch(`${store.value.url}:${store.value.port}/event/ofday?day=${Temporal.PlainDate.from(day).add({ days: store.value.dayOffset })}`);
+    store.value.eventsOfDay = (await response.json());
   },
 
   eventsOfMonth: [],

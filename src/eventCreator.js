@@ -128,8 +128,8 @@ class EventCreator {
     for (let i = 0; i < n; i++) {
       weekDaysOnDateTime.forEach((d) => {
         event.dates.push({
-          begin: d.begin.add({ weeks: i }).toString() + "Z",
-          end: d.end.add({ weeks: i }).toString() + "Z",
+          begin: d.begin.add({ weeks: i }),
+          end: d.end.add({ weeks: i }),
         });
       });
     }
@@ -138,8 +138,8 @@ class EventCreator {
         (d) => Temporal.PlainDateTime.compare(baseBeginDateTime, d.begin) === 1,
       )
       .forEach((d) => {
-        d.begin = d.begin.add({ weeks: n });
-        d.end = d.end.add({ weeks: n });
+        d.begin = d.begin.add({ weeks: n }).toString() + "Z";
+        d.end = d.end.add({ weeks: n }).toString() + "Z";
       });
     return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
@@ -190,8 +190,8 @@ class EventCreator {
     do {
       weekDaysOnDateTime.forEach((d) => {
         event.dates.push({
-          begin: d.begin.add({ weeks: i }).toString() + "Z",
-          end: d.end.add({ weeks: i }).toString() + "Z",
+          begin: d.begin.add({ weeks: i }),
+          end: d.end.add({ weeks: i })
         });
       });
       i++;
@@ -211,7 +211,10 @@ class EventCreator {
             untilDate,
             Temporal.PlainDate.from(d.end),
           ) !== -1,
-      );
+      ).forEach((d) => {
+        d.begin = d.begin.add({ weeks: n }).toString() + "Z";
+        d.end = d.end.add({ weeks: n }).toString() + "Z";
+      });
     return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",

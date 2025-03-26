@@ -63,6 +63,7 @@ router.put("/OneEvent", verifyToken, async function(req, res) {
   } finally {
   }
 });
+
 router.get("/nearEvents", verifyToken, async function(req, res) {
   try {
     const today = req.query.today;
@@ -79,6 +80,41 @@ router.get("/nearEvents", verifyToken, async function(req, res) {
     res.status(200).json(nearEvents);
   } finally {
 
+  }
+});
+
+router.get("/ofday", verifyToken, async function(req, res) {
+  try {
+    let startDay = Temporal.PlainDateTime.from(req.query.day);
+    let endDay = startDay.add({ hours: 23, minutes: 59, seconds: 59 });
+    startDay = startDay.toString() + "Z";
+    endDay = endDay.toString() + "Z";
+    const eventsOfDay = await Event.find(
+      {
+        userId: req.userId,
+        dates: {
+          $elemMatch: {
+            $or: [
+              {
+                begin: { $gte: startDay, $lte: endDay }
+              },
+              {
+                end: { $gte: startDay, $lte: endDay }
+              },
+              {
+                begin: { $lte: startDay },
+                end: { $gte: endDay }
+              }
+            ]
+          }
+        }
+      }
+    );
+    console.log(eventsOfDay);
+    res.status(200).json(eventsOfDay);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send();
   }
 });
 
