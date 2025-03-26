@@ -2,8 +2,10 @@
 import { ref, onMounted, watch, computed } from "vue";
 import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
+import VisualizeEvent from "@/components/VisualizeEvent.vue";
 
 const thisMonday = computed(() => store.value.simDate.subtract({ days: store.value.simDate.dayOfWeek - 1 }).add({ weeks: store.value.weekOffset }));
+var activeEventId = ref("");
 
 function getColorFromTitle(title) {
   // Create a hash from the title string
@@ -85,7 +87,14 @@ onMounted();
         <div class="d-flex flex-column align-items-begin text-white rounded-circle p-1 text-wrap">
           <div class="fw-bold" style="font-size: 100%;">
             {{ day.slice(0, 3) }}
-            <span v-if="day === store.week[store.simDay] && store.weekOffset === 0" class="text-danger">*</span>
+            <span v-if="day === store.week[store.simDay] && store.weekOffset === 0" class="text-danger"><svg
+                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bullseye"
+                viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                <path d="M8 13A5 5 0 1 1 8 3a5 5 0 0 1 0 10m0 1A6 6 0 1 0 8 2a6 6 0 0 0 0 12" />
+                <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8" />
+                <path d="M9.5 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+              </svg></span>
           </div>
           <div class="fw-thin" style="font-size: 75%;">
             {{ thisMonday.add({ days: store.week.indexOf(day) }) }}
@@ -94,10 +103,11 @@ onMounted();
       </div>
 
       <div class="col-11 h-100 d-flex flex-row justify-content-between border-start gap-1 flex-wrap">
-        <div v-if="store.eventsOfWeek.find((d) => d.day === store.week.indexOf(day))"
+        <button v-if="store.eventsOfWeek.find((d) => d.day === store.week.indexOf(day))"
           v-for="event in store.eventsOfWeek.find((d) => d.day === store.week.indexOf(day)).events"
-          class="fillable p-2 d-flex justify-content-between align-items-start gap-3"
-          :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
+          class="btn fillable p-2 d-flex justify-content-between align-items-start gap-3"
+          :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }"
+          @click="activeEventId = event._id" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal">
           <div class="fw-bold text-start event">
             {{ event.title }}
           </div>
@@ -107,12 +117,24 @@ onMounted();
             }} - {{
               Temporal.PlainDateTime.from(event.dates.end.slice(0, -1)).toPlainTime().toString().slice(0, 5) }}
             <span
-              v-if="Temporal.PlainDateTime.compare(store.simDateTime, event.dates.begin.slice(0, -1)) >= 0 && Temporal.PlainDateTime.compare(store.simDateTime, event.dates.end.slice(0, -1)) <= 0"
-              class="text-danger">*</span>
+              v-if="Temporal.PlainDateTime.compare(store.simDateTime, Temporal.PlainDateTime.from(event.dates.begin.slice(0, -1))) >= 0 &&
+                Temporal.PlainDateTime.compare(store.simDateTime, Temporal.PlainDateTime.from(event.dates.end.slice(0, -1))) <= 0"
+              class="text-danger mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-bullseye rightnow" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                <path d="M8 13A5 5 0 1 1 8 3a5 5 0 0 1 0 10m0 1A6 6 0 1 0 8 2a6 6 0 0 0 0 12" />
+                <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8" />
+                <path d="M9.5 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+              </svg>
+            </span>
           </div>
-        </div>
+        </button>
       </div>
     </div>
+  </div>
+  <div class="modal fade" id="VisualizeEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
+    <VisualizeEvent :IdEvent="activeEventId" />
   </div>
 </template>
 
@@ -130,5 +152,22 @@ onMounted();
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-</style>
 
+.rightnow {
+  animation-name: fade;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes fade {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+</style>
