@@ -67,8 +67,9 @@ const store = ref({
     const response = await fetch(`${store.value.url}:${store.value.port}/event`);
     store.value.eventsOfDay = (await response.json()).filter((event) => event.dates.every((date) => Temporal.PlainDate.compare(Temporal.PlainDate.from(day), Temporal.PlainDate.from(date.begin.slice(0, -1))) === 0));
   },
-  eventsOfMonth:[],
-  monthOffset:0,
+
+  eventsOfMonth: [],
+  monthOffset: 0,
   getEventsOfMonth: async (firstday) => {
     try {
       console.log(firstday);
