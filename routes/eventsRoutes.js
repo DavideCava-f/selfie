@@ -161,34 +161,6 @@ router.get("/ofweek", verifyToken, async function(req, res) {
       { $group: { _id: "$day", events: { $push: "$$ROOT" } } },
       { $sort: { _id: 1 } }
     ]);
-    // const eventsOfWeek = await Event.aggregate([
-    //   // 1. Filter events by the current user
-    //   { $match: { userId: new mongoose.Types.ObjectId(req.userId) } },
-    //
-    //   // 2. Unwind the dates array to work with each date individually
-    //   { $unwind: "$dates" },
-    //
-    //   {
-    //     $addFields: {
-    //       "dates.beginDateOnly": {
-    //         $dateToString: { format: "%Y-%m-%d", date: "$dates.begin" }
-    //       }
-    //     }
-    //   },
-    //
-    //   // 3. Filter out dates that are not in the current week
-    //   { $match: { "dates.beginDateOnly": { $gte: new Date(monday).toISOString().split("T")[0], $lte: new Date(sunday).toISOString().split("T")[0] } } },
-    //
-    //   { $sort: { "dates.begin": 1 } },
-    //
-    //   // 4. Group the events by the date (dates.begin)
-    //   {
-    //     $group: {
-    //       _id: "$dates.beginDateOnly",  // Group key is the date
-    //       events: { $push: "$$ROOT" }  // Collect all event documents with that date
-    //     }
-    //   }
-    // ]);
 
     console.log(eventsOfWeek);
     res.status(200).json(eventsOfWeek);
