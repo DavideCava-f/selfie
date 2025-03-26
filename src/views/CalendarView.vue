@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import NavBar from '@/components/NavBar.vue';
 import CreateEvent from "@/components/CreateEvent.vue";
-import VisualizeEvent from "@/components/VisualizeModifyEvent.vue";
+import VisualizeModifyEvent from "@/components/VisualizeModifyEvent.vue";
 import ModifyEvent from "@/components/ModifyEvent.vue";
 import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
@@ -126,12 +126,9 @@ onMounted(() => {
                     aria-labelledby="createEventModal" aria-hidden="true">
                     <CreateEvent @update="update" />
                 </div>
-                <div class="modal fade" id="VisualizeEventModal" data-bs-backdrop="false" tabindex="-1"
+                <div class="modal fade" id="VisualizeEventModal" data-bs-backdrop="static" tabindex="-1"
                     aria-hidden="true">
-                    <VisualizeEvent :IdEvent="activeEventId" />
-                </div>
-                <div class="modal fade" id="ModifyEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
-                    <ModifyEvent :IdEvent="activeEventId" />
+                    <VisualizeModifyEvent :IdEvent="activeEventId" />
                 </div>
             </div>
         </div>
