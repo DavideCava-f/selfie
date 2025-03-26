@@ -11,7 +11,7 @@ let realFirstDay = ref({});
 let dayInMonth = ref([]);
 const giorniSettimana = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 // var MactiveEventId = ref("");
-// let SelectedDay = ref("");
+let SelectedDay = ref("");
 
 
 async function getEvents() {
