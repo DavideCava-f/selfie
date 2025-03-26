@@ -2,17 +2,27 @@
 import { ref, onMounted } from "vue";
 import { Temporal } from "@js-temporal/polyfill";
 import { store } from "@/store";
+import VisualizeEvent from "@/components/VisualizeEvent.vue";
+import ModifyEvent from "@/components/ModifyEvent.vue";
 
-const blocchiEvento = ref([]);
 let weekdays = ref([]);
 let firstDay = ref({});
-let MonthlyEvents= ref([]);
+let realFirstDay = ref({});
 let dayInMonth = ref([]);
 const giorniSettimana = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
+var activeEventId = ref("");
+let SelectedDay = ref("");
+
 
 async function getEvents(){
     store.value.getEventsOfMonth(firstDay.toString());
 
+}
+function reload(){
+    firstDay=realFirstDay;
+    store.value.monthOffset=0;
+    updateWeekDays(firstDay);
+    getEvents();
 }
 
 function updateWeekDays(day){
@@ -22,14 +32,15 @@ function updateWeekDays(day){
     }
     dayInMonth.value = day.daysInMonth;
     console.log(firstDay.toString());
-    console.log(weekdays.value);
 }
 
 async function changeMonth(direction){
     if (direction === 1){
         firstDay = firstDay.add({months: 1});
+        store.value.monthOffset++;
     } else {
         firstDay = firstDay.add({months: -1});
+        store.value.monthOffset--;
     }
     updateWeekDays(firstDay);
     getEvents();
@@ -42,59 +53,152 @@ onMounted(async () => {
     firstDay = today.with({ day: 1 }); // Imposta il giorno a 1
     console.log(firstDay.toString());
     await updateWeekDays(firstDay);
+    realFirstDay = firstDay;
     await getEvents();
 
 });
 
 function conta(i){
-    console.log("suca");
     return store.value.eventsOfMonth.find((d)=> (d.day) ===i).events.length;
 }
 
-function getOtherEvents(i){
-    console.log(store.value.eventsOfMonth.find((d)=> (d.day) ===i).events);
+function getColorFromTitle(title) {
+  // Create a hash from the title string
+  let hash = 0;
+  for (let i = 0; i < title.length; i++) {
+    hash = title.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  // Convert the hash to an RGB color
+  let color = '#';
+  for (let i = 0; i < 3; i++) {
+    // Extract 8 bits at a time from the hash
+    const value = (hash >> (i * 8)) & 0xFF;
+    // Convert the value to a two-digit hexadecimal string
+    color += ('00' + value.toString(16)).slice(-2);
+  }
+  return color;
 }
+
+function getInvertedColor(hex) {
+  // Remove '#' if present
+  hex = hex.replace(/^#/, '');
+
+  // If shorthand notation, expand it (e.g., "abc" -> "aabbcc")
+  if (hex.length === 3) {
+    hex = hex.split('').map(char => char + char).join('');
+  }
+
+  // Validate hex color length
+  if (hex.length !== 6) {
+    throw new Error('Invalid HEX color.');
+  }
+
+  // Convert hex to RGB components
+  let r = parseInt(hex.substring(0, 2));
+  let g = parseInt(hex.substring(2, 4));
+  let b = parseInt(hex.substring(4, 6));
+
+  // Invert each color component
+  r = 255 - r;
+  g = 255 - g;
+  b = 255 - b;
+
+  // Convert the inverted values back to hex and return the result
+  return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+}
+
 </script>
 
 <template>
     <div class="container-fluid text-light border border-danger w-100">
-        <div class="d-flex bg-dark flex-fill justify-content-between w-100" id="uppercalendar"> <!-- barra superiore del calendario -->
-            <div class="btn d-flex align-self-center" @click="changeMonth(-1)" >
-                            <img src="@/assets/Indietro.svg" />
+        <div class="d-flex justify-content-between flex-fill bg-light text-center rounded-3 align-items-center"> <!-- barra superiore del calendario -->
+            <button class="btn d-flex align-self-center" @click="changeMonth(-1)">
+                <img src="@/assets/Indietro.svg" />
+            </button>
+            <div class="align-self-center text-dark">{{ firstDay.toLocaleString("it-IT", { month: "long", year: "numeric" }) }}
+            <button v-if="store.monthOffset !== 0" class="btn"
+                @click="reload()">R</button>
             </div>
-            <div v-for="day in weekdays" class="d-flex flex-fill justify-content-center border border-white">
-                    <p>{{ day }}</p>
-            </div>
-            <button class="btn d-flex align-self-end" @click="changeMonth(1)" >
-                            <img src="@/assets/avanti.svg" />
+            <button class="btn d-flex align-self-center" @click="changeMonth(1)">
+                <img src="@/assets/avanti.svg" />
             </button>
         </div>
-        <div class="d-flex flex-wrap"> <!-- celle dei giorni nel mense -->
-            <div v-for="i in dayInMonth" class="d-flex flex-column flex-fill justify-content-start border border-white" style="min-width: 14%;max-width: 14%;width: 14%; height: 15vh">
-                <div class="d-flex justify-content-center text-wrap">
+        <div class="d-flex bg-dark flex-fill justify-content-between w-100" id="uppercalendar" > <!-- barra superiore del calendario -->
+            <div v-for="day in weekdays" class="d-flex flex-fill justify-content-center border border-white" style="width: calc(100%/7); max-width: calc(100%/7);">
+                    <p>{{ day }}</p>
+            </div>
+        </div>
+        <div class="d-flex flex-wrap w-100 border border-white m-0"> <!-- celle dei giorni nel mense -->
+            <div v-for="i in dayInMonth" class="d-flex flex-column flex-fill justify-content-start border" style="width: calc(100%/7); max-width: calc(100%/7); height: 15vh">
+                <div v-if="store.simDateTime.day === i && store.monthOffset===0" class="d-flex justify-content-center text-wrap bg-danger">
+                    {{ i }}
+                </div>
+                <div v-else class="d-flex justify-content-center text-wrap">
                     {{ i }}
                 </div>
                 <div class="m-0 p-0 d-flex flex-column" style="overflow: hidden;">
-                    <div v-if="store.eventsOfMonth.find((d)=> (d.day) ===i) && (conta(i)>2)">
-                        <div v-if="store.eventsOfMonth.find((d)=> (d.day) === i)" v-for="event in (store.eventsOfMonth.find((d)=> (d.day) ===i).events).slice(0,2)" class="btn d-inline-block text-truncate" style="line-height: 1; max-width: 100%;min-height: 25%">
-                        {{ event.title }}
-                        </div>
-                        <div class="btn" @click="getOtherEvents(i)" style="line-height: 1; max-width: 100%;min-height: 25%">
+                    <div v-if="store.eventsOfMonth.find((d)=> (d.day) ===i) && (conta(i)>2)" class="d-flex flex-column align-items-start " style="overflow: hidden;">
+                        <button @click="() => {
+                                    activeEventId = event._id
+                                }" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal"
+                                v-if="store.eventsOfMonth.find((d)=> (d.day) === i)" v-for="event in (store.eventsOfMonth.find((d)=> (d.day) ===i).events).slice(0,2)"
+                                class="btn d-flex d-inline-block align-items-center  text-truncate event " 
+                                :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">                             
+                                    {{ event.title }}
+                        </button>
+                        <div class="btn event d-flex d-inline-block align-self-center align-items-center" @click="()=>{
+                            SelectedDay=store.eventsOfMonth.find((d)=> (d.day) === i);
+                        }" 
+                        data-bs-target="#AltriEventi" data-bs-toggle="modal"
+                        >
                             altri eventi
                         </div>
                     </div>
                     <div v-else>
-                        <div v-if="store.eventsOfMonth.find((d)=> (d.day) === i)" v-for="event in store.eventsOfMonth.find((d)=> (d.day) ===i).events" class="btn d-inline-block text-truncate" style="line-height: 1; max-width: 100%;min-height: 25%">
+                        <button @click="() => {
+                                    activeEventId = event._id
+                                }" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal"
+                        v-if="store.eventsOfMonth.find((d)=> (d.day) === i)" v-for="event in store.eventsOfMonth.find((d)=> (d.day) ===i).events" class="btn d-flex d-inline-block align-items-center  text-truncate event"
+                        :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
                         {{ event.title }}
-                        </div>
+                        </button>
                     </div>
                 </div>
                 
             </div>
         </div>
     </div>
+    <div class="modal fade" id="VisualizeEventModal" data-bs-backdrop="false" tabindex="-1"
+                    aria-hidden="true">
+                    <VisualizeEvent :IdEvent="activeEventId" :isActive="isActive"/>
+    </div>
+
+    <div class="modal fade" id="AltriEventi" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Altri eventi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex flex-column">
+                    <button v-for="event in SelectedDay.events" @click="() => {
+                                    activeEventId = event._id
+                    }" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal" class="btn"
+                    :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
+                        {{ event.title }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <style>
+.event{
+    line-height: 1;
+    max-width: 100%;
+    min-height: 25%
+}
 
 </style>
