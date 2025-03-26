@@ -18,10 +18,10 @@ var event = ref(
   });
 
 watch(() => props.IdEvent, () => {
+  console.log("watch modify");
   getEvent();
-
-
 })
+
 
 const eventTitle = ref(null);
 const eventText = ref(null);
@@ -169,8 +169,7 @@ watch(eventBeginDate, setDayOfWeek);
         <h1 class="modal-title fs-4" id="staticBackdropLabel">
           Modify event
         </h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-          @click="resetFields"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="my-2">

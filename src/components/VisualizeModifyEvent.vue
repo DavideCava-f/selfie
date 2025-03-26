@@ -1,6 +1,7 @@
 <script setup>
 import { store } from '@/store';
 import { ref, onMounted, watch } from "vue";
+import ModifyEvent from "@/components/ModifyEvent.vue";
 
 const props = defineProps(['IdEvent']);
 var event = ref({
@@ -10,6 +11,7 @@ var event = ref({
 });
 
 watch(() => props.IdEvent, () => {
+  console.log("watch visual");
   getEvent();
 })
 
@@ -42,6 +44,7 @@ function getEvent() {
           <div>
 
             <button @click="getEvent">getEvent</button>
+            <button data-bs-target="#ModifyEventModal" data-bs-toggle="modal">Modify</button>
           </div>
         </div>
 
@@ -64,6 +67,7 @@ function getEvent() {
       </div>
     </div>
   </div>
+  
 </template>
 
 <style scoped></style>

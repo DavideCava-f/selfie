@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import NavBar from '@/components/NavBar.vue';
 import CreateEvent from "@/components/CreateEvent.vue";
-import VisualizeEvent from "@/components/VisualizeEvent.vue";
+import VisualizeEvent from "@/components/VisualizeModifyEvent.vue";
 import ModifyEvent from "@/components/ModifyEvent.vue";
 import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
@@ -87,8 +87,6 @@ onMounted(() => {
                             <div>
                                 <button @click="activeEventId = event._id; console.log(activeEventId)" data-bs-target="#VisualizeEventModal"
                                     data-bs-toggle="modal">Visualize</button>
-                                <button @click="activeEventId = event._id" data-bs-target="#ModifyEventModal"
-                                    data-bs-toggle="modal">Modify</button>
                                 <h4>{{ event.title }}</h4>
                                 {{ event.details.text }}
 

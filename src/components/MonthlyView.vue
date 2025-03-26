@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { Temporal } from "@js-temporal/polyfill";
 import { store } from "@/store";
-import VisualizeEvent from "@/components/VisualizeEvent.vue";
+import VisualizeEvent from "@/components/VisualizeModifyEvent.vue";
 import ModifyEvent from "@/components/ModifyEvent.vue";
 
 let weekdays = ref([]);
@@ -147,13 +147,13 @@ function getInvertedColor(hex) {
                                 :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">                             
                                     {{ event.title }}
                         </button>
-                        <div class="btn event d-flex d-inline-block align-self-center align-items-center" @click="()=>{
+                        <button class="btn event d-flex d-inline-block align-self-center align-items-center" @click="()=>{
                             SelectedDay=store.eventsOfMonth.find((d)=> (d.day) === i);
                         }" 
                         data-bs-target="#AltriEventi" data-bs-toggle="modal"
                         >
                             altri eventi
-                        </div>
+                        </button>
                     </div>
                     <div v-else>
                         <button @click="() => {
@@ -184,7 +184,7 @@ function getInvertedColor(hex) {
                 <div class="modal-body d-flex flex-column">
                     <button v-for="event in SelectedDay.events" @click="() => {
                                     MactiveEventId = event._id
-                    }" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal" class="btn"
+                    }" data-bs-target="#VisualizeEventModalM" data-bs-toggle="modal" class="btn"
                     :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
                         {{ event.title }}
                     </button>

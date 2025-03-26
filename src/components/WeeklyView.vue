@@ -2,7 +2,7 @@
 import { ref, onMounted, watch, computed } from "vue";
 import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
-import VisualizeEvent from "@/components/VisualizeEvent.vue";
+import VisualizeEvent from "@/components/VisualizeModifyEvent.vue";
 
 const thisMonday = computed(() => store.value.simDate.subtract({ days: store.value.simDate.dayOfWeek - 1 }).add({ weeks: store.value.weekOffset }));
 var activeEventId = ref("");
