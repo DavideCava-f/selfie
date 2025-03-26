@@ -10,7 +10,7 @@ let firstDay = ref({});
 let realFirstDay = ref({});
 let dayInMonth = ref([]);
 const giorniSettimana = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
-var activeEventId = ref("");
+var MactiveEventId = ref("");
 let SelectedDay = ref("");
 
 
@@ -140,8 +140,8 @@ function getInvertedColor(hex) {
                 <div class="m-0 p-0 d-flex flex-column" style="overflow: hidden;">
                     <div v-if="store.eventsOfMonth.find((d)=> (d.day) ===i) && (conta(i)>2)" class="d-flex flex-column align-items-start " style="overflow: hidden;">
                         <button @click="() => {
-                                    activeEventId = event._id
-                                }" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal"
+                                    MactiveEventId = event._id
+                                }" data-bs-target="#VisualizeEventModalM" data-bs-toggle="modal"
                                 v-if="store.eventsOfMonth.find((d)=> (d.day) === i)" v-for="event in (store.eventsOfMonth.find((d)=> (d.day) ===i).events).slice(0,2)"
                                 class="btn d-flex d-inline-block align-items-center  text-truncate event " 
                                 :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">                             
@@ -157,8 +157,8 @@ function getInvertedColor(hex) {
                     </div>
                     <div v-else>
                         <button @click="() => {
-                                    activeEventId = event._id
-                                }" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal"
+                                    MactiveEventId = event._id
+                                }" data-bs-target="#VisualizeEventModalM" data-bs-toggle="modal"
                         v-if="store.eventsOfMonth.find((d)=> (d.day) === i)" v-for="event in store.eventsOfMonth.find((d)=> (d.day) ===i).events" class="btn d-flex d-inline-block align-items-center  text-truncate event"
                         :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
                         {{ event.title }}
@@ -169,9 +169,9 @@ function getInvertedColor(hex) {
             </div>
         </div>
     </div>
-    <div class="modal fade" id="VisualizeEventModal" data-bs-backdrop="false" tabindex="-1"
+    <div class="modal fade" id="VisualizeEventModalM" data-bs-backdrop="false" tabindex="-1"
                     aria-hidden="true">
-                    <VisualizeEvent :IdEvent="activeEventId" :isActive="isActive"/>
+                    <VisualizeEvent :IdEvent="MactiveEventId" />
     </div>
 
     <div class="modal fade" id="AltriEventi" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
@@ -183,7 +183,7 @@ function getInvertedColor(hex) {
                 </div>
                 <div class="modal-body d-flex flex-column">
                     <button v-for="event in SelectedDay.events" @click="() => {
-                                    activeEventId = event._id
+                                    MactiveEventId = event._id
                     }" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal" class="btn"
                     :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
                         {{ event.title }}

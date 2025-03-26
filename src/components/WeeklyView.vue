@@ -107,7 +107,7 @@ onMounted();
           v-for="event in store.eventsOfWeek.find((d) => d.day === store.week.indexOf(day)).events"
           class="btn fillable p-2 d-flex justify-content-between align-items-start gap-3"
           :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }"
-          @click="activeEventId = event._id" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal">
+          @click="activeEventId = event._id" data-bs-target="#VisualizeEventModalW" data-bs-toggle="modal">
           <div class="fw-bold text-start event">
             {{ event.title }}
           </div>
@@ -133,7 +133,7 @@ onMounted();
       </div>
     </div>
   </div>
-  <div class="modal fade" id="VisualizeEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
+  <div class="modal fade" id="VisualizeEventModalW" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
     <VisualizeEvent :IdEvent="activeEventId" />
   </div>
 </template>

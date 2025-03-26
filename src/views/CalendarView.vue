@@ -70,22 +70,22 @@ onMounted(() => {
                 <!-- colonna day-->
                 <div class="d-flex flex-column justify-content-center">
                     <div class="d-flex justify-content-between flex-fill bg-light text-center mx-1 my-3 rounded-3">
-                        <button class="btn d-flex align-self-center">
-                            <img src="@/assets/Indietro.svg" @click="getDate(0)"/>
+                        <button class="btn d-flex align-self-center" @click="getDate(0)">
+                            <img src="@/assets/Indietro.svg" />
                         </button>
                     
                         <div class="align-self-center">{{ printDay() }}</div>
                         
                         <div></div>
-                        <button class="btn d-flex align-self-center">
-                            <img src="@/assets/avanti.svg" @click="getDate(1)" />
+                        <button class="btn d-flex align-self-center" @click="getDate(1)">
+                            <img src="@/assets/avanti.svg"  />
                         </button>
                     </div>
 
                     <div class="overflow-scroll rounded-3" style="max-height: 100vh">
                         <div v-for="event in store.eventsOfDay" class="flex-fill bg-light m-1 p-3 rounded-3">
                             <div>
-                                <button @click="activeEventId = event._id" data-bs-target="#VisualizeEventModal"
+                                <button @click="activeEventId = event._id; console.log(activeEventId)" data-bs-target="#VisualizeEventModal"
                                     data-bs-toggle="modal">Visualize</button>
                                 <button @click="activeEventId = event._id" data-bs-target="#ModifyEventModal"
                                     data-bs-toggle="modal">Modify</button>
