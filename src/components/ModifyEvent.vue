@@ -9,7 +9,6 @@ const emits = defineEmits([
   "update"
 ]);
 
-const props = defineProps(['IdEvent', 'isActive'])
 var event = ref(
   {
     title: "",
@@ -17,7 +16,7 @@ var event = ref(
     dates: []
   });
 
-watch(() => props.IdEvent, () => {
+watch(() => store.value.activeEventId, () => {
   console.log("watch modify");
   getEvent();
 })
@@ -42,52 +41,35 @@ const repetitionSelected = ref({
 const eventLink = ref(null);
 
 function updateEvent() {
-
-  console.log(props.IdEvent)
   console.log(eventTitle.value)
   console.log(eventText.value)
   console.log(eventLink.value)
-
-  // var isoBegin = new Date(`${eventBeginDate.value}T${eventBeginTime.value}:00Z`).toISOString();
-  //  var isoEnd = new Date(`${eventEndDate.value}T${eventEndTime.value}:00Z`).toISOString();
-
   fetch(`${store.value.url}:${store.value.port}/event/OneEvent`, {
-
     method: "PUT",
     headers: {
       Accept: "application/json",
       'Content-Type': 'application/json', // Tells the server you're sending JSON
     },
     body: JSON.stringify({
-      id: props.IdEvent,
+      id: store.value.activeEventId,
       title: eventTitle.value,
       text: eventText.value,
       link: eventLink.value,
-
-
     })
   }
   ).then(response => { return response.json() })
     .then(data => {
       var i = data
-
-
       store.value.getEventsOfDay(store.value.simDate);
-      //Success prompt 
     });
-
 }
 
 function getEvent() {
-
-  console.log(props.IdEvent)
-  fetch(`${store.value.url}:${store.value.port}/event/OneEvent?id=${props.IdEvent}`, {
-
+  fetch(`${store.value.url}:${store.value.port}/event/OneEvent?id=${store.value.activeEventId}`, {
     method: "get"
   }
   ).then(response => { return response.json() })
     .then(data => {
-
       eventTitle.value = data.title
       eventText.value = data.details.text
       eventLink.value = data.details.link
@@ -96,8 +78,8 @@ function getEvent() {
       eventEndDate.value = data.dates[0].end.split("T")[0]
       eventEndTime.value = data.dates[0].end.split("T")[1].substring(0, 5);
     });
-
 }
+
 function setBeginNow() {
   eventBeginDate.value = store.value.simDate;
   eventBeginTime.value = store.value.simTime.slice(0, 5);

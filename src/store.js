@@ -61,6 +61,8 @@ const store = ref({
     return response.ok;
   },
 
+  activeEventId: null,
+
   eventsOfDay: [],
   getEventsOfDay: async (day) => {
     // FIXME: farlo lato server (query database) + offset

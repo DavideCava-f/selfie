@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import NavBar from '@/components/NavBar.vue';
 import CreateEvent from "@/components/CreateEvent.vue";
-import VisualizeEvent from "@/components/VisualizeModifyEvent.vue";
+import VisualizeEvent from "@/components/VisualizeEvent.vue";
 import ModifyEvent from "@/components/ModifyEvent.vue";
 import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
@@ -14,46 +14,35 @@ const isWeekly = ref(Boolean);
 const VisualizedDate = ref("")
 
 
-function f(){
-
+function f() {    // perche' il mio cognome e' frocio
     VisualizedDate.value = store.value.simDate
 }
 
 function update() {
-    store.value.getEventsOfDay( VisualizedDate.value);
-    store.value.getEventsOfWeek( VisualizedDate.value);
+    store.value.getEventsOfDay(VisualizedDate.value);
+    store.value.getEventsOfWeek(VisualizedDate.value);
 }
 
-function printDay(){
-
-    if (Temporal.PlainDate.compare(VisualizedDate.value , store.value.simDate) == 0 ){
-        return "TODAY "+ VisualizedDate.value.toString()
-    }else if( Temporal.PlainDate.compare(VisualizedDate.value.add({days : -1}) , store.value.simDate) == 0 ){
+function printDay() {
+    if (Temporal.PlainDate.compare(VisualizedDate.value, store.value.simDate) == 0) {
+        return "TODAY " + VisualizedDate.value.toString()
+    } else if (Temporal.PlainDate.compare(VisualizedDate.value.add({ days: -1 }), store.value.simDate) == 0) {
         return "TOMORROW " + VisualizedDate.value.toString()
-    }else{
+    } else {
         return VisualizedDate.value.toString()
     }
-
 }
 
-function getDate(i){
-
-    
-    if(i==1){
-    VisualizedDate.value = VisualizedDate.value.add({days : 1})
-    }else{
-
-    VisualizedDate.value = VisualizedDate.value.add({days : -1})
-
+function getDate(i) {
+    if (i == 1) {
+        VisualizedDate.value = VisualizedDate.value.add({ days: 1 })
+    } else {
+        VisualizedDate.value = VisualizedDate.value.add({ days: -1 })
     }
-
     console.log(VisualizedDate.value.toString())
-
- update();
-
+    update();
 }
 
-var activeEventId = ref("");
 
 onMounted(() => {
     f()
@@ -66,7 +55,7 @@ onMounted(() => {
     <NavBar />
     <div class="container-fluid">
         <div class="row bg-dark p-3 h-100" style="">
-            <div class="col-lg-4 col-12 mt-3 bg-warning rounded-4">
+            <div class="col-lg-4 col-12 order-2 order-lg-1 mt-3 bg-warning rounded-4">
                 <!-- colonna day-->
                 <div class="d-flex flex-column justify-content-center">
                     <div class="d-flex justify-content-between flex-fill bg-light text-center mx-1 my-3 rounded-3">
@@ -74,19 +63,25 @@ onMounted(() => {
                             <img src="@/assets/Indietro.svg" />
                         </button>
                     
-                        <div class="align-self-center">{{ printDay() }}</div>
-                        
-                        <div></div>
+                        <div v-if="Temporal.PlainDate.compare(VisualizedDate , store.simDate) === 0 " class="align-self-center">
+                            TODAY {{ VisualizedDate.toString() }}
+                        </div>
+                        <div v-else-if="Temporal.PlainDate.compare(VisualizedDate.add({days : -1}) , store.simDate) === 0 " class="align-self-center">
+                            TOMORROW {{ VisualizedDate.toString() }}
+                        </div>
+                        <div v-else class="align-self-center">
+                            {{ VisualizedDate.toString() }}
+                        </div>
                         <button class="btn d-flex align-self-center" @click="getDate(1)">
-                            <img src="@/assets/avanti.svg"  />
+                            <img src="@/assets/avanti.svg" />
                         </button>
                     </div>
 
                     <div class="overflow-scroll rounded-3" style="max-height: 100vh">
                         <div v-for="event in store.eventsOfDay" class="flex-fill bg-light m-1 p-3 rounded-3">
                             <div>
-                                <button @click="activeEventId = event._id; console.log(activeEventId)" data-bs-target="#VisualizeEventModal"
-                                    data-bs-toggle="modal">Visualize</button>
+                                <button @click="store.activeEventId = event._id; console.log(store.activeEventId)"
+                                    data-bs-target="#VisualizeEventModal" data-bs-toggle="modal">Visualize</button>
                                 <h4>{{ event.title }}</h4>
                                 {{ event.details.text }}
 
@@ -100,7 +95,7 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8 col-12 mt-3 bg-primary rounded-4" style="position: relative">
+            <div class="col-lg-8 col-12 order-1 order-lg-2 mt-3 bg-primary rounded-4" style="position: relative">
                 <div>
                     <button class="btn" @click="isWeekly = true">
                         Weekly
@@ -110,31 +105,25 @@ onMounted(() => {
                     </button>
                 </div>
                 <!-- colonna calendario -->
-                <div v-if="isWeekly">
-                    <WeeklyView />
-                </div>
-                <div v-else>
-                    <MonthlyView />
-                </div>
+                <component :is="isWeekly ? WeeklyView : MonthlyView"></component>
 
                 <button class="btn bg-danger rounded-5 m-3" style="position: fixed; right: 0; bottom: 0"
                     data-bs-target="#createEventModal" data-bs-toggle="modal">
                     +
                 </button>
                 <!-- Finestra MODALE di inserimento evento -->
-                <div class="modal fade" id="createEventModal" data-bs-backdrop="false" tabindex="-1"
-                    aria-labelledby="createEventModal" aria-hidden="true">
-                    <CreateEvent @update="update" />
-                </div>
-                <div class="modal fade" id="VisualizeEventModal" data-bs-backdrop="false" tabindex="-1"
-                    aria-hidden="true">
-                    <VisualizeEvent :IdEvent="activeEventId" />
-                </div>
-                <div class="modal fade" id="ModifyEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
-                    <ModifyEvent :IdEvent="activeEventId" />
-                </div>
             </div>
         </div>
+    </div>
+    <div class="modal fade" id="createEventModal" data-bs-backdrop="false" tabindex="-1"
+        aria-labelledby="createEventModal" aria-hidden="true">
+        <CreateEvent @update="update" />
+    </div>
+    <div class="modal fade" id="VisualizeEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
+        <VisualizeEvent />
+    </div>
+    <div class="modal fade" id="ModifyEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
+        <ModifyEvent />
     </div>
 </template>
 
