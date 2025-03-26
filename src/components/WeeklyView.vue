@@ -2,7 +2,7 @@
 import { ref, onMounted, watch, computed } from "vue";
 import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
-import VisualizeEvent from "@/components/VisualizeModifyEvent.vue";
+import VisualizeEvent from "@/components/VisualizeEvent.vue";
 
 const thisMonday = computed(() => store.value.simDate.subtract({ days: store.value.simDate.dayOfWeek - 1 }).add({ weeks: store.value.weekOffset }));
 var activeEventId = ref("");
@@ -107,7 +107,7 @@ onMounted();
           v-for="event in store.eventsOfWeek.find((d) => d.day === store.week.indexOf(day)).events"
           class="btn fillable p-2 d-flex justify-content-between align-items-start gap-3"
           :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }"
-          @click="activeEventId = event._id" data-bs-target="#VisualizeEventModalW" data-bs-toggle="modal">
+          @click="store.activeEventId = event._id" data-bs-target="#VisualizeEventModalW" data-bs-toggle="modal">
           <div class="fw-bold text-start event">
             {{ event.title }}
           </div>
@@ -134,7 +134,7 @@ onMounted();
     </div>
   </div>
   <div class="modal fade" id="VisualizeEventModalW" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
-    <VisualizeEvent :IdEvent="activeEventId" />
+    <VisualizeEvent />
   </div>
 </template>
 
@@ -142,7 +142,7 @@ onMounted();
 .fillable {
   flex: 1 1 auto;
   min-width: 0;
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
 }
 
 .event {

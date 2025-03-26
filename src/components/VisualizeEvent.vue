@@ -1,30 +1,28 @@
 <script setup>
 import { store } from '@/store';
 import { ref, onMounted, watch } from "vue";
-import ModifyEvent from "@/components/ModifyEvent.vue";
+import { Temporal } from "@js-temporal/polyfill";
 
-const props = defineProps(['IdEvent']);
 var event = ref({
   title: "",
   details: "",
   dates: []
 });
 
-watch(() => props.IdEvent, () => {
-  console.log("watch visual");
-  getEvent();
-})
-
 function getEvent() {
-  console.log(props.IdEvent)
-  fetch(`${store.value.url}:${store.value.port}/event/OneEvent?id=${props.IdEvent}`, {
+  fetch(`${store.value.url}:${store.value.port}/event/OneEvent?id=${store.value.activeEventId}`, {
     method: "get"
-  }).then(response => { return response.json() })
+  }
+  ).then(response => { return response.json() })
     .then(data => {
       event.value = data
-      console.log(data)
     });
 }
+
+watch(() => store.value.activeEventId, () => {
+  console.log("watch visual");
+  getEvent();
+});
 </script>
 
 
@@ -42,7 +40,6 @@ function getEvent() {
       <div class="modal-body">
         <div class="my-2">
           <div>
-
             <button @click="getEvent">getEvent</button>
             <button data-bs-target="#ModifyEventModal" data-bs-toggle="modal">Modify</button>
           </div>
@@ -57,17 +54,14 @@ function getEvent() {
           <a :href="event.details.link"> LONK </a>
         </div>
         <div class="my-2">
-
           <div v-for="date in event.dates">
             start:{{ new Date(date.begin).toDateString() }} finish:{{ new Date(date.end).toDateString() }}
           </div>
         </div>
         <br />
-
       </div>
     </div>
   </div>
-  
 </template>
 
 <style scoped></style>
