@@ -13,7 +13,7 @@ import DailyView from "@/components/DailyView.vue";
 
 const isWeekly = ref(Boolean);
 
-onMounted();
+// onMounted();
 </script>
 
 <template>
