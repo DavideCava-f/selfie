@@ -109,26 +109,30 @@ router.put("/OneEvent", verifyToken, async function(req, res) {
 
     });
     }else{
-      const dates = [{begin:req.body.beginDate,end:req.body.endDate}]
-      const details = {text: req.body.text,link: req.body.link }
+      const dates = JSON.stringify([{begin: req.body.beginDate,end: req.body.endDate}])
+      const details = JSON.stringify({text: req.body.text,link: req.body.link })
       const activeDate= req.body.date 
-    await Event.updateOne({ _id: req.body.idEvent},{
+        let startOfDay = Temporal.PlainDateTime.from(activeDate);
+        let endOfDay = startOfDay.add({ hours: 23, minutes: 59, seconds: 59 });
+        startOfDay = startOfDay.toString();
+        endOfDay = endOfDay.toString();
+    await Event.updateOne({ _id: req.body.id},{
       $pull: { 
         dates: { 
           $or: [
-            { begin: {$regex: "^"+activeDate} },  // Condizione: la data di inizio corrisponde
-            { end: {$regex: "^"+activeDate} },  // Condizione: la data di inizio corrisponde
+                { begin: { $gte: startOfDay, $lte: endOfDay } },
+                { end: { $gte: startOfDay, $lte: endOfDay } }
           ]
         } 
       }
-  })
+  })/*
     await Event.create({
       userId: req.userId,
       dates: dates,
       title: req.body.title,
       details: details
     });
-
+*/
     }
     res.json({ mess: "ciao" });
     //res.status(200).send("aa")
