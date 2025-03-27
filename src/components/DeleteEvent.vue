@@ -12,16 +12,20 @@ var event = ref({
 function deleteEvent(i){
 
  
-
+  console.log(store.value.activeEventId)
   fetch(`${store.value.url}:${store.value.port}/event/OneEvent`, {
+    headers: {
+    'Content-Type': 'application/json'
+      },
     method: "delete",
     body: JSON.stringify({
       "idEvent": store.value.activeEventId,
-      "idOp": i,
+      "idOp": i
     })
 
   }).then(response => { return response.json() })
     .then(data => {
+      //console.log(data.status)
     });
 
  

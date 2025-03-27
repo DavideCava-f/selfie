@@ -49,11 +49,15 @@ router.get("/OneEvent", verifyToken, async function(req, res) {
 router.delete("/OneEvent", verifyToken, async function(req, res) {
 
   try {
-    
+    console.log(req.body.idEvent)
+    console.log(req.body.idOp)
+    console.log(store.value.activeDate)
     if(req.body.idOp == 0){
 
     const ev = await Event.findOne({ _id: req.body.idEvent})
-    if(ev.dates.lenght == 1){
+
+    console.log(ev.dates.length)
+    if(ev.dates.length == 1){
         await Event.deleteOne({_id:req.body.idEvent})
     }else{
 
@@ -74,6 +78,7 @@ router.delete("/OneEvent", verifyToken, async function(req, res) {
 
   //  res.status(200).json(event);
     //res.status(200).send("aa")
+    res.status(200).json({"a" :"a"})
   } catch {
     res.status(500).send();
   } finally {
