@@ -69,6 +69,8 @@ const store = ref({
   getEventsOfDay: async (day) => {
     const response = await fetch(`${store.value.url}:${store.value.port}/event/ofday?day=${Temporal.PlainDate.from(day).add({ days: store.value.dayOffset })}`);
     store.value.eventsOfDay = (await response.json());
+    console.log("Events of day:");
+    console.log(store.value.eventsOfDay);
   },
 
   eventsOfMonth: [],
