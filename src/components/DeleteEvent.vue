@@ -9,29 +9,24 @@ var event = ref({
   dates: []
 });
 
-function deleteEvent(i){
-
- 
+function deleteEvent(i) {
   console.log(store.value.activeEventId)
   fetch(`${store.value.url}:${store.value.port}/event/OneEvent`, {
     headers: {
-    'Content-Type': 'application/json'
-      },
+      'Content-Type': 'application/json'
+    },
     method: "delete",
     body: JSON.stringify({
       "idEvent": store.value.activeEventId,
       "idOp": i,
-      "date":store.value.activeDate
+      "date": store.value.activeDate
     })
 
   }).then(response => { return response.json() })
     .then(data => {
-      //console.log(data.status)
+      console.log(data);
+      store.value.update();
     });
-
- 
-
-
 }
 
 function getEvent() {
@@ -57,7 +52,7 @@ watch(() => store.value.activeEventId, () => {
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="staticBackdropLabel">
-          {{ event.title  }}
+          {{ event.title }}
         </h1>
 
         <br />

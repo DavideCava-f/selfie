@@ -5,10 +5,6 @@ import { store } from "@/store";
 import { EventCreator } from "@/eventCreator";
 import { Temporal } from "@js-temporal/polyfill";
 
-const emits = defineEmits([
-  "update"
-]);
-
 var event = ref(
   {
     title: "",
@@ -59,8 +55,8 @@ function updateEvent() {
   }
   ).then(response => { return response.json() })
     .then(data => {
-      var i = data
-      store.value.getEventsOfDay(store.value.simDate);
+      var i = data;
+      store.value.update();
     });
 }
 

@@ -1,32 +1,19 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import NavBar from '@/components/NavBar.vue';
-import CreateEvent from "@/components/CreateEvent.vue";
-import VisualizeEvent from "@/components/VisualizeEvent.vue";
-import ModifyEvent from "@/components/ModifyEvent.vue";
-import DeleteEvent from "@/components/DeleteEvent.vue";
+import { ref, onMounted, computed } from "vue";
 import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
-import MonthlyView from "@/components/MonthlyView.vue";
-import WeeklyView from "@/components/WeeklyView.vue";
 
 const isWeekly = ref(Boolean);
-const VisualizedDate = ref({});
-
-function f() {    // perche' il mio cognome e' frocio
-  VisualizedDate.value = store.value.simDate
-}
+const VisualizedDate = computed(() => store.value.simDate.add({ days: store.value.dayOffset }));
 
 function getDate(i) {
   store.value.dayOffset += i;
-  console.log(VisualizedDate.value.toString());
-  VisualizedDate.value = VisualizedDate.value.add({ days: i });
   console.log(VisualizedDate.value.toString());
   store.value.getEventsOfDay(store.value.simDate);
 }
 
 onMounted(() => {
-  f()
+  store.value.getEventsOfDay(store.value.simDate);
 });
 </script>
 
@@ -47,7 +34,7 @@ onMounted(() => {
         {{ VisualizedDate.toString() }}
       </div>
       <button v-if="store.dayOffset !== 0" class="btn"
-        @click="store.dayOffset = 0; store.getEventsOfDay(store.simDate); f();">
+        @click="store.dayOffset = 0; store.getEventsOfDay(store.simDate);">
         R
       </button>
       <button class="btn d-flex align-self-center" @click="getDate(1)">

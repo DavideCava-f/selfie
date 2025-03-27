@@ -63,7 +63,9 @@ function prevWeek() {
   store.value.getEventsOfWeek(store.value.simDate);
 }
 
-onMounted();
+onMounted(() => {
+  store.value.getEventsOfWeek(store.value.simDate);
+});
 </script>
 
 <template>
