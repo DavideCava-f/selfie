@@ -20,7 +20,8 @@ function deleteEvent(i){
     method: "delete",
     body: JSON.stringify({
       "idEvent": store.value.activeEventId,
-      "idOp": i
+      "idOp": i,
+      "date":store.value.activeDate
     })
 
   }).then(response => { return response.json() })

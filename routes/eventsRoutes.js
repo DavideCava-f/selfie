@@ -49,31 +49,33 @@ router.get("/OneEvent", verifyToken, async function(req, res) {
 router.delete("/OneEvent", verifyToken, async function(req, res) {
 
   try {
-    console.log(req.body.idEvent)
-    console.log(req.body.idOp)
-    console.log(store.value.activeDate)
+  //  console.log(req.body.idEvent)
+    //console.log(req.body.idOp)
+  const activeDate = req.body.date;
+  console.log(activeDate)
+ // console.log(req.body.idOp)
     if(req.body.idOp == 0){
 
     const ev = await Event.findOne({ _id: req.body.idEvent})
 
-    console.log(ev.dates.length)
     if(ev.dates.length == 1){
-        await Event.deleteOne({_id:req.body.idEvent})
+        const v = await Event.deleteOne({_id:req.body.idEvent})
+        console.log(v)
     }else{
 
     await Event.updateOne({ _id: req.body.idEvent},{
       $pull: { 
         dates: { 
           $or: [
-            { begin: {$regex: "^"+store.value.activeDate} },  // Condizione: la data di inizio corrisponde
-            { end: {$regex: "^"+store.value.activeDate} },  // Condizione: la data di inizio corrisponde
+            { begin: {$regex: "^"+activeDate} },  // Condizione: la data di inizio corrisponde
+            { end: {$regex: "^"+activeDate} },  // Condizione: la data di inizio corrisponde
           ]
         } 
       }
   })
   }
   }else{
-  await Event.deleteOne({_id:req.body.id})
+  await Event.deleteOne({ _id: req.body.idEvent})
   } 
 
   //  res.status(200).json(event);
