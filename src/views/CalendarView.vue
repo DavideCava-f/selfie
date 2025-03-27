@@ -9,31 +9,16 @@ import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
 import MonthlyView from "@/components/MonthlyView.vue";
 import WeeklyView from "@/components/WeeklyView.vue";
+import DailyView from "@/components/DailyView.vue";
 
 const isWeekly = ref(Boolean);
-//const VisualizedDate = ref(store.value.simDate)
-const VisualizedDate = ref({});
-
-
-function f() {    // perche' il mio cognome e' frocio
-    VisualizedDate.value = store.value.simDate
-}
 
 function update() {
     store.value.getEventsOfDay(store.value.simDate);
     store.value.getEventsOfWeek(store.value.simDate);
 }
 
-function getDate(i) {
-    store.value.dayOffset += i;
-    console.log(VisualizedDate.value.toString());
-    VisualizedDate.value = VisualizedDate.value.add({ days: i });
-    console.log(VisualizedDate.value.toString());
-    update();
-}
-
 onMounted(() => {
-    f()
     update();
 });
 </script>
@@ -45,48 +30,10 @@ onMounted(() => {
         <div class="row bg-dark p-3 h-100" style="">
             <div class="col-lg-4 col-12 order-2 order-lg-1 mt-3 bg-warning rounded-4">
                 <!-- colonna day-->
-                <div class="d-flex flex-column justify-content-center">
-                    <div class="d-flex justify-content-between flex-fill bg-light text-center mx-1 my-3 rounded-3">
-                        <button class="btn d-flex align-self-center" @click="getDate(-1)">
-                            <img src="@/assets/Indietro.svg" />
-                        </button>
-
-                        <div v-if="store.dayOffset === 0" class="align-self-center">
-                            TODAY {{ VisualizedDate.toString() }}
-                        </div>
-                        <div v-else-if="store.dayOffset === 1" class="align-self-center">
-                            TOMORROW {{ VisualizedDate.toString() }}
-                        </div>
-                        <div v-else class="align-self-center">
-                            {{ VisualizedDate.toString() }}
-                        </div>
-                        <button v-if="store.dayOffset !== 0" class="btn" @click="store.dayOffset = 0; f(); update();">
-                            R
-                        </button>
-                        <button class="btn d-flex align-self-center" @click="getDate(1)">
-                            <img src="@/assets/avanti.svg" />
-                        </button>
-                    </div>
-
-                    <div class="overflow-scroll rounded-3" style="max-height: 100vh">
-                        <div v-for="event in store.eventsOfDay" class="flex-fill bg-light m-1 p-3 rounded-3">
-                            <div>
-                                <button @click="store.activeEventId = event._id; console.log(store.activeEventId)"
-                                    data-bs-target="#VisualizeEventModal" data-bs-toggle="modal">Visualize</button>
-                                <h4>{{ event.title }}</h4>
-                                {{ event.details.text }}
-
-                                <footer>
-                                    <a :href="event.details.link">LOCATION</a>
-                                </footer>
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
+                <DailyView />
             </div>
             <div class="col-lg-8 col-12 order-1 order-lg-2 mt-3 bg-primary rounded-4" style="position: relative">
+                <!-- colonna calendario -->
                 <div>
                     <button class="btn" @click="isWeekly = true">
                         Weekly
@@ -95,9 +42,7 @@ onMounted(() => {
                         Monthly
                     </button>
                 </div>
-                <!-- colonna calendario -->
                 <component :is="isWeekly ? WeeklyView : MonthlyView"></component>
-
                 <button class="btn bg-danger rounded-5 m-3" style="position: fixed; right: 0; bottom: 0"
                     data-bs-target="#createEventModal" data-bs-toggle="modal">
                     +
