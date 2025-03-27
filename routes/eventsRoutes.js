@@ -109,8 +109,9 @@ router.put("/OneEvent", verifyToken, async function(req, res) {
 
     });
     }else{
-      const dates = JSON.stringify([{begin: req.body.beginDate,end: req.body.endDate}])
-      const details = JSON.stringify({text: req.body.text,link: req.body.link })
+      const dates = [{begin: new Date(req.body.beginDate),end: new Date(req.body.endDate)}]
+      const details = {text: req.body.text,link: req.body.link }
+      console.log(dates)
       const activeDate= req.body.date 
         let startOfDay = Temporal.PlainDateTime.from(activeDate);
         let endOfDay = startOfDay.add({ hours: 23, minutes: 59, seconds: 59 });
@@ -125,14 +126,14 @@ router.put("/OneEvent", verifyToken, async function(req, res) {
           ]
         } 
       }
-  })/*
-    await Event.create({
+  })
+  console.log("putamadre")
+    const a = await Event.create({
       userId: req.userId,
       dates: dates,
       title: req.body.title,
       details: details
     });
-*/
     }
     res.json({ mess: "ciao" });
     //res.status(200).send("aa")

@@ -54,8 +54,8 @@ function updateEvent(i) {
       title: eventTitle.value,
       text: eventText.value,
       link: eventLink.value,
-      beginDate: eventBeginDate + "T" + eventBeginTime + ":00.000Z",
-      endDate: eventEndDate + "T" + eventEndTime + ":00.000Z"
+      beginDate: eventBeginDate.value + "T" + eventBeginTime.value + ":00.000Z",
+      endDate: eventEndDate.value + "T" + eventEndTime.value + ":00.000Z"
     })
   }
   ).then(response => { return response.json() })
