@@ -62,9 +62,13 @@ router.get("/", verifyToken, async function(req, res) {
 
 router.get("/last", verifyToken, async function(req, res) {
   try{
-    const lastnote = await Note.findOne({}).sort({lastUpDate: -1}).limit(1);
+    const lastnotes = await Note.find({userId: req.userId}).sort({lastUpDate: -1}).limit(1);
+    const lastnote= lastnotes[0];
     res.json(lastnote);
-  } finally{
+  } 
+  catch(err){
+    console.log(err);
+  }finally{
 
   }
 });
