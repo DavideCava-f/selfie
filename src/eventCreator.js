@@ -211,10 +211,12 @@ class EventCreator {
             untilDate,
             Temporal.PlainDate.from(d.end),
           ) !== -1,
-      ).forEach((d) => {
-        d.begin = d.begin.add({ weeks: n }).toString() + "Z";
-        d.end = d.end.add({ weeks: n }).toString() + "Z";
-      });
+      );
+    event.dates.forEach((d) => {
+      d.begin = d.begin.toString() + "Z";
+      d.end = d.end.toString() + "Z";
+    });
+    console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",

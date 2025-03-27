@@ -75,10 +75,11 @@ const store = ref({
 
   eventsOfMonth: [],
   monthOffset: 0,
-  getEventsOfMonth: async (firstday) => {
+  getEventsOfMonth: async (day) => {
     try {
-      console.log(firstday);
-      const response = await fetch(`${store.value.url}:${store.value.port}/event/eventOfMonth?firstday=${firstday}`);
+      const firstDay = day.with({ day: 1 }).add({ months: store.value.monthOffset });
+      console.log(firstDay);
+      const response = await fetch(`${store.value.url}:${store.value.port}/event/eventOfMonth?firstday=${firstDay}`);
       store.value.eventsOfMonth = (await response.json()).map((date) => {
         return {
           day: Temporal.PlainDate.from(date._id).day,
@@ -94,13 +95,19 @@ const store = ref({
 
   eventsOfWeek: [],
   weekOffset: 0,
-  getEventsOfWeek: async (baseDay) => {
-    const thisMonday = Temporal.PlainDate.from(baseDay).subtract({ days: Temporal.PlainDate.from(baseDay).dayOfWeek - 1 }).add({ weeks: store.value.weekOffset });
+  getEventsOfWeek: async (day) => {
+    const thisMonday = Temporal.PlainDate.from(day).subtract({ days: Temporal.PlainDate.from(day).dayOfWeek - 1 }).add({ weeks: store.value.weekOffset });
     const response = await fetch(`${store.value.url}:${store.value.port}/event/ofweek?monday=${thisMonday}`);
     store.value.eventsOfWeek = (await response.json()).map((date) => {
       return { day: Temporal.PlainDate.from(date._id).dayOfWeek - 1, events: date.events }
     });
     console.log(store.value.eventsOfWeek);
+  },
+
+  update: () => {
+    store.value.getEventsOfDay(store.value.simDate);
+    store.value.getEventsOfWeek(store.value.simDate);
+    store.value.getEventsOfMonth(store.value.simDate);
   }
 });
 

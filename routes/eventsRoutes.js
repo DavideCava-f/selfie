@@ -47,41 +47,49 @@ router.get("/OneEvent", verifyToken, async function(req, res) {
 });
 
 router.delete("/OneEvent", verifyToken, async function(req, res) {
-
   try {
-  //  console.log(req.body.idEvent)
+    console.log("inside delete!!!");
+    //  console.log(req.body.idEvent)
     //console.log(req.body.idOp)
-  const activeDate = req.body.date;
-  console.log(activeDate)
- // console.log(req.body.idOp)
-    if(req.body.idOp == 0){
+    const activeDate = req.body.date;
+    console.log(activeDate)
+    // console.log(req.body.idOp)
+    if (req.body.idOp == 0) {
 
-    const ev = await Event.findOne({ _id: req.body.idEvent})
+      const ev = await Event.findOne({ _id: req.body.idEvent })
+      console.log(ev);
 
-    if(ev.dates.length == 1){
-        const v = await Event.deleteOne({_id:req.body.idEvent})
+      if (ev.dates.length == 1) {
+        const v = await Event.deleteOne({ _id: req.body.idEvent })
         console.log(v)
-    }else{
-    await Event.updateOne({ _id: req.body.idEvent},{
-      $pull: { 
-        dates: { 
-          $or: [
-            { begin: {$regex: "^"+activeDate} },  // Condizione: la data di inizio corrisponde
-            { end: {$regex: "^"+activeDate} },  // Condizione: la data di inizio corrisponde
-          ]
-        } 
-      }
-  })
-  }
-  }else{
-  await Event.deleteOne({ _id: req.body.idEvent})
-  } 
+      } else {
 
-  //  res.status(200).json(event);
+        console.log("update One!");
+        let startOfDay = Temporal.PlainDateTime.from(activeDate);
+        let endOfDay = startOfDay.add({ hours: 23, minutes: 59, seconds: 59 });
+        startOfDay = startOfDay.toString();
+        endOfDay = endOfDay.toString();
+        await Event.updateOne({ _id: req.body.idEvent }, {
+          $pull: {
+            dates: {
+              $or: [
+                { begin: { $gte: startOfDay, $lte: endOfDay } },
+                { end: { $gte: startOfDay, $lte: endOfDay } }
+              ]
+            }
+          }
+        });
+      }
+    } else {
+      await Event.deleteOne({ _id: req.body.idEvent })
+    }
+
+    //  res.status(200).json(event);
     //res.status(200).send("aa")
-    res.status(200).json({"a" :"a"})
-  } catch {
-    res.status(500).send();
+    res.status(200).json({ "a": "a" })
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error });
   } finally {
   }
 

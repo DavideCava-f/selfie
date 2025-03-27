@@ -1,13 +1,12 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { Temporal } from "@js-temporal/polyfill";
 import { store } from "@/store";
 import VisualizeEvent from "@/components/VisualizeEvent.vue";
 import ModifyEvent from "@/components/ModifyEvent.vue";
 
 let weekdays = ref([]);
-let firstDay = ref({});
-let realFirstDay = ref({});
+let firstDay = computed(() => store.value.simDate.with({ day: 1 }).add({ months: store.value.monthOffset }));
 let dayInMonth = ref([]);
 const giorniSettimana = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 // var MactiveEventId = ref("");
@@ -15,13 +14,12 @@ let SelectedDay = ref("");
 
 
 async function getEvents() {
-    store.value.getEventsOfMonth(firstDay.toString());
+    store.value.getEventsOfMonth(store.value.simDate);
 }
 
 function reload() {
-    firstDay = realFirstDay;
     store.value.monthOffset = 0;
-    updateWeekDays(firstDay);
+    updateWeekDays(firstDay.value);
     getEvents();
 }
 
@@ -36,26 +34,20 @@ function updateWeekDays(day) {
 
 async function changeMonth(direction) {
     if (direction === 1) {
-        firstDay = firstDay.add({ months: 1 });
         store.value.monthOffset++;
     } else {
-        firstDay = firstDay.add({ months: -1 });
         store.value.monthOffset--;
     }
-    updateWeekDays(firstDay);
+    updateWeekDays(firstDay.value);
     getEvents();
 
 }
 
 onMounted(async () => {
     console.log("Mounted MonthlyView");
-    const today = Temporal.Now.plainDateISO(); // Ottiene la data odierna
-    firstDay = today.with({ day: 1 }); // Imposta il giorno a 1
     console.log(firstDay.toString());
-    await updateWeekDays(firstDay);
-    realFirstDay = firstDay;
+    await updateWeekDays(firstDay.value);
     await getEvents();
-
 });
 
 function conta(i) {
@@ -148,7 +140,9 @@ function getInvertedColor(hex) {
                     <div v-if="store.eventsOfMonth.find((d) => (d.day) === i) && (conta(i) > 2)"
                         class="d-flex flex-column align-items-start " style="overflow: hidden;">
                         <button @click="() => {
-                            store.activeEventId = event._id
+                            store.activeEventId = event._id;
+                            store.activeDate = firstDay.add({ days: i - 1 });
+                            console.log(store.activeDate);
                         }" data-bs-target="#VisualizeEventModalM" data-bs-toggle="modal"
                             v-if="store.eventsOfMonth.find((d) => (d.day) === i)"
                             v-for="event in (store.eventsOfMonth.find((d) => (d.day) === i).events).slice(0, 2)"
@@ -164,7 +158,9 @@ function getInvertedColor(hex) {
                     </div>
                     <div v-else>
                         <button @click="() => {
-                            store.activeEventId = event._id
+                            store.activeEventId = event._id;
+                            store.activeDate = firstDay.add({ days: i - 1 });
+                            console.log(store.activeDate);
                         }" data-bs-target="#VisualizeEventModalM" data-bs-toggle="modal"
                             v-if="store.eventsOfMonth.find((d) => (d.day) === i)"
                             v-for="event in store.eventsOfMonth.find((d) => (d.day) === i).events"

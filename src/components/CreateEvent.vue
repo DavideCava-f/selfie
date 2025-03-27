@@ -5,10 +5,6 @@ import { store } from "@/store";
 import { EventCreator } from "@/eventCreator";
 import { Temporal } from "@js-temporal/polyfill";
 
-const emits = defineEmits([
-  "update"
-]);
-
 const eventTitle = ref(null);
 const eventText = ref(null);
 const eventBeginDate = ref(null);
@@ -117,7 +113,7 @@ function createEvent() {
       eventBeginTime.value,
       eventEndDate.value,
       eventEndTime.value,
-    ).then(() => emits("update"));
+    ).then(() => store.value.update());
   } else {
     if (frequenceSelected.value.type === "d") {
       if (repetitionSelected.value.type === "i") {
@@ -130,7 +126,7 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-        ).then(() => emits("update"));
+        ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "n") {
         EventCreator.insertNDaily(
           parseInt(repetitionSelected.value.option),
@@ -141,7 +137,7 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-        ).then(() => emits("update"));
+        ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "u") {
         EventCreator.insertUntilDaily(
           repetitionSelected.value.option,
@@ -152,7 +148,7 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-        ).then(() => emits("update"));
+        ).then(() => store.value.update());
       }
     } else if (frequenceSelected.value.type === "w") {
       if (repetitionSelected.value.type === "i") {
@@ -166,7 +162,7 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-        ).then(() => emits("update"));
+        ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "n") {
         EventCreator.insertNWeekly(
           parseInt(repetitionSelected.value.option),
@@ -178,7 +174,7 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-        ).then(() => emits("update"));
+        ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "u") {
         EventCreator.insertUntilWeekly(
           repetitionSelected.value.option,
@@ -190,7 +186,7 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-        ).then(() => emits("update"));
+        ).then(() => store.value.update());
       }
     } else if (frequenceSelected.value.type === "m") {
       if (repetitionSelected.value.type === "i") {
@@ -203,7 +199,7 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-        ).then(() => emits("update"));
+        ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "n") {
         EventCreator.insertNMonthly(
           parseInt(repetitionSelected.value.option),
@@ -214,7 +210,7 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-        ).then(() => emits("update"));
+        ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "u") {
         EventCreator.insertUntilMonthly(
           repetitionSelected.value.option,
@@ -225,7 +221,7 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-        ).then(() => emits("update"));
+        ).then(() => store.value.update());
       }
     }
   }

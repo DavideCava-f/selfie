@@ -13,14 +13,7 @@ import DailyView from "@/components/DailyView.vue";
 
 const isWeekly = ref(Boolean);
 
-function update() {
-    store.value.getEventsOfDay(store.value.simDate);
-    store.value.getEventsOfWeek(store.value.simDate);
-}
-
-onMounted(() => {
-    update();
-});
+// onMounted();
 </script>
 
 <template>
@@ -53,7 +46,7 @@ onMounted(() => {
     </div>
     <div class="modal fade" id="createEventModal" data-bs-backdrop="false" tabindex="-1"
         aria-labelledby="createEventModal" aria-hidden="true">
-        <CreateEvent @update="update" />
+        <CreateEvent />
     </div>
     <div class="modal fade" id="VisualizeEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
         <VisualizeEvent />
