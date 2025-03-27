@@ -40,11 +40,12 @@ const repetitionSelected = ref({
 });
 const eventLink = ref(null);
 
-function updateEvent() {
+function updateEvent(i) {
   console.log(eventTitle.value)
   console.log(eventText.value)
   console.log(eventLink.value)
   fetch(`${store.value.url}:${store.value.port}/event/OneEvent`, {
+    credentials: "include",
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -52,9 +53,13 @@ function updateEvent() {
     },
     body: JSON.stringify({
       id: store.value.activeEventId,
+      idOp: i,
+      date: store.value.activeDate,
       title: eventTitle.value,
       text: eventText.value,
       link: eventLink.value,
+      beginDate: eventBeginDate + "T" + eventBeginTime + ":00.000Z",
+      endDate: eventEndDate + "T" + eventEndTime + ":00.000Z"
     })
   }
   ).then(response => { return response.json() })
@@ -165,8 +170,23 @@ watch(eventBeginDate, setDayOfWeek);
             v-model="eventText"></textarea>
         </div>
 
+        <div class="my-2">
+          <label>Link</label>
+          <input class="form-control" type="text" placeholder="Luogo fisico o virtuale" v-model="eventLink" />
+        </div>
         <br />
 
+        <div class="form-check my-2">
+          <input class="form-check-input" type="checkbox" id="repeatable" :disabled="eventBeginDate.toString() !== eventEndDate.toString() ||
+            !eventBeginDate
+            " v-model="repeatable" />
+          <label class="form-check-label" for="repeatable">Update OnlyThis</label>
+        </div>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" :disabled="!canCreateEvent() || repeatable"
+          @click="updateEvent(0)">
+          Update All Events
+        </button>
+        <div v-if="repeatable" class="row my-2">
         <div class="my-2">
           <label>Start</label>
           <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
@@ -198,70 +218,17 @@ watch(eventBeginDate, setDayOfWeek);
             All day
           </button>
         </div>
-        <div class="form-check my-2">
-          <input class="form-check-input" type="checkbox" id="repeatable" :disabled="eventBeginDate.toString() !== eventEndDate.toString() ||
-            !eventBeginDate
-            " v-model="repeatable" />
-          <label class="form-check-label" for="repeatable">Repeatable</label>
-        </div>
-        <div v-if="repeatable" class="row my-2">
-          <div class="col-sm-6 col-12">
-            <label>Frequence</label>
-            <div>
-              <select class="form-select" v-model="frequenceSelected.type">
-                <option value="d">Every day</option>
-                <option value="w">One/more days a week</option>
-                <option value="m">Every month this day</option>
-              </select>
-            </div>
-            <br />
-            <div v-if="frequenceSelected.type === 'w'"
-              class="d-flex flex-wrap gap-1 justify-content-between gap-1 mx-2">
-              <div v-for="day in store.week" :key="day">
-                <input type="checkbox" class="btn-check" autocomplete="off"
-                  v-model="frequenceSelected.option[store.week.indexOf(day)]"
-                  :checked="store.week.indexOf(day) === dayOfWeek" :disabled="store.week.indexOf(day) === dayOfWeek"
-                  :id="day" />
-                <label class="btn btn-outline-primary rounded-pill" :for="day">{{ day.slice(0, 2) }}
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-12 my-sm-0 my-3">
-            <label>Repetition</label>
-            <div>
-              <select class="form-select" v-model="repetitionSelected.type" @change="repetitionSelected.option = ''">
-                <option value="i">Repeat indefinitely</option>
-                <option value="n">Repeat n times</option>
-                <option value="u">Repeat until</option>
-              </select>
-            </div>
-            <br />
-            <div class="d-flex align-items-center gap-1" v-if="repetitionSelected.type === 'n'">
-              <input class="form-control" type="number" min="1" max="3650" placeholder="Insert n"
-                v-model="repetitionSelected.option" />
-              <div class="form-text text-nowrap">Min. 1, Max. 3650</div>
-            </div>
-            <div v-else-if="repetitionSelected.type === 'u'">
-              <input class="form-control" type="date" :min="store.simDate" v-model="repetitionSelected.option" />
-            </div>
-          </div>
-        </div>
-        <br />
-        <div class="my-2">
-          <label>Link</label>
-          <input class="form-control" type="text" placeholder="Luogo fisico o virtuale" v-model="eventLink" />
-        </div>
-      </div>
       <div class="modal-footer d-flex justify-content-end">
         <button class="btn btn-secondary" :disabled="!eventText" @click="generateDetails">
           AI
         </button>
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal" :disabled="!canCreateEvent()"
-          @click="updateEvent">
-          Update
+          @click="updateEvent(1)">
+          Update This Event
         </button>
       </div>
     </div>
+  </div>
+  </div>
   </div>
 </template>

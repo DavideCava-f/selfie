@@ -62,7 +62,6 @@ router.delete("/OneEvent", verifyToken, async function(req, res) {
         const v = await Event.deleteOne({_id:req.body.idEvent})
         console.log(v)
     }else{
-
     await Event.updateOne({ _id: req.body.idEvent},{
       $pull: { 
         dates: { 
@@ -92,6 +91,7 @@ router.delete("/OneEvent", verifyToken, async function(req, res) {
 
 router.put("/OneEvent", verifyToken, async function(req, res) {
   try {
+    if(req.body.idOp == 0){
     const event = await Event.updateOne({ _id: req.body.id }, {
       $set: {
         "title": req.body.title,
@@ -100,6 +100,28 @@ router.put("/OneEvent", verifyToken, async function(req, res) {
       }
 
     });
+    }else{
+      const dates = [{begin:req.body.beginDate,end:req.body.endDate}]
+      const details = {text: req.body.text,link: req.body.link }
+      const activeDate= req.body.date 
+    await Event.updateOne({ _id: req.body.idEvent},{
+      $pull: { 
+        dates: { 
+          $or: [
+            { begin: {$regex: "^"+activeDate} },  // Condizione: la data di inizio corrisponde
+            { end: {$regex: "^"+activeDate} },  // Condizione: la data di inizio corrisponde
+          ]
+        } 
+      }
+  })
+    await Event.create({
+      userId: req.userId,
+      dates: dates,
+      title: req.body.title,
+      details: details
+    });
+
+    }
     res.json({ mess: "ciao" });
     //res.status(200).send("aa")
   } catch {
