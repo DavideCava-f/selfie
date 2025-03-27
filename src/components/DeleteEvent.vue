@@ -9,6 +9,26 @@ var event = ref({
   dates: []
 });
 
+function deleteEvent(i){
+
+ 
+
+  fetch(`${store.value.url}:${store.value.port}/event/OneEvent`, {
+    method: "delete",
+    body: JSON.stringify({
+      "idEvent": store.value.activeEventId,
+      "idOp": i,
+    })
+
+  }).then(response => { return response.json() })
+    .then(data => {
+    });
+
+ 
+
+
+}
+
 function getEvent() {
   fetch(`${store.value.url}:${store.value.port}/event/OneEvent?id=${store.value.activeEventId}`, {
     method: "get"
@@ -23,6 +43,7 @@ watch(() => store.value.activeEventId, () => {
   console.log("watch visual");
   getEvent();
 });
+
 </script>
 
 
@@ -31,35 +52,21 @@ watch(() => store.value.activeEventId, () => {
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="staticBackdropLabel">
-          {{ event.title }}
+          {{ event.title  }}
         </h1>
 
+        <br />
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
       </div>
       <div class="modal-body">
         <div class="my-2">
           <div>
-            <button @click="getEvent">getEvent</button>
-            <button data-bs-target="#ModifyEventModal" data-bs-toggle="modal">Modify</button>
-            <button data-bs-target="#DeleteEventModal" data-bs-toggle="modal">Delete</button>
+            <button @click="deleteEvent(0)">Delete Only this Event</button>
+            <button @click="deleteEvent(1)">Delete All Events like this</button>
           </div>
         </div>
 
-        <div class="my-2">
-          <p>{{ event.details.text }}</p>
-        </div>
-
-        <div class="my-2">
-
-          <a :href="event.details.link"> LONK </a>
-        </div>
-        <div class="my-2">
-          <div v-for="date in event.dates">
-            start:{{ new Date(date.begin).toDateString() }} finish:{{ new Date(date.end).toDateString() }}
-          </div>
-        </div>
-        <br />
       </div>
     </div>
   </div>

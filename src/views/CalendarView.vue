@@ -4,6 +4,7 @@ import NavBar from '@/components/NavBar.vue';
 import CreateEvent from "@/components/CreateEvent.vue";
 import VisualizeEvent from "@/components/VisualizeEvent.vue";
 import ModifyEvent from "@/components/ModifyEvent.vue";
+import DeleteEvent from "@/components/DeleteEvent.vue";
 import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
 import MonthlyView from "@/components/MonthlyView.vue";
@@ -124,6 +125,9 @@ onMounted(() => {
     </div>
     <div class="modal fade" id="ModifyEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
         <ModifyEvent />
+    </div>
+    <div class="modal fade" id="DeleteEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
+        <DeleteEvent />
     </div>
 </template>
 

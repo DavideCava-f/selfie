@@ -46,6 +46,43 @@ router.get("/OneEvent", verifyToken, async function(req, res) {
   }
 });
 
+router.delete("/OneEvent", verifyToken, async function(req, res) {
+
+  try {
+    
+    if(req.body.idOp == 0){
+
+    const ev = await Event.findOne({ _id: req.body.idEvent})
+    if(ev.dates.lenght == 1){
+        await Event.deleteOne({_id:req.body.idEvent})
+    }else{
+
+    await Event.updateOne({ _id: req.body.idEvent},{
+      $pull: { 
+        dates: { 
+          $or: [
+            { begin: {$regex: "^"+store.value.activeDate} },  // Condizione: la data di inizio corrisponde
+            { end: {$regex: "^"+store.value.activeDate} },  // Condizione: la data di inizio corrisponde
+          ]
+        } 
+      }
+  })
+  }
+  }else{
+  await Event.deleteOne({_id:req.body.id})
+  } 
+
+  //  res.status(200).json(event);
+    //res.status(200).send("aa")
+  } catch {
+    res.status(500).send();
+  } finally {
+  }
+
+
+});
+
+
 router.put("/OneEvent", verifyToken, async function(req, res) {
   try {
     const event = await Event.updateOne({ _id: req.body.id }, {
