@@ -37,6 +37,7 @@ const repetitionSelected = ref({
 const eventLink = ref(null);
 
 function updateEvent(i) {
+  //Da mettere Date del giorno selezionato
   console.log(eventTitle.value)
   console.log(eventText.value)
   console.log(eventLink.value)
