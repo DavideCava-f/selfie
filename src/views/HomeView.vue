@@ -12,9 +12,11 @@ const router = useRouter();
 
 
 function getLastNote() {
-    fetch(`${store.value.url}:${store.value.port}/note/last`)
+    fetch(`${store.value.url}:${store.value.port}/note/last`, {
+        credentials: "include",
+    })
         .then(response => {
-            console.log(response);
+            //console.log(response);
             return response.json();
         }).then(data => {
             console.log(data);
@@ -25,10 +27,10 @@ function getLastNote() {
 async function getNearEvents() {
     fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}`)
         .then(response => {
-            console.log(response);
+            //console.log(response);
             return response.json();
         }).then(data => {
-            console.log(data);
+            //console.log(data);
             nearEvents.value = data;
         });
 }
@@ -47,11 +49,6 @@ function gotoNote() {
 }
 
 function getVisibleDate(date) {
-    /* NotesList.value = NotesList.value.sort((i,j) => {
-        
-    } )*/
-
-    //var no= NotesList.value[0].lastUpDate
     var str =
         new Date(date).toDateString() +
         " " +
