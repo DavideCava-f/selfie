@@ -81,25 +81,26 @@ onMounted();
   </div>
 
   <div class="container d-flex flex-column justify-content-between w-100 m-1" style="min-height: 70vh;">
-    <div v-for="day in store.week" class="row w-100  border fillable align-items-center"> 
-      <div class="h-100 p-0 d-flex flex-fill justify-content-center align-items-center" style="width: 12%; max-width: 12%;">
+    <div v-for="day in store.week" class="row w-100  border fillable align-items-center">
+      <div class="h-100 p-0 d-flex flex-fill justify-content-center align-items-center"
+        style="width: 12%; max-width: 12%;">
         <div class="d-flex flex-column align-items-center text-white rounded-circle  text-wrap">
           <div class="fw-bold fs-6">
             {{ day.slice(0, 3) }}
-            
+
           </div>
           <div class="fw-thin" style="font-size: 75%;">
             {{ thisMonday.add({ days: store.week.indexOf(day) }).day }}
-            
+
           </div>
           <div v-if="day === store.week[store.simDay] && store.weekOffset === 0" class="text-danger"><svg
-                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bullseye"
-                viewBox="0 0 16 16">
-                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                <path d="M8 13A5 5 0 1 1 8 3a5 5 0 0 1 0 10m0 1A6 6 0 1 0 8 2a6 6 0 0 0 0 12" />
-                <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8" />
-                <path d="M9.5 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
-              </svg></div>
+              xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bullseye"
+              viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+              <path d="M8 13A5 5 0 1 1 8 3a5 5 0 0 1 0 10m0 1A6 6 0 1 0 8 2a6 6 0 0 0 0 12" />
+              <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8" />
+              <path d="M9.5 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+            </svg></div>
         </div>
       </div>
 
@@ -108,7 +109,8 @@ onMounted();
           v-for="event in store.eventsOfWeek.find((d) => d.day === store.week.indexOf(day)).events"
           class="btn fillable p-2 d-flex justify-content-between align-items-center gap-3"
           :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }"
-          @click="store.activeEventId = event._id" data-bs-target="#VisualizeEventModalW" data-bs-toggle="modal">
+          @click="store.activeEventId = event._id; store.activeDate = store.eventsOfWeek.find((d) => d.day === store.week.indexOf(day))._id"
+          data-bs-target="#VisualizeEventModalW" data-bs-toggle="modal">
           <div class="fw-bold text-start event">
             {{ event.title }}
           </div>
@@ -121,9 +123,10 @@ onMounted();
               v-if="Temporal.PlainDateTime.compare(store.simDateTime, Temporal.PlainDateTime.from(event.dates.begin.slice(0, -1))) >= 0 &&
                 Temporal.PlainDateTime.compare(store.simDateTime, Temporal.PlainDateTime.from(event.dates.end.slice(0, -1))) <= 0"
               class="text-danger mb-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record2 align-baseline rightnow" viewBox="0 0 16 16">
-                <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8m0 1A5 5 0 1 0 8 3a5 5 0 0 0 0 10"/>
-                <path d="M10 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0"/>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-record2 align-baseline rightnow" viewBox="0 0 16 16">
+                <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8m0 1A5 5 0 1 0 8 3a5 5 0 0 0 0 10" />
+                <path d="M10 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0" />
               </svg>
             </span>
           </div>
