@@ -14,11 +14,12 @@ import verifyToken from "./routes/middleware.js";
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
 global.rootDir = __dirname;
-dotenv.config();
+dotenv.config({ path: `${global.rootDir}/.env` });
 
 // MongoDB & Mongoose
 // Atlas dev database
-const uri = process.env.MONGODB_DEV;
+const uri = process.env.MONGODB_PROD;
+console.log(uri);
 
 let app = express();
 
