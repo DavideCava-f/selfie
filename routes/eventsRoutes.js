@@ -98,6 +98,7 @@ router.delete("/OneEvent", verifyToken, async function(req, res) {
 
 
 router.put("/OneEvent", verifyToken, async function(req, res) {
+  console.log("inside put!!!");
   try {
     if(req.body.idOp == 0){
     const event = await Event.updateOne({ _id: req.body.id }, {

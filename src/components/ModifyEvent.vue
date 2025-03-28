@@ -61,8 +61,10 @@ function updateEvent(i) {
   }
   ).then(response => { return response.json() })
     .then(data => {
+      console.log(data);
       var i = data;
       store.value.update();
+      store.value.activeEventId = i;
     });
 }
 
@@ -75,9 +77,9 @@ function getEvent() {
       eventTitle.value = data.title
       eventText.value = data.details.text
       eventLink.value = data.details.link
-      eventBeginDate.value = store.value.activeDate;
+      eventBeginDate.value = store.value.activeDate.toString();
       eventBeginTime.value = data.dates[0].begin.split("T")[1].substring(0, 5);
-      eventEndDate.value = store.value.activeDate;
+      eventEndDate.value = store.value.activeDate.toString();
       eventEndTime.value = data.dates[0].end.split("T")[1].substring(0, 5);
     });
 }
@@ -143,7 +145,11 @@ function canCreateEvent() {
 
 resetFields();
 
-watch(eventBeginDate, setDayOfWeek);
+watch(()=> eventBeginDate, ()=>{
+  console.log("watch modify date")
+  setDayOfWeek();
+
+  });
 </script>
 
 <template>

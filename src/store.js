@@ -50,10 +50,10 @@ const store = ref({
   // dangerouslyAllowBrowser: true,
   // }),
 
-  url: "https://site232465.tw.cs.unibo.it",
-  // url: "http://localhost",
-  port: 443,
-  // port: 8000,
+  //url: "https://site232465.tw.cs.unibo.it",
+  url: "http://localhost",
+  //port: 443,
+  port: 8000,
 
   checkAuth: async () => {
     const response = await fetch(`${store.value.url}:${store.value.port}/checkauth`, {
