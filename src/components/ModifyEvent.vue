@@ -12,7 +12,7 @@ var event = ref(
     dates: []
   });
 
-watch(() => store.value.activeEventId, () => {
+watch(() => [store.value.activeEventId, store.value.activeDate], () => {
   console.log("watch modify");
   getEvent();
 })
@@ -75,9 +75,9 @@ function getEvent() {
       eventTitle.value = data.title
       eventText.value = data.details.text
       eventLink.value = data.details.link
-      eventBeginDate.value = data.dates[0].begin.split("T")[0]
+      eventBeginDate.value = store.value.activeDate;
       eventBeginTime.value = data.dates[0].begin.split("T")[1].substring(0, 5);
-      eventEndDate.value = data.dates[0].end.split("T")[0]
+      eventEndDate.value = store.value.activeDate;
       eventEndTime.value = data.dates[0].end.split("T")[1].substring(0, 5);
     });
 }
@@ -153,7 +153,7 @@ watch(eventBeginDate, setDayOfWeek);
         <h1 class="modal-title fs-4" id="staticBackdropLabel">
           Modify event
         </h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="resetFields"></button>
       </div>
       <div class="modal-body">
         <div class="my-2">
