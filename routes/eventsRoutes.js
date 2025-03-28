@@ -149,13 +149,22 @@ router.get("/nearEvents", verifyToken, async function(req, res) {
     console.log(req.query);
     console.log("Oggi è" + today);
 
-    var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today } });
+    var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString()+"Z" } });
 
+    console.log(nearEvents);
     for (let i = 0; i < nearEvents.length; i++) {
       nearEvents[i].dates = nearEvents[i].dates.filter((date) => {
         return (Temporal.PlainDateTime.compare(date.begin.toISOString().slice(0, -1), today) >= 0);
-      });
+      }).sort((a, b) => {
+        return Temporal.PlainDateTime.compare(a.begin.toISOString().slice(0, -1), b.begin.toISOString().slice(0, -1));
+        });
     }
+    console.log(nearEvents);
+    nearEvents = nearEvents.sort((a, b) => {
+      return Temporal.PlainDateTime.compare(a.dates[0].begin.toISOString().slice(0, -1), b.dates[0].begin.toISOString().slice(0, -1));
+    });
+
+    nearEvents = nearEvents.slice(0, 5);
     res.status(200).json(nearEvents);
   } finally {
 

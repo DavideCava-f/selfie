@@ -62,8 +62,8 @@ watch(() => store.value.activeEventId, () => {
       <div class="modal-body">
         <div class="my-2">
           <div>
-            <button @click="deleteEvent(0)">Delete Only this Event</button>
-            <button @click="deleteEvent(1)">Delete All Events like this</button>
+            <button @click="deleteEvent(0)" data-bs-dismiss="modal">Delete Only this Event</button>
+            <button @click="deleteEvent(1)" data-bs-dismiss="modal">Delete All Events like this</button>
           </div>
         </div>
 

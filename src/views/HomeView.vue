@@ -1,7 +1,7 @@
 <script setup>
 import NavBar from "@/components/NavBar.vue";
 import { store } from "@/store";
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 let lastnote = ref({});
@@ -24,6 +24,14 @@ function getLastNote() {
         });
 }
 
+async function update(){
+    await getLastNote();
+    await getNearEvents();
+    console.log("suca")
+    console.log(lastnote.value);
+    loaded.value = true;
+}
+
 async function getNearEvents() {
     fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}`)
         .then(response => {
@@ -36,11 +44,11 @@ async function getNearEvents() {
 }
 
 onBeforeMount(async () => {
-    await getLastNote();
-    await getNearEvents();
-    console.log("suca")
-    console.log(lastnote.value);
-    loaded.value = true;
+    update();
+});
+
+watch(() => store.value.deltaDateTime, () => {
+    update();
 });
 
 function gotoNote() {
@@ -49,11 +57,13 @@ function gotoNote() {
 }
 
 function getVisibleDate(date) {
+    date = date.slice(0, -1);
     var str =
         new Date(date).toDateString() +
         " " +
         new Date(date).toTimeString().split(" ")[0];
     str = str.slice(0, -3);
+    console.log(str);
     return str;
 }
 
@@ -61,8 +71,8 @@ function getVisibleDate(date) {
 
 <template>
     <NavBar />
-    <div>
-        <div class="row justify-content-center  p-4 ">
+    <div class="container-fluid">
+        <div class="row justify-content-center p-3 ">
             <div class="col-lg-3 col-12 ">
                 <div class="align-items-center">
                     <h2 class="mx-auto">Eventi prossimi</h2>
@@ -73,15 +83,15 @@ function getVisibleDate(date) {
                         <h1>Non ci sono eventi prossimi</h1>
                     </div>
                     <div v-else>
-                        <div v-for="event in nearEvents" class="bg-success rounded-3 text-black m-2">
-                            <div v-for="date in event.dates">
-                                <h4>{{ event.title }}</h4>
-                                {{ event.details.text }}
-
+                        <button v-for="event in nearEvents" @click="router.push('/calendar')" class="w-100 p-0 btn bg-success rounded-3 text-black m-2">
+                            <h4>{{ event.title }}</h4>
+                            {{ event.details.text }}
+                            ripetizioni:
+                            <div v-for="date in event.dates" >
                                 <p>{{ getVisibleDate(date.begin) }}</p>
                                 <p>{{ getVisibleDate(date.end) }}</p>
                             </div>
-                        </div>
+                        </button>
                     </div>
 
                 </div>
