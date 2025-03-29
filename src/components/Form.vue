@@ -12,7 +12,6 @@ var Confirm = ref("");
 var SignUp = ref(null);
 var UserSU = ref({})
 const router = useRouter();
-const currentRoute = computed(() => router.currentRoute.value["path"]);
 
 let listaCorsi = [
   "Informatica",
@@ -47,20 +46,6 @@ async function validateForm() {
 }
 
 async function addUser() {
-  console.log(UserSU.value.username);
-  console.log(Password.value);
-  console.log(Confirm.value);
-  // NOTE: fare i controlli non con variabili locali ma con i ref.
-  /*
-  let name = document.forms["signup"]["name"].value;
-  let surname = document.forms["signup"]["surname"].value;
-  let username = document.forms["signup"]["username"].value;
-  let course = document.getElementById("corsi").selectedIndex;
-  let y = document.getElementById("corsi").options;
-  let pswd = document.forms["signup"]["password"].value;
-  let confirmPswd = document.forms["signup"]["confirmPswd"].value;
-  */
-
   if (Password.value !== Confirm.value) {
     alert("Le password non coincidono");
     return;

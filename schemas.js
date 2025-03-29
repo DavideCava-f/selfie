@@ -46,12 +46,25 @@ const NoteSchema = new Schema({
     }]
 });
 
+const ActivitySchema = new Schema({
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
+    dates: [
+        {
+            creation: Date,
+            deadline: Date
+        }
+    ],
+    title: String,
+    text: String,
+    completed: Boolean,
+});
 
 const User = model('User', UserSchema);
 const Event = model('Event', EventSchema);
 const Note = model('Note', NoteSchema);
+const Activity = model('Activity', ActivitySchema);
 
-export { User, Event, Note };
+export { User, Event, Note, Activity };
 // Query per note ordinate in base alla lunghezza di Text
 /*
 const notes = await Note.aggregate([
