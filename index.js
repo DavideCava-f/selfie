@@ -36,6 +36,7 @@ app.use(cookieParser());
 app.use("/note", notesRoutes);
 app.use("/event", eventsRoutes);
 app.use("/user", usersRoutes);
+app.use("/activities", activityRoutes);
 
 app.get("/checkauth", verifyToken, async function(req, res) {
   res.status(200).send();

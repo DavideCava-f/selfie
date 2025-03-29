@@ -14,4 +14,14 @@ router.post("/", verifyToken, async function(req, res) {
 
 router.get("/", verifyToken, async function(req, res) {
 
+    const Acts = await Activity.find({ userId: req.userId });
+    res.json(Acts);
+});
+router.delete("/", verifyToken, async function(req, res) {
+
+    await Activity.delete({ _id: req.body.id_Act });
+
+
+
+
 });

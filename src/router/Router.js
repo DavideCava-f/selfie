@@ -5,6 +5,7 @@ import LoginView from "../views/LoginView.vue";
 import HomeView from "../views/HomeView.vue";
 import CalendarView from "../views/CalendarView.vue";
 import NoteView from "../views/NoteView.vue";
+import ActivitiesView from "../views/ActivitiesView.vue";
 
 const routes = [
   { path: "/", redirect: "/login" },
@@ -13,6 +14,7 @@ const routes = [
   { path: "/calendar", component: CalendarView, meta: { requiresAuth: true } },
   { path: "/notes", component: NoteView, meta: { requiresAuth: true } },
   { path: "/projects", component: NoteView, meta: { requiresAuth: true } },
+  { path: "/activities", component: ActivitiesView, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({
