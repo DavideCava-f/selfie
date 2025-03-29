@@ -104,6 +104,8 @@ const store = ref({
     });
     console.log(store.value.eventsOfWeek);
   },
+  
+  toggleMod: false,
 
   update: () => {
     store.value.getEventsOfDay(store.value.simDate);

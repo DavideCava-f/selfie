@@ -61,14 +61,14 @@ function updateEvent(i) {
   }
   ).then(response => { return response.json() })
     .then(data => {
-      console.log(data);
-      var i = data;
       store.value.update();
-      store.value.activeEventId = i;
+      store.value.toggleMod = !store.value.toggleMod;
+      
     });
 }
 
 function getEvent() {
+  console.log("dio porco:"+store.value.activeEventId);
   fetch(`${store.value.url}:${store.value.port}/event/OneEvent?id=${store.value.activeEventId}`, {
     method: "get"
   }
@@ -81,6 +81,7 @@ function getEvent() {
       eventBeginTime.value = data.dates[0].begin.split("T")[1].substring(0, 5);
       eventEndDate.value = store.value.activeDate.toString();
       eventEndTime.value = data.dates[0].end.split("T")[1].substring(0, 5);
+      console.log("titol "+eventTitle.value)
     });
 }
 

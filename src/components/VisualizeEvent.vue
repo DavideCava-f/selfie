@@ -19,7 +19,7 @@ function getEvent() {
     });
 }
 
-watch(() => store.value.activeEventId, () => {
+watch(() => [store.value.activeEventId, store.value.toggleMod], () => {
   console.log("watch visual");
   getEvent();
 });

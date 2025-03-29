@@ -138,8 +138,8 @@ router.put("/OneEvent", verifyToken, async function(req, res) {
     }
     res.json({ mess: "ciao" });
     //res.status(200).send("aa")
-  } catch {
-    res.status(500).send();
+  } catch(err) {
+    console.log(err);
   } finally {
   }
 });
@@ -199,7 +199,7 @@ router.get("/ofday", verifyToken, async function(req, res) {
         }
       }
     );
-    console.log(eventsOfDay);
+    //console.log(eventsOfDay);
     res.status(200).json(eventsOfDay);
   } catch (error) {
     console.log(error);
@@ -287,7 +287,7 @@ router.get("/ofweek", verifyToken, async function(req, res) {
       { $sort: { _id: 1 } }
     ]);
 
-    console.log(eventsOfWeek);
+    //console.log(eventsOfWeek);
     res.status(200).json(eventsOfWeek);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -376,7 +376,7 @@ router.get("/eventOfMonth", verifyToken, async function(req, res) {
       { $group: { _id: "$day", events: { $push: "$$ROOT" } } },
       { $sort: { _id: 1 } }
     ]);
-    console.log(eventsOfMonth);
+    //console.log(eventsOfMonth);
 
     res.status(200).json(eventsOfMonth);
   } catch (err) {
