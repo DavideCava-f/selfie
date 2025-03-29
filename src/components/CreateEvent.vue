@@ -98,7 +98,9 @@ function canCreateEvent() {
       (repetitionSelected.value.type === "n" ||
         repetitionSelected.value.type === "u")
       ? repetitionSelected.value.option
-      : true)
+      : true) &&
+        (Temporal.PlainDate.compare(eventBeginDate.value, eventEndDate.value) <= 0) &&
+        (Temporal.PlainTime.compare(eventBeginTime.value, eventEndTime.value) <= 0)
   );
 }
 
