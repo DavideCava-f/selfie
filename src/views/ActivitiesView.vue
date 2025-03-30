@@ -1,5 +1,6 @@
 <script setup>
 
+import { store } from "@/store";
 import { ref, onMounted } from "vue";
 import NavBar from '@/components/NavBar.vue';
 
@@ -10,7 +11,7 @@ var TODOAct = ref([])
 
 function toggleChange(id, compl){
 
-  fetch(`${store.value.url}:${store.value.port}/activities`, {
+  fetch(`${store.value.url}:${store.value.port}/activity`, {
     method: "put",
     credentials: "include",
     headers: {
@@ -30,7 +31,7 @@ function toggleChange(id, compl){
 
 function deleteAct(id){
 
-  fetch(`${store.value.url}:${store.value.port}/activities`, {
+  fetch(`${store.value.url}:${store.value.port}/activity`, {
     method: "delete",
     credentials: "include",
     headers: {
@@ -56,7 +57,7 @@ CompletedAct.value = []
 RetardedAct.value = []
 TODOAct.value = []
   
-  fetch(`${store.value.url}:${store.value.port}/activities`, {
+  fetch(`${store.value.url}:${store.value.port}/activity`, {
     credentials: "include",
   })
     .then((response) => {
@@ -64,9 +65,10 @@ TODOAct.value = []
       return response.json();
     })
     .then((data) => {
+      console.log(data)
      data.forEach((el) => {
       if(!el.completed){
-        if(Date.now()<data.dates.deadline)
+        if(Date.now()<el.dates.deadline)
         {
           TODOAct.value.push(el)
         }else{
