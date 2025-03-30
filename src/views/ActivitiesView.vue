@@ -7,6 +7,27 @@ var CompletedAct = ref([])
 var RetardedAct = ref([])
 var TODOAct = ref([])
 
+
+function toggleChange(id, compl){
+
+  fetch(`${store.value.url}:${store.value.port}/activities`, {
+    method: "put",
+    credentials: "include",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    //make sure to serialize your JSON body
+    body: JSON.stringify({
+      id_Act: id,
+      completion:compl
+    }),
+  })
+    .then(() => {
+        getAct()
+    })
+}
+
 function deleteAct(id){
 
   fetch(`${store.value.url}:${store.value.port}/activities`, {
@@ -84,6 +105,8 @@ onMounted(() => {
                     Delete Act
                   </button>
                 </span>
+                 <label>Completed</label>
+                 <input type="checkbox" @change="toggleChange(act._id,act.completed)" v-model="act.completed">
           </div>
           </div>
           </div>
