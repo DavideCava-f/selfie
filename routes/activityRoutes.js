@@ -9,13 +9,14 @@ const router = express.Router();
 dotenv.config();
 
 router.post("/", verifyToken, async function(req, res) {
+    console.log(req.body.deadlineDate)
     try{
         await Activity.create({
             userId: req.userId,
             dates: [
                 {
                     creation: new Date().toISOString(),
-                    deadline: req.body.deadline
+                    deadline: req.body.deadlineDate
                 }
             ],
             title: req.body.title,
@@ -40,9 +41,10 @@ router.get("/", verifyToken, async function(req, res) {
 router.delete("/", verifyToken, async function(req, res) {
 
     try{
-    await Activity.delete({ _id: req.body.id_Act });
-
-    }catch(err){
+    await Activity.deleteOne({ _id: req.body.id_Act });
+    res.status(200).send()
+    
+}catch(err){
         res.status(500).send()
 
     }
@@ -53,7 +55,7 @@ router.delete("/", verifyToken, async function(req, res) {
 
 router.put("/", verifyToken, async function(req, res) {
 
-    const comple = false
+    var comple = false
     if(req.body.completion){
         comple = true
     }

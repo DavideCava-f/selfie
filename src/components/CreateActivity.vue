@@ -40,7 +40,9 @@ function createActivity(){
             text: activityText.value,
             deadlineDate: activityDeadlineDate.value + "T" + activityDeadlineTime.value + ":00.000Z"
         })
-    }).then(response => { return response.json() });
+    }).then(response => { 
+        this.$emit('created')
+        return response.json() });
 }
 
 </script>
