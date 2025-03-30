@@ -30,3 +30,5 @@ router.post("/", verifyToken, async function(req, res) {
 router.get("/", verifyToken, async function(req, res) {
 
 });
+
+export default router;
