@@ -13,7 +13,7 @@ const routes = [
   { path: "/home", component: HomeView, meta: { requiresAuth: true } },
   { path: "/calendar", component: CalendarView, meta: { requiresAuth: true } },
   { path: "/notes", component: NoteView, meta: { requiresAuth: true } },
-  { path: "/projects", component: NoteView, meta: { requiresAuth: true } },
+  { path: "/projects", component: null, meta: { requiresAuth: true } },
   { path: "/activities", component: ActivitiesView, meta: { requiresAuth: true } },
 ];
 
