@@ -104,13 +104,26 @@ const store = ref({
     });
     console.log(store.value.eventsOfWeek);
   },
-  
+
+  activitiesOfDay: [],
+  getActivitiesOfDay: async (day) => {
+    try {
+      const response = await fetch(`${store.value.url}:${store.value.port}/activity/ofday?day=${Temporal.PlainDate.from(day).add({ days: store.value.dayOffset })}`);
+      store.value.activitiesOfDay = await response.json();
+      console.log("Activities of day:");
+      console.log(store.value.activitiesOfDay);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   toggleMod: false,
 
   update: () => {
     store.value.getEventsOfDay(store.value.simDate);
     store.value.getEventsOfWeek(store.value.simDate);
     store.value.getEventsOfMonth(store.value.simDate);
+    store.value.getActivitiesOfDay(store.value.simDate);
   }
 });
 
