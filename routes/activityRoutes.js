@@ -107,6 +107,30 @@ router.get("/ofweek", verifyToken, async function(req, res) {
         console.log(error);
         res.status(200).json({ error: error })
     }
+});
+
+router.get("/ofmonth", verifyToken, async function(req, res) {
+    try {
+        const firstday = req.query.firstday;
+        let lastDate = Temporal.PlainDate.from(firstday).with({ day: Temporal.PlainDate.from(firstday).daysInMonth }).toString();
+
+        const activities = await Activity.aggregate([
+            { $match: { userId: new mongoose.Types.ObjectId(req.userId), completed: false } },
+            { $unwind: "$dates" },
+            { $sort: { "dates.deadline": 1 } },
+            { $addFields: { day: { $dateToString: { format: "%Y-%m-%d", date: "$dates.deadline" } } } },
+            { $match: { day: { $gte: new Date(firstday).toISOString().split("T")[0], $lte: new Date(lastDate).toISOString().split("T")[0] } } },
+            { $group: { _id: "$day", activities: { $push: "$$ROOT" } } },
+            { $sort: { _id: 1 } }
+        ]);
+        console.log(activities);
+        res.status(200).json(activities);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: err });
+    } finally {
+    }
+
 })
 
 export default router;

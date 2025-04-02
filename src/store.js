@@ -132,6 +132,24 @@ const store = ref({
     }
   },
 
+  activitiesOfMonth: [],
+  getActivitiesOfMonth: async (day) => {
+    try {
+      const firstDay = day.with({ day: 1 }).add({ months: store.value.monthOffset });
+      console.log(firstDay);
+      const response = await fetch(`${store.value.url}:${store.value.port}/activity/ofmonth?firstday=${firstDay}`);
+      store.value.activitiesOfMonth = (await response.json()).map((date) => {
+        return {
+          day: Temporal.PlainDate.from(date._id).day,
+          activities: date.activities
+        }
+      });
+      console.log(store.value.activitiesOfMonth);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
 
   toggleMod: false,
 
@@ -140,6 +158,7 @@ const store = ref({
     store.value.getEventsOfWeek(store.value.simDate);
     store.value.getEventsOfMonth(store.value.simDate);
     store.value.getActivitiesOfDay(store.value.simDate);
+    store.value.getActivitiesOfMonth(store.value.simDate);
   }
 });
 
