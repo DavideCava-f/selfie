@@ -1,4 +1,4 @@
 clear
 sudo rm -r ./dist
-sudo npm run build
-sudo node index.js
+npm run build
+node index.js

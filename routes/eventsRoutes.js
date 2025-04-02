@@ -100,45 +100,45 @@ router.delete("/OneEvent", verifyToken, async function(req, res) {
 router.put("/OneEvent", verifyToken, async function(req, res) {
   console.log("inside put!!!");
   try {
-    if(req.body.idOp == 0){
-    const event = await Event.updateOne({ _id: req.body.id }, {
-      $set: {
-        "title": req.body.title,
-        "details.text": req.body.text,
-        "details.link": req.body.link
-      }
+    if (req.body.idOp == 0) {
+      const event = await Event.updateOne({ _id: req.body.id }, {
+        $set: {
+          "title": req.body.title,
+          "details.text": req.body.text,
+          "details.link": req.body.link
+        }
 
-    });
-    }else{
-      const dates = [{begin: new Date(req.body.beginDate),end: new Date(req.body.endDate)}]
-      const details = {text: req.body.text,link: req.body.link }
+      });
+    } else {
+      const dates = [{ begin: new Date(req.body.beginDate), end: new Date(req.body.endDate) }]
+      const details = { text: req.body.text, link: req.body.link }
       console.log(dates)
-      const activeDate= req.body.date 
-        let startOfDay = Temporal.PlainDateTime.from(activeDate);
-        let endOfDay = startOfDay.add({ hours: 23, minutes: 59, seconds: 59 });
-        startOfDay = startOfDay.toString();
-        endOfDay = endOfDay.toString();
-    await Event.updateOne({ _id: req.body.id},{
-      $pull: { 
-        dates: { 
-          $or: [
-                { begin: { $gte: startOfDay, $lte: endOfDay } },
-                { end: { $gte: startOfDay, $lte: endOfDay } }
-          ]
-        } 
-      }
-  })
-  console.log("putamadre")
-    const a = await Event.create({
-      userId: req.userId,
-      dates: dates,
-      title: req.body.title,
-      details: details
-    });
+      const activeDate = req.body.date
+      let startOfDay = Temporal.PlainDateTime.from(activeDate);
+      let endOfDay = startOfDay.add({ hours: 23, minutes: 59, seconds: 59 });
+      startOfDay = startOfDay.toString();
+      endOfDay = endOfDay.toString();
+      await Event.updateOne({ _id: req.body.id }, {
+        $pull: {
+          dates: {
+            $or: [
+              { begin: { $gte: startOfDay, $lte: endOfDay } },
+              { end: { $gte: startOfDay, $lte: endOfDay } }
+            ]
+          }
+        }
+      })
+      console.log("putamadre")
+      const a = await Event.create({
+        userId: req.userId,
+        dates: dates,
+        title: req.body.title,
+        details: details
+      });
     }
     res.json({ mess: "ciao" });
     //res.status(200).send("aa")
-  } catch(err) {
+  } catch (err) {
     console.log(err);
   } finally {
   }
@@ -150,7 +150,7 @@ router.get("/nearEvents", verifyToken, async function(req, res) {
     console.log(req.query);
     console.log("Oggi è" + today);
 
-    var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString()+"Z" } });
+    var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString() + "Z" } });
 
     console.log(nearEvents);
     for (let i = 0; i < nearEvents.length; i++) {
@@ -158,7 +158,7 @@ router.get("/nearEvents", verifyToken, async function(req, res) {
         return (Temporal.PlainDateTime.compare(date.begin.toISOString().slice(0, -1), today) >= 0);
       }).sort((a, b) => {
         return Temporal.PlainDateTime.compare(a.begin.toISOString().slice(0, -1), b.begin.toISOString().slice(0, -1));
-        });
+      });
     }
     console.log(nearEvents);
     nearEvents = nearEvents.sort((a, b) => {
@@ -297,8 +297,7 @@ router.get("/ofweek", verifyToken, async function(req, res) {
 router.get("/eventOfMonth", verifyToken, async function(req, res) {
   try {
     const firstday = req.query.firstday;
-    let lastDate = Temporal.PlainDate.from(firstday);
-    lastDate = (lastDate.with({ day: Temporal.PlainDate.from(firstday).daysInMonth })).toString();
+    let lastDate = Temporal.PlainDate.from(firstday).with({ day: Temporal.PlainDate.from(firstday).daysInMonth }).toString();
 
     console.log(firstday.toString());
     console.log(lastDate.toString());

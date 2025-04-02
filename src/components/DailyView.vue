@@ -3,17 +3,19 @@ import { ref, onMounted, computed } from "vue";
 import { store } from '@/store';
 import { Temporal } from "@js-temporal/polyfill";
 
-const isWeekly = ref(Boolean);
+const isEvent = ref(Boolean);
 const VisualizedDate = computed(() => store.value.simDate.add({ days: store.value.dayOffset }));
 
 function getDate(i) {
   store.value.dayOffset += i;
   console.log(VisualizedDate.value.toString());
   store.value.getEventsOfDay(store.value.simDate);
+  store.value.getActivitiesOfDay(store.value.simDate);
 }
 
 onMounted(() => {
   store.value.getEventsOfDay(store.value.simDate);
+  store.value.getActivitiesOfDay(store.value.simDate);
 });
 </script>
 
@@ -34,7 +36,7 @@ onMounted(() => {
         {{ VisualizedDate.toString() }}
       </div>
       <button v-if="store.dayOffset !== 0" class="btn"
-        @click="store.dayOffset = 0; store.getEventsOfDay(store.simDate);">
+        @click="store.dayOffset = 0; store.getEventsOfDay(store.simDate); store.getActivitiesOfDay(store.simDate);">
         R
       </button>
       <button class="btn d-flex align-self-center" @click="getDate(1)">
@@ -42,23 +44,58 @@ onMounted(() => {
       </button>
     </div>
 
-    <div class="overflow-scroll rounded-3" style="max-height: 100vh">
-      <div v-for="event in store.eventsOfDay" class="flex-fill bg-light m-1 p-3 rounded-3">
-        <div>
-          <button
-            @click="store.activeEventId = event._id; store.activeDate = store.simDate.add({ days: store.dayOffset }); console.log(store.activeEventId)"
-            data-bs-target="#VisualizeEventModal" data-bs-toggle="modal">Visualize</button>
-          <h4>{{ event.title }}</h4>
-          {{ event.details.text }}
+    <div class="mx-1">
+      <div>
+        <button class="btn" @click="isEvent = true">
+          Events
+        </button>
+        <button class="btn" @click="isEvent = false">
+          Activities
+        </button>
+      </div>
 
-          <footer>
-            <a :href="event.details.link">LOCATION</a>
-          </footer>
-
+      <div v-if="isEvent">
+        <h3>Events</h3>
+        <div class="overflow-scroll rounded-3" style="max-height: 70vh;">
+          <div v-for="event in store.eventsOfDay" class="flex-fill bg-light m-1 p-3 rounded-3">
+            <div>
+              <button
+                @click="store.activeEventId = event._id; store.activeDate = store.simDate.add({ days: store.dayOffset }); console.log(store.activeEventId)"
+                data-bs-target="#VisualizeEventModal" data-bs-toggle="modal">Visualize</button>
+              <h4>{{ event.title }}</h4>
+              {{ event.details.text }}
+              <footer>
+                <a :href="event.details.link">LOCATION</a>
+              </footer>
+            </div>
+          </div>
         </div>
+      </div>
 
+      <div v-else>
+        <h3>Activities</h3>
+        <div class="overflow-scroll rounded-3" style="max-height: 70vh;">
+          <div v-for="activity in store.activitiesOfDay" class="card">
+            <div class="card-body">
+              <h4 class="card-title fw-bold">{{ activity.title }}</h4>
+              <hr />
+              {{ activity.text }}
+              <hr />
+              <div
+                :class="{ late: Temporal.PlainDateTime.compare(store.simDateTime, activity.dates[0].deadline.slice(0, -1)) > 0 }">
+                Deadline:{{ Temporal.PlainDateTime.from(activity.dates[0].deadline.slice(0, -1)).toString() }}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
 </template>
+
+<style scoped>
+.late {
+  color: red;
+}
+</style>

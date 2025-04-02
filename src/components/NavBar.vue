@@ -59,13 +59,18 @@ setUserPfp();
                             </RouterLink>
                         </li>
                         <li class="nav-item">
+                            <RouterLink v-if="currentRoute !== '/activities'" class="nav-link text-white"
+                                to="/activities">
+                                <img src="@/assets/ActivityLogo.svg" alt="Activities" width="w-100">
+                            </RouterLink>
+                        </li>
+                        <li class="nav-item">
                             <!-- Non sara' un RouterLink -->
                             <RouterLink class="nav-link text-white" to="#">
                                 <img src="@/assets/PomodoroLogo.svg" alt="Pomodoro" class="w-100">
                             </RouterLink>
                         </li>
                         <li class="nav-item">
-                            <!-- Non sara' un RouterLink -->
                             <button class="nav-link text-white" data-bs-target="#timeMachineModal"
                                 data-bs-toggle="modal">
                                 <img src="@/assets/TimeMachineLogo.svg" alt="TimeMachine" class="w-100">

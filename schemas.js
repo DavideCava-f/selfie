@@ -48,7 +48,7 @@ const NoteSchema = new Schema({
 
 const ActivitySchema = new Schema({
     userId: { type: Schema.Types.ObjectId, ref: "User" },
-    dates: [
+    dates: [ //Non serve un array
         {
             creation: Date,
             deadline: Date

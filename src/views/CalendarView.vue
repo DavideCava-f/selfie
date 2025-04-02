@@ -10,6 +10,7 @@ import { Temporal } from "@js-temporal/polyfill";
 import MonthlyView from "@/components/MonthlyView.vue";
 import WeeklyView from "@/components/WeeklyView.vue";
 import DailyView from "@/components/DailyView.vue";
+import Create from "@/components/Create.vue";
 
 const isWeekly = ref(Boolean);
 
@@ -20,7 +21,7 @@ const isWeekly = ref(Boolean);
     <!-- <button @click="emits('click')"></button> -->
     <NavBar />
     <div class="container-fluid">
-        <div class="row bg-dark p-3 h-100" style="">
+        <div class="row bg-dark p-3 h-100">
             <div class="col-lg-4 col-12 order-2 order-lg-1 mt-3 bg-warning rounded-4">
                 <!-- colonna day-->
                 <DailyView />
@@ -46,7 +47,7 @@ const isWeekly = ref(Boolean);
     </div>
     <div class="modal fade" id="createEventModal" data-bs-backdrop="false" tabindex="-1"
         aria-labelledby="createEventModal" aria-hidden="true">
-        <CreateEvent />
+        <Create />
     </div>
     <div class="modal fade" id="VisualizeEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
         <VisualizeEvent />

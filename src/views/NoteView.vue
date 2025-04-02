@@ -4,14 +4,15 @@ import NavBar from "@/components/NavBar.vue";
 import { useRouter, useRoute } from 'vue-router';
 import { computed, ref, onMounted } from "vue";
 import { marked } from "marked";
-import { CreateNote, DuplicateNote, DeleteNote, UpdateNote, SaveAfterUpdate,getNotes } from "@/CRUDnotes";
+import { CreateNote, DuplicateNote, DeleteNote, UpdateNote, SaveAfterUpdate, getNotes } from "@/CRUDnotes";
 import {
   NCtitle,
   NCcontent,
   NCtags,
   NUtitle,
   NUcontent,
-  NUtags  } from "@/CRUDnotes";
+  NUtags
+} from "@/CRUDnotes";
 import { SortByDate, SortByTitle, SortByLength, getVisibleDate } from "@/NotesUtils";
 import { NotesList } from "@/store";
 
@@ -29,42 +30,44 @@ onMounted(() => {
 <template>
   <NavBar />
 
-  <div class="m-3 d-flex justify-content-evenly input-group">
-    <div class="m-3">
-      SortByCreationDate:
-      <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByDate(0)">
-        Newest to Oldest
-      </button>
-      <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByDate(1)">
-        Oldest to Newest
-      </button>
-    </div>
-    <div class="m-3">
-      SortByLastUpdate:
-      <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByDate(2)">
-        Newest to Oldest
-      </button>
-      <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByDate(3)">
-        Oldest to Newest
-      </button>
-    </div>
-    <div class="m-3">
-      SortByTitle:
-      <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByTitle(0)">
-        A-Z
-      </button>
-      <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByTitle(1)">
-        Z-A
-      </button>
-    </div>
-    <div class="m-3">
-      SortByTitle:
-      <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByLength(0)">
-        Length Cresc
-      </button>
-      <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByLength(1)">
-        Length Decr
-      </button>
+  <div class="container">
+    <div class="m-3 d-flex justify-content-evenly input-group">
+      <div class="m-3">
+        SortByCreationDate:
+        <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByDate(0)">
+          Newest to Oldest
+        </button>
+        <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByDate(1)">
+          Oldest to Newest
+        </button>
+      </div>
+      <div class="m-3">
+        SortByLastUpdate:
+        <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByDate(2)">
+          Newest to Oldest
+        </button>
+        <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByDate(3)">
+          Oldest to Newest
+        </button>
+      </div>
+      <div class="m-3">
+        SortByTitle:
+        <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByTitle(0)">
+          A-Z
+        </button>
+        <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByTitle(1)">
+          Z-A
+        </button>
+      </div>
+      <div class="m-3">
+        SortByTitle:
+        <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByLength(0)">
+          Length Cresc
+        </button>
+        <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByLength(1)">
+          Length Decr
+        </button>
+      </div>
     </div>
   </div>
 
@@ -92,7 +95,7 @@ onMounted(() => {
               <span v-for="tag in note.Tags">
                 <span class="badge text-bg-warning mx-1 mb-1">{{
                   tag.name
-                }}</span>
+                  }}</span>
               </span>
               <div>
                 <span><button class="btn btn-outline-danger" @click="DeleteNote(note._id)">
@@ -100,10 +103,10 @@ onMounted(() => {
                   </button>
                 </span>
                 <span><button class="btn btn-outline-primary" @click="DuplicateNote(note._id)">
-                     Duplicate Note
+                    Duplicate Note
                   </button></span>
-                <span><button class="btn btn-outline-info" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
-                    @click="UpdateNote(note._id)">
+                <span><button class="btn btn-outline-info" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasWithBothOptions" @click="UpdateNote(note._id)">
                     UpdateNote
                   </button></span>
               </div>
@@ -124,12 +127,12 @@ onMounted(() => {
   <div>
     <RouterLink to="#create-note">
 
-    <button class="btn btn-danger border-5 rounded-circle btn-outline-danger fx-button" style="" type="button"
-      data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-      +
-    </button>
+      <button class="btn btn-danger border-5 rounded-circle btn-outline-danger fx-button" style="" type="button"
+        data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+        +
+      </button>
 
-  </RouterLink>
+    </RouterLink>
     <button @click.prevent="getNotes">GetNotes</button>
   </div>
 

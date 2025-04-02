@@ -4,13 +4,15 @@ import { Temporal } from "@js-temporal/polyfill";
 import { store } from "@/store";
 import VisualizeEvent from "@/components/VisualizeEvent.vue";
 import ModifyEvent from "@/components/ModifyEvent.vue";
+import ActivityModal from "@/components/ActivityModal.vue";
 
 let weekdays = ref([]);
 let firstDay = computed(() => store.value.simDate.with({ day: 1 }).add({ months: store.value.monthOffset }));
 let dayInMonth = ref([]);
 const giorniSettimana = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 // var MactiveEventId = ref("");
-let SelectedDay = ref("");
+let eventsOfSelectedDay = ref({});
+const activitiesOfSelectedDay = ref({});
 
 
 async function getEvents() {
@@ -21,6 +23,7 @@ function reload() {
     store.value.monthOffset = 0;
     updateWeekDays(firstDay.value);
     getEvents();
+    store.value.getActivitiesOfMonth(store.value.simDate);
 }
 
 function updateWeekDays(day) {
@@ -40,7 +43,7 @@ async function changeMonth(direction) {
     }
     updateWeekDays(firstDay.value);
     getEvents();
-
+    store.value.getActivitiesOfMonth(store.value.simDate);
 }
 
 onMounted(async () => {
@@ -48,6 +51,7 @@ onMounted(async () => {
     console.log(firstDay.toString());
     await updateWeekDays(firstDay.value);
     await getEvents();
+    store.value.getActivitiesOfMonth(store.value.simDate);
 });
 
 function conta(i) {
@@ -129,14 +133,18 @@ function getInvertedColor(hex) {
         <div class="d-flex flex-wrap w-100 border border-white m-0"> <!-- celle dei giorni nel mense -->
             <div v-for="i in dayInMonth" class="d-flex flex-column flex-fill justify-content-start border"
                 style="width: calc(100%/7); max-width: calc(100%/7); height: 15vh">
-                <div v-if="store.simDateTime.day === i && store.monthOffset === 0"
-                    class="d-flex justify-content-center text-wrap bg-danger">
-                    {{ i }}
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                    <div
+                        :class="['d-flex', 'justify-content-center', 'align-items-center', 'text-wrap', 'flex-fill', 'h-100', store.simDateTime.day === i && store.monthOffset === 0 ? 'bg-danger' : '']">
+                        {{ i }}
+                    </div>
+                    <button v-if="store.activitiesOfMonth.find((d) => d.day === i)" class="btn rounded-0 bg-danger"
+                        @click="activitiesOfSelectedDay = store.activitiesOfMonth.find((d) => d.day === i).activities; console.log(activitiesOfSelectedDay)"
+                        data-bs-target="#VisualizeActivitiesModal" data-bs-toggle="modal">
+                        A
+                    </button>
                 </div>
-                <div v-else class="d-flex justify-content-center text-wrap">
-                    {{ i }}
-                </div>
-                <div class="m-0 p-0 d-flex flex-column" style="overflow: hidden;">
+                <div class="mx-0 mt-1 p-0 d-flex flex-column" style="overflow: hidden;">
                     <div v-if="store.eventsOfMonth.find((d) => (d.day) === i) && (conta(i) > 2)"
                         class="d-flex flex-column align-items-start " style="overflow: hidden;">
                         <button @click="() => {
@@ -151,10 +159,11 @@ function getInvertedColor(hex) {
                             {{ event.title }}
                         </button>
                         <button class="btn event d-flex d-inline-block align-self-center align-items-center" @click="() => {
-                            SelectedDay = store.eventsOfMonth.find((d) => (d.day) === i);
+                            eventsOfSelectedDay = store.eventsOfMonth.find((d) => (d.day) === i).events;
                         }" data-bs-target="#AltriEventi" data-bs-toggle="modal">
                             altri eventi
                         </button>
+
                     </div>
                     <div v-else>
                         <button @click="() => {
@@ -186,7 +195,7 @@ function getInvertedColor(hex) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body d-flex flex-column">
-                    <button v-for="event in SelectedDay.events" @click="() => {
+                    <button v-for="event in eventsOfSelectedDay" @click="() => {
                         store.activeEventId = event._id
                     }" data-bs-target="#VisualizeEventModalM" data-bs-toggle="modal" class="btn"
                         :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
@@ -195,6 +204,10 @@ function getInvertedColor(hex) {
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="modal fade" id="VisualizeActivitiesModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
+        <ActivityModal :activities="activitiesOfSelectedDay" />
     </div>
 </template>
 
