@@ -1,5 +1,4 @@
 <script setup>
-
 import CreateActivity from '@/components/CreateActivity.vue';
 import { store } from "@/store";
 import { ref, onMounted } from "vue";
@@ -16,8 +15,7 @@ var ActUpdateDeadlineDate = ref("")
 var ActUpdateDeadlineTime = ref("")
 
 
-function toggleChange(id, compl){
-
+function toggleChange(id, compl) {
   fetch(`${store.value.url}:${store.value.port}/activity`, {
     method: "put",
     credentials: "include",
@@ -28,16 +26,15 @@ function toggleChange(id, compl){
     //make sure to serialize your JSON body
     body: JSON.stringify({
       id_Act: id,
-      completion:compl
+      completion: compl
     }),
   })
     .then(() => {
-        getAct()
+      getAct()
     })
 }
 
-function deleteAct(id){
-
+function deleteAct(id) {
   console.log(id)
   fetch(`${store.value.url}:${store.value.port}/activity`, {
     method: "delete",
@@ -56,15 +53,13 @@ function deleteAct(id){
       getAct()
       //do something awesome that makes the world a better place
     });
-
 }
 
-function getAct(){
+function getAct() {
+  CompletedAct.value = []
+  RetardedAct.value = []
+  TODOAct.value = []
 
-CompletedAct.value = []
-RetardedAct.value = []
-TODOAct.value = []
-  
   fetch(`${store.value.url}:${store.value.port}/activity`, {
     credentials: "include",
   })
@@ -72,23 +67,22 @@ TODOAct.value = []
       return response.json();
     })
     .then((data) => {
-     data.forEach((el) => {
-      console.log(el)
-      if(!el.completed){
+      data.forEach((el) => {
+        console.log(el)
+        if (!el.completed) {
 
-        if(new Date().getTime()<=new Date(el.dates[0].deadline).getTime() || !el.dates[0].deadline)
-        {
+          if (new Date().getTime() <= new Date(el.dates[0].deadline).getTime() || !el.dates[0].deadline) {
 
-          console.log(el.dates[0].deadline)
-          TODOAct.value.push(el)
-        }else{
+            console.log(el.dates[0].deadline)
+            TODOAct.value.push(el)
+          } else {
 
-          RetardedAct.value.push(el)
+            RetardedAct.value.push(el)
+          }
+        } else {
+          CompletedAct.value.push(el)
         }
-      }else{
-        CompletedAct.value.push(el)
-      }
-     } ) 
+      })
     });
 }
 
@@ -134,7 +128,6 @@ const deadline = ActUpdateDeadlineDate.value + "T" + ActUpdateDeadlineTime.value
 
 }
 
-
 onMounted(() => {
   getAct()
 })
@@ -142,7 +135,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <NavBar />
+  <NavBar />
   <div class="container">
     <div class="row">
       <div class="col">
@@ -156,24 +149,25 @@ onMounted(() => {
               {{ act.text }}
               <hr />
               <div>
-                Creation:{{ new Date(act.dates[0].creation).toLocaleString() }} | Deadline:{{ new Date(act.dates[0].deadline).toLocaleString() }}
+                Creation:{{ new Date(act.dates[0].creation).toLocaleString() }} | Deadline:{{ new
+                  Date(act.dates[0].deadline).toLocaleString() }}
               </div>
               <div>
                 <span><button class="btn btn-outline-danger" @click="deleteAct(act._id)">
                     Delete Act
                   </button>
                 </span>
-                 <label>Completed</label>
-                 <input type="checkbox" @change="toggleChange(act._id,act.completed)" v-model="act.completed">
-          </div>
-          </div>
+                <label>Completed</label>
+                <input type="checkbox" @change="toggleChange(act._id, act.completed)" v-model="act.completed">
+              </div>
+            </div>
           </div>
 
 
         </div>
       </div>
       <div class="col">
-        Todo Activities  
+        Todo Activities
         <div v-for="act in TODOAct">
           <div class="card rounded-3">
             <div class="card-body">
@@ -182,13 +176,15 @@ onMounted(() => {
               {{ act.text }}
               <hr />
               <div>
-                Creation:{{ new Date(act.dates[0].creation).toLocaleString() }} | Deadline:{{ new Date(act.dates[0].deadline).toLocaleString() }}
+                Creation:{{ new Date(act.dates[0].creation).toLocaleString() }} | Deadline:{{ new
+                  Date(act.dates[0].deadline).toLocaleString() }}
               </div>
               <div>
                 <span><button class="btn btn-outline-danger" @click="deleteAct(act._id)">
                     Delete Act
                   </button>
                 </span>
+
                 <span><button class="btn btn-outline-info" data-bs-target="#updateEventModal" @click="updateAct(act._id,act.text,act.title,act.dates[0].deadline)">
                     Update Act
                   </button>
@@ -199,6 +195,7 @@ onMounted(() => {
           </div>
           </div>
           </div>
+        </div>
       </div>
       <div class="col">
         Retarded Activities
@@ -210,7 +207,8 @@ onMounted(() => {
               {{ act.text }}
               <hr />
               <div>
-                Creation:{{ new Date(act.dates[0].creation).toLocaleString() }} | Deadline:{{ new Date(act.dates[0].deadline).toLocaleString() }}
+                Creation:{{ new Date(act.dates[0].creation).toLocaleString() }} | Deadline:{{ new
+                  Date(act.dates[0].deadline).toLocaleString() }}
               </div>
               <div>
                 <span><button class="btn btn-outline-danger" @click="deleteAct(act._id)">
@@ -227,15 +225,17 @@ onMounted(() => {
           </div>
           </div>
           </div>
+        </div>
       </div>
-                <button class="btn bg-danger rounded-5 m-3" style="position: fixed; right: 0; bottom: 0"
-                    data-bs-target="#createEventModal" data-bs-toggle="modal">
-                    +
-                </button>
+      <button class="btn bg-danger rounded-5 m-3" style="position: fixed; right: 0; bottom: 0"
+        data-bs-target="#createEventModal" data-bs-toggle="modal">
+        +
+      </button>
 
 
-    <div class="modal fade" id="createEventModal" data-bs-backdrop="false" tabindex="-1"
+      <div class="modal fade" id="createEventModal" data-bs-backdrop="false" tabindex="-1"
         aria-labelledby="createEventModal" aria-hidden="true">
+
         <CreateActivity @created="getAct()"/>
     </div>
     <div class="modal fade" id="updateEventModal" data-bs-backdrop="false" tabindex="-1"
@@ -287,7 +287,6 @@ onMounted(() => {
     </div>
     </div>
     </div>
-
 
   </div>
 </template>
