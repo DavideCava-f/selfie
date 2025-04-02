@@ -1,7 +1,9 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { Temporal } from "@js-temporal/polyfill";
 import { store } from "@/store";
+import { getEventsOfMonth } from "@/eventGetter";
+import { getActivitiesOfMonth } from "@/activityGetter";
 import VisualizeEvent from "@/components/VisualizeEvent.vue";
 import ModifyEvent from "@/components/ModifyEvent.vue";
 import ActivityModal from "@/components/ActivityModal.vue";
@@ -14,16 +16,9 @@ const giorniSettimana = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 let eventsOfSelectedDay = ref({});
 const activitiesOfSelectedDay = ref({});
 
-
-async function getEvents() {
-    store.value.getEventsOfMonth(store.value.simDate);
-}
-
 function reload() {
     store.value.monthOffset = 0;
     updateWeekDays(firstDay.value);
-    getEvents();
-    store.value.getActivitiesOfMonth(store.value.simDate);
 }
 
 function updateWeekDays(day) {
@@ -36,23 +31,9 @@ function updateWeekDays(day) {
 }
 
 async function changeMonth(direction) {
-    if (direction === 1) {
-        store.value.monthOffset++;
-    } else {
-        store.value.monthOffset--;
-    }
+    store.value.monthOffset += direction;
     updateWeekDays(firstDay.value);
-    getEvents();
-    store.value.getActivitiesOfMonth(store.value.simDate);
 }
-
-onMounted(async () => {
-    console.log("Mounted MonthlyView");
-    console.log(firstDay.toString());
-    await updateWeekDays(firstDay.value);
-    await getEvents();
-    store.value.getActivitiesOfMonth(store.value.simDate);
-});
 
 function conta(i) {
     return store.value.eventsOfMonth.find((d) => (d.day) === i).events.length;
@@ -104,6 +85,16 @@ function getInvertedColor(hex) {
     return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
 }
 
+onMounted(async () => {
+    console.log("Mounted MonthlyView");
+    console.log(firstDay.toString());
+    updateWeekDays(firstDay.value);
+    getEventsOfMonth();
+    getActivitiesOfMonth();
+});
+
+watch(() => store.value.monthOffset, () => getEventsOfMonth());
+watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
 </script>
 
 <template>

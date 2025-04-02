@@ -50,25 +50,22 @@ router.delete("/", verifyToken, async function(req, res) {
 });
 
 router.put("/update", verifyToken, async function(req, res) {
+    console.log(req.body.deadlineDate)
+    try {
+        const Acts = await Activity.updateOne({ _id: req.body.id }, {
+            $set: {
 
-    console.log(req.body.deadlineDate) 
-
-    try{
-
-    const Acts = await Activity.updateOne({ _id: req.body.id },{$set:{
-
-        "title": req.body.title,
-        "text": req.body.text,
-        "dates.0.deadline": req.body.deadlineDate
-    }})
-
+                "title": req.body.title,
+                "text": req.body.text,
+                "dates.0.deadline": req.body.deadlineDate
+            }
+        })
         res.status(200).send()
-
-    }catch(err){
+    } catch (err) {
         res.status(500).send()
     }
-
 });
+
 router.put("/", verifyToken, async function(req, res) {
     var comple = false
     if (req.body.completion) {
@@ -85,7 +82,6 @@ router.put("/", verifyToken, async function(req, res) {
         res.status(500).send()
     }
 });
-
 
 router.get("/ofday", verifyToken, async function(req, res) {
     try {
@@ -150,7 +146,6 @@ router.get("/ofmonth", verifyToken, async function(req, res) {
         res.status(500).json({ error: err });
     } finally {
     }
-
-})
+});
 
 export default router;
