@@ -12,6 +12,24 @@ function getDate(i) {
   store.value.dayOffset += i;
 }
 
+function toggleChange(id, compl) {
+  fetch(`${store.value.url}:${store.value.port}/activity`, {
+    method: "put",
+    credentials: "include",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    //make sure to serialize your JSON body
+    body: JSON.stringify({
+      id_Act: id,
+      completion: compl
+    }),
+  }).then(() => {
+    store.value.update();
+  });
+}
+
 onMounted(() => {
   getEventsOfDay();
   getActivitiesOfDay();
@@ -57,19 +75,16 @@ watch(() => store.value.dayOffset, () => getActivitiesOfDay());
 
       <div v-if="isEvent">
         <h3>Events</h3>
-        <div class="overflow-scroll rounded-3" style="max-height: 70vh;">
-          <div v-for="event in store.eventsOfDay" class="flex-fill bg-light m-1 p-3 rounded-3">
-            <div>
-              <button
-                @click="store.activeEventId = event._id; store.activeDate = store.simDate.add({ days: store.dayOffset }); console.log(store.activeEventId)"
-                data-bs-target="#VisualizeEventModal" data-bs-toggle="modal">Visualize</button>
-              <h4>{{ event.title }}</h4>
-              {{ event.details.text }}
-              <footer>
-                <a :href="event.details.link">LOCATION</a>
-              </footer>
-            </div>
-          </div>
+        <div class="overflow-scroll rounded-3 w-100" style="max-height: 70vh;">
+          <button v-for="event in store.eventsOfDay" class="btn w-100 bg-light my-1 p-3 rounded-3"
+            @click="store.activeEventId = event._id; store.activeDate = store.simDate.add({ days: store.dayOffset }); console.log(store.activeEventId)"
+            data-bs-target="#VisualizeEventModal" data-bs-toggle="modal">
+            <h4>{{ event.title }}</h4>
+            {{ event.details.text }}
+            <footer>
+              <a :href="event.details.link">LOCATION</a>
+            </footer>
+          </button>
         </div>
       </div>
 
@@ -84,15 +99,17 @@ watch(() => store.value.dayOffset, () => getActivitiesOfDay());
               <hr />
               <div
                 :class="{ late: Temporal.PlainDateTime.compare(store.simDateTime, activity.dates[0].deadline.slice(0, -1)) > 0 }">
-                Deadline:{{ Temporal.PlainDateTime.from(activity.dates[0].deadline.slice(0, -1)).toString() }}
+                Deadline: {{ Temporal.PlainDateTime.from(activity.dates[0].deadline.slice(0, -1)).toString() }}
               </div>
+              <label>Completed</label>
+              <input type="checkbox" @change="toggleChange(activity._id, activity.completed)"
+                v-model="activity.completed">
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <style scoped>
