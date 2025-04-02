@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted, watch, computed } from "vue";
 import { store } from '@/store';
+import { getEventsOfWeek } from "@/eventGetter";
+import { getActivitiesOfWeek } from "@/activityGetter";
 import { Temporal } from "@js-temporal/polyfill";
 import VisualizeEvent from "@/components/VisualizeEvent.vue";
 import ActivityModal from "@/components/ActivityModal.vue";
@@ -56,20 +58,19 @@ function getInvertedColor(hex) {
 
 function nextWeek() {
   store.value.weekOffset++;
-  store.value.getEventsOfWeek(store.value.simDate);
-  store.value.getActivitiesOfWeek(store.value.simDate);
 }
 
 function prevWeek() {
   store.value.weekOffset--;
-  store.value.getEventsOfWeek(store.value.simDate);
-  store.value.getActivitiesOfWeek(store.value.simDate);
 }
 
 onMounted(() => {
-  store.value.getEventsOfWeek(store.value.simDate);
-  store.value.getActivitiesOfWeek(store.value.simDate);
+  getEventsOfWeek();
+  getActivitiesOfWeek();
 });
+
+watch(() => store.value.weekOffset, () => getEventsOfWeek());
+watch(() => store.value.weekOffset, () => getActivitiesOfWeek());
 </script>
 
 <template>
@@ -79,8 +80,7 @@ onMounted(() => {
     </button>
     <div class="align-self-center">
       {{ thisMonday.toLocaleString("it-IT", { month: "long", year: "numeric" }) }}
-      <button v-if="store.weekOffset !== 0" class="btn"
-        @click="store.weekOffset = 0; store.getEventsOfWeek(store.simDate); store.getActivitiesOfWeek(store.simDate)">R</button>
+      <button v-if="store.weekOffset !== 0" class="btn" @click="store.weekOffset = 0">R</button>
     </div>
     <button class="btn d-flex align-self-center" @click="nextWeek">
       <img src="@/assets/avanti.svg" />

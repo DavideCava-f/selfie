@@ -1,6 +1,8 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { store } from '@/store';
+import { getEventsOfDay } from '@/eventGetter';
+import { getActivitiesOfDay } from '@/activityGetter';
 import { Temporal } from "@js-temporal/polyfill";
 
 const isEvent = ref(Boolean);
@@ -8,15 +10,15 @@ const VisualizedDate = computed(() => store.value.simDate.add({ days: store.valu
 
 function getDate(i) {
   store.value.dayOffset += i;
-  console.log(VisualizedDate.value.toString());
-  store.value.getEventsOfDay(store.value.simDate);
-  store.value.getActivitiesOfDay(store.value.simDate);
 }
 
 onMounted(() => {
-  store.value.getEventsOfDay(store.value.simDate);
-  store.value.getActivitiesOfDay(store.value.simDate);
+  getEventsOfDay();
+  getActivitiesOfDay();
 });
+
+watch(() => store.value.dayOffset, () => getEventsOfDay());
+watch(() => store.value.dayOffset, () => getActivitiesOfDay());
 </script>
 
 <template>
@@ -35,8 +37,7 @@ onMounted(() => {
       <div v-else class="align-self-center">
         {{ VisualizedDate.toString() }}
       </div>
-      <button v-if="store.dayOffset !== 0" class="btn"
-        @click="store.dayOffset = 0; store.getEventsOfDay(store.simDate); store.getActivitiesOfDay(store.simDate);">
+      <button v-if="store.dayOffset !== 0" class="btn" @click="store.dayOffset = 0">
         R
       </button>
       <button class="btn d-flex align-self-center" @click="getDate(1)">
