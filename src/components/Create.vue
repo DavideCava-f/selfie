@@ -26,10 +26,10 @@ onMounted(() => {
             </div>
             <div class="modal-body">
                 <div v-if="choice">
-                    <CreateEvent @created="store.update()" />
+                    <CreateEvent />
                 </div>
                 <div v-else>
-                    <CreateActivity />
+                    <CreateActivity @created="store.update()" />
                 </div>
             </div>
         </div>

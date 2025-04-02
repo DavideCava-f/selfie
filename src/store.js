@@ -117,6 +117,19 @@ const store = ref({
     }
   },
 
+  activitiesOfWeek: [],
+  getActivitiesOfWeek: async (day) => {
+    try {
+      const response = await fetch(`${store.value.url}:${store.value.port}/activity/ofday?day=${Temporal.PlainDate.from(day).add({ days: store.value.dayOffset })}`);
+      store.value.activitiesOfDay = await response.json();
+      console.log("Activities of day:");
+      console.log(store.value.activitiesOfDay);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+
   toggleMod: false,
 
   update: () => {

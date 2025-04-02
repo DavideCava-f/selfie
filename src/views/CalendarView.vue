@@ -21,7 +21,7 @@ const isWeekly = ref(Boolean);
     <!-- <button @click="emits('click')"></button> -->
     <NavBar />
     <div class="container-fluid">
-        <div class="row bg-dark p-3 h-100" style="">
+        <div class="row bg-dark p-3 h-100">
             <div class="col-lg-4 col-12 order-2 order-lg-1 mt-3 bg-warning rounded-4">
                 <!-- colonna day-->
                 <DailyView />

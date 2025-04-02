@@ -5,6 +5,9 @@ import { store } from "@/store";
 import { EventCreator } from "@/eventCreator";
 import { Temporal } from "@js-temporal/polyfill";
 
+
+const emit = defineEmits(["created"]);
+
 const activityTitle = ref(null);
 const activityText = ref(null);
 const activityDeadlineDate = ref(null);
@@ -17,7 +20,7 @@ function canCreateActivity() {
 }
 
 function setDeadlineNow() {
-    activityDeadlineDate.value = store.value.simDate;
+    activityDeadlineDate.value = store.value.simDate.toString();
     activityDeadlineTime.value = store.value.simTime.slice(0, 5);
 }
 
@@ -28,6 +31,8 @@ function resetDeadline() {
 
 function createActivity() {
     console.log("create activity");
+    console.log(activityDeadlineDate.value);
+    console.log(activityDeadlineTime.value);
     fetch(`${store.value.url}:${store.value.port}/activity`, {
         credentials: "include",
         method: "POST",
@@ -42,8 +47,7 @@ function createActivity() {
         })
     }).then(response => {
         console.log("non ci arrivo");
-        this.$emit('created')
-        return response.json()
+        emit('created');
     });
 }
 

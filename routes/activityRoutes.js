@@ -23,8 +23,10 @@ router.post("/", verifyToken, async function(req, res) {
             text: req.body.text,
             completed: false,
         });
+        res.status(200).send();
     } catch (err) {
         console.log(err);
+        res.status(500).send();
     }
 });
 
@@ -37,6 +39,7 @@ router.get("/", verifyToken, async function(req, res) {
 
     }
 });
+
 router.delete("/", verifyToken, async function(req, res) {
     try {
         await Activity.deleteOne({ _id: req.body.id_Act });
@@ -54,7 +57,6 @@ router.put("/", verifyToken, async function(req, res) {
     try {
         const Acts = await Activity.updateOne({ _id: req.body.id_Act }, {
             $set: {
-
                 completed: comple
             }
         });
@@ -74,14 +76,8 @@ router.get("/ofday", verifyToken, async function(req, res) {
         const activities = await Activity.find(
             {
                 userId: req.userId,
-                dates: {
-                    $elemMatch: {
-                        $or: [
-                            { creation: { $gte: startDay, $lte: endDay } },
-                            { deadline: { $gte: startDay, $lte: endDay } }
-                        ]
-                    }
-                }
+                completed: false,
+                "dates.deadline": { $lte: endDay }
             }
         );
         res.status(200).json(activities);
