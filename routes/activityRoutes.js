@@ -87,4 +87,26 @@ router.get("/ofday", verifyToken, async function(req, res) {
     }
 });
 
+router.get("/ofweek", verifyToken, async function(req, res) {
+    try {
+        const monday = Temporal.PlainDate.from(req.query.monday).toString();
+        const sunday = Temporal.PlainDate.from(monday).add({ days: 6 }).toString();
+
+        const activities = await Activity.aggregate([
+            { $match: { userId: new mongoose.Types.ObjectId(req.userId), completed: false } },
+            { $unwind: "$dates" },
+            { $sort: { "dates.deadline": 1 } },
+            { $addFields: { day: { $dateToString: { format: "%Y-%m-%d", date: "$dates.deadline" } } } },
+            { $match: { day: { $gte: monday, $lte: sunday } } },
+            { $group: { _id: "$day", activities: { $push: "$$ROOT" } } },
+            { $sort: { _id: 1 } }
+        ]);
+        console.log(activities);
+        res.status(200).json(activities);
+    } catch (error) {
+        console.log(error);
+        res.status(200).json({ error: error })
+    }
+})
+
 export default router;
