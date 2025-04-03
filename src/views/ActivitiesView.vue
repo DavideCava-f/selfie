@@ -189,8 +189,8 @@ onMounted(() => {
                     Update Act
                   </button>
                 </span>
-                 <label>Completed</label>
-                 <input type="checkbox" @change="toggleChange(act._id,act.completed)" v-model="act.completed">
+                <label>Completed</label>
+                <input type="checkbox" @change="toggleChange(act._id,act.completed)" v-model="act.completed">
           </div>
           </div>
           </div>
@@ -219,8 +219,8 @@ onMounted(() => {
                     Update Act
                   </button>
                 </span>
-                 <label>Completed</label>
-                 <input type="checkbox" @change="toggleChange(act._id,act.completed)" v-model="act.completed">
+                <label>Completed</label>
+                <input type="checkbox" @change="toggleChange(act._id,act.completed)" v-model="act.completed">
           </div>
           </div>
           </div>
@@ -286,9 +286,6 @@ onMounted(() => {
     </div>
     </div>
     </div>
-    </div>
-
-  </div>
 </template>
 
 <style scoped></style>
