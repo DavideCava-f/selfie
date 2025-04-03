@@ -1,8 +1,9 @@
 <script setup>
 import CreateActivity from '@/components/CreateActivity.vue';
 import { store } from "@/store";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import NavBar from '@/components/NavBar.vue';
+import { Temporal } from '@js-temporal/polyfill';
 
 var CompletedAct = ref([])
 var RetardedAct = ref([])
@@ -13,6 +14,11 @@ var ActUpdateTitle = ref("")
 var ActUpdateText = ref("")
 var ActUpdateDeadlineDate = ref("")
 var ActUpdateDeadlineTime = ref("")
+
+watch(()=>store.value.deltaDateTime, () => {
+  //console.log("watch activity")
+  getAct()
+})
 
 
 function toggleChange(id, compl) {
@@ -68,8 +74,10 @@ function getAct() {
     .then((data) => {
       data.forEach((el) => {
         console.log(el)
+        let date = (el.dates[0].deadline).slice(0,-1);
         if (!el.completed) {
-          if (new Date().getTime() <= new Date(el.dates[0].deadline).getTime() || !el.dates[0].deadline) {
+
+          if (Temporal.PlainDateTime.compare(store.value.simDateTime ,Temporal.PlainDateTime.from(date)) <= 0 || !el.dates[0].deadline) {
             console.log(el.dates[0].deadline)
             TODOAct.value.push(el)
           } else {

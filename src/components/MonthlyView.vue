@@ -98,7 +98,7 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
 </script>
 
 <template>
-    <div class="container-fluid text-light border border-danger w-100">
+    <div class="container-fluid text-light border border-danger w-100 p-0 m-0">
         <div class="d-flex justify-content-between flex-fill bg-light text-center rounded-3 align-items-center">
             <!-- barra superiore del calendario -->
             <button class="btn d-flex align-self-center" @click="changeMonth(-1)">
@@ -115,7 +115,7 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
             </button>
         </div>
         <div class="d-flex bg-dark flex-fill justify-content-between w-100" id="uppercalendar">
-            <!-- barra superiore del calendario -->
+            <!-- barra dei giorni del calendario -->
             <div v-for="day in weekdays" class="d-flex flex-fill justify-content-center border border-white"
                 style="width: calc(100%/7); max-width: calc(100%/7);">
                 <p>{{ day }}</p>
@@ -129,7 +129,7 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
                         :class="['d-flex', 'justify-content-center', 'align-items-center', 'text-wrap', 'flex-fill', 'h-100', store.simDateTime.day === i && store.monthOffset === 0 ? 'bg-danger' : '']">
                         {{ i }}
                     </div>
-                    <button v-if="store.activitiesOfMonth.find((d) => d.day === i)" class="btn rounded-0 bg-danger"
+                    <button v-if="store.activitiesOfMonth.find((d) => d.day === i)" class="btn rounded-5 bg-danger w-25 h-25 fs-100"
                         @click="activitiesOfSelectedDay = store.activitiesOfMonth.find((d) => d.day === i).activities; console.log(activitiesOfSelectedDay)"
                         data-bs-target="#VisualizeActivitiesModal" data-bs-toggle="modal">
                         A
@@ -145,11 +145,11 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
                         }" data-bs-target="#VisualizeEventModalM" data-bs-toggle="modal"
                             v-if="store.eventsOfMonth.find((d) => (d.day) === i)"
                             v-for="event in (store.eventsOfMonth.find((d) => (d.day) === i).events).slice(0, 2)"
-                            class="btn d-flex d-inline-block align-items-center  text-truncate event "
+                            class="btn d-flex d-inline-block align-items-center  text-truncate event text-nowrap"
                             :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
                             {{ event.title }}
                         </button>
-                        <button class="btn event d-flex d-inline-block align-self-center align-items-center" @click="() => {
+                        <button class="btn event d-flex d-inline-block align-self-center align-items-center text-nowrap" @click="() => {
                             eventsOfSelectedDay = store.eventsOfMonth.find((d) => (d.day) === i).events;
                         }" data-bs-target="#AltriEventi" data-bs-toggle="modal">
                             altri eventi
@@ -164,7 +164,8 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
                         }" data-bs-target="#VisualizeEventModalM" data-bs-toggle="modal"
                             v-if="store.eventsOfMonth.find((d) => (d.day) === i)"
                             v-for="event in store.eventsOfMonth.find((d) => (d.day) === i).events"
-                            class="btn d-flex d-inline-block align-items-center  text-truncate event"
+                            class="btn d-flex d-inline-block align-items-center 
+                            text-truncate event text-nowrap"
                             :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
                             {{ event.title }}
                         </button>

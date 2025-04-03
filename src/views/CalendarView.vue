@@ -21,14 +21,14 @@ const isWeekly = ref(Boolean);
     <!-- <button @click="emits('click')"></button> -->
     <NavBar />
     <div class="container-fluid">
-        <div class="row bg-dark p-3 h-100">
+        <div class="row bg-dark p-lg-3 p-0 h-100">
             <div class="col-lg-4 col-12 order-2 order-lg-1 mt-3 bg-warning rounded-4">
                 <!-- colonna day-->
                 <DailyView />
             </div>
-            <div class="col-lg-8 col-12 order-1 order-lg-2 mt-3 bg-primary rounded-4" style="position: relative">
+            <div class="col-lg-8 col-12 order-1 order-lg-2 mt-3 bg-primary rounded-4 px-lg-3 p-0" style="position: relative">
                 <!-- colonna calendario -->
-                <div>
+                <div class="p-lg-1 p-0">
                     <button class="btn" @click="isWeekly = true">
                         Weekly
                     </button>
