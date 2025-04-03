@@ -3,6 +3,7 @@ import CreateActivity from '@/components/CreateActivity.vue';
 import { store } from "@/store";
 import { ref, onMounted } from "vue";
 import NavBar from '@/components/NavBar.vue';
+import { Temporal } from '@js-temporal/polyfill';
 
 var CompletedAct = ref([])
 var RetardedAct = ref([])
@@ -70,8 +71,8 @@ function getAct() {
       data.forEach((el) => {
         console.log(el)
         if (!el.completed) {
-
-          if (new Date().getTime() <= new Date(el.dates[0].deadline).getTime() || !el.dates[0].deadline) {
+          let date = (el.dates[0].deadline).slice(0,-1)
+          if (Temporal.PlainDateTime.compare(store.value.simDateTime, Temporal.PlainDateTime.from(date))<=0 || !el.dates[0].deadline) {
 
             console.log(el.dates[0].deadline)
             TODOAct.value.push(el)
