@@ -7,6 +7,8 @@ import { Temporal } from "@js-temporal/polyfill";
 
 const isEvent = ref(Boolean);
 const VisualizedDate = computed(() => store.value.simDate.add({ days: store.value.dayOffset }));
+let ActButt=ref(null);
+let EvButt=ref(null);
 
 function getDate(i) {
   store.value.dayOffset += i;
@@ -30,9 +32,22 @@ function toggleChange(id, compl) {
   });
 }
 
-onMounted(() => {
-  getEventsOfDay();
-  getActivitiesOfDay();
+function eventsMode(i){
+  if (i === 0) {
+    isEvent.value = true;
+    ActButt.value.classList.remove('active');
+    EvButt.value.classList.add('active');
+  } else {
+    isEvent.value = false;
+    EvButt.value.classList.remove('active');
+    ActButt.value.classList.add('active');
+  }
+}
+
+onMounted(async() => {
+  await getEventsOfDay();
+  await getActivitiesOfDay();
+  console.log((store.value.eventsOfDay).length);
 });
 
 watch(() => store.value.dayOffset, () => getEventsOfDay());
@@ -64,19 +79,18 @@ watch(() => store.value.dayOffset, () => getActivitiesOfDay());
     </div>
 
     <div class="mx-1">
-      <div>
-        <button class="btn" @click="isEvent = true">
+      <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
+        <button type="button" class="btn btn-outline-primary active" @click="eventsMode(0)" ref="EvButt">
           Events
         </button>
-        <button class="btn" @click="isEvent = false">
+        <button type="button" class="btn btn-outline-primary" @click="eventsMode(1)" ref="ActButt">
           Activities
         </button>
       </div>
 
       <div v-if="isEvent">
-        <h3>Events</h3>
-        <div class="overflow-scroll rounded-3 w-100" style="max-height: 70vh;">
-          <button v-for="event in store.eventsOfDay" class="btn w-100 bg-light my-1 p-3 rounded-3"
+        <div v-if="store.eventsOfDay.length!==0" class="overflow-scroll rounded-3 w-100" style="max-height: 70vh;">
+          <button  v-for="event in store.eventsOfDay" class="btn w-100 bg-light my-1 p-3 rounded-3"
             @click="store.activeEventId = event._id; store.activeDate = store.simDate.add({ days: store.dayOffset }); console.log(store.activeEventId)"
             data-bs-target="#VisualizeEventModal" data-bs-toggle="modal">
             <h4>{{ event.title }}</h4>
@@ -86,10 +100,12 @@ watch(() => store.value.dayOffset, () => getActivitiesOfDay());
             </footer>
           </button>
         </div>
+        <div v-else class="overflow-scroll rounded-3" style="max-height: 70vh;">
+          <h4 class="text-center">No events for this day</h4>
+        </div>
       </div>
 
       <div v-else>
-        <h3>Activities</h3>
         <div class="overflow-scroll rounded-3" style="max-height: 70vh;">
           <div v-for="activity in store.activitiesOfDay" class="card">
             <div class="card-body">

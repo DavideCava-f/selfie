@@ -54,10 +54,24 @@ watch(() => [store.value.activeEventId, store.value.toggleMod], () => {
 
           <a :href="event.details.link"> LONK </a>
         </div>
-        <div class="my-2">
-          <div v-for="date in event.dates">
-            start:{{ new Date(date.begin).toDateString() }} finish:{{ new Date(date.end).toDateString() }}
-          </div>
+        <div class="my-2 rounded border border-secondary">
+          <ul class="list-group list-group-flush p-0">
+            <li v-for="date in event.dates" class="d-flex flex-row justify-content-start list-group-item">
+              <div class=" border border-secondary">
+                start
+              </div>
+              <div class=" border border-secondary">
+                {{ new Date(date.begin).toDateString() }}
+              </div>
+              <div class=" border border-secondary">
+                finish
+              </div>
+              <div class=" border border-secondary">
+                {{ new Date(date.end).toDateString() }}
+              </div>
+            </li>
+          </ul>
+          
         </div>
         <br />
       </div>

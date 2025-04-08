@@ -14,7 +14,22 @@ import Create from "@/components/Create.vue";
 
 const isWeekly = ref(Boolean);
 
-// onMounted();
+let weekButt = ref(null);
+let monthButt = ref(null);
+
+function visualMode(i){
+  if (i === 0) {
+    isWeekly.value = true;
+    weekButt.value.classList.add('active');
+    monthButt.value.classList.remove('active');
+  } else {
+    isWeekly.value = false;
+    monthButt.value.classList.add('active');
+    weekButt.value.classList.remove('active');
+  }
+}
+
+
 </script>
 
 <template>
@@ -28,11 +43,11 @@ const isWeekly = ref(Boolean);
             </div>
             <div class="col-lg-8 col-12 order-1 order-lg-2 mt-3 bg-primary rounded-4 px-lg-3 p-0" style="position: relative">
                 <!-- colonna calendario -->
-                <div class="p-lg-1 p-0">
-                    <button class="btn" @click="isWeekly = true">
+                <div class="p-lg-1 p-0 btn-group" role="group">
+                    <button class="btn btn-outline-dark active" @click="visualMode(0)" ref="weekButt">
                         Weekly
                     </button>
-                    <button class="btn" @click="isWeekly = false">
+                    <button class="btn btn-outline-dark" @click="visualMode(1)" ref="monthButt">
                         Monthly
                     </button>
                 </div>

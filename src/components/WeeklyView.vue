@@ -92,7 +92,7 @@ watch(() => store.value.weekOffset, () => getActivitiesOfWeek());
       <div v-for="day in store.week" class="row w-100 border fillable align-items-center p-0">
         <div class="h-100 p-0 d-flex flex-column flex-lg-row flex-fill justify-content-center align-items-center"
           style="width: 12%; max-width: 12%;">
-          <div class="d-flex flex-column align-items-center text-white rounded-circle text-wrap">
+          <div class="d-flex flex-column align-items-center text-white rounded-circle text-wrap position-static">
             <div class="fw-bold fs-6">
               {{ day.slice(0, 3) }}
             </div>
@@ -111,7 +111,7 @@ watch(() => store.value.weekOffset, () => getActivitiesOfWeek());
           </div>
           <div v-if="store.activitiesOfWeek.find((d) => d.day === store.week.indexOf(day))"
             class="d-flex flex-column align-items-center ms-1">
-            <button class="btn rounded-circle bg-danger text-white"
+            <button class="btn rounded-pill bg-danger text-white"
               @click="activitiesOfSelectedDay = store.activitiesOfWeek.find((d) => d.day === store.week.indexOf(day)).activities; console.log(activitiesOfSelectedDay)"
               data-bs-target="#VisualizeActivitiesModal" data-bs-toggle="modal">
               A
