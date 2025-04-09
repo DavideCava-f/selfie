@@ -22,6 +22,7 @@ function visualMode(i){
     isWeekly.value = true;
     weekButt.value.classList.add('active');
     monthButt.value.classList.remove('active');
+
   } else {
     isWeekly.value = false;
     monthButt.value.classList.add('active');
