@@ -7,6 +7,8 @@ async function notipol() {
   let response = await fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}`);
   response = await response.json();
 
+
+
   // Assumiamo di avere l'array delle notifiche da mostrare in response
   console.log("ricevo notifica!");
 
