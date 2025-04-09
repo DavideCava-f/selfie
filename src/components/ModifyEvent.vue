@@ -62,13 +62,11 @@ function updateEvent(i) {
   ).then(response => { return response.json() })
     .then(data => {
       store.value.update();
-      store.value.toggleMod = !store.value.toggleMod;
-      
     });
 }
 
 function getEvent() {
-  console.log("dio porco:"+store.value.activeEventId);
+  console.log("dio porco:" + store.value.activeEventId);
   fetch(`${store.value.url}:${store.value.port}/event/OneEvent?id=${store.value.activeEventId}`, {
     method: "get"
   }
@@ -81,7 +79,7 @@ function getEvent() {
       eventBeginTime.value = data.dates[0].begin.split("T")[1].substring(0, 5);
       eventEndDate.value = store.value.activeDate.toString();
       eventEndTime.value = data.dates[0].end.split("T")[1].substring(0, 5);
-      console.log("titol "+eventTitle.value)
+      console.log("titol " + eventTitle.value)
     });
 }
 
@@ -146,11 +144,11 @@ function canCreateEvent() {
 
 resetFields();
 
-watch(()=> eventBeginDate, ()=>{
+watch(() => eventBeginDate, () => {
   console.log("watch modify date")
   setDayOfWeek();
 
-  });
+});
 </script>
 
 <template>
@@ -160,7 +158,8 @@ watch(()=> eventBeginDate, ()=>{
         <h1 class="modal-title fs-4" id="staticBackdropLabel">
           Modify event
         </h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="resetFields"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          @click="resetFields"></button>
       </div>
       <div class="modal-body">
         <div class="my-2">
@@ -186,53 +185,53 @@ watch(()=> eventBeginDate, ()=>{
             " v-model="repeatable" />
           <label class="form-check-label" for="repeatable">Update OnlyThis</label>
         </div>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" :disabled="!canCreateEvent() || repeatable"
-          @click="updateEvent(0)">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+          :disabled="!canCreateEvent() || repeatable" @click="updateEvent(0)">
           Update All Events
         </button>
         <div v-if="repeatable" class="row my-2">
-        <div class="my-2">
-          <label>Start</label>
-          <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
-            <input class="form-control" type="date" v-model="eventBeginDate" />
-            <input class="form-control" type="time" v-model="eventBeginTime" />
-            <button class="btn btn-outline-primary" @click="setBeginNow">
-              Now
+          <div class="my-2">
+            <label>Start</label>
+            <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
+              <input class="form-control" type="date" v-model="eventBeginDate" />
+              <input class="form-control" type="time" v-model="eventBeginTime" />
+              <button class="btn btn-outline-primary" @click="setBeginNow">
+                Now
+              </button>
+              <button class="btn btn-outline-danger" @click="resetBegin">
+                Reset
+              </button>
+            </div>
+          </div>
+          <div class="my-2">
+            <label>End</label>
+            <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
+              <input class="form-control" type="date" :min="eventBeginDate" v-model="eventEndDate" />
+              <input class="form-control" type="time" v-model="eventEndTime" />
+              <button class="btn btn-outline-primary" @click="setEndNow">
+                Now
+              </button>
+              <button class="btn btn-outline-danger" @click="resetEnd">
+                Reset
+              </button>
+            </div>
+          </div>
+          <div class="my-2">
+            <button class="btn btn-outline-success" type="button" id="tuttoIlGiorno" @click="allDay">
+              All day
             </button>
-            <button class="btn btn-outline-danger" @click="resetBegin">
-              Reset
+          </div>
+          <div class="modal-footer d-flex justify-content-end">
+            <button class="btn btn-secondary" :disabled="!eventText" @click="generateDetails">
+              AI
+            </button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" :disabled="!canCreateEvent()"
+              @click="updateEvent(1)">
+              Update This Event
             </button>
           </div>
         </div>
-        <div class="my-2">
-          <label>End</label>
-          <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
-            <input class="form-control" type="date" :min="eventBeginDate" v-model="eventEndDate" />
-            <input class="form-control" type="time" v-model="eventEndTime" />
-            <button class="btn btn-outline-primary" @click="setEndNow">
-              Now
-            </button>
-            <button class="btn btn-outline-danger" @click="resetEnd">
-              Reset
-            </button>
-          </div>
-        </div>
-        <div class="my-2">
-          <button class="btn btn-outline-success" type="button" id="tuttoIlGiorno" @click="allDay">
-            All day
-          </button>
-        </div>
-      <div class="modal-footer d-flex justify-content-end">
-        <button class="btn btn-secondary" :disabled="!eventText" @click="generateDetails">
-          AI
-        </button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" :disabled="!canCreateEvent()"
-          @click="updateEvent(1)">
-          Update This Event
-        </button>
       </div>
     </div>
-  </div>
-  </div>
   </div>
 </template>

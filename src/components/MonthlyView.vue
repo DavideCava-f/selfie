@@ -129,7 +129,8 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
                         :class="['d-flex', 'justify-content-center', 'align-items-center', 'text-wrap', 'flex-fill', 'h-100', store.simDateTime.day === i && store.monthOffset === 0 ? 'bg-danger' : '']">
                         {{ i }}
                     </div>
-                    <button v-if="store.activitiesOfMonth.find((d) => d.day === i)" class="btn rounded-5 bg-danger w-25 h-25 fs-100"
+                    <button v-if="store.activitiesOfMonth.find((d) => d.day === i)"
+                        class="btn rounded-5 bg-danger w-25 h-25 fs-100"
                         @click="activitiesOfSelectedDay = store.activitiesOfMonth.find((d) => d.day === i).activities; console.log(activitiesOfSelectedDay)"
                         data-bs-target="#VisualizeActivitiesModal" data-bs-toggle="modal">
                         A
@@ -139,7 +140,7 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
                     <div v-if="store.eventsOfMonth.find((d) => (d.day) === i) && (conta(i) > 2)"
                         class="d-flex flex-column align-items-start " style="overflow: hidden;">
                         <button @click="() => {
-                            store.activeEventId = event._id;
+                            store.activeEventId = event._id; store.toggle = !store.toggle;
                             store.activeDate = firstDay.add({ days: i - 1 });
                             console.log(store.activeDate);
                         }" data-bs-target="#VisualizeEventModalM" data-bs-toggle="modal"
@@ -149,22 +150,22 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
                             :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
                             {{ event.title }}
                         </button>
-                        <button class="btn event d-flex d-inline-block align-self-center align-items-center text-nowrap" @click="() => {
-                            eventsOfSelectedDay = store.eventsOfMonth.find((d) => (d.day) === i).events;
-                        }" data-bs-target="#AltriEventi" data-bs-toggle="modal">
+                        <button class="btn event d-flex d-inline-block align-self-center align-items-center text-nowrap"
+                            @click="() => {
+                                eventsOfSelectedDay = store.eventsOfMonth.find((d) => (d.day) === i).events;
+                            }" data-bs-target="#AltriEventi" data-bs-toggle="modal">
                             altri eventi
                         </button>
 
                     </div>
                     <div v-else>
                         <button @click="() => {
-                            store.activeEventId = event._id;
+                            store.activeEventId = event._id; store.toggle = !store.toggle;
                             store.activeDate = firstDay.add({ days: i - 1 });
                             console.log(store.activeDate);
-                        }" data-bs-target="#VisualizeEventModalM" data-bs-toggle="modal"
+                        }" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal"
                             v-if="store.eventsOfMonth.find((d) => (d.day) === i)"
-                            v-for="event in store.eventsOfMonth.find((d) => (d.day) === i).events"
-                            class="btn d-flex d-inline-block align-items-center 
+                            v-for="event in store.eventsOfMonth.find((d) => (d.day) === i).events" class="btn d-flex d-inline-block align-items-center 
                             text-truncate event text-nowrap"
                             :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
                             {{ event.title }}
@@ -175,9 +176,9 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
             </div>
         </div>
     </div>
-    <div class="modal fade" id="VisualizeEventModalM" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
-        <VisualizeEvent />
-    </div>
+    <!-- <div class="modal fade" id="VisualizeEventModalM" data-bs-backdrop="false" tabindex="-1" aria-hidden="true"> -->
+    <!--     <VisualizeEvent /> -->
+    <!-- </div> -->
 
     <div class="modal fade" id="AltriEventi" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -188,7 +189,7 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
                 </div>
                 <div class="modal-body d-flex flex-column">
                     <button v-for="event in eventsOfSelectedDay" @click="() => {
-                        store.activeEventId = event._id
+                        store.activeEventId = event._id; store.toggle = !store.toggle;
                     }" data-bs-target="#VisualizeEventModalM" data-bs-toggle="modal" class="btn"
                         :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
                         {{ event.title }}

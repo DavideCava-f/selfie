@@ -78,8 +78,7 @@ const store = ref({
   activitiesOfWeek: [],
   activitiesOfMonth: [],
 
-  toggleMod: false,
-  
+  toggle: false,
 
   update: () => {
     getEventsOfDay();
@@ -88,7 +87,7 @@ const store = ref({
     getActivitiesOfDay();
     getActivitiesOfMonth();
     getActivitiesOfWeek();
-    store.value.toggleMod = !store.value.toggleMod;
+    store.value.toggle = !store.value.toggle;
   }
 });
 

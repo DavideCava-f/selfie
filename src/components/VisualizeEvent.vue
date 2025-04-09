@@ -19,7 +19,7 @@ function getEvent() {
     });
 }
 
-watch(() => [store.value.activeEventId, store.value.toggleMod], () => {
+watch(() => store.value.toggle, () => {
   console.log("watch visual");
   getEvent();
 });
@@ -71,7 +71,7 @@ watch(() => [store.value.activeEventId, store.value.toggleMod], () => {
               </div>
             </li>
           </ul>
-          
+
         </div>
         <br />
       </div>

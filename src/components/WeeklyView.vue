@@ -124,9 +124,9 @@ watch(() => store.value.weekOffset, () => getActivitiesOfWeek());
             v-for="event in store.eventsOfWeek.find((d) => d.day === store.week.indexOf(day)).events"
             class="btn fillable p-2 d-flex justify-content-between align-items-center gap-3"
             :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }"
-            @click="store.activeEventId = event._id;
+            @click="store.activeEventId = event._id; store.toggle = !store.toggle;
             store.activeDate = thisMonday.add({ days: store.eventsOfWeek.find((d) => d.day === store.week.indexOf(day)).day });
-            console.log(store.activeDate);" data-bs-target="#VisualizeEventModalW" data-bs-toggle="modal">
+            console.log(store.activeDate);" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal">
             <div class="fw-bold text-start event">
               {{ event.title }}
             </div>
@@ -151,12 +151,12 @@ watch(() => store.value.weekOffset, () => getActivitiesOfWeek());
       </div>
     </div>
   </div>
-  <div class="modal fade" id="VisualizeEventModalW" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
-      <VisualizeEvent />
-    </div>
-    <div class="modal fade" id="VisualizeActivitiesModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
-      <ActivityModal :activities="activitiesOfSelectedDay" />
-    </div>
+  <!-- <div class="modal fade" id="VisualizeEventModalW" data-bs-backdrop="false" tabindex="-1" aria-hidden="true"> -->
+  <!--   <VisualizeEvent /> -->
+  <!-- </div> -->
+  <div class="modal fade" id="VisualizeActivitiesModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
+    <ActivityModal :activities="activitiesOfSelectedDay" />
+  </div>
 </template>
 
 <style scoped>
