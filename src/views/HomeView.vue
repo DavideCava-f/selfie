@@ -24,7 +24,7 @@ function getLastNote() {
         });
 }
 
-async function update(){
+async function update() {
     await getLastNote();
     await getNearEvents();
     console.log("suca")
@@ -38,8 +38,9 @@ async function getNearEvents() {
             //console.log(response);
             return response.json();
         }).then(data => {
-            //console.log(data);
-            nearEvents.value = data;
+            console.log("Near Eventssss:");
+            console.log(data);
+            nearEvents.value = data.slice(0, 5);
         });
 }
 
@@ -83,11 +84,12 @@ function getVisibleDate(date) {
                         <h1>Non ci sono eventi prossimi</h1>
                     </div>
                     <div v-else>
-                        <button v-for="event in nearEvents" @click="router.push('/calendar')" class="w-100 p-0 btn bg-success rounded-3 text-black m-2">
+                        <button v-for="event in nearEvents" @click="router.push('/calendar')"
+                            class="w-100 p-0 btn bg-success rounded-3 text-black m-2">
                             <h4>{{ event.title }}</h4>
                             {{ event.details.text }}
                             ripetizioni:
-                            <div v-for="date in event.dates" >
+                            <div v-for="date in event.dates">
                                 <p>{{ getVisibleDate(date.begin) }}</p>
                                 <p>{{ getVisibleDate(date.end) }}</p>
                             </div>

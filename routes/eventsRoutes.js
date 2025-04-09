@@ -165,7 +165,6 @@ router.get("/nearEvents", verifyToken, async function(req, res) {
       return Temporal.PlainDateTime.compare(a.dates[0].begin.toISOString().slice(0, -1), b.dates[0].begin.toISOString().slice(0, -1));
     });
 
-    nearEvents = nearEvents.slice(0, 5);
     res.status(200).json(nearEvents);
   } finally {
 

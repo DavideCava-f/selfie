@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import { Temporal } from "@js-temporal/polyfill";
 import { getEventsOfWeek, getEventsOfDay, getEventsOfMonth } from "@/eventGetter";
 import { getActivitiesOfDay, getActivitiesOfMonth, getActivitiesOfWeek } from "@/activityGetter";
+import { notipol } from "@/notipol";
 
 export const NotesList = ref([]);
 
@@ -94,6 +95,11 @@ const store = ref({
 setInterval(
   () => (store.value.realDateTime = Temporal.Now.plainDateTimeISO()),
   1000,
+);
+
+setInterval(
+  notipol,
+  5000
 );
 
 export { store };
