@@ -146,11 +146,18 @@ router.put("/OneEvent", verifyToken, async function(req, res) {
 
 router.get("/nearEvents", verifyToken, async function(req, res) {
   try {
-    const today = req.query.today;
+    const today = req.query.refDay;
+    const isNotification = req.query.isNotification;
+    const MaxAdvance = today.add(req.query.advance);
     console.log(req.query);
     console.log("Oggi è" + today);
 
-    var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString() + "Z" } });
+    if(!isNotification) {
+      var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString() + "Z" } });
+    }
+    else {
+      var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString() + "Z", $lte: MaxAdvance } });
+    }
 
     console.log(nearEvents);
     for (let i = 0; i < nearEvents.length; i++) {
