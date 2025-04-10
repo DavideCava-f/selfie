@@ -147,10 +147,19 @@ router.put("/OneEvent", verifyToken, async function(req, res) {
 router.get("/nearEvents", verifyToken, async function(req, res) {
   try {
     const today = req.query.today;
-    console.log(req.query);
-    console.log("Oggi è" + today);
+    const isNotification = req.query.isNotification;
+    const advance = Temporal.PlainDateTime.from(req.query.today).add({ days: 7 });
 
-    var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString() + "Z" } });
+    console.log("today: " + today + "  "+ typeof today);
+    console.log("advance: " + advance.toString() +"  " + typeof advance);
+
+    if(!isNotification) {
+      var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString() + "Z" } });
+    }
+    else {
+      
+      var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString() + "Z", $lte: advance.toString() + "Z" } });
+    }
 
     console.log(nearEvents);
     for (let i = 0; i < nearEvents.length; i++) {

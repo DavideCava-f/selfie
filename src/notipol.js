@@ -52,14 +52,12 @@ event.notification.advance.forEach(advance => {
 
 
 async function notipol() {
-  let response = await fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}`);
+  let response = await fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}&isNotification=${true}&max=${store.value.advance[-1]}`);
   Events = await response.json();
 
   Events.forEach(el => {EventNotification(el)});
-
-
   // Assumiamo di avere l'array delle notifiche da mostrare in response
-  console.log("ricevo notifica!");
+  console.log(response);
 
   toast("Hello! Wow so easy!", {
     "theme": "auto",

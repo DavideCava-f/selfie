@@ -89,7 +89,9 @@ const store = ref({
     getActivitiesOfMonth();
     getActivitiesOfWeek();
     store.value.toggle = !store.value.toggle;
-  }
+  },
+
+  advance: []
 });
 
 setInterval(
@@ -99,7 +101,7 @@ setInterval(
 
 setInterval(
   notipol,
-  5000
+  5000000000
 );
 
 export { store };
