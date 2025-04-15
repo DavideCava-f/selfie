@@ -38,6 +38,7 @@ app.use("/note", notesRoutes);
 app.use("/event", eventsRoutes);
 app.use("/user", usersRoutes);
 app.use("/activity", activityRoutes);
+app.use("/notification", notificationRoutes);
 
 app.get("/checkauth", verifyToken, async function(req, res) {
   res.status(200).send();

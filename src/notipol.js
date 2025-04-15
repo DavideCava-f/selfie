@@ -26,13 +26,17 @@ async function EventNotification(event){
   event.notification.advance.push({type: "oneDay", noted: false});
   event.notification.advance.push({type: "oneWeek", noted: false});
   console.log("Advance: ", event.notification.advance);
+  let nextDate = dates.find(date => Temporal.PlainDateTime.compare(Temporal.PlainDateTime.from(date.begin), Now) >= 1) //Trovo la data successiva e dopo faccio i controlli
+
+if(nextDate != undefined){
 
   event.notification.advance.forEach(advance => {
-    dates.forEach(date => {
-      let BeginDate = (Temporal.PlainDateTime.from((date.begin.toString()).slice(0,-1)));
+      let BeginDate = (Temporal.PlainDateTime.from((nextDate.begin.toString()).slice(0,-1)));
 
       let distance = BeginDate.since(Now, {smallestUnit: "seconds", largestUnit: "months"});
-      
+  
+
+
       if(distance.total({ unit: 'days' }) < 1 && advance.type === ("oneDay"))    {
         if(!advance.noted){
           toast(event.title, {
@@ -60,8 +64,30 @@ async function EventNotification(event){
           });
         }
       }
-    })
+    
   })
+
+  
+}else{
+
+
+  fetch(`${store.value.url}:${store.value.port}/notification`, {
+    method: "put",
+    credentials: "include",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+
+    //make sure to serialize your JSON body
+    body: JSON.stringify({
+      id_Event: id,
+      SetNoted: true
+    }),
+  })
+
+
+}
 
 
 }
