@@ -22,6 +22,8 @@ const repetitionSelected = ref({
   option: "",
 });
 const notifiable = ref(false);
+const notificationSelected = ref([]);
+const notifyUntilAck = ref(false);
 const eventLink = ref(null);
 
 async function generateDetails() {
@@ -306,6 +308,52 @@ watch(eventBeginDate, setDayOfWeek);
                 <option value="w">One/more days a week</option>
                 <option value="m">Every month this day</option>
               </select>
+            </div>
+            <br />
+            <div v-if="frequenceSelected.type === 'w'"
+              class="d-flex flex-wrap gap-1 justify-content-between gap-1 mx-2">
+              <div v-for="day in store.week" :key="day">
+                <input type="checkbox" class="btn-check" autocomplete="off"
+                  v-model="frequenceSelected.option[store.week.indexOf(day)]"
+                  :checked="store.week.indexOf(day) === dayOfWeek" :disabled="store.week.indexOf(day) === dayOfWeek"
+                  :id="day" />
+                <label class="btn btn-outline-primary rounded-pill" :for="day">{{ day.slice(0, 2) }}
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-12 my-sm-0 my-3">
+            <label>Repetition</label>
+            <div>
+              <select class="form-select" v-model="repetitionSelected.type" @change="repetitionSelected.option = ''">
+                <option value="i">Repeat indefinitely</option>
+                <option value="n">Repeat n times</option>
+                <option value="u">Repeat until</option>
+              </select>
+            </div>
+            <br />
+            <div class="d-flex align-items-center gap-1" v-if="repetitionSelected.type === 'n'">
+              <input class="form-control" type="number" min="1" max="3650" placeholder="Insert n"
+                v-model="repetitionSelected.option" />
+              <div class="form-text text-nowrap">Min. 1, Max. 3650</div>
+            </div>
+            <div v-else-if="repetitionSelected.type === 'u'">
+              <input class="form-control" type="date" :min="store.simDate" v-model="repetitionSelected.option" />
+            </div>
+          </div>
+        </div>
+        <div class="form-check my-2">
+          <input class="form-check-input" type="checkbox" id="notifiable" v-model="notifiable" />
+          <label class="form-check-label" for="notifiable">Notifiable</label>
+        </div>
+        <div v-if="notifiable" class="row my-2">
+          <div class="col-sm-6 col-12">
+            <label>When to notify</label>
+            <div>
+              <div>
+                <input class="form-check-input" type="checkbox" id="oneDay" v-model="notifiable" />
+                <label class="form-check-label" for="notifiable">Notifiable</label>
+              </div>
             </div>
             <br />
             <div v-if="frequenceSelected.type === 'w'"
