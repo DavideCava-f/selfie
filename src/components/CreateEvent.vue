@@ -21,6 +21,7 @@ const repetitionSelected = ref({
   type: "i",
   option: "",
 });
+const notifiable = ref(false);
 const eventLink = ref(null);
 
 async function generateDetails() {
@@ -99,8 +100,8 @@ function canCreateEvent() {
         repetitionSelected.value.type === "u")
       ? repetitionSelected.value.option
       : true) &&
-        (Temporal.PlainDate.compare(eventBeginDate.value, eventEndDate.value) <= 0) &&
-        (Temporal.PlainTime.compare(eventBeginTime.value, eventEndTime.value) <= 0)
+    (Temporal.PlainDate.compare(eventBeginDate.value, eventEndDate.value) <= 0) &&
+    (Temporal.PlainTime.compare(eventBeginTime.value, eventEndTime.value) <= 0)
   );
 }
 

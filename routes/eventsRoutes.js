@@ -150,14 +150,13 @@ router.get("/nearEvents", verifyToken, async function(req, res) {
     const isNotification = req.query.isNotification;
     const advance = Temporal.PlainDateTime.from(req.query.today).add({ days: 7 });
 
-    console.log("today: " + today + "  "+ typeof today);
-    console.log("advance: " + advance.toString() +"  " + typeof advance);
+    console.log("today: " + today + "  " + typeof today);
+    console.log("advance: " + advance.toString() + "  " + typeof advance);
 
-    if(!isNotification) {
+    if (!isNotification) {
       var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString() + "Z" } });
     }
     else {
-      
       var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString() + "Z", $lte: advance.toString() + "Z" } });
     }
 
