@@ -101,7 +101,7 @@ setInterval(
 
 setInterval(
   notipol,
-  10000
+  30000
 );
 
 export { store };

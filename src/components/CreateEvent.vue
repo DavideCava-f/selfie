@@ -22,7 +22,7 @@ const repetitionSelected = ref({
   option: "",
 });
 const notifiable = ref(false);
-const notificationSelected = ref([]);
+const notificationSelected = ref([false, false]);
 const notifyUntilAck = ref(false);
 const eventLink = ref(null);
 
@@ -75,6 +75,9 @@ function resetFields() {
   repeatable.value = false;
   frequenceSelected.value = { type: "d", option: [...Array(7)] };
   repetitionSelected.value = { type: "i", option: "" };
+  notifiable.value = false;
+  notificationSelected.value = [false, false];
+  notifyUntilAck.value = false;
   eventLink.value = "";
 }
 
@@ -118,6 +121,8 @@ function createEvent() {
       eventBeginTime.value,
       eventEndDate.value,
       eventEndTime.value,
+      notificationSelected.value,
+      notifyUntilAck.value
     ).then(() => store.value.update());
   } else {
     if (frequenceSelected.value.type === "d") {
@@ -131,6 +136,8 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
+          notificationSelected.value,
+          notifyUntilAck.value
         ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "n") {
         EventCreator.insertNDaily(
@@ -142,6 +149,8 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
+          notificationSelected.value,
+          notifyUntilAck.value
         ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "u") {
         EventCreator.insertUntilDaily(
@@ -153,6 +162,8 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
+          notificationSelected.value,
+          notifyUntilAck.value
         ).then(() => store.value.update());
       }
     } else if (frequenceSelected.value.type === "w") {
@@ -167,6 +178,8 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
+          notificationSelected.value,
+          notifyUntilAck.value
         ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "n") {
         EventCreator.insertNWeekly(
@@ -179,6 +192,8 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
+          notificationSelected.value,
+          notifyUntilAck.value
         ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "u") {
         EventCreator.insertUntilWeekly(
@@ -191,6 +206,8 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
+          notificationSelected.value,
+          notifyUntilAck.value
         ).then(() => store.value.update());
       }
     } else if (frequenceSelected.value.type === "m") {
@@ -204,6 +221,8 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
+          notificationSelected.value,
+          notifyUntilAck.value
         ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "n") {
         EventCreator.insertNMonthly(
@@ -215,6 +234,8 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
+          notificationSelected.value,
+          notifyUntilAck.value
         ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "u") {
         EventCreator.insertUntilMonthly(
@@ -226,6 +247,8 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
+          notificationSelected.value,
+          notifyUntilAck.value
         ).then(() => store.value.update());
       }
     }
@@ -350,41 +373,21 @@ watch(eventBeginDate, setDayOfWeek);
           <div class="col-sm-6 col-12">
             <label>When to notify</label>
             <div>
-              <div>
-                <input class="form-check-input" type="checkbox" id="oneDay" v-model="notifiable" />
-                <label class="form-check-label" for="notifiable">Notifiable</label>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="oneDay" v-model="notificationSelected[0]" />
+                <label class="form-check-label" for="oneDay">One day before</label>
               </div>
-            </div>
-            <br />
-            <div v-if="frequenceSelected.type === 'w'"
-              class="d-flex flex-wrap gap-1 justify-content-between gap-1 mx-2">
-              <div v-for="day in store.week" :key="day">
-                <input type="checkbox" class="btn-check" autocomplete="off"
-                  v-model="frequenceSelected.option[store.week.indexOf(day)]"
-                  :checked="store.week.indexOf(day) === dayOfWeek" :disabled="store.week.indexOf(day) === dayOfWeek"
-                  :id="day" />
-                <label class="btn btn-outline-primary rounded-pill" :for="day">{{ day.slice(0, 2) }}
-                </label>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="oneWeek" v-model="notificationSelected[1]" />
+                <label class="form-check-label" for="oneWeek">One week before</label>
               </div>
             </div>
           </div>
           <div class="col-sm-6 col-12 my-sm-0 my-3">
-            <label>Repetition</label>
-            <div>
-              <select class="form-select" v-model="repetitionSelected.type" @change="repetitionSelected.option = ''">
-                <option value="i">Repeat indefinitely</option>
-                <option value="n">Repeat n times</option>
-                <option value="u">Repeat until</option>
-              </select>
-            </div>
-            <br />
-            <div class="d-flex align-items-center gap-1" v-if="repetitionSelected.type === 'n'">
-              <input class="form-control" type="number" min="1" max="3650" placeholder="Insert n"
-                v-model="repetitionSelected.option" />
-              <div class="form-text text-nowrap">Min. 1, Max. 3650</div>
-            </div>
-            <div v-else-if="repetitionSelected.type === 'u'">
-              <input class="form-control" type="date" :min="store.simDate" v-model="repetitionSelected.option" />
+            <label>Type of notification</label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="untilAck" v-model="notifyUntilAck" />
+              <label class="form-check-label" for="untilAck">Keep notification opened?</label>
             </div>
           </div>
         </div>

@@ -4,7 +4,7 @@ import "vue3-toastify/dist/index.css";
 import { Temporal } from "@js-temporal/polyfill";
 
 
-async function setNotedTrue(eventId) {
+async function setNotedTrue(eventId, advanceId) {
   fetch(`${store.value.url}:${store.value.port}/notification`, {
     method: "put",
     credentials: "include",
@@ -15,22 +15,16 @@ async function setNotedTrue(eventId) {
     //make sure to serialize your JSON body
     body: JSON.stringify({
       id_Event: eventId,
-      SetNoted: true
+      id_Advance: advanceId,
+      setNoted: true
     }),
   })
 }
 
 async function EventNotification(event) {
   let Now = (Temporal.PlainDateTime.from(store.value.simDateTime));
-  /* per ragioni di test cambio l'untilAck */
-  event.notification.untilAck = false;
   let untilAck = event.notification.untilAck;
   let dates = event.dates;
-  console.log("Dates: ", dates);
-  /* per ragioni di test adesso cambio l'advance di ogni evento*/
-  event.notification.advance.push({ type: "oneDay", noted: false });
-  event.notification.advance.push({ type: "oneWeek", noted: false });
-  console.log("Advance: ", event.notification.advance);
   // FIXME: siamo sicuri che con find venga trovata la prima data dell'evento da notificare?
   let nextDate = dates.find(date => Temporal.PlainDateTime.compare(Temporal.PlainDateTime.from(date.begin.slice(0, -1)), Now) >= 1) //Trovo la data successiva e dopo faccio i controlli
 
@@ -39,8 +33,9 @@ async function EventNotification(event) {
       let BeginDate = (Temporal.PlainDateTime.from((nextDate.begin.toString()).slice(0, -1)));
       let distance = BeginDate.since(Now, { smallestUnit: "seconds", largestUnit: "months" });
 
-      if (distance.total({ unit: 'days' }) < 1 && advance.type === ("oneDay") && !advance.noted) {
-        let not = "\"" + event.title + "\" is happening in one day!"
+      if (distance.total({ unit: 'days' }) < 1 && advance.ofType === ("oneDay") && !advance.noted) {
+        console.log(event);
+        let not = "\"" + event.title + "\" is happening in less than a day!"
         toast(not, {
           "theme": "auto",
           "type": "default",
@@ -49,8 +44,10 @@ async function EventNotification(event) {
           "autoClose": untilAck ? false : 5000,
           "dangerouslyHTMLString": true
         });
-      } else if (distance.total({ unit: 'days' }) < 7 && advance.type === ("oneWeek") && !advance.noted) {
-        let not = "\"" + event.title + "\" is happening in one week!"
+        setNotedTrue(event._id, advance._id);
+      } else if (distance.total({ unit: 'days' }) < 7 && advance.ofType === ("oneWeek") && !advance.noted) {
+        console.log(event);
+        let not = "\"" + event.title + "\" is happening in less than a week!"
         toast(not, {
           "theme": "auto",
           "type": "default",
@@ -59,9 +56,8 @@ async function EventNotification(event) {
           "autoClose": untilAck ? false : 5000,
           "dangerouslyHTMLString": true
         });
+        setNotedTrue(event._id, advance._id);
       }
-
-      // setNotedTrue(event._id, advance._id)
     })
   } else {
     // FIXME: ma questo caso non dovrebbe mai esserci, poiche' la query
@@ -73,10 +69,8 @@ async function EventNotification(event) {
 async function notipol() {
   let response = await fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}&isNotification=${true}&max=${store.value.advance[-1]}`);
   let Events = await response.json();
-  //console.log("Events: ", Events);
   console.log("notipol!");
   await Events.forEach(el => { EventNotification(el) });
-  // Assumiamo di avere l'array delle notifiche da mostrare in response
 }
 
 export { notipol };

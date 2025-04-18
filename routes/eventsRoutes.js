@@ -12,14 +12,20 @@ router.post("/", verifyToken, async function(req, res) {
   try {
     console.log("Stampa date:");
     console.log(req.body.dates);
+    console.log(req.body.notification.advance);
     await Event.create({
       userId: req.userId,
       dates: req.body.dates,
       title: req.body.title,
-      details: req.body.details
+      details: req.body.details,
+      notification: {
+        advance: req.body.notification.advance,
+        untilAck: req.body.notification.untilAck
+      }
     });
   } catch (error) {
-    res.status(500).send(error);
+    console.log(error);
+    res.status(500).json(error);
   } finally {
     res.status(200).send();
   }
