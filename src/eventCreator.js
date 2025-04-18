@@ -11,6 +11,8 @@ class EventCreator {
     eventBeginTime,
     eventEndDate,
     eventEndTime,
+    notificationSelected,
+    notifyUntilAck
   ) {
     const event = {
       dates: [],
@@ -19,6 +21,10 @@ class EventCreator {
         text: eventText,
         link: eventLink,
       },
+      notification: {
+        advance: [],
+        untilAck: notifyUntilAck
+      }
     };
     const baseBeginDateTime = Temporal.PlainDateTime.from(
       `${eventBeginDate}T${eventBeginTime}:00.000`,
@@ -30,6 +36,18 @@ class EventCreator {
       event.dates.push({
         begin: baseBeginDateTime.add({ days: i }).toString() + "Z",
         end: baseEndDateTime.add({ days: i }).toString() + "Z",
+      });
+    }
+    if (notificationSelected[0]) {
+      event.notification.advance.push({
+        ofType: "oneDay",
+        noted: false
+      });
+    }
+    if (notificationSelected[1]) {
+      event.notification.advance.push({
+        ofType: "oneWeek",
+        noted: false
       });
     }
     console.log(event);
@@ -51,6 +69,8 @@ class EventCreator {
     eventBeginTime,
     eventEndDate,
     eventEndTime,
+    notificationSelected,
+    notifyUntilAck
   ) {
     const event = {
       dates: [],
@@ -59,6 +79,10 @@ class EventCreator {
         text: eventText,
         link: eventLink,
       },
+      notification: {
+        advance: [],
+        untilAck: notifyUntilAck
+      }
     };
     const baseBeginDateTime = Temporal.PlainDateTime.from(
       `${eventBeginDate}T${eventBeginTime}:00.000`,
@@ -79,6 +103,18 @@ class EventCreator {
         Temporal.PlainDate.from(untilDate),
       ) !== 1
     );
+    if (notificationSelected[0]) {
+      event.notification.advance.push({
+        ofType: "oneDay",
+        noted: false
+      });
+    }
+    if (notificationSelected[1]) {
+      event.notification.advance.push({
+        ofType: "oneWeek",
+        noted: false
+      });
+    }
     console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
@@ -99,6 +135,8 @@ class EventCreator {
     eventBeginTime,
     eventEndDate,
     eventEndTime,
+    notificationSelected,
+    notifyUntilAck
   ) {
     const event = {
       dates: [],
@@ -107,6 +145,10 @@ class EventCreator {
         text: eventText,
         link: eventLink,
       },
+      notification: {
+        advance: [],
+        untilAck: notifyUntilAck
+      }
     };
     const baseBeginDateTime = Temporal.PlainDateTime.from(
       `${eventBeginDate}T${eventBeginTime}:00.000`,
@@ -141,6 +183,18 @@ class EventCreator {
         d.begin = d.begin.add({ weeks: n }).toString() + "Z";
         d.end = d.end.add({ weeks: n }).toString() + "Z";
       });
+    if (notificationSelected[0]) {
+      event.notification.advance.push({
+        ofType: "oneDay",
+        noted: false
+      });
+    }
+    if (notificationSelected[1]) {
+      event.notification.advance.push({
+        ofType: "oneWeek",
+        noted: false
+      });
+    }
     return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",
@@ -160,6 +214,8 @@ class EventCreator {
     eventBeginTime,
     eventEndDate,
     eventEndTime,
+    notificationSelected,
+    notifyUntilAck
   ) {
     const event = {
       dates: [],
@@ -168,6 +224,10 @@ class EventCreator {
         text: eventText,
         link: eventLink,
       },
+      notification: {
+        advance: [],
+        untilAck: notifyUntilAck
+      }
     };
     const baseBeginDateTime = Temporal.PlainDateTime.from(
       `${eventBeginDate}T${eventBeginTime}:00.000`,
@@ -216,6 +276,18 @@ class EventCreator {
       d.begin = d.begin.toString() + "Z";
       d.end = d.end.toString() + "Z";
     });
+    if (notificationSelected[0]) {
+      event.notification.advance.push({
+        ofType: "oneDay",
+        noted: false
+      });
+    }
+    if (notificationSelected[1]) {
+      event.notification.advance.push({
+        ofType: "oneWeek",
+        noted: false
+      });
+    }
     console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
@@ -235,6 +307,8 @@ class EventCreator {
     eventBeginTime,
     eventEndDate,
     eventEndTime,
+    notificationSelected,
+    notifyUntilAck
   ) {
     const event = {
       dates: [],
@@ -243,6 +317,10 @@ class EventCreator {
         text: eventText,
         link: eventLink,
       },
+      notification: {
+        advance: [],
+        untilAck: notifyUntilAck
+      }
     };
     const baseBeginDateTime = Temporal.PlainDateTime.from(
       `${eventBeginDate}T${eventBeginTime}:00.000`,
@@ -254,6 +332,18 @@ class EventCreator {
       event.dates.push({
         begin: baseBeginDateTime.add({ months: i }).toString() + "Z",
         end: baseEndDateTime.add({ months: i }).toString() + "Z",
+      });
+    }
+    if (notificationSelected[0]) {
+      event.notification.advance.push({
+        ofType: "oneDay",
+        noted: false
+      });
+    }
+    if (notificationSelected[1]) {
+      event.notification.advance.push({
+        ofType: "oneWeek",
+        noted: false
       });
     }
     console.log(event);
@@ -275,6 +365,8 @@ class EventCreator {
     eventBeginTime,
     eventEndDate,
     eventEndTime,
+    notificationSelected,
+    notifyUntilAck
   ) {
     const event = {
       dates: [],
@@ -283,6 +375,10 @@ class EventCreator {
         text: eventText,
         link: eventLink,
       },
+      notification: {
+        advance: [],
+        untilAck: notifyUntilAck
+      }
     };
     const baseBeginDateTime = Temporal.PlainDateTime.from(
       `${eventBeginDate}T${eventBeginTime}:00.000`,
@@ -303,6 +399,18 @@ class EventCreator {
         Temporal.PlainDate.from(untilDate),
       ) !== 1
     );
+    if (notificationSelected[0]) {
+      event.notification.advance.push({
+        ofType: "oneDay",
+        noted: false
+      });
+    }
+    if (notificationSelected[1]) {
+      event.notification.advance.push({
+        ofType: "oneWeek",
+        noted: false
+      });
+    }
     console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",

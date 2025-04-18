@@ -33,7 +33,8 @@ async function update() {
 }
 
 async function getNearEvents() {
-    fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}`)
+
+    fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}&isNotification=${false}&max=${store.value.advance[-1]}`)
         .then(response => {
             //console.log(response);
             return response.json();
