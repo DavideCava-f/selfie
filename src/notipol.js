@@ -40,7 +40,7 @@ async function EventNotification(event) {
           "theme": "auto",
           "type": "default",
           "position": "top-left",
-          "transition": "slide",
+          "transition": "slide", 
           "autoClose": untilAck ? false : 5000,
           "dangerouslyHTMLString": true
         });
@@ -67,9 +67,12 @@ async function EventNotification(event) {
 
 
 async function notipol() {
-  let response = await fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}&isNotification=${true}&max=${store.value.advance[-1]}`);
+  const max = (store.value.advance.days.twoWeeks[0].add(store.value.advance.hours.twelveHr[0].add(store.value.advance.minutes.halfHr[0]))).toString();
+  //console.log("max: " + max.toString());
+  let response = await fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}&isNotification=${true}&max=${max}`);
   let Events = await response.json();
   console.log("notipol!");
+  console.log(Events);
   await Events.forEach(el => { EventNotification(el) });
 }
 

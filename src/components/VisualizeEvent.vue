@@ -54,8 +54,22 @@ watch(() => store.value.toggle, () => {
 
           <a :href="event.details.link"> LONK </a>
         </div>
-        <div class="my-2 rounded border border-secondary">
-          <ul class="list-group list-group-flush p-0">
+        <div class="my-2  ">
+          <table class="table table-bordered rounded border-secondary">
+            <thead>
+              <tr>
+                <th scope="col">Start</th>
+                <th scope="col">End</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="date in event.dates" :key="date.begin">
+                <td>{{ new Date(date.begin).toDateString() }}</td>
+                <td>{{ new Date(date.end).toDateString() }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- <ul class="list-group list-group-flush p-0">
             <li v-for="date in event.dates" class="d-flex flex-row justify-content-start list-group-item">
               <div class=" border border-secondary">
                 start
@@ -70,7 +84,7 @@ watch(() => store.value.toggle, () => {
                 {{ new Date(date.end).toDateString() }}
               </div>
             </li>
-          </ul>
+          </ul> -->
 
         </div>
         <br />

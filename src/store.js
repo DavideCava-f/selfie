@@ -91,7 +91,26 @@ const store = ref({
     store.value.toggle = !store.value.toggle;
   },
 
-  advance: []
+  advance: { // non avendo le Tuple ho dovuto adattarmi al meglio delle mie possibilità ♠♥♣♦ 
+    days:{
+      oneDay: [Temporal.Duration.from({ days: 1 }), "oneDay"],
+      twoDays: [Temporal.Duration.from({ days: 2 }), "twoDays"],
+      oneWeek: [Temporal.Duration.from({ days: 7 }), "oneWeek"],
+      twoWeeks: [Temporal.Duration.from({ days: 14 }), "twoWeeks"],
+    },
+    hours:{
+      oneHr: [Temporal.Duration.from({ hours: 1 }), "oneHr"],
+      twoHr: [Temporal.Duration.from({ hours: 2 }), "twoHr"],
+      sixHr: [Temporal.Duration.from({ hours: 6 }), "sixHr"],
+      twelveHr: [Temporal.Duration.from({ hours: 12 }), "twelveHr"],
+    },
+    minutes:{
+      fiveMin: [Temporal.Duration.from({ minutes: 5 }), "fiveMin"],
+      tenMin: [Temporal.Duration.from({ minutes: 10 }), "tenMin"],
+      fiftMin: [Temporal.Duration.from({ minutes: 15 }), "fifteenMin"],
+      halfHr: [Temporal.Duration.from({ minutes: 30 }), "halfHr"],
+    },
+  }
 });
 
 setInterval(
@@ -101,7 +120,7 @@ setInterval(
 
 setInterval(
   notipol,
-  30000
+  15000
 );
 
 export { store };
