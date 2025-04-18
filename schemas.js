@@ -32,15 +32,6 @@ const EventSchema = new Schema({
     details: {
         text: String,
         link: String
-    },
-    notification: {
-        advance: [
-            {
-                ofType: String,
-                noted: Boolean
-            }
-        ],
-        untilAck: Boolean
     }
 });
 

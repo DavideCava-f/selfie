@@ -21,9 +21,6 @@ const repetitionSelected = ref({
   type: "i",
   option: "",
 });
-const notifiable = ref(false);
-const notificationSelected = ref([false, false]);
-const notifyUntilAck = ref(false);
 const eventLink = ref(null);
 
 async function generateDetails() {
@@ -75,9 +72,6 @@ function resetFields() {
   repeatable.value = false;
   frequenceSelected.value = { type: "d", option: [...Array(7)] };
   repetitionSelected.value = { type: "i", option: "" };
-  notifiable.value = false;
-  notificationSelected.value = [false, false];
-  notifyUntilAck.value = false;
   eventLink.value = "";
 }
 
@@ -105,8 +99,8 @@ function canCreateEvent() {
         repetitionSelected.value.type === "u")
       ? repetitionSelected.value.option
       : true) &&
-    (Temporal.PlainDate.compare(eventBeginDate.value, eventEndDate.value) <= 0) &&
-    (Temporal.PlainTime.compare(eventBeginTime.value, eventEndTime.value) <= 0)
+        (Temporal.PlainDate.compare(eventBeginDate.value, eventEndDate.value) <= 0) &&
+        (Temporal.PlainTime.compare(eventBeginTime.value, eventEndTime.value) <= 0)
   );
 }
 
@@ -121,8 +115,6 @@ function createEvent() {
       eventBeginTime.value,
       eventEndDate.value,
       eventEndTime.value,
-      notificationSelected.value,
-      notifyUntilAck.value
     ).then(() => store.value.update());
   } else {
     if (frequenceSelected.value.type === "d") {
@@ -136,8 +128,6 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-          notificationSelected.value,
-          notifyUntilAck.value
         ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "n") {
         EventCreator.insertNDaily(
@@ -149,8 +139,6 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-          notificationSelected.value,
-          notifyUntilAck.value
         ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "u") {
         EventCreator.insertUntilDaily(
@@ -162,8 +150,6 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-          notificationSelected.value,
-          notifyUntilAck.value
         ).then(() => store.value.update());
       }
     } else if (frequenceSelected.value.type === "w") {
@@ -178,8 +164,6 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-          notificationSelected.value,
-          notifyUntilAck.value
         ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "n") {
         EventCreator.insertNWeekly(
@@ -192,8 +176,6 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-          notificationSelected.value,
-          notifyUntilAck.value
         ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "u") {
         EventCreator.insertUntilWeekly(
@@ -206,8 +188,6 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-          notificationSelected.value,
-          notifyUntilAck.value
         ).then(() => store.value.update());
       }
     } else if (frequenceSelected.value.type === "m") {
@@ -221,8 +201,6 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-          notificationSelected.value,
-          notifyUntilAck.value
         ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "n") {
         EventCreator.insertNMonthly(
@@ -234,8 +212,6 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-          notificationSelected.value,
-          notifyUntilAck.value
         ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "u") {
         EventCreator.insertUntilMonthly(
@@ -247,8 +223,6 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
-          notificationSelected.value,
-          notifyUntilAck.value
         ).then(() => store.value.update());
       }
     }
@@ -362,32 +336,6 @@ watch(eventBeginDate, setDayOfWeek);
             </div>
             <div v-else-if="repetitionSelected.type === 'u'">
               <input class="form-control" type="date" :min="store.simDate" v-model="repetitionSelected.option" />
-            </div>
-          </div>
-        </div>
-        <div class="form-check my-2">
-          <input class="form-check-input" type="checkbox" id="notifiable" v-model="notifiable" />
-          <label class="form-check-label" for="notifiable">Notifiable</label>
-        </div>
-        <div v-if="notifiable" class="row my-2">
-          <div class="col-sm-6 col-12">
-            <label>When to notify</label>
-            <div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="oneDay" v-model="notificationSelected[0]" />
-                <label class="form-check-label" for="oneDay">One day before</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="oneWeek" v-model="notificationSelected[1]" />
-                <label class="form-check-label" for="oneWeek">One week before</label>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-12 my-sm-0 my-3">
-            <label>Type of notification</label>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="untilAck" v-model="notifyUntilAck" />
-              <label class="form-check-label" for="untilAck">Keep notification opened?</label>
             </div>
           </div>
         </div>

@@ -12,20 +12,14 @@ router.post("/", verifyToken, async function(req, res) {
   try {
     console.log("Stampa date:");
     console.log(req.body.dates);
-    console.log(req.body.notification.advance);
     await Event.create({
       userId: req.userId,
       dates: req.body.dates,
       title: req.body.title,
-      details: req.body.details,
-      notification: {
-        advance: req.body.notification.advance,
-        untilAck: req.body.notification.untilAck
-      }
+      details: req.body.details
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
+    res.status(500).send(error);
   } finally {
     res.status(200).send();
   }
@@ -153,18 +147,10 @@ router.put("/OneEvent", verifyToken, async function(req, res) {
 router.get("/nearEvents", verifyToken, async function(req, res) {
   try {
     const today = req.query.today;
-    const isNotification = req.query.isNotification;
-    const advance = Temporal.PlainDateTime.from(req.query.today).add({ days: 7 });
+    console.log(req.query);
+    console.log("Oggi è" + today);
 
-    console.log("today: " + today + "  " + typeof today);
-    console.log("advance: " + advance.toString() + "  " + typeof advance);
-
-    if (!isNotification) {
-      var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString() + "Z" } });
-    }
-    else {
-      var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString() + "Z", $lte: advance.toString() + "Z" } });
-    }
+    var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString() + "Z" } });
 
     console.log(nearEvents);
     for (let i = 0; i < nearEvents.length; i++) {
