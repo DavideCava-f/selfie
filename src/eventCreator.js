@@ -38,17 +38,15 @@ class EventCreator {
         end: baseEndDateTime.add({ days: i }).toString() + "Z",
       });
     }
-    if (notificationSelected[0]) {
-      event.notification.advance.push({
-        ofType: "oneDay",
-        noted: false
-      });
-    }
-    if (notificationSelected[1]) {
-      event.notification.advance.push({
-        ofType: "oneWeek",
-        noted: false
-      });
+    for (const d in store.value.advance) {
+      const i = Object.keys(store.value.advance).indexOf(d);
+      console.log(i);
+      if (notificationSelected[i]) {
+        event.notification.advance.push({
+          ofType: store.value.advance[d][1],
+          noted: false
+        });
+      }
     }
     console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {
@@ -103,17 +101,15 @@ class EventCreator {
         Temporal.PlainDate.from(untilDate),
       ) !== 1
     );
-    if (notificationSelected[0]) {
-      event.notification.advance.push({
-        ofType: "oneDay",
-        noted: false
-      });
-    }
-    if (notificationSelected[1]) {
-      event.notification.advance.push({
-        ofType: "oneWeek",
-        noted: false
-      });
+    for (const d in store.value.advance) {
+      const i = Object.keys(store.value.advance).indexOf(d);
+      console.log(i);
+      if (notificationSelected[i]) {
+        event.notification.advance.push({
+          ofType: store.value.advance[d][1],
+          noted: false
+        });
+      }
     }
     console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {
@@ -183,17 +179,15 @@ class EventCreator {
         d.begin = d.begin.add({ weeks: n }).toString() + "Z";
         d.end = d.end.add({ weeks: n }).toString() + "Z";
       });
-    if (notificationSelected[0]) {
-      event.notification.advance.push({
-        ofType: "oneDay",
-        noted: false
-      });
-    }
-    if (notificationSelected[1]) {
-      event.notification.advance.push({
-        ofType: "oneWeek",
-        noted: false
-      });
+    for (const d in store.value.advance) {
+      const i = Object.keys(store.value.advance).indexOf(d);
+      console.log(i);
+      if (notificationSelected[i]) {
+        event.notification.advance.push({
+          ofType: store.value.advance[d][1],
+          noted: false
+        });
+      }
     }
     return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
@@ -276,17 +270,15 @@ class EventCreator {
       d.begin = d.begin.toString() + "Z";
       d.end = d.end.toString() + "Z";
     });
-    if (notificationSelected[0]) {
-      event.notification.advance.push({
-        ofType: "oneDay",
-        noted: false
-      });
-    }
-    if (notificationSelected[1]) {
-      event.notification.advance.push({
-        ofType: "oneWeek",
-        noted: false
-      });
+    for (const d in store.value.advance) {
+      const i = Object.keys(store.value.advance).indexOf(d);
+      console.log(i);
+      if (notificationSelected[i]) {
+        event.notification.advance.push({
+          ofType: store.value.advance[d][1],
+          noted: false
+        });
+      }
     }
     console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {
@@ -334,17 +326,15 @@ class EventCreator {
         end: baseEndDateTime.add({ months: i }).toString() + "Z",
       });
     }
-    if (notificationSelected[0]) {
-      event.notification.advance.push({
-        ofType: "oneDay",
-        noted: false
-      });
-    }
-    if (notificationSelected[1]) {
-      event.notification.advance.push({
-        ofType: "oneWeek",
-        noted: false
-      });
+    for (const d in store.value.advance) {
+      const i = Object.keys(store.value.advance).indexOf(d);
+      console.log(i);
+      if (notificationSelected[i]) {
+        event.notification.advance.push({
+          ofType: store.value.advance[d][1],
+          noted: false
+        });
+      }
     }
     console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {
@@ -399,17 +389,15 @@ class EventCreator {
         Temporal.PlainDate.from(untilDate),
       ) !== 1
     );
-    if (notificationSelected[0]) {
-      event.notification.advance.push({
-        ofType: "oneDay",
-        noted: false
-      });
-    }
-    if (notificationSelected[1]) {
-      event.notification.advance.push({
-        ofType: "oneWeek",
-        noted: false
-      });
+    for (const d in store.value.advance) {
+      const i = Object.keys(store.value.advance).indexOf(d);
+      console.log(i);
+      if (notificationSelected[i]) {
+        event.notification.advance.push({
+          ofType: store.value.advance[d][1],
+          noted: false
+        });
+      }
     }
     console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {

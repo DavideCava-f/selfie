@@ -33,7 +33,7 @@ async function update() {
 
 async function getNearEvents() {
     console.log("suca");
-    const max = (store.value.advance.days.twoWeeks[0].add(store.value.advance.hours.twelveHr[0].add(store.value.advance.minutes.halfHr[0]))).toString();
+    const max = (store.value.advance.twoWeeks[0].add(store.value.advance.twelveHr[0].add(store.value.advance.halfHr[0]))).toString();
     fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}&isNotification=${false}&max=${max}`)
         .then(response => {
             //console.log(response);

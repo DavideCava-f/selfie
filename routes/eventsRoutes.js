@@ -152,7 +152,6 @@ router.put("/OneEvent", verifyToken, async function(req, res) {
 
 router.get("/nearEvents", verifyToken, async function(req, res) {
   try {
-    
     const today = req.query.today;
     const isNotification = req.query.isNotification;
     console.log("today: " + today);
@@ -167,18 +166,17 @@ router.get("/nearEvents", verifyToken, async function(req, res) {
       //console.log("Max:" , req.query.max);
       const max = req.query.max;
       //console.log("max: " + max.toString());
-      
+
       advance = Temporal.PlainDateTime.from(req.query.today).add(max);
       var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString() + "Z", $lte: advance.toString() + "Z" } });
       //console.log("nearEvents: " + nearEvents);
-      
+
     }
     //console.log("today: " + today + "  " + typeof today);
     //console.log("advance: " + advance.toString() + "  " + typeof advance);
 
     //console.log(nearEvents);
-    if(nearEvents)
-    {
+    if (nearEvents) {
       for (let i = 0; i < nearEvents.length; i++) {
         nearEvents[i].dates = nearEvents[i].dates.filter((date) => {
           return (Temporal.PlainDateTime.compare(date.begin.toISOString().slice(0, -1), today) >= 0);
