@@ -143,7 +143,7 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
                             store.activeEventId = event._id; store.toggle = !store.toggle;
                             store.activeDate = firstDay.add({ days: i - 1 });
                             console.log(store.activeDate);
-                        }" data-bs-target="#VisualizeEventModalM" data-bs-toggle="modal"
+                        }" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal"
                             v-if="store.eventsOfMonth.find((d) => (d.day) === i)"
                             v-for="event in (store.eventsOfMonth.find((d) => (d.day) === i).events).slice(0, 2)"
                             class="btn d-flex d-inline-block align-items-center  text-truncate event text-nowrap"
@@ -179,7 +179,7 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
     <!-- <div class="modal fade" id="VisualizeEventModalM" data-bs-backdrop="false" tabindex="-1" aria-hidden="true"> -->
     <!--     <VisualizeEvent /> -->
     <!-- </div> -->
-
+     
     <div class="modal fade" id="AltriEventi" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
