@@ -2,7 +2,7 @@ import { store } from "@/store";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import { Temporal } from "@js-temporal/polyfill";
-
+import router from "./router/Router";
 
 async function setNotedTrue(eventId, advanceId) {
   fetch(`${store.value.url}:${store.value.port}/notification`, {
@@ -21,8 +21,24 @@ async function setNotedTrue(eventId, advanceId) {
   })
 }
 
+function openDate(date) {
+  router.push("/calendar");
+  console.log(date);
+  let begin = Temporal.PlainDateTime.from(date.begin.slice(0, -1));
+  console.log(begin);
+  let distance = begin.since(store.value.simDateTime, { smallestUnit: "seconds", largestUnit: "months" });
+
+  console.log(distance.total({ unit: 'days' }));
+  console.log(distance.total({ unit: 'weeks', relativeTo: store.value.simDateTime }));
+  console.log(distance.total({ unit: 'months', relativeTo: store.value.simDateTime }));
+
+  store.value.dayOffset += Math.ceil(distance.total({ unit: 'days' }));
+  store.value.weekOffset += Math.round(distance.total({ unit: 'weeks', relativeTo: store.value.simDateTime }));
+  store.value.monthOffset += Math.round(distance.total({ unit: 'months', relativeTo: store.value.simDateTime }));
+}
+
 async function EventNotification(event) {
-  let Now = (Temporal.PlainDateTime.from(store.value.simDateTime));
+  let Now = Temporal.PlainDateTime.from(store.value.simDateTime);
   let untilAck = event.notification.untilAck;
   let dates = event.dates;
   // FIXME: siamo sicuri che con find venga trovata la prima data dell'evento da notificare?
@@ -42,10 +58,11 @@ async function EventNotification(event) {
           "position": "top-left",
           "transition": "slide", 
           "autoClose": untilAck ? false : 5000,
+          onClick: () => openDate(nextDate),
           "dangerouslyHTMLString": true
         });
         setNotedTrue(event._id, advance._id);
-      } else if (distance.total({ unit: 'days' }) < 7 && advance.ofType === ("oneWeek") && !advance.noted) {
+      } else if (distance.total({ unit: 'weeks', relativeTo: Now }) < 1 && advance.ofType === ("oneWeek") && !advance.noted) {
         console.log(event);
         let not = "\"" + event.title + "\" is happening in less than a week!"
         toast(not, {
@@ -54,6 +71,7 @@ async function EventNotification(event) {
           "position": "top-left",
           "transition": "slide",
           "autoClose": untilAck ? false : 5000,
+          onClick: () => openDate(nextDate),
           "dangerouslyHTMLString": true
         });
         setNotedTrue(event._id, advance._id);
