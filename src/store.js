@@ -104,7 +104,7 @@ const store = ref({
 
     fiveMin: [Temporal.Duration.from({ minutes: 5 }), "fiveMin"],
     tenMin: [Temporal.Duration.from({ minutes: 10 }), "tenMin"],
-    fiftMin: [Temporal.Duration.from({ minutes: 15 }), "fifteenMin"],
+    fiftMin: [Temporal.Duration.from({ minutes: 15 }), "fiftMin"],
     halfHr: [Temporal.Duration.from({ minutes: 30 }), "halfHr"],
   }
 });

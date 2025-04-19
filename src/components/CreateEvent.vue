@@ -1,6 +1,6 @@
 <script setup>
 import OpenAI from "openai";
-import { ref, watch, watchEffect, reactive } from "vue";
+import { ref, watch, watchEffect, reactive, computed } from "vue";
 import { store } from "@/store";
 import { EventCreator } from "@/eventCreator";
 import { Temporal } from "@js-temporal/polyfill";
@@ -22,7 +22,12 @@ const repetitionSelected = ref({
   option: "",
 });
 const notifiable = ref(false);
-const notificationSelected = ref([false, false]);
+const notificationRawSelected = ref([]);
+const notificationSelected = computed(() => Object.keys(store.value.advance).map((advance) => notificationRawSelected.value.includes(advance)));
+watchEffect(() => {
+  console.log(notificationRawSelected.value);
+  console.log(notificationSelected.value);
+});
 const notifyUntilAck = ref(false);
 const eventLink = ref(null);
 
@@ -372,16 +377,13 @@ watch(eventBeginDate, setDayOfWeek);
         <div v-if="notifiable" class="row my-2">
           <div class="col-sm-6 col-12">
             <label>When to notify</label>
-            <div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="oneDay" v-model="notificationSelected[0]" />
-                <label class="form-check-label" for="oneDay">One day before</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="oneWeek" v-model="notificationSelected[1]" />
-                <label class="form-check-label" for="oneWeek">One week before</label>
-              </div>
-            </div>
+            <select class="form-select" multiple size="3" aria-label="Multiple select"
+              v-model="notificationRawSelected">
+              <option v-for="(advance, idx) in store.advance" :key="idx" :value="advance[1]"
+                :selected="Object.keys(store.advance).indexOf(idx) === 0">
+                {{ advance[1] }}
+              </option>
+            </select>
           </div>
           <div class="col-sm-6 col-12 my-sm-0 my-3">
             <label>Type of notification</label>

@@ -32,7 +32,7 @@ function openDate(date) {
   console.log(distance.total({ unit: 'weeks', relativeTo: store.value.simDateTime }));
   console.log(distance.total({ unit: 'months', relativeTo: store.value.simDateTime }));
 
-  store.value.dayOffset += Math.ceil(distance.total({ unit: 'days' }));
+  store.value.dayOffset += Math.round(distance.total({ unit: 'days' }));
   store.value.weekOffset += Math.round(distance.total({ unit: 'weeks', relativeTo: store.value.simDateTime }));
   store.value.monthOffset += Math.round(distance.total({ unit: 'months', relativeTo: store.value.simDateTime }));
 }
