@@ -74,22 +74,22 @@ function getVisibleDate(date) {
 <template>
     <NavBar />
     <div class="container-fluid">
-        <div class="row justify-content-center p-3 ">
+        <div class="row justify-content-center p-3 " >
             <div class="col-lg-3 col-12 ">
                 <div class="align-items-center">
                     <h2 class="mx-auto">Eventi prossimi</h2>
                 </div>
-                <div class="container-fluid bg-danger d-flex flex-column overflow-scroll rounded-4"
-                    style="max-height: 80vh">
+                <div class="container-fluid bg-danger d-flex flex-column overflow-scroll rounded-4 overflow-x-hidden align-items-center"
+                    style="max-height: 80vh;">
                     <div v-if="nearEvents.length == 0">
                         <h1>Non ci sono eventi prossimi</h1>
                     </div>
                     <div v-else>
                         <button v-for="event in nearEvents" @click="router.push('/calendar')"
-                            class="w-100 p-0 btn bg-success rounded-3 text-black m-2">
-                            <h4>{{ event.title }}</h4>
+                            class="w-100 p-0 btn bg-success rounded-3 text-black m-2 flex-fill">
+                            <h2>{{ event.title }}</h2>
                             {{ event.details.text }}
-                            ripetizioni:
+                            <h3>ripetizioni:</h3>
                             <div v-for="date in event.dates">
                                 <p>{{ getVisibleDate(date.begin) }}</p>
                                 <p>{{ getVisibleDate(date.end) }}</p>
