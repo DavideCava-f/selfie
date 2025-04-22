@@ -29,10 +29,10 @@ router.put("/", verifyToken, async function(req, res) {
     if (req.body.setNoted) {
       await Event.updateOne({
         _id: req.body.id_Event,
-        'notification.advance._id': req.body.id_Advance
+        'dates._id': req.body.id_Date
       },
         {
-          $set: { 'notification.advance.$.noted': true }
+          $set: { 'dates.$.noted': true }
         }
       );
     }
