@@ -66,6 +66,13 @@ const ActivitySchema = new Schema({
     title: String,
     text: String,
     completed: Boolean,
+    notification: { //Ogni campo indica se notificato in quel momento
+        
+     isLate: Boolean,
+     oneDayLate: Boolean,
+     oneWeekLate: Boolean,
+    },
+    
 });
 
 const User = model('User', UserSchema);

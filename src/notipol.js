@@ -5,7 +5,7 @@ import { Temporal } from "@js-temporal/polyfill";
 import router from "./router/Router";
 
 async function setNotedTrue(eventId, advanceId) {
-  await fetch(`${store.value.url}:${store.value.port}/notification`, {
+  fetch(`${store.value.url}:${store.value.port}/notification`, {
     method: "put",
     credentials: "include",
     headers: {
@@ -18,7 +18,7 @@ async function setNotedTrue(eventId, advanceId) {
       id_Advance: advanceId,
       setNoted: true
     }),
-  });
+  })
 }
 
 function openDate(date) {
@@ -63,17 +63,116 @@ async function EventNotification(event) {
             onClick: () => openDate(nextDate),
             dangerouslyHTMLString: true,
           });
-          const notification = new Notification(notificationMessage);
           setNotedTrue(event._id, advance._id);
         }
       }
-    });
+    }
+    );
   } else {
     // FIXME: ma questo caso non dovrebbe mai esserci, poiche' la query
     // nearEvents esclude eventi che non hanno date il cui inizio e' maggiore di oggi
   }
 }
 
+async function ActivityNotification(act, now,oneDayNext,oneWeekNext){
+
+    let isModified = false
+    let deadline = Temporal.PlainDateTime.from(act.dates.deadline)
+
+    if(act.notification.isLate == false){
+      const notificationMessage = `"${act.title}" is Expired!`;
+      toast(notificationMessage, {
+        theme: "auto",
+        type: "default",
+        position: "top-left",
+        transition: "slide",
+        autoClose: false,
+        dangerouslyHTMLString: true,
+        style: {
+          backgroundColor: '#fff8b3', // soft yellow
+          color: '#333',              // dark text for contrast
+          border: '1px solid #e6c200',
+          fontWeight: 'bold',
+        }
+      });
+      //TOSTAMI
+//Metti il noti
+      act.notification.isLate = true
+      isModified = true
+    }else if(act.notification.oneDayLate == false){
+
+      if(Temporal.PlainDateTime.compare(deadline,oneDayNext) < 0){
+
+      const notificationMessage = `"${act.title}" is One Day Late`;
+      toast(notificationMessage, {
+        theme: "auto",
+        type: "default",
+        position: "top-left",
+        transition: "slide",
+        autoClose: false,
+        dangerouslyHTMLString: true,
+        style: {
+          backgroundColor: '##ff8300', // orange 
+          color: '#333',              // dark text for contrast
+          border: '1px solid #e6c200',
+          fontWeight: 'bold',
+        }
+      });
+        //Tostami
+      act.notification.oneDayLate = true
+      isModified = true
+      }
+
+    }else if(act.notification.oneWeekLate == false){
+
+      if(Temporal.PlainDateTime.compare(deadline,oneWeekNext) < 0){
+
+      const notificationMessage = `"${act.title}" is One Week`;
+      toast(notificationMessage, {
+        theme: "auto",
+        type: "default",
+        position: "top-left",
+        transition: "slide",
+        autoClose: false,
+        dangerouslyHTMLString: true,
+        style: {
+          backgroundColor: '##ff0000', // red 
+          color: '#333',              // dark text for contrast
+          border: '1px solid #e6c200',
+          fontWeight: 'bold',
+        }
+      });
+        //Tostami
+      act.notification.oneWeekLate = true
+      isModified = true
+      }
+
+    }
+
+
+    if(isModified){ //Altrimenti non ce bisogno di fetch
+
+    await fetch(`${store.value.url}:${store.value.port}/activities/noted`,{
+      method: "put",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ 
+          id_Act : act._id,
+          isLateModified : act.notification.isLate,
+          oneDayModified : act.notification.oneDayLate,
+          oneWeekModified : act.notification.oneWeekLate
+
+      }),
+    }
+    );
+  
+}
+
+
+}
 
 async function notipol() {
   const max = (store.value.advance.twoWeeks[0].add(store.value.advance.twelveHr[0].add(store.value.advance.halfHr[0]))).toString();
@@ -81,9 +180,23 @@ async function notipol() {
   let response = await fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}&isNotification=${true}&max=${max}`);
   let Events = await response.json();
   console.log("notipol!");
-  console.log(Events);
+  console.log(Events)
   Notification.requestPermission();
   await Events.forEach(el => { EventNotification(el) });
+  let activities = await fetch(`${store.value.url}:${store.value.port}/activities`);
+  let Acts = activities.json();
+  let Expired = Acts.filter((el) => {
+    let deadline = Temporal.PlainDateTime.from(el.dates.deadline)
+    let now = Temporal.PlainDateTime.from(store.value.simDateTime)
+   return  el.completed == false && Temporal.PlainDateTime.compare(deadline,now) < 0;
+  })
+    const oneDayFromNow = now.add({ days: 1 });
+    const oneWeekFromNow = now.add({ days: 7 });
+  Expired.forEach((el) => {
+    ActivityNotification(el,now,oneDayFromNow,oneWeekFromNow)
+  })
+
+
 }
 
 export { notipol };
