@@ -5,7 +5,7 @@ import { Temporal } from "@js-temporal/polyfill";
 import router from "./router/Router";
 
 async function setNotedTrue(eventId, advanceId) {
-  fetch(`${store.value.url}:${store.value.port}/notification`, {
+  await fetch(`${store.value.url}:${store.value.port}/notification`, {
     method: "put",
     credentials: "include",
     headers: {
@@ -18,7 +18,7 @@ async function setNotedTrue(eventId, advanceId) {
       id_Advance: advanceId,
       setNoted: true
     }),
-  })
+  });
 }
 
 function openDate(date) {
@@ -63,11 +63,11 @@ async function EventNotification(event) {
             onClick: () => openDate(nextDate),
             dangerouslyHTMLString: true,
           });
+          const notification = new Notification(notificationMessage);
           setNotedTrue(event._id, advance._id);
         }
       }
-    }
-    );
+    });
   } else {
     // FIXME: ma questo caso non dovrebbe mai esserci, poiche' la query
     // nearEvents esclude eventi che non hanno date il cui inizio e' maggiore di oggi
@@ -82,6 +82,7 @@ async function notipol() {
   let Events = await response.json();
   console.log("notipol!");
   console.log(Events);
+  Notification.requestPermission();
   await Events.forEach(el => { EventNotification(el) });
 }
 
