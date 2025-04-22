@@ -25,7 +25,8 @@ const EventSchema = new Schema({
     dates: [
         {
             begin: Date,
-            end: Date
+            end: Date,
+            noted: Boolean
         }
     ],
     title: String,
@@ -34,12 +35,7 @@ const EventSchema = new Schema({
         link: String
     },
     notification: {
-        advance: [
-            {
-                ofType: String,
-                noted: Boolean
-            }
-        ],
+        advance: [String],
         untilAck: Boolean
     }
 });
