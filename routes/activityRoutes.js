@@ -54,10 +54,10 @@ router.delete("/", verifyToken, async function(req, res) {
     }
 });
 
-router.put("/update", verifyToken, async function(req, res) {
-    console.log(req.body.deadlineDate)
+router.put("/noted", verifyToken, async function(req, res) {
+    console.log(req.body.isLateModified)
     try {
-        const Acts = await Activity.updateOne({ _id: req.body.id }, {
+        const Acts = await Activity.updateOne({ _id: req.body.id_Act }, {
             $set: {
 
                "notification.isLate" : req.body.isLateModified, 

@@ -74,12 +74,14 @@ async function EventNotification(event) {
   }
 }
 
-async function ActivityNotification(act, now,oneDayNext,oneWeekNext){
+async function ActivityNotification(act){
 
     let isModified = false
-    let deadline = Temporal.PlainDateTime.from(act.dates.deadline)
+    let deadline = Temporal.PlainDateTime.from(act.dates[0].deadline.slice(0,-1))
+  let now = Temporal.PlainDateTime.from(store.value.simDateTime)
 
-    if(act.notification.isLate == false){
+
+    if(act.notification.isLate == false){ //Se arrivto qui significa scaduto non servono ulteriori controlli
       const notificationMessage = `"${act.title}" is Expired!`;
       toast(notificationMessage, {
         theme: "auto",
@@ -101,7 +103,7 @@ async function ActivityNotification(act, now,oneDayNext,oneWeekNext){
       isModified = true
     }else if(act.notification.oneDayLate == false){
 
-      if(Temporal.PlainDateTime.compare(deadline,oneDayNext) < 0){
+      if(Temporal.PlainDateTime.compare(deadline.add({days:1}),now) <= 0){
 
       const notificationMessage = `"${act.title}" is One Day Late`;
       toast(notificationMessage, {
@@ -125,7 +127,7 @@ async function ActivityNotification(act, now,oneDayNext,oneWeekNext){
 
     }else if(act.notification.oneWeekLate == false){
 
-      if(Temporal.PlainDateTime.compare(deadline,oneWeekNext) < 0){
+      if(Temporal.PlainDateTime.compare(deadline.add({weeks:1}),now) <= 0){
 
       const notificationMessage = `"${act.title}" is One Week`;
       toast(notificationMessage, {
@@ -150,9 +152,11 @@ async function ActivityNotification(act, now,oneDayNext,oneWeekNext){
     }
 
 
+      
     if(isModified){ //Altrimenti non ce bisogno di fetch
 
-    await fetch(`${store.value.url}:${store.value.port}/activities/noted`,{
+      
+    await fetch(`${store.value.url}:${store.value.port}/activity/noted`,{
       method: "put",
       credentials: "include",
       headers: {
@@ -179,21 +183,29 @@ async function notipol() {
   //console.log("max: " + max.toString());
   let response = await fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}&isNotification=${true}&max=${max}`);
   let Events = await response.json();
+  let now = Temporal.PlainDateTime.from(store.value.simDateTime)
   console.log("notipol!");
   console.log(Events)
   Notification.requestPermission();
   await Events.forEach(el => { EventNotification(el) });
-  let activities = await fetch(`${store.value.url}:${store.value.port}/activities`);
-  let Acts = activities.json();
+  let activities = await fetch(`${store.value.url}:${store.value.port}/activity`);
+  let Acts = await activities.json();
   let Expired = Acts.filter((el) => {
-    let deadline = Temporal.PlainDateTime.from(el.dates.deadline)
-    let now = Temporal.PlainDateTime.from(store.value.simDateTime)
+    let deadline = Temporal.PlainDateTime.from(el.dates[0].deadline.slice(0,-1))
    return  el.completed == false && Temporal.PlainDateTime.compare(deadline,now) < 0;
   })
+  console.log("ACTST")
+  console.log(Expired)
+  /*
     const oneDayFromNow = now.add({ days: 1 });
     const oneWeekFromNow = now.add({ days: 7 });
+
+    console.log(oneDayFromNow.toString())
+    console.log(oneWeekFromNow.toString())
+    console.log(now.toString())
+   */ 
   Expired.forEach((el) => {
-    ActivityNotification(el,now,oneDayFromNow,oneWeekFromNow)
+    ActivityNotification(el)
   })
 
 
