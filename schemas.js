@@ -46,6 +46,7 @@ const NoteSchema = new Schema({
     lastUpDate: Date,
     Title: String,
     Text: String,
+    markdown : Boolean,
     Tags: [{
         name: String
     }]
