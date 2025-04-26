@@ -147,24 +147,42 @@ router.put("/OneEvent", verifyToken, async function(req, res) {
 router.get("/nearEvents", verifyToken, async function(req, res) {
   try {
     const today = req.query.today;
-    console.log(req.query);
-    console.log("Oggi è" + today);
+    const isNotification = req.query.isNotification;
+    console.log("today: " + today);
+    console.log("isNotification: " + isNotification);
+    let advance;
+    if (!isNotification) {
+      //console.log("sucamelllllo");
+      var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString() + "Z" } });
+      //console.log("nearEvents: " + nearEvents);
+    }
+    else {
+      //console.log("Max:" , req.query.max);
+      const max = req.query.max;
+      //console.log("max: " + max.toString());
 
-    var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString() + "Z" } });
+      advance = Temporal.PlainDateTime.from(req.query.today).add(max);
+      var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString() + "Z", $lte: advance.toString() + "Z" } });
+      //console.log("nearEvents: " + nearEvents);
 
-    console.log(nearEvents);
-    for (let i = 0; i < nearEvents.length; i++) {
-      nearEvents[i].dates = nearEvents[i].dates.filter((date) => {
-        return (Temporal.PlainDateTime.compare(date.begin.toISOString().slice(0, -1), today) >= 0);
-      }).sort((a, b) => {
-        return Temporal.PlainDateTime.compare(a.begin.toISOString().slice(0, -1), b.begin.toISOString().slice(0, -1));
+    }
+    //console.log("today: " + today + "  " + typeof today);
+    //console.log("advance: " + advance.toString() + "  " + typeof advance);
+
+    //console.log(nearEvents);
+    if (nearEvents) {
+      for (let i = 0; i < nearEvents.length; i++) {
+        nearEvents[i].dates = nearEvents[i].dates.filter((date) => {
+          return (Temporal.PlainDateTime.compare(date.begin.toISOString().slice(0, -1), today) >= 0);
+        }).sort((a, b) => {
+          return Temporal.PlainDateTime.compare(a.begin.toISOString().slice(0, -1), b.begin.toISOString().slice(0, -1));
+        });
+      }
+      //console.log(nearEvents);
+      nearEvents = nearEvents.sort((a, b) => {
+        return Temporal.PlainDateTime.compare(a.dates[0].begin.toISOString().slice(0, -1), b.dates[0].begin.toISOString().slice(0, -1));
       });
     }
-    console.log(nearEvents);
-    nearEvents = nearEvents.sort((a, b) => {
-      return Temporal.PlainDateTime.compare(a.dates[0].begin.toISOString().slice(0, -1), b.dates[0].begin.toISOString().slice(0, -1));
-    });
-
     res.status(200).json(nearEvents);
   } finally {
 

@@ -88,8 +88,8 @@ watch(() => store.value.weekOffset, () => getActivitiesOfWeek());
       </button>
     </div>
 
-    <div class="container-fluid d-flex flex-column justify-content-between my-2 w-100 p-0" style="min-height: 70vh;">
-      <div v-for="day in store.week" class="row w-100 border fillable align-items-center p-0">
+    <div class="container-fluid d-flex flex-column justify-content-start my-2 w-100 p-0" style="min-height: 70vh;">
+      <div v-for="day in store.week" class="row w-100 border fillable align-self-center align-items-center p-0">
         <div class="h-100 p-0 d-flex flex-column flex-lg-row flex-fill justify-content-center align-items-center"
           style="width: 12%; max-width: 12%;">
           <div class="d-flex flex-column align-items-center text-white rounded-circle text-wrap position-static">

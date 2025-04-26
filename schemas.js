@@ -25,13 +25,18 @@ const EventSchema = new Schema({
     dates: [
         {
             begin: Date,
-            end: Date
+            end: Date,
+            noted: Boolean
         }
     ],
     title: String,
     details: {
         text: String,
         link: String
+    },
+    notification: {
+        advance: [String],
+        untilAck: Boolean
     }
 });
 
@@ -41,6 +46,7 @@ const NoteSchema = new Schema({
     lastUpDate: Date,
     Title: String,
     Text: String,
+    markdown : Boolean,
     Tags: [{
         name: String
     }]
@@ -57,6 +63,13 @@ const ActivitySchema = new Schema({
     title: String,
     text: String,
     completed: Boolean,
+    notification: { //Ogni campo indica se notificato in quel momento
+        
+     isLate: Boolean,
+     oneDayLate: Boolean,
+     oneWeekLate: Boolean,
+    },
+    
 });
 
 const User = model('User', UserSchema);

@@ -87,6 +87,7 @@ watch(() => store.value.dayOffset, () => getActivitiesOfDay());
           Activities
         </button>
       </div>
+    </div>
 
       <div v-if="isEvent">
         <div v-if="store.eventsOfDay.length !== 0" class="overflow-scroll rounded-3 w-100" style="max-height: 70vh;">
@@ -104,9 +105,8 @@ watch(() => store.value.dayOffset, () => getActivitiesOfDay());
           <h4 class="text-center">No events for this day</h4>
         </div>
       </div>
-
       <div v-else>
-        <div class="overflow-scroll rounded-3" style="max-height: 70vh;">
+        <div v-if="store.activitiesOfDay.length !== 0" class="overflow-scroll rounded-3" style="max-height: 70vh;">
           <div v-for="activity in store.activitiesOfDay" class="card">
             <div class="card-body">
               <h4 class="card-title fw-bold">{{ activity.title }}</h4>
@@ -121,8 +121,10 @@ watch(() => store.value.dayOffset, () => getActivitiesOfDay());
               <input type="checkbox" @change="toggleChange(activity._id, activity.completed)"
                 v-model="activity.completed">
             </div>
-          </div>
         </div>
+      </div>
+      <div v-else class="overflow-scroll rounded-3" style="max-height: 70vh;">
+            <h4 class="text-center">No activities for this day</h4>
       </div>
     </div>
   </div>

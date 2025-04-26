@@ -7,7 +7,7 @@ import { useRouter, useRoute } from "vue-router";
 let lastnote = ref({});
 let nearEvents = ref([]);
 let loaded = ref(Boolean);
-let progetti = ref({});
+let pomodoro = ref({});
 const router = useRouter();
 
 
@@ -27,13 +27,14 @@ function getLastNote() {
 async function update() {
     await getLastNote();
     await getNearEvents();
-    console.log("suca")
     console.log(lastnote.value);
     loaded.value = true;
 }
 
 async function getNearEvents() {
-    fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}`)
+    console.log("suca");
+    const max = (store.value.advance.twoWeeks[0].add(store.value.advance.twelveHr[0].add(store.value.advance.halfHr[0]))).toString();
+    fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}&isNotification=${false}&max=${max}`)
         .then(response => {
             //console.log(response);
             return response.json();
@@ -73,70 +74,105 @@ function getVisibleDate(date) {
 <template>
     <NavBar />
     <div class="container-fluid">
-        <div class="row justify-content-center p-3 ">
-            <div class="col-lg-3 col-12 ">
-                <div class="align-items-center">
-                    <h2 class="mx-auto">Eventi prossimi</h2>
-                </div>
-                <div class="container-fluid bg-danger d-flex flex-column overflow-scroll rounded-4"
-                    style="max-height: 80vh">
-                    <div v-if="nearEvents.length == 0">
-                        <h1>Non ci sono eventi prossimi</h1>
+        <div class="row justify-content-center p-3 " >
+            <div class="col-lg-3 col-12 "><!-- colonna prossimi eventi -->
+
+                <div class="card text-bg-danger mb-3" style="max-height: 80vh;">
+                    <div class="card-header align-items-center">
+                        <h2 class="mx-auto">Eventi prossimi</h2>
                     </div>
-                    <div v-else>
-                        <button v-for="event in nearEvents" @click="router.push('/calendar')"
-                            class="w-100 p-0 btn bg-success rounded-3 text-black m-2">
-                            <h4>{{ event.title }}</h4>
-                            {{ event.details.text }}
-                            ripetizioni:
-                            <div v-for="date in event.dates">
-                                <p>{{ getVisibleDate(date.begin) }}</p>
-                                <p>{{ getVisibleDate(date.end) }}</p>
-                            </div>
+                    <div class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center">
+                        <div v-if="nearEvents.length == 0">
+                            <h1>Non ci sono eventi prossimi</h1>
+                        </div>
+                        <div v-else>
+                            <button v-for="event in nearEvents" @click="router.push('/calendar')"
+                                class="w-100 btn bg-success rounded-3 text-black my-1 align-items-center">
+                                <h2>{{ event.title }}</h2>
+                                {{ event.details.text }}
+                                <h3>ripetizioni:</h3>
+                                <div class="d-flex justify-content-center">
+                                    <table class="table-success">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Start</th>
+                                            <th scope="col">End</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr v-for="date in event.dates" :key="date.begin">
+                                            <td>{{ getVisibleDate(date.begin) }}</td>
+                                            <td>{{ getVisibleDate(date.end) }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <!-- <div v-for="date in event.dates">
+                                    <p>{{ getVisibleDate(date.begin) }}</p>
+                                    <p>{{ getVisibleDate(date.end) }}</p>
+                                </div> -->
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-12"><!-- colonna ultima nota -->
+
+                <div class="card text-bg-danger mb-3" style="max-height: 80vh;">
+                    <div class="card-header align-items-center">
+                        <h2 class="mx-auto">Ultima nota modificata</h2>
+                    </div>
+                    <div class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center ">
+                        <button @click="gotoNote" class="w-100 btn bg-success rounded-3 text-black my-1">
+                            <h1 v-if="loaded">
+                                {{ lastnote.Title }}
+                            </h1>
+                            <h1 v-else>
+                                caricamento in corso...
+                            </h1>
+                            <p v-if="loaded">
+                                {{ lastnote.Text }}
+                            </p>
+                            <p v-else>
+                                caricamento in corso...
+                            </p>
+
                         </button>
                     </div>
-
                 </div>
             </div>
             <div class="col-lg-3 col-12">
-                <div class="align-items-center">
-                    <h2 class="mx-auto">Ultima nota modificata</h2>
-                </div>
-                <div @click="gotoNote" class="container-fluid bg-danger d-flex flex-column overflow-scroll rounded-4"
-                    style="max-height: 80vh">
-                    <button class="btn bg-success rounded-3 text-black m-2">
-                        <h1 v-if="loaded">
-                            {{ lastnote.Title }}
-                        </h1>
-                        <h1 v-else>
-                            caricamento in corso...
-                        </h1>
-                        <p v-if="loaded">
-                            {{ lastnote.Text }}
-                        </p>
-                        <p v-else>
-                            caricamento in corso...
-                        </p>
-
-                    </button>
-                </div>
-            </div>
-            <div class="col-lg-3 col-12">
-                <div class="align-items-center">
-                    <h2 class="mx-auto">Progetti in corso</h2>
-                </div>
-                <div class="container-fluid bg-danger d-flex flex-column overflow-scroll rounded-4"
-                    style="max-height: 80vh">
-                    <div class="bg-success rounded-3 text-black m-2">
-                        <div v-if="progetti.value">
+                <div class="card text-bg-danger mb-3" style="max-height: 80vh;">
+                    <div class="card-header align-items-center">
+                        <h2 class="mx-auto">Progetti in corso</h2>
+                    </div>
+                    <div class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center">
+                        <div v-if="pomodoro.value">
 
                         </div>
                         <div v-else>
                             Non ci sono progetti in corso
                         </div>
-
                     </div>
                 </div>
+
+
+                <!-- <div class="align-items-center">
+                    <h2 class="mx-auto">Report ultimo pomodoro</h2>
+                </div>
+                <div class="container-fluid bg-danger d-flex flex-column overflow-scroll rounded-4"
+                    style="max-height: 80vh">
+                    <div class="bg-success rounded-3 text-black m-2">
+                        <div v-if="pomodoro.value">
+
+                        </div>
+                        <div v-else>
+                            Nessun pomodoro fatto
+                        </div>
+
+                    </div>
+                </div> -->
             </div>
         </div>
     </div>

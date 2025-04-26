@@ -11,7 +11,9 @@ import {
   NCtags,
   NUtitle,
   NUcontent,
-  NUtags
+  NUtags,
+  NCMarkDown,
+  NUMarkDown,
 } from "@/CRUDnotes";
 import { SortByDate, SortByTitle, SortByLength, getVisibleDate } from "@/NotesUtils";
 import { NotesList } from "@/store";
@@ -87,11 +89,22 @@ onMounted(() => {
             <div class="card-body">
               <h1 class="card-title fw-bold">{{ note.Title }}</h1>
               <hr />
+              <div v-if="note.markdown">
+
               <p :class="[
                 { selected: selectedCard == note._id },
                 'card-text',
                 'notSelected',
               ]" v-html="marked.parse(note.Text)" style=""></p>
+              </div>
+              <div v-else>
+
+              <p :class="[
+                { selected: selectedCard == note._id },
+                'card-text',
+                'notSelected',
+              ]" style="">{{ note.Text }}</p>
+              </div>
               <span v-for="tag in note.Tags">
                 <span class="badge text-bg-warning mx-1 mb-1">{{
                   tag.name
@@ -165,17 +178,10 @@ onMounted(() => {
                   class="form-control" placeholder="Add tags (comma separated)" />
               </div>
               <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-outline-secondary">
-                    <i class="fas fa-bold"></i>
-                  </button>
-                  <button type="button" class="btn btn-outline-secondary">
-                    <i class="fas fa-italic"></i>
-                  </button>
-                  <button type="button" class="btn btn-outline-secondary">
-                    <i class="fas fa-list"></i>
-                  </button>
-                </div>
+                <label>
+              <input class="form-check-input" type="checkbox" id="untilAck" v-model="NCMarkDown" />
+                  MarkDown
+                </label>
                 <button @click.prevent="CreateNote" :disabled="!enabled" class="btn btn-primary">
                   <i class="fas fa-save me-2"></i>Save Note
                 </button>
@@ -221,18 +227,11 @@ onMounted(() => {
                   'border-danger': !enabledUpdate,
                 }" v-model="NUtags" type="text" class="form-control" placeholder="Add tags (comma separated)" />
               </div>
+                <label>
+              <input class="form-check-input" type="checkbox" v-model="NUMarkDown" />
+                  MarkDown
+                </label>
               <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-outline-secondary">
-                    <i class="fas fa-bold"></i>
-                  </button>
-                  <button type="button" class="btn btn-outline-secondary">
-                    <i class="fas fa-italic"></i>
-                  </button>
-                  <button type="button" class="btn btn-outline-secondary">
-                    <i class="fas fa-list"></i>
-                  </button>
-                </div>
                 <button @click.prevent="SaveAfterUpdate()" :disabled="!enabledUpdate" class="btn btn-primary">
                   <i class="fas fa-save me-2"></i>Save Note
                 </button>

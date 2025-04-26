@@ -10,6 +10,8 @@ export var NUtitle = ref("");
 export var NUcontent = ref("");
 export var NUtags = ref("");
 export var NUid = ref("");
+export var NCMarkDown = ref(false);
+export var NUMarkDown = ref(false);
 
 export function CreateNote() {
   //Parsing tags
@@ -29,18 +31,22 @@ export function CreateNote() {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-
     //make sure to serialize your JSON body
     body: JSON.stringify({
       title: Title,
       content: Content,
       tags: jsonTags,
+      markdown: NCMarkDown.value
     }),
   })
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
       getNotes();
+  NCtags.value = "";
+  NCtitle.value = "";
+  NCcontent.value = "";
+  NCMarkDown.value = "";
       //do something awesome that makes the world a better place
     });
 }
@@ -55,15 +61,13 @@ export function DuplicateNote(id) {
   });
   tagsStr = tagsStr.slice(0, -1);
   NCtags.value = tagsStr;
+  NCMarkDown.value = elem.markdown 
   console.log(NCtitle.value);
   console.log(NCcontent.value);
   console.log(NCtags.value);
 
   CreateNote();
 
-  NCtags.value = "";
-  NCtitle.value = "";
-  NCcontent.value = "";
 }
 
 export function DeleteNote(id) {
@@ -121,6 +125,7 @@ export function UpdateNote(id) {
   });
   NUtags.value = tagsStr.slice(0, -1);
   NUid.value = Note2Update._id;
+  NUMarkDown.value = Note2Update.markdown
   console.log(NUid.value);
   //console.log(Note2Update)
 }
@@ -151,6 +156,7 @@ export function SaveAfterUpdate() {
       title_note: NUtitle.value || "No Title",
       content_note: NUcontent.value || "No Content",
       tags_note: UjsonTags,
+      markdown_note: NUMarkDown.value
     }),
   })
     .then((response) => {
@@ -160,6 +166,10 @@ export function SaveAfterUpdate() {
     .then(() => {
       //NotesList.value = NotesList.value.filter(el => el._id.toString() != id)
       getNotes();
+  NUtags.value = "";
+  NUtitle.value = "";
+  NUcontent.value = "";
+  NUMarkDown.value = "";
       //do something awesome that makes the world a better place
     });
 }

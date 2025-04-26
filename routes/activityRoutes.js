@@ -22,6 +22,11 @@ router.post("/", verifyToken, async function(req, res) {
             title: req.body.title,
             text: req.body.text,
             completed: false,
+        notification: {
+            isLate: false,
+            oneDayLate: false,
+            oneWeekLate: false
+        }
         });
         res.status(200).send();
     } catch (err) {
@@ -49,10 +54,26 @@ router.delete("/", verifyToken, async function(req, res) {
     }
 });
 
-router.put("/update", verifyToken, async function(req, res) {
-    console.log(req.body.deadlineDate)
+router.put("/noted", verifyToken, async function(req, res) {
+    console.log(req.body.isLateModified)
     try {
-        const Acts = await Activity.updateOne({ _id: req.body.id }, {
+        const Acts = await Activity.updateOne({ _id: req.body.id_Act }, {
+            $set: {
+
+               "notification.isLate" : req.body.isLateModified, 
+               "notification.oneDayLate" : req.body.oneDayModified, 
+               "notification.oneWeekLate" : req.body.oneWeekModified, 
+            }
+        })
+        res.status(200).send()
+    } catch (err) {
+        res.status(500).send()
+    }
+});
+
+router.put("/noted", verifyToken, async function(req, res) {
+    try {
+        const Acts = await Activity.updateOne({ _id: req.body.id_Act }, {
             $set: {
 
                 "title": req.body.title,
@@ -65,7 +86,6 @@ router.put("/update", verifyToken, async function(req, res) {
         res.status(500).send()
     }
 });
-
 router.put("/", verifyToken, async function(req, res) {
     var comple = false
     if (req.body.completion) {
@@ -147,5 +167,6 @@ router.get("/ofmonth", verifyToken, async function(req, res) {
     } finally {
     }
 });
+
 
 export default router;

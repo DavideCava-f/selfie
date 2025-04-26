@@ -30,7 +30,15 @@ class EventCreator {
       event.dates.push({
         begin: baseBeginDateTime.add({ days: i }).toString() + "Z",
         end: baseEndDateTime.add({ days: i }).toString() + "Z",
+        noted: false
       });
+    }
+    for (const d in store.value.advance) {
+      const i = Object.keys(store.value.advance).indexOf(d);
+      console.log(i);
+      if (notificationSelected[i]) {
+        event.notification.advance.push(store.value.advance[d][1]);
+      }
     }
     console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {
@@ -71,6 +79,7 @@ class EventCreator {
       event.dates.push({
         begin: baseBeginDateTime.add({ days: i }).toString() + "Z",
         end: baseEndDateTime.add({ days: i }).toString() + "Z",
+        noted: false
       });
       i++;
     } while (
@@ -79,6 +88,13 @@ class EventCreator {
         Temporal.PlainDate.from(untilDate),
       ) !== 1
     );
+    for (const d in store.value.advance) {
+      const i = Object.keys(store.value.advance).indexOf(d);
+      console.log(i);
+      if (notificationSelected[i]) {
+        event.notification.advance.push(store.value.advance[d][1]);
+      }
+    }
     console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
@@ -140,7 +156,15 @@ class EventCreator {
       .forEach((d) => {
         d.begin = d.begin.add({ weeks: n }).toString() + "Z";
         d.end = d.end.add({ weeks: n }).toString() + "Z";
+        d.noted = false;
       });
+    for (const d in store.value.advance) {
+      const i = Object.keys(store.value.advance).indexOf(d);
+      console.log(i);
+      if (notificationSelected[i]) {
+        event.notification.advance.push(store.value.advance[d][1]);
+      }
+    }
     return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",
@@ -215,7 +239,15 @@ class EventCreator {
     event.dates.forEach((d) => {
       d.begin = d.begin.toString() + "Z";
       d.end = d.end.toString() + "Z";
+      d.noted = false;
     });
+    for (const d in store.value.advance) {
+      const i = Object.keys(store.value.advance).indexOf(d);
+      console.log(i);
+      if (notificationSelected[i]) {
+        event.notification.advance.push(store.value.advance[d][1]);
+      }
+    }
     console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
@@ -254,7 +286,15 @@ class EventCreator {
       event.dates.push({
         begin: baseBeginDateTime.add({ months: i }).toString() + "Z",
         end: baseEndDateTime.add({ months: i }).toString() + "Z",
+        noted: false
       });
+    }
+    for (const d in store.value.advance) {
+      const i = Object.keys(store.value.advance).indexOf(d);
+      console.log(i);
+      if (notificationSelected[i]) {
+        event.notification.advance.push(store.value.advance[d][1]);
+      }
     }
     console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {
@@ -295,6 +335,7 @@ class EventCreator {
       event.dates.push({
         begin: baseBeginDateTime.add({ months: i }).toString() + "Z",
         end: baseEndDateTime.add({ months: i }).toString() + "Z",
+        noted: false
       });
       i++;
     } while (
@@ -303,6 +344,13 @@ class EventCreator {
         Temporal.PlainDate.from(untilDate),
       ) !== 1
     );
+    for (const d in store.value.advance) {
+      const i = Object.keys(store.value.advance).indexOf(d);
+      console.log(i);
+      if (notificationSelected[i]) {
+        event.notification.advance.push(store.value.advance[d][1]);
+      }
+    }
     console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",

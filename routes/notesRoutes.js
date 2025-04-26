@@ -17,6 +17,7 @@ router.post("/", verifyToken, async function(req, res) {
       Title: req.body.title,
       Text: req.body.content, //Campi singoli va bene stringa
       Tags: JSON.parse(req.body.tags), //Array di oggetti vuole l'oggetto
+      markdown: req.body.markdown
     });
   } finally {
     res.json({ note: req.body });
@@ -44,6 +45,7 @@ router.put("/", verifyToken, async function(req, res) {
           lastUpDate: UpdateDate,
           Text: req.body.content_note,
           Tags: JSON.parse(req.body.tags_note),
+          markdown:req.body.markdown_note
         },
       },
     );
