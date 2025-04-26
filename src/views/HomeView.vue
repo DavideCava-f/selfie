@@ -87,24 +87,27 @@ function getVisibleDate(date) {
                         </div>
                         <div v-else>
                             <button v-for="event in nearEvents" @click="router.push('/calendar')"
-                                class="w-100 btn bg-success rounded-3 text-black my-1 justify-content-start">
+                                class="w-100 btn bg-success rounded-3 text-black my-1 align-items-center">
                                 <h2>{{ event.title }}</h2>
                                 {{ event.details.text }}
                                 <h3>ripetizioni:</h3>
-                                <table class="table-success ">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">Start</th>
-                                        <th scope="col">End</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr v-for="date in event.dates" :key="date.begin">
-                                        <td>{{ getVisibleDate(date.begin) }}</td>
-                                        <td>{{ getVisibleDate(date.end) }}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                <div class="d-flex justify-content-center">
+                                    <table class="table-success">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Start</th>
+                                            <th scope="col">End</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr v-for="date in event.dates" :key="date.begin">
+                                            <td>{{ getVisibleDate(date.begin) }}</td>
+                                            <td>{{ getVisibleDate(date.end) }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
                                 <!-- <div v-for="date in event.dates">
                                     <p>{{ getVisibleDate(date.begin) }}</p>
                                     <p>{{ getVisibleDate(date.end) }}</p>
@@ -120,22 +123,22 @@ function getVisibleDate(date) {
                     <div class="card-header align-items-center">
                         <h2 class="mx-auto">Ultima nota modificata</h2>
                     </div>
-                    <div class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center">
-                        <button @click="gotoNote" class="btn bg-success rounded-3 text-black m-2">
-                        <h1 v-if="loaded">
-                            {{ lastnote.Title }}
-                        </h1>
-                        <h1 v-else>
-                            caricamento in corso...
-                        </h1>
-                        <p v-if="loaded">
-                            {{ lastnote.Text }}
-                        </p>
-                        <p v-else>
-                            caricamento in corso...
-                        </p>
+                    <div class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center ">
+                        <button @click="gotoNote" class="w-100 btn bg-success rounded-3 text-black my-1">
+                            <h1 v-if="loaded">
+                                {{ lastnote.Title }}
+                            </h1>
+                            <h1 v-else>
+                                caricamento in corso...
+                            </h1>
+                            <p v-if="loaded">
+                                {{ lastnote.Text }}
+                            </p>
+                            <p v-else>
+                                caricamento in corso...
+                            </p>
 
-                    </button>
+                        </button>
                     </div>
                 </div>
             </div>
