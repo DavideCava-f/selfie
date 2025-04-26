@@ -54,11 +54,6 @@ setUserPfp();
                             </RouterLink>
                         </li>
                         <li class="nav-item">
-                            <RouterLink v-if="currentRoute !== '/projects'" class="nav-link text-white" to="/projects">
-                                <img src="@/assets/ProjectLogo.svg" alt="Projects" width="w-100">
-                            </RouterLink>
-                        </li>
-                        <li class="nav-item">
                             <RouterLink v-if="currentRoute !== '/activities'" class="nav-link text-white"
                                 to="/activities">
                                 <img src="@/assets/ActivityLogo.svg" alt="Activities" width="w-100">
