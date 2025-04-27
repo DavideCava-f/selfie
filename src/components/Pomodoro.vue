@@ -2,32 +2,48 @@
   
   <script setup>
   import { ref, computed, onUnmounted } from 'vue';
+ 
+  var SetMinutes = ref(35)
+  var SetSeconds = ref(0)
+  var SetCycles = ref(5)
+  const INITIAL_TIME = computed(() => {return SetMinutes.value*60+SetSeconds.value} ); // 25 minutes in seconds
   
-  const INITIAL_TIME = 1500; // 25 minutes in seconds
-  
-  const time = ref(INITIAL_TIME);
+  const time = ref(0);
+  var cycles = ref(0)
   const isRunning = ref(false);
   let timerId = null;
   
   const formatTime = computed(() => {
     const minutes = Math.floor(time.value / 60);
     const seconds = time.value % 60;
-    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${cycles.value}`;
   });
   
   const progressBarWidth = computed(() => {
     return `${(time.value / INITIAL_TIME) * 100}%`;
   });
   
+  function setupTimer(){
+    pauseTimer();
+    time.value = INITIAL_TIME.value 
+    cycles.value = SetCycles.value
+  }
   function tick() {
     if (time.value > 0) {
       time.value--;
     } else {
+        if(cycles.value > 1){
+            AdvanceCycle();
+        }else{
+
       pauseTimer();
       alert('Time is up!');
+        }
     }
   }
-  
+  function forceCycle(){
+    time.value =0
+  }
   function startTimer() {
     if (isRunning.value) return;
     isRunning.value = true;
@@ -42,11 +58,17 @@
     isRunning.value = false;
   }
   
-  function resetTimer() {
+  function AdvanceCycle() {
+    cycles.value--;
     pauseTimer();
-    time.value = INITIAL_TIME;
+    time.value = INITIAL_TIME.value;
   }
   
+  function resetTimerCycle() {
+    pauseTimer();
+    time.value = INITIAL_TIME.value;
+    cycles.value = SetCycles.value;
+  }
   onUnmounted(() => {
     if (timerId !== null) {
       clearInterval(timerId);
@@ -75,17 +97,40 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <<div class="container modal-content">
+        <div class="container modal-content">
         <div class="modal-body">
 
       <div class="brand">Pomodoro Timer</div>
+        <div>
+         
+            <label>
+                Minutes
+            <select v-model="SetMinutes">
+                <option v-for="n in 13" :key="n" :value="(n-1)*5">{{ (n-1)*5 }}</option>
+            </select>
+            </label>  
+            <label>
+                Seconds
+            <select v-model="SetSeconds">
+                <option v-for="n in 13" :key="n" :value="(n-1)*5">{{ (n-1)*5 }}</option>
+            </select>
+            </label>  
+            <label>
+                Cycles
+            <select v-model="SetCycles">
+                <option v-for="n in 13" :key="n" :value="n">{{ n }}</option>
+            </select>
+            </label>  
+            <button @click="setupTimer()"> Set</button>
+        </div>
       <div class="timer">{{ formatTime }}</div>
       <div class="progress-bar">
         <div class="progress" :style="{ width: progressBarWidth }"></div>
       </div>
       <button @click="startTimer" :disabled="isRunning">Start</button>
       <button @click="pauseTimer" :disabled="!isRunning" class="pause-button">Pause</button>
-      <button @click="resetTimer" class="reset-button">Reset</button>
+      <button @click="resetTimerCycle" class="reset-button">Reset</button>
+      <button @click="forceCycle" :disabled="!isRunning" class="pause-button">forceCycle</button>
 
         </div>
     </div>
