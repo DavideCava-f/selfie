@@ -6,8 +6,11 @@
   var SetMinutes = ref(35)
   var SetSeconds = ref(0)
   var SetCycles = ref(5)
+  var relaxingMinutes = ref(5)
+  var relaxingSeconds = ref(5)
+  var relaxingTime = computed(() => {return relaxingMinutes.value*60+relaxingSeconds.value} )
   const INITIAL_TIME = computed(() => {return SetMinutes.value*60+SetSeconds.value} ); // 25 minutes in seconds
-  
+ var relaxing = false 
   const time = ref(0);
   var cycles = ref(0)
   const isRunning = ref(false);
@@ -33,9 +36,16 @@
       time.value--;
     } else {
         if(cycles.value > 1){
+            if(!relaxing){
+                time.value = relaxingTime.value
+                pauseTimer()
+                relaxing= true
+            }else{
             AdvanceCycle();
+            }
         }else{
 
+            cycles.value--
       pauseTimer();
       alert('Time is up!');
         }
@@ -59,6 +69,7 @@
   }
   
   function AdvanceCycle() {
+    relaxing = false
     cycles.value--;
     pauseTimer();
     time.value = INITIAL_TIME.value;
@@ -102,7 +113,8 @@
 
       <div class="brand">Pomodoro Timer</div>
         <div>
-         
+        <div>
+
             <label>
                 Minutes
             <select v-model="SetMinutes">
@@ -121,9 +133,26 @@
                 <option v-for="n in 13" :key="n" :value="n">{{ n }}</option>
             </select>
             </label>  
+
+        </div> 
+        <div>
+
+            <label>
+                RelaxingMinutes
+            <select v-model="relaxingMinutes">
+                <option v-for="n in 13" :key="n" :value="(n-1)*5">{{ (n-1)*5 }}</option>
+            </select>
+            </label>  
+            <label>
+                RelaxingSeconds
+            <select v-model="relaxingSeconds">
+                <option v-for="n in 13" :key="n" :value="(n-1)*5">{{ (n-1)*5 }}</option>
+            </select>
+            </label>  
+        </div> 
             <button @click="setupTimer()"> Set</button>
         </div>
-      <div class="timer">{{ formatTime }}</div>
+      <div :class="{timerWork:!relaxing, timerRelaxing:relaxing}">{{ formatTime }}</div>
       <div class="progress-bar">
         <div class="progress" :style="{ width: progressBarWidth }"></div>
       </div>
@@ -162,10 +191,15 @@
     color: #4caf50;
     margin-bottom: 10px;
   }
-  .timer {
+  .timerWork {
     font-size: 4rem;
     margin-bottom: 20px;
-    color: #4caf50;
+    color: #ff0000;
+  }
+  .timerRelaxing {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    color: #00ff0d;
   }
   .progress-bar {
     width: 70%;
