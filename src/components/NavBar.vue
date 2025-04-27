@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import TimeMachine from './TimeMachine.vue';
+import Pomodoro from './Pomodoro.vue';
 import { store } from "@/store";
 
 const router = useRouter();
@@ -62,7 +63,10 @@ setUserPfp();
                         <li class="nav-item">
                             <!-- Non sara' un RouterLink -->
                             <RouterLink class="nav-link text-white" to="#">
+                            <button class="nav-link text-white" data-bs-target="#PomodoroModal"
+                                data-bs-toggle="modal">
                                 <img src="@/assets/PomodoroLogo.svg" alt="Pomodoro" class="w-100">
+                            </button>
                             </RouterLink>
                         </li>
                         <li class="nav-item">
@@ -96,6 +100,10 @@ setUserPfp();
     <div class="modal fade" id="timeMachineModal" data-bs-backdrop="false" tabindex="-1"
         aria-labelledby="timeMachineModalLabel" aria-hidden="true">
         <TimeMachine />
+    </div>
+    <div class="modal fade" id="PomodoroModal" data-bs-backdrop="false" tabindex="-1"
+        aria-labelledby="Pomodoro" aria-hidden="true">
+        <Pomodoro />
     </div>
 </template>
 
