@@ -10,7 +10,7 @@
   var relaxingSeconds = ref(5)
   var relaxingTime = computed(() => {return relaxingMinutes.value*60+relaxingSeconds.value} )
   const INITIAL_TIME = computed(() => {return SetMinutes.value*60+SetSeconds.value} ); // 25 minutes in seconds
- var relaxing = false 
+  var relaxing = false 
   const time = ref(0);
   var cycles = ref(0)
   const isRunning = ref(false);
@@ -152,9 +152,14 @@
         </div> 
             <button @click="setupTimer()"> Set</button>
         </div>
-      <div :class="{timerWork:!relaxing, timerRelaxing:relaxing}">{{ formatTime }}</div>
-      <div class="progress-bar">
+      <div :class="{timerWork:!relaxing, timerRelaxing:relaxing}" class="fs-3">{{ formatTime }}</div>
+      <!-- <div class="progress-bar">
         <div class="progress" :style="{ width: progressBarWidth }"></div>
+      </div> -->
+      <div class="row d-flex justify-content-center">
+        <div class="tomato align-self-center">
+        <div class="highlight"></div>
+      </div>
       </div>
       <button @click="startTimer" :disabled="isRunning">Start</button>
       <button @click="pauseTimer" :disabled="!isRunning" class="pause-button">Pause</button>
@@ -247,5 +252,53 @@
     opacity: 0.6;
     cursor: not-allowed;
   }
+
+      /* Tomato container */
+      .tomato {
+      position: relative;
+      width: 200px;
+      height: 180px;
+      background: radial-gradient(circle at 50% 30%, #ff4d4d, #e60000);
+      border-radius: 50% 50% 45% 45%;
+      box-shadow: inset -10px -10px 20px rgba(0,0,0,0.2);
+    }
+
+    /* Leaf/crown using clip-path */
+.tomato::before {
+  content: '';
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  width: 140px;
+  height: 60px;
+  background: radial-gradient(circle at 50% 50%, #4a8, #285);
+  /* Five-point crown shape */
+  clip-path: polygon(
+    50% 0%,
+    62% 35%,
+    100% 35%,
+    70% 57%,
+    84% 100%,
+    50% 75%,
+    16% 100%,
+    30% 57%,
+    0% 35%,
+    38% 35%
+  );
+  transform: translateX(-50%);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+
+/* Highlight spot */
+    .tomato .highlight {
+      position: absolute;
+      top: 40px;
+      left: 60px;
+      width: 60px;
+      height: 30px;
+      background: rgba(255,255,255,0.4);
+      border-radius: 50%;
+      transform: rotate(-20deg);
+    }
   </style>
   
