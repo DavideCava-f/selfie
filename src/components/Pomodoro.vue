@@ -45,6 +45,8 @@
         }else{
 
             cycles.value--
+            if(cycles.value < 0)
+              cycles.value = 0
       pauseTimer();
       alert('Time is up!');
         }
@@ -159,7 +161,7 @@
         <div>
         <div>
             <input v-model="TotalTime" type="number"/>
-            <button @click="CalcTime">DIOSTRONZO</button>
+            <button @click="CalcTime">CALCTIME</button>
             <label>
                 Minutes
             <input v-model="SetMinutes"/>
@@ -183,8 +185,11 @@
         </div>
         <div v-if="cycles">Cycles: {{ cycles }}</div>
       <div :class="{timerWork:!relaxing, timerRelaxing:relaxing}">{{ formatTime }}</div>
+      <div class="pomodoro-top">
+  <div class="pomodoro-leaf"></div>
+</div>
       <div class="progress-bar">
-        <div class="progress" :style="{ width: progressBarWidth }"></div>
+        <div :class="{progressWork:!relaxing, progressRelaxing:relaxing}" :style="{ width: progressBarWidth }"></div>
       </div>
       <button @click="startTimer" :disabled="isRunning">Start</button>
       <button @click="pauseTimer" :disabled="!isRunning" class="pause-button">Pause</button>
@@ -193,14 +198,6 @@
 
         </div>
     </div>
-      </div>
-      <div class="modal-footer d-flex justify-content-end">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Reset
-        </button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-          Change
-        </button>
       </div>
     </div>
   </div>
@@ -234,15 +231,21 @@
   .progress-bar {
     width: 70%;
     background-color: #ddd;
-    border-radius: 20px;
+    border-radius: 100px;
     overflow: hidden;
     margin: 0 auto 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
-  .progress {
+  .progressRelaxing {
     background-color: #4caf50;
-    height: 20px;
-    border-radius: 20px;
+    height: 270px;
+    border-radius: 100px;
+    transition: width 0.5s ease-in-out;
+  }
+  .progressWork {
+    background-color: #ff0000;
+    height: 270px;
+    border-radius: 100px;
     transition: width 0.5s ease-in-out;
   }
   button {
@@ -277,5 +280,20 @@
     opacity: 0.6;
     cursor: not-allowed;
   }
+  .pomodoro-top {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: -10px;
+}
+
+.pomodoro-leaf {
+  width: 50px;
+  height: 30px;
+  background-color: #4caf50;
+  border-radius: 50% 50% 0 0;
+  transform: rotate(-10deg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
   </style>
   
