@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import { User, Event, Note } from "./schemas.js";
 import notesRoutes from "./routes/notesRoutes.js";
 import eventsRoutes from "./routes/eventsRoutes.js";
+import pomodoroRoutes from "./routes/pomodoroRoutes.js";
 import usersRoutes from "./routes/usersRoute.js";
 import activityRoutes from "./routes/activityRoutes.js";
 import verifyToken from "./routes/middleware.js";
@@ -36,6 +37,7 @@ app.use(express.static(path.join(global.rootDir, "dist")));
 app.use(cookieParser());
 app.use("/note", notesRoutes);
 app.use("/event", eventsRoutes);
+app.use("/pomodoro", pomodoroRoutes);
 app.use("/user", usersRoutes);
 app.use("/activity", activityRoutes);
 
