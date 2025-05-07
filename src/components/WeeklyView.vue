@@ -3,6 +3,7 @@ import { ref, onMounted, watch, computed } from "vue";
 import { store } from '@/store';
 import { getEventsOfWeek } from "@/eventGetter";
 import { getActivitiesOfWeek } from "@/activityGetter";
+import { getPomodoros } from "@/pomodoroGetter";
 import { Temporal } from "@js-temporal/polyfill";
 import VisualizeEvent from "@/components/VisualizeEvent.vue";
 import ActivityModal from "@/components/ActivityModal.vue";
@@ -67,10 +68,12 @@ function prevWeek() {
 onMounted(() => {
   getEventsOfWeek();
   getActivitiesOfWeek();
+  getPomodoros();
 });
 
 watch(() => store.value.weekOffset, () => getEventsOfWeek());
 watch(() => store.value.weekOffset, () => getActivitiesOfWeek());
+watch(() => store.value.weekOffset, () => getPomodoros());
 </script>
 
 <template>

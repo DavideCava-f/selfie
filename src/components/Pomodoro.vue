@@ -139,7 +139,7 @@ function createPomodoroEvent() {
       studyMins: SetMinutes.value,
       pauseMins: relaxingMinutes.value
     })
-  }).then(() => { console.log("pomodoro created correctly") });
+  }).then(() => { console.log("pomodoro created correctly"); store.value.update(); });
 }
 
 onUnmounted(() => {
