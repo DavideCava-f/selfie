@@ -4,6 +4,7 @@ import { Temporal } from "@js-temporal/polyfill";
 import { store } from "@/store";
 import { getEventsOfMonth } from "@/eventGetter";
 import { getActivitiesOfMonth } from "@/activityGetter";
+import { getPomodoros } from "@/pomodoroGetter";
 import VisualizeEvent from "@/components/VisualizeEvent.vue";
 import ModifyEvent from "@/components/ModifyEvent.vue";
 import ActivityModal from "@/components/ActivityModal.vue";
@@ -91,10 +92,12 @@ onMounted(async () => {
     updateWeekDays(firstDay.value);
     getEventsOfMonth();
     getActivitiesOfMonth();
+    getPomodoros();
 });
 
 watch(() => store.value.monthOffset, () => getEventsOfMonth());
 watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
+watch(() => store.value.monthOffset, () => getPomodoros());
 </script>
 
 <template>
@@ -179,7 +182,7 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
     <!-- <div class="modal fade" id="VisualizeEventModalM" data-bs-backdrop="false" tabindex="-1" aria-hidden="true"> -->
     <!--     <VisualizeEvent /> -->
     <!-- </div> -->
-     
+
     <div class="modal fade" id="AltriEventi" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
