@@ -4,13 +4,12 @@
   import { ref, computed, onUnmounted } from 'vue';
  
   var SetMinutes = ref(35)
-  var SetSeconds = ref(0)
   var SetCycles = ref(5)
-  var relaxingMinutes = ref(5)
-  var relaxingSeconds = ref(5)
-  var relaxingTime = computed(() => {return relaxingMinutes.value*60+relaxingSeconds.value} )
-  const INITIAL_TIME = computed(() => {return SetMinutes.value*60+SetSeconds.value} ); // 25 minutes in seconds
- var relaxing = false 
+  var relaxingMinutes = ref(0)
+  var TotalTime = ref(5)
+  var relaxingTime = computed(() => {return relaxingMinutes.value*60} )
+  var relaxing = ref(false); 
+  const INITIAL_TIME = computed(() => {return relaxing.value ? relaxingTime.value : SetMinutes.value*60} ); // 25 minutes in seconds
   const time = ref(0);
   var cycles = ref(0)
   const isRunning = ref(false);
@@ -19,11 +18,11 @@
   const formatTime = computed(() => {
     const minutes = Math.floor(time.value / 60);
     const seconds = time.value % 60;
-    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${cycles.value}`;
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   });
   
   const progressBarWidth = computed(() => {
-    return `${(time.value / INITIAL_TIME) * 100}%`;
+    return `${(time.value / INITIAL_TIME.value) * 100}%`;
   });
   
   function setupTimer(){
@@ -36,10 +35,10 @@
       time.value--;
     } else {
         if(cycles.value > 1){
-            if(!relaxing){
+            if(!relaxing.value){
                 time.value = relaxingTime.value
-                pauseTimer()
-                relaxing= true
+                //pauseTimer()
+                relaxing.value= true
             }else{
             AdvanceCycle();
             }
@@ -69,17 +68,62 @@
   }
   
   function AdvanceCycle() {
-    relaxing = false
+    relaxing.value = false
     cycles.value--;
-    pauseTimer();
+  //  pauseTimer();
     time.value = INITIAL_TIME.value;
   }
   
   function resetTimerCycle() {
     pauseTimer();
+    relaxing.value = false
     time.value = INITIAL_TIME.value;
     cycles.value = SetCycles.value;
   }
+
+  function findFactors(tot){
+    let iter = Math.floor(tot/2)
+    let divis = []
+    while(iter > 0){
+
+      if((tot % iter) == 0){
+        divis.push(iter)
+      }
+
+      iter -= 1
+
+    }
+    return divis
+
+  }
+
+  function CalcTime(){
+    let totalTime= TotalTime.value
+    let divis = findFactors(totalTime)
+
+    let time = divis[Math.floor(Math.random()*divis.length)]
+    let cycles = totalTime/time
+    if(cycles > time){ //SWAP var
+      time = time + cycles
+      cycles = time - cycles
+      time = time - cycles
+    }
+    let work = Math.floor(time * 4 /5)
+    let relax = Math.ceil(time/5)
+
+    if(cycles == 1)
+    {
+      SetMinutes.value = time
+    }else{
+
+    SetMinutes.value = work
+    relaxingMinutes.value = relax
+    }
+    SetCycles.value = cycles
+
+
+  }
+
   onUnmounted(() => {
     if (timerId !== null) {
       clearInterval(timerId);
@@ -114,23 +158,16 @@
       <div class="brand">Pomodoro Timer</div>
         <div>
         <div>
-
+            <input v-model="TotalTime" type="number"/>
+            <button @click="CalcTime">DIOSTRONZO</button>
             <label>
                 Minutes
-            <select v-model="SetMinutes">
-                <option v-for="n in 13" :key="n" :value="(n-1)*5">{{ (n-1)*5 }}</option>
-            </select>
-            </label>  
-            <label>
-                Seconds
-            <select v-model="SetSeconds">
-                <option v-for="n in 13" :key="n" :value="(n-1)*5">{{ (n-1)*5 }}</option>
-            </select>
+            <input v-model="SetMinutes"/>
             </label>  
             <label>
                 Cycles
             <select v-model="SetCycles">
-                <option v-for="n in 13" :key="n" :value="n">{{ n }}</option>
+                <option v-for="n in 500" :key="n" :value="n">{{ n }}</option>
             </select>
             </label>  
 
@@ -139,19 +176,12 @@
 
             <label>
                 RelaxingMinutes
-            <select v-model="relaxingMinutes">
-                <option v-for="n in 13" :key="n" :value="(n-1)*5">{{ (n-1)*5 }}</option>
-            </select>
-            </label>  
-            <label>
-                RelaxingSeconds
-            <select v-model="relaxingSeconds">
-                <option v-for="n in 13" :key="n" :value="(n-1)*5">{{ (n-1)*5 }}</option>
-            </select>
+            <input v-model="relaxingMinutes"/>
             </label>  
         </div> 
             <button @click="setupTimer()"> Set</button>
         </div>
+        <div v-if="cycles">Cycles: {{ cycles }}</div>
       <div :class="{timerWork:!relaxing, timerRelaxing:relaxing}">{{ formatTime }}</div>
       <div class="progress-bar">
         <div class="progress" :style="{ width: progressBarWidth }"></div>
