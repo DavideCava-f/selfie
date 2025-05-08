@@ -40,13 +40,21 @@ const EventSchema = new Schema({
     }
 });
 
+const PomodoroSchema = new Schema({
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
+    beginDate: Date,
+    cycles: Number,
+    studyMins: Number,
+    pauseMins: Number
+})
+
 const NoteSchema = new Schema({
     userId: { type: Schema.Types.ObjectId, ref: "User" },
     creationDate: Date,
     lastUpDate: Date,
     Title: String,
     Text: String,
-    markdown : Boolean,
+    markdown: Boolean,
     Tags: [{
         name: String
     }]
@@ -64,20 +72,21 @@ const ActivitySchema = new Schema({
     text: String,
     completed: Boolean,
     notification: { //Ogni campo indica se notificato in quel momento
-        
-     isLate: Boolean,
-     oneDayLate: Boolean,
-     oneWeekLate: Boolean,
+
+        isLate: Boolean,
+        oneDayLate: Boolean,
+        oneWeekLate: Boolean,
     },
-    
+
 });
 
 const User = model('User', UserSchema);
 const Event = model('Event', EventSchema);
+const Pomodoro = model('Pomodoro', PomodoroSchema);
 const Note = model('Note', NoteSchema);
 const Activity = model('Activity', ActivitySchema);
 
-export { User, Event, Note, Activity };
+export { User, Event, Pomodoro, Note, Activity };
 // Query per note ordinate in base alla lunghezza di Text
 /*
 const notes = await Note.aggregate([

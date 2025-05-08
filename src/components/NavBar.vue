@@ -62,12 +62,9 @@ setUserPfp();
                         </li>
                         <li class="nav-item">
                             <!-- Non sara' un RouterLink -->
-                            <RouterLink class="nav-link text-white" to="#">
-                            <button class="nav-link text-white" data-bs-target="#PomodoroModal"
-                                data-bs-toggle="modal">
+                            <button class="nav-link text-white" data-bs-target="#PomodoroModal" data-bs-toggle="modal">
                                 <img src="@/assets/PomodoroLogo.svg" alt="Pomodoro" class="w-100">
                             </button>
-                            </RouterLink>
                         </li>
                         <li class="nav-item">
                             <button class="nav-link text-white" data-bs-target="#timeMachineModal"
@@ -101,8 +98,8 @@ setUserPfp();
         aria-labelledby="timeMachineModalLabel" aria-hidden="true">
         <TimeMachine />
     </div>
-    <div class="modal fade" id="PomodoroModal" data-bs-backdrop="false" tabindex="-1"
-        aria-labelledby="Pomodoro" aria-hidden="true">
+    <div class="modal fade" id="PomodoroModal" data-bs-backdrop="false" tabindex="-1" aria-labelledby="Pomodoro"
+        aria-hidden="true">
         <Pomodoro />
     </div>
 </template>

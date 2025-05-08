@@ -107,8 +107,8 @@ function canCreateEvent() {
         repetitionSelected.value.type === "u")
       ? repetitionSelected.value.option
       : true) &&
-        (Temporal.PlainDate.compare(eventBeginDate.value, eventEndDate.value) <= 0) &&
-        (Temporal.PlainTime.compare(eventBeginTime.value, eventEndTime.value) <= 0)
+    (Temporal.PlainDate.compare(eventBeginDate.value, eventEndDate.value) <= 0) &&
+    (Temporal.PlainTime.compare(eventBeginTime.value, eventEndTime.value) <= 0)
   );
 }
 
@@ -123,6 +123,8 @@ function createEvent() {
       eventBeginTime.value,
       eventEndDate.value,
       eventEndTime.value,
+      notificationSelected.value,
+      notifyUntilAck.value
     ).then(() => store.value.update());
   } else {
     if (frequenceSelected.value.type === "d") {
@@ -136,6 +138,8 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
+          notificationSelected.value,
+          notifyUntilAck.value
         ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "n") {
         EventCreator.insertNDaily(
@@ -147,6 +151,8 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
+          notificationSelected.value,
+          notifyUntilAck.value
         ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "u") {
         EventCreator.insertUntilDaily(
@@ -158,6 +164,8 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
+          notificationSelected.value,
+          notifyUntilAck.value
         ).then(() => store.value.update());
       }
     } else if (frequenceSelected.value.type === "w") {
@@ -172,6 +180,8 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
+          notificationSelected.value,
+          notifyUntilAck.value
         ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "n") {
         EventCreator.insertNWeekly(
@@ -184,6 +194,8 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
+          notificationSelected.value,
+          notifyUntilAck.value
         ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "u") {
         EventCreator.insertUntilWeekly(
@@ -196,6 +208,8 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
+          notificationSelected.value,
+          notifyUntilAck.value
         ).then(() => store.value.update());
       }
     } else if (frequenceSelected.value.type === "m") {
@@ -209,6 +223,8 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
+          notificationSelected.value,
+          notifyUntilAck.value
         ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "n") {
         EventCreator.insertNMonthly(
@@ -220,6 +236,8 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
+          notificationSelected.value,
+          notifyUntilAck.value
         ).then(() => store.value.update());
       } else if (repetitionSelected.value.type === "u") {
         EventCreator.insertUntilMonthly(
@@ -231,6 +249,8 @@ function createEvent() {
           eventBeginTime.value,
           eventEndDate.value,
           eventEndTime.value,
+          notificationSelected.value,
+          notifyUntilAck.value
         ).then(() => store.value.update());
       }
     }

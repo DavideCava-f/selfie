@@ -4,6 +4,7 @@ import { Temporal } from "@js-temporal/polyfill";
 import { store } from "@/store";
 import { getEventsOfMonth } from "@/eventGetter";
 import { getActivitiesOfMonth } from "@/activityGetter";
+import { getPomodoros } from "@/pomodoroGetter";
 import VisualizeEvent from "@/components/VisualizeEvent.vue";
 import ModifyEvent from "@/components/ModifyEvent.vue";
 import ActivityModal from "@/components/ActivityModal.vue";
@@ -13,6 +14,7 @@ let firstDay = computed(() => store.value.simDate.with({ day: 1 }).add({ months:
 let dayInMonth = ref([]);
 const giorniSettimana = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 // var MactiveEventId = ref("");
+let selectedDay = ref(null);
 let eventsOfSelectedDay = ref({});
 const activitiesOfSelectedDay = ref({});
 
@@ -36,7 +38,12 @@ async function changeMonth(direction) {
 }
 
 function conta(i) {
-    return store.value.eventsOfMonth.find((d) => (d.day) === i).events.length;
+    let f = store.value.eventsOfMonth.find((d) => (d.day) === i);
+    return f ? f.events.length : 0;
+}
+
+function contaPom(i) {
+    return store.value.pomodoros.filter((p) => Temporal.PlainDate.compare(Temporal.PlainDate.from(p.beginDate.slice(0, -1)), firstDay.value.add({ days: i - 1 })) === 0).length;
 }
 
 function getColorFromTitle(title) {
@@ -91,10 +98,12 @@ onMounted(async () => {
     updateWeekDays(firstDay.value);
     getEventsOfMonth();
     getActivitiesOfMonth();
+    getPomodoros();
 });
 
 watch(() => store.value.monthOffset, () => getEventsOfMonth());
 watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
+watch(() => store.value.monthOffset, () => getPomodoros());
 </script>
 
 <template>
@@ -137,8 +146,7 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
                     </button>
                 </div>
                 <div class="mx-0 mt-1 p-0 d-flex flex-column" style="overflow: hidden;">
-                    <div v-if="store.eventsOfMonth.find((d) => (d.day) === i) && (conta(i) > 2)"
-                        class="d-flex flex-column align-items-start " style="overflow: hidden;">
+                    <div v-if="conta(i) > 2" class="d-flex flex-column align-items-start " style="overflow: hidden;">
                         <button @click="() => {
                             store.activeEventId = event._id; store.toggle = !store.toggle;
                             store.activeDate = firstDay.add({ days: i - 1 });
@@ -152,11 +160,11 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
                         </button>
                         <button class="btn event d-flex d-inline-block align-self-center align-items-center text-nowrap"
                             @click="() => {
+                                selectedDay = i;
                                 eventsOfSelectedDay = store.eventsOfMonth.find((d) => (d.day) === i).events;
                             }" data-bs-target="#AltriEventi" data-bs-toggle="modal">
                             altri eventi
                         </button>
-
                     </div>
                     <div v-else>
                         <button @click="() => {
@@ -170,6 +178,22 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
                             :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
                             {{ event.title }}
                         </button>
+                        <button
+                            v-if="store.pomodoros.filter((p) => Temporal.PlainDate.compare(Temporal.PlainDate.from(p.beginDate.slice(0, -1)), firstDay.add({ days: i - 1 })) === 0)"
+                            v-for="pomodoro in store.pomodoros.filter((p) => Temporal.PlainDate.compare(Temporal.PlainDate.from(p.beginDate.slice(0, -1)), firstDay.add({ days: i - 1 })) === 0).slice(0, 2 - conta(i))"
+                            class="btn btn-danger d-flex d-inline-block align-items-center 
+                            text-truncate event text-nowrap" @click="" data-bs-target="#PomodoroModal"
+                            data-bs-toggle="modal"> <!-- TODO -->
+                            🍅 {{ pomodoro.beginDate.split("T")[1].slice(0, 5) }}
+                        </button>
+                        <button v-if="contaPom(i) > 2 - conta(i)"
+                            class="btn event d-flex d-inline-block align-self-center align-items-center text-nowrap"
+                            @click="() => {
+                                selectedDay = i;
+                                eventsOfSelectedDay = store.eventsOfMonth.find((d) => (d.day) === i).events;
+                            }" data-bs-target="#AltriEventi" data-bs-toggle="modal">
+                            altri eventi
+                        </button>
                     </div>
                 </div>
 
@@ -179,7 +203,7 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
     <!-- <div class="modal fade" id="VisualizeEventModalM" data-bs-backdrop="false" tabindex="-1" aria-hidden="true"> -->
     <!--     <VisualizeEvent /> -->
     <!-- </div> -->
-     
+
     <div class="modal fade" id="AltriEventi" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
@@ -194,12 +218,18 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
                         :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
                         {{ event.title }}
                     </button>
+                    <button
+                        v-for="pomodoro in store.pomodoros.filter((p) =>
+                            Temporal.PlainDate.compare(Temporal.PlainDate.from(p.beginDate.slice(0, -1)), firstDay.add({ days: selectedDay - 1 })) === 0)"
+                        class="btn btn-danger" data-bs-target="#PomodoroModal" data-bs-toggle="modal">
+                        🍅 {{ pomodoro.beginDate.split("T")[1].slice(0, 5) }}
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="VisualizeActivitiesModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
+    <div class=" modal fade" id="VisualizeActivitiesModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
         <ActivityModal :activities="activitiesOfSelectedDay" />
     </div>
 </template>

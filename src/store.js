@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import { Temporal } from "@js-temporal/polyfill";
 import { getEventsOfWeek, getEventsOfDay, getEventsOfMonth } from "@/eventGetter";
 import { getActivitiesOfDay, getActivitiesOfMonth, getActivitiesOfWeek } from "@/activityGetter";
+import { getPomodoros } from "@/pomodoroGetter";
 import { notipol } from "@/notipol";
 
 export const NotesList = ref([]);
@@ -79,6 +80,8 @@ const store = ref({
   activitiesOfWeek: [],
   activitiesOfMonth: [],
 
+  pomodoros: [],
+
   toggle: false,
 
   update: () => {
@@ -88,6 +91,7 @@ const store = ref({
     getActivitiesOfDay();
     getActivitiesOfMonth();
     getActivitiesOfWeek();
+    getPomodoros();
     store.value.toggle = !store.value.toggle;
   },
 
