@@ -31,6 +31,7 @@ watchEffect(() => {
 const notifyUntilAck = ref(false);
 const eventLink = ref(null);
 
+
 async function generateDetails() {
   const completion = await store.value.openai.chat.completions.create({
     model: "deepseek/deepseek-r1-distill-llama-70b:free",
