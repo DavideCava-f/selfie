@@ -14,6 +14,7 @@ let firstDay = computed(() => store.value.simDate.with({ day: 1 }).add({ months:
 let dayInMonth = ref([]);
 const giorniSettimana = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 // var MactiveEventId = ref("");
+let selectedDay = ref(null);
 let eventsOfSelectedDay = ref({});
 const activitiesOfSelectedDay = ref({});
 
@@ -155,6 +156,7 @@ watch(() => store.value.monthOffset, () => getPomodoros());
                         </button>
                         <button class="btn event d-flex d-inline-block align-self-center align-items-center text-nowrap"
                             @click="() => {
+                                selectedDay = i;
                                 eventsOfSelectedDay = store.eventsOfMonth.find((d) => (d.day) === i).events;
                             }" data-bs-target="#AltriEventi" data-bs-toggle="modal">
                             altri eventi
@@ -172,6 +174,15 @@ watch(() => store.value.monthOffset, () => getPomodoros());
                             text-truncate event text-nowrap"
                             :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
                             {{ event.title }}
+                        </button>
+                        {{}}
+                        <button
+                            v-if="store.pomodoros.filter((p) => Temporal.PlainDate.compare(Temporal.PlainDate.from(p.beginDate.slice(0, -1)), firstDay.add({ days: i - 1 })) === 0)"
+                            v-for="pomodoro in store.pomodoros.filter((p) => Temporal.PlainDate.compare(Temporal.PlainDate.from(p.beginDate.slice(0, -1)), firstDay.add({ days: i - 1 })) === 0)"
+                            class="btn btn-danger d-flex d-inline-block align-items-center 
+                            text-truncate event text-nowrap" @click="" data-bs-target="#PomodoroModal"
+                            data-bs-toggle="modal"> <!-- TODO -->
+                            🍅 {{ pomodoro.beginDate.split("T")[1].slice(0, 5) }}
                         </button>
                     </div>
                 </div>
@@ -197,12 +208,18 @@ watch(() => store.value.monthOffset, () => getPomodoros());
                         :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
                         {{ event.title }}
                     </button>
+                    <button
+                        v-for="pomodoro in store.pomodoros.filter((p) =>
+                            Temporal.PlainDate.compare(Temporal.PlainDate.from(p.beginDate.slice(0, -1)), firstDay.add({ days: selectedDay - 1 })) === 0)"
+                        class="btn btn-danger" data-bs-target="#PomodoroModal" data-bs-toggle="modal">
+                        🍅 {{ pomodoro.beginDate.split("T")[1].slice(0, 5) }}
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="VisualizeActivitiesModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
+    <div class=" modal fade" id="VisualizeActivitiesModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
         <ActivityModal :activities="activitiesOfSelectedDay" />
     </div>
 </template>
