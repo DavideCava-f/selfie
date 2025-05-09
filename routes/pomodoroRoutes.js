@@ -1,6 +1,5 @@
 import express from "express";
 import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
 import { Pomodoro } from "../schemas.js";
 import verifyToken from "./middleware.js";
 const router = express.Router();

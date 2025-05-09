@@ -81,6 +81,7 @@ const store = ref({
   activitiesOfMonth: [],
 
   pomodoros: [],
+  activePomodoro: null,
 
   toggle: false,
 

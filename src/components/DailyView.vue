@@ -109,8 +109,8 @@ watch(() => store.value.dayOffset, () => getPomodoros());
       </div>
       <div class="overflow-scroll rounded-3 w-100" style="max-height: 40vh;">
         <button v-for="pomodoro in store.pomodoros.filter((p) => Temporal.PlainDate.compare(Temporal.PlainDate.from(p.beginDate.split('T')[0]),
-          VisualizedDate) === 0)" class="btn btn-danger w-100 my-1 p-3 rounded-3" @click=""
-          data-bs-target="#PomodoroModal" data-bs-toggle="modal"> <!-- TODO -->
+          VisualizedDate) === 0)" class="btn btn-danger w-100 my-1 p-3 rounded-3"
+          @click="store.activePomodoro = pomodoro" data-bs-target="#PomodoroModal" data-bs-toggle="modal">
           <h5>At {{ pomodoro.beginDate.split("T")[1].slice(0, 5) }}</h5>
           {{ pomodoro.cycles }} cycles, {{ pomodoro.studyMins }} study, {{ pomodoro.pauseMins }} pause
         </button>

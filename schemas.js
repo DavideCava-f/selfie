@@ -45,7 +45,7 @@ const PomodoroSchema = new Schema({
     beginDate: Date,
     cycles: Number,
     studyMins: Number,
-    pauseMins: Number
+    pauseMins: Number,
 })
 
 const NoteSchema = new Schema({

@@ -152,8 +152,8 @@ watch(() => store.value.weekOffset, () => getPomodoros());
           </button>
           <button v-for="pomodoro in store.pomodoros.filter((p) => Temporal.PlainDate.compare(Temporal.PlainDate.from(p.beginDate.split('T')[0]),
             thisMonday.add({ days: store.week.indexOf(day) })) === 0)"
-            class="btn btn-danger fillable p-2 d-flex justify-content-between align-items-center gap-3" @click=""
-            data-bs-target="#PomodoroModal" data-bs-toggle="modal"> <!-- TODO -->
+            class="btn btn-danger fillable p-2 d-flex justify-content-between align-items-center gap-3"
+            @click="store.activePomodoro = pomodoro" data-bs-target="#PomodoroModal" data-bs-toggle="modal">
             <div class="fw-bold text-start event">
               🍅
             </div>
