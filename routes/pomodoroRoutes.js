@@ -38,4 +38,16 @@ router.get("/", verifyToken, async function(req, res) {
 });
 
 
+router.delete("/", verifyToken, async function(req, res) {
+  try {
+    const id = req.query.id;
+    await Pomodoro.deleteOne({ userId: req.userId, _id: id });
+    res.status(200).send();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
+  }
+});
+
+
 export default router;
