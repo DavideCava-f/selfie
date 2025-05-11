@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onUnmounted } from 'vue';
+import { ref, computed, onUnmounted, watch } from 'vue';
 import { store } from "@/store";
 
 var SetMinutes = ref(35)
@@ -163,7 +163,21 @@ onUnmounted(() => {
     clearInterval(timerId);
   }
 });
+
+
+watch(() => store.value.activePomodoro, () => {
+  if (store.value.activePomodoro) {
+    SetMinutes.value = store.value.activePomodoro.studyMins;
+    SetCycles.value = store.value.activePomodoro.cycles;
+    relaxingMinutes.value = store.value.activePomodoro.pauseMins;
+  } else {
+    SetMinutes.value = 35;
+    SetCycles.value = 5;
+    relaxingMinutes.value = 0;
+  }
+});
 </script>
+
 <template>
   <!--  <div class="container modal-content">
         <div class="modal-body">
@@ -215,7 +229,7 @@ onUnmounted(() => {
             </div>
 
             <div class="brand">Pomodoro Timer</div>
-            <div>
+            <div v-if="!store.activePomodoro">
               <div>
                 <input v-model="TotalTime" type="number" />
                 <button @click="CalcTime">DIOSTRONZO</button>
@@ -229,10 +243,8 @@ onUnmounted(() => {
                     <option v-for="n in 500" :key="n" :value="n">{{ n }}</option>
                   </select>
                 </label>
-
               </div>
               <div>
-
                 <label>
                   RelaxingMinutes
                   <input v-model="relaxingMinutes" />
@@ -240,16 +252,18 @@ onUnmounted(() => {
               </div>
             </div>
 
-            <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
-              <button type="button" class="btn btn-outline-primary active" @click="mode = 0">
-                Now
-              </button>
-              <button type="button" class="btn btn-outline-primary" @click="mode = 1">
-                Plan
-              </button>
+            <div v-if="!store.activePomodoro">
+              <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
+                <button type="button" class="btn btn-outline-primary active" @click="mode = 0">
+                  Now
+                </button>
+                <button type="button" class="btn btn-outline-primary" @click="mode = 1">
+                  Plan
+                </button>
+              </div>
             </div>
 
-            <div v-if="mode === 0">
+            <div v-if="mode === 0 || store.activePomodoro">
               <button @click="setupTimer()"> Set</button>
 
               <div v-if="cycles">Cycles: {{ cycles }}</div>
