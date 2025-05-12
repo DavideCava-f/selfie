@@ -83,25 +83,40 @@ function resetTimerCycle() {
   cycles.value = SetCycles.value;
 }
 
-function findFactors(tot) {
-  let iter = Math.floor(tot / 2)
-  let divis = []
-  while (iter > 0) {
+async function findFactorsAsync(tot) {
+  const divis = [];
+  const max = Math.floor(tot / 2);
+  const batchSize = 10000;
+  let count = 0;
 
-    if ((tot % iter) == 0) {
-      divis.push(iter)
+  for (let i = max; i > 0; i--) {
+    if (tot % i === 0) {
+      divis.push(i);
     }
-
-    iter -= 1
-
+    count++;
+    if (count >= batchSize) {
+      count = 0;
+      await new Promise(resolve => setTimeout(resolve, 0));
+    }
   }
-  return divis
-
+  return divis;
 }
 
-function CalcTime() {
+// function findFactors(tot) {
+//   let iter = Math.floor(tot / 2)
+//   let divis = []
+//   while (iter > 0) {
+//     if ((tot % iter) == 0) {
+//       divis.push(iter)
+//     }
+//     iter -= 1
+//   }
+//   return divis
+// }
+
+async function CalcTime() {
   let totalTime = TotalTime.value
-  let divis = findFactors(totalTime)
+  let divis = await findFactorsAsync(totalTime);
 
   let time = divis[Math.floor(Math.random() * divis.length)]
   let cycles = totalTime / time
@@ -115,8 +130,8 @@ function CalcTime() {
 
   if (cycles == 1) {
     SetMinutes.value = time
+    relaxingMinutes.value = 0;
   } else {
-
     SetMinutes.value = work
     relaxingMinutes.value = relax
   }
@@ -232,7 +247,7 @@ watch(() => store.value.activePomodoro, () => {
             <div v-if="!store.activePomodoro">
               <div>
                 <input v-model="TotalTime" type="number" />
-                <button @click="CalcTime">DIOSTRONZO</button>
+                <button @click="CalcTime">Generate intervals</button>
                 <label>
                   Minutes
                   <input v-model="SetMinutes" />
@@ -240,7 +255,7 @@ watch(() => store.value.activePomodoro, () => {
                 <label>
                   Cycles
                   <select v-model="SetCycles">
-                    <option v-for="n in 500" :key="n" :value="n">{{ n }}</option>
+                    <option v-for="n in Math.max(SetCycles, 50)" :key="n" :value="n">{{ n }}</option>
                   </select>
                 </label>
               </div>
