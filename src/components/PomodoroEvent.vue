@@ -95,7 +95,6 @@ async function resetTimerCycle() {
   isSet.value = false;
 }
 
-
 function deletePomodoroEvent() {
   console.log("delete pomodoro");
   fetch(`${store.value.url}:${store.value.port}/pomodoro?id=${store.value.activePomodoro._id}`, {
@@ -192,20 +191,25 @@ watch(() => store.value.activePomodoro?._id, () => {
           </label>
         </div>
 
-        <div class="d-flex justify-content-center">
-          <button @click="setupTimer" :disabled="isSet">Set</button>
-          <button @click="resetTimerCycle" :disabled="isRunning" class="reset-button">Reset</button>
+        <div v-if="store.activePomodoro?.completedCycles < store.activePomodoro?.cycles">
+          <div class="d-flex justify-content-center">
+            <button @click="setupTimer" :disabled="isSet">Set</button>
+            <button @click="resetTimerCycle" :disabled="isRunning" class="reset-button">Reset</button>
+          </div>
+          <div v-if="cycles">
+            Remaining cycles: {{ cycles }}
+          </div>
+          <div :class="{ timerWork: !relaxing, timerRelaxing: relaxing }">{{ formatTime }}</div>
+          <div class="progress-bar">
+            <div class="progress" :style="{ width: progressBarWidth }"></div>
+          </div>
+          <button @click="startTimer" :disabled="isRunning || !isSet">Start</button>
+          <button @click="pauseTimer" :disabled="!isRunning" class="pause-button">Pause</button>
+          <button @click="forceCycle" :disabled="!isRunning" class="pause-button">Next</button>
         </div>
-        <div v-if="cycles">
-          Remaining cycles: {{ cycles }}
+        <div v-else>
+          Pomodoro already completed!
         </div>
-        <div :class="{ timerWork: !relaxing, timerRelaxing: relaxing }">{{ formatTime }}</div>
-        <div class="progress-bar">
-          <div class="progress" :style="{ width: progressBarWidth }"></div>
-        </div>
-        <button @click="startTimer" :disabled="isRunning || !isSet">Start</button>
-        <button @click="pauseTimer" :disabled="!isRunning" class="pause-button">Pause</button>
-        <button @click="forceCycle" :disabled="!isRunning" class="pause-button">Next</button>
       </div>
     </div>
   </div>

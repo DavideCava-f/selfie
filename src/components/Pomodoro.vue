@@ -227,7 +227,10 @@ onUnmounted(() => {
         </div>
 
         <div v-if="mode === 0">
-          <button @click="setupTimer()" :disabled="isSet">Set</button>
+          <div class="d-flex justify-content-center">
+            <button @click="setupTimer" :disabled="isSet">Set</button>
+            <button @click="resetTimerCycle" :disabled="isRunning" class="reset-button">Reset</button>
+          </div>
           <div v-if="cycles">
             Remaining cycles: {{ cycles }}
           </div>
@@ -237,7 +240,6 @@ onUnmounted(() => {
           </div>
           <button @click="startTimer" :disabled="isRunning">Start</button>
           <button @click="pauseTimer" :disabled="!isRunning" class="pause-button">Pause</button>
-          <button @click="resetTimerCycle" :disabled="!isSet" class="reset-button">Reset</button>
           <button @click="forceCycle" :disabled="!isRunning" class="pause-button">Next</button>
         </div>
         <div v-else>

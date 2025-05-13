@@ -17,32 +17,31 @@ const isWeekly = ref(Boolean);
 let weekButt = ref(null);
 let monthButt = ref(null);
 
-function visualMode(i){
-  if (i === 0) {
-    isWeekly.value = true;
-    weekButt.value.classList.add('active');
-    monthButt.value.classList.remove('active');
+function visualMode(i) {
+    if (i === 0) {
+        isWeekly.value = true;
+        weekButt.value.classList.add('active');
+        monthButt.value.classList.remove('active');
 
-  } else {
-    isWeekly.value = false;
-    monthButt.value.classList.add('active');
-    weekButt.value.classList.remove('active');
-  }
+    } else {
+        isWeekly.value = false;
+        monthButt.value.classList.add('active');
+        weekButt.value.classList.remove('active');
+    }
 }
 
 
 </script>
 
 <template>
-    <!-- <button @click="emits('click')"></button> -->
-    <NavBar />
     <div class="container-fluid">
         <div class="row bg-dark p-lg-3 p-0 h-100">
             <div class="col-lg-4 col-12 order-2 order-lg-1 mt-3 bg-warning rounded-4">
                 <!-- colonna day-->
                 <DailyView />
             </div>
-            <div class="col-lg-8 col-12 order-1 order-lg-2 mt-3 bg-primary rounded-4 px-lg-3 p-0" style="position: relative">
+            <div class="col-lg-8 col-12 order-1 order-lg-2 mt-3 bg-primary rounded-4 px-lg-3 p-0"
+                style="position: relative">
                 <!-- colonna calendario -->
                 <div class="p-lg-1 p-0 btn-group" role="group">
                     <button class="btn btn-outline-dark active" @click="visualMode(0)" ref="weekButt">
