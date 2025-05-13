@@ -331,4 +331,19 @@ button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
+  .pomodoro-top {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: -10px;
+}
+
+.pomodoro-leaf {
+  width: 50px;
+  height: 30px;
+  background-color: #4caf50;
+  border-radius: 50% 50% 0 0;
+  transform: rotate(-10deg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
 </style>
