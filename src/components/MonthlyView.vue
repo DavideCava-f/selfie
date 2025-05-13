@@ -183,7 +183,7 @@ watch(() => store.value.monthOffset, () => getPomodoros());
                             v-for="pomodoro in store.pomodoros.filter((p) => Temporal.PlainDate.compare(Temporal.PlainDate.from(p.beginDate.slice(0, -1)), firstDay.add({ days: i - 1 })) === 0).slice(0, 2 - conta(i))"
                             class="btn btn-danger d-flex d-inline-block align-items-center 
                             text-truncate event text-nowrap" @click="store.activePomodoro = pomodoro"
-                            data-bs-target="#PomodoroModal" data-bs-toggle="modal">
+                            data-bs-target="#PomodoroEventModal" data-bs-toggle="modal">
                             🍅 {{ pomodoro.beginDate.split("T")[1].slice(0, 5) }}
                         </button>
                         <button v-if="contaPom(i) > 2 - conta(i)"
@@ -221,7 +221,7 @@ watch(() => store.value.monthOffset, () => getPomodoros());
                     <button
                         v-for="pomodoro in store.pomodoros.filter((p) =>
                             Temporal.PlainDate.compare(Temporal.PlainDate.from(p.beginDate.slice(0, -1)), firstDay.add({ days: selectedDay - 1 })) === 0)"
-                        class="btn btn-danger" data-bs-target="#PomodoroModal" data-bs-toggle="modal"
+                        class="btn btn-danger" data-bs-target="#PomodoroEventModal" data-bs-toggle="modal"
                         @click="store.activePomodoro = pomodoro">
                         🍅 {{ pomodoro.beginDate.split("T")[1].slice(0, 5) }}
                     </button>

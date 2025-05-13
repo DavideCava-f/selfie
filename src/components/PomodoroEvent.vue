@@ -38,7 +38,7 @@ function setupTimer() {
   pauseTimer();
   relaxing.value = false
   time.value = INITIAL_TIME.value
-  cycles.value = SetCycles.value
+  cycles.value = SetCycles.value - store.value.activePomodoro.completedCycles;
   isSet.value = true;
 }
 
@@ -50,6 +50,7 @@ async function tick() {
       if (!relaxing.value) {
         time.value = relaxingTime.value
         relaxing.value = true
+        if (store.value.activePomodoro) await updateCompletedCycles();
       } else {
         AdvanceCycle();
       }
@@ -86,88 +87,72 @@ function AdvanceCycle() {
 
 async function resetTimerCycle() {
   pauseTimer();
+  await resetCycles();
+  SetCycles.value = store.value.activePomodoro.cycles;
   relaxing.value = false
   time.value = INITIAL_TIME.value;
   cycles.value = SetCycles.value;
-}
-
-async function findFactorsAsync(tot) {
-  const divis = [];
-  const max = Math.floor(tot / 2);
-  const batchSize = 10000;
-  let count = 0;
-  for (let i = max; i > 0; i--) {
-    if (tot % i === 0) {
-      divis.push(i);
-
-    }
-    count++;
-    if (count >= batchSize) {
-      count = 0;
-      await new Promise(resolve => setTimeout(resolve, 0));
-    }
-  }
-  divis.push(tot);
-  return divis;
-}
-
-async function CalcTime() {
-  let totalTime = TotalTime.value
-  let divis = await findFactorsAsync(totalTime);
-  if (divis.length == 0) return;
-
-  let time = divis[Math.floor(Math.random() * divis.length)]
-  let cycles = totalTime / time
-  if (cycles > time) { //SWAP var
-    time = time + cycles
-    cycles = time - cycles
-    time = time - cycles
-  }
-  let work = Math.floor(time * 4 / 5)
-  let relax = Math.ceil(time / 5)
-
-  if (cycles == 1) {
-    SetMinutes.value = time
-    relaxingMinutes.value = 0;
-  } else {
-    SetMinutes.value = work
-    relaxingMinutes.value = relax
-  }
-  SetCycles.value = cycles
-}
-
-
-function reset() {
-  SetMinutes.value = DEFAULT_STUDY_MINS;
-  SetCycles.value = DEFAULT_CYCLES;
-  relaxingMinutes.value = DEFAULT_PAUSE_MINS;
-  TotalTime.value = 1;
   isSet.value = false;
 }
 
-function createPomodoroEvent() {
-  fetch(`${store.value.url}:${store.value.port}/pomodoro`, {
+
+function deletePomodoroEvent() {
+  console.log("delete pomodoro");
+  fetch(`${store.value.url}:${store.value.port}/pomodoro?id=${store.value.activePomodoro._id}`, {
     credentials: "include",
-    method: "POST",
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+    }
+  }).then(() => {
+    console.log("pomodoro deleted correctly");
+    store.value.activePomodoro = null;
+    store.value.update();
+  });
+}
+
+function updateCompletedCycles() {
+  fetch(`${store.value.url}:${store.value.port}/pomodoro?id=${store.value.activePomodoro._id}`, {
+    credentials: "include",
+    method: "PUT",
     headers: {
       Accept: "application/json",
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      beginDate: startDate.value + "T" + startTime.value + ":00.000Z",
-      cycles: SetCycles.value,
-      studyMins: SetMinutes.value,
-      pauseMins: relaxingMinutes.value,
-    })
-  }).then(() => { console.log("pomodoro created correctly"); store.value.update(); });
+  }).then(() => {
+    console.log("pomodoro updated correctly");
+    store.value.update();
+  })
 }
 
-onUnmounted(() => {
-  if (timerId !== null) {
-    clearInterval(timerId);
-    reset();
+function resetCycles() {
+  fetch(`${store.value.url}:${store.value.port}/pomodoro/reset?id=${store.value.activePomodoro._id}`, {
+    credentials: "include",
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+    },
+  }).then(() => {
+    console.log("pomodoro resetted correctly");
+    store.value.update();
+  })
+}
+
+watch(() => store.value.activePomodoro?._id, () => {
+  if (store.value.activePomodoro) {
+    SetMinutes.value = store.value.activePomodoro.studyMins;
+    SetCycles.value = store.value.activePomodoro.cycles;
+    relaxingMinutes.value = store.value.activePomodoro.pauseMins;
   }
+  time.value = 0;
+  cycles.value = 0;
+  isSet.value = false;
+  relaxing.value = false;
+  pauseTimer();
 });
+
 </script>
 
 <template>
@@ -175,44 +160,25 @@ onUnmounted(() => {
     <div class="modal-content">
       <div class="modal-header bg-danger">
         <h1 class="modal-title fs-4" id="staticBackdropLabel">Pomodoro Timer</h1>
-        <button @click="() => { !isRunning ? reset() : null; }" type="button" class="btn-close" data-bs-dismiss="modal"
-          aria-label="Close"></button>
+        <button @click="() => { !isRunning && !store.activePomodoro ? reset() : null; }" type="button" class="btn-close"
+          data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body d-flex flex-column text-center">
-        <div class="brand">Pomodoro Timer</div>
-        <div>
-          <div>
-            <input v-model="TotalTime" type="number" min="1" />
-            <button @click="CalcTime">Generate intervals</button>
-            <label>
-              Minutes
-              <input v-model="SetMinutes" />
-            </label>
-            <br>
-            <label>
-              Cycles
-              <select v-model="SetCycles">
-                <option v-for="n in Math.max(SetCycles, 50)" :key="n" :value="n">{{ n }}</option>
-              </select>
-            </label>
-            <br>
-            <label>
-              RelaxingMinutes
-              <input v-model="relaxingMinutes" />
-            </label>
-          </div>
-        </div>
+        <button @click="deletePomodoroEvent(); isSet = false" class="btn btn-danger" data-bs-dismiss="modal">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+            viewBox="0 0 16 16">
+            <path
+              d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+            <path
+              d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+          </svg>
+        </button>
+        <span>
+          <i>Linked to pomodoro at {{ store.activePomodoro?.beginDate.split("T")[0] }} -
+            {{ store.activePomodoro?.beginDate.split("T")[1].slice(0, 5) }}</i>
+        </span>
 
-        <div>
-          <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
-            <button type="button" class="btn btn-outline-primary active" @click="mode = 0">
-              Now
-            </button>
-            <button type="button" class="btn btn-outline-primary" @click="mode = 1">
-              Plan
-            </button>
-          </div>
-        </div>
+        <div class="brand">Pomodoro Timer</div>
 
         <div class="d-flex justify-content-between">
           <label>
@@ -226,25 +192,20 @@ onUnmounted(() => {
           </label>
         </div>
 
-        <div v-if="mode === 0">
-          <button @click="setupTimer()" :disabled="isSet">Set</button>
-          <div v-if="cycles">
-            Remaining cycles: {{ cycles }}
-          </div>
-          <div :class="{ timerWork: !relaxing, timerRelaxing: relaxing }">{{ formatTime }}</div>
-          <div class="progress-bar">
-            <div class="progress" :style="{ width: progressBarWidth }"></div>
-          </div>
-          <button @click="startTimer" :disabled="isRunning">Start</button>
-          <button @click="pauseTimer" :disabled="!isRunning" class="pause-button">Pause</button>
-          <button @click="resetTimerCycle" :disabled="!isSet" class="reset-button">Reset</button>
-          <button @click="forceCycle" :disabled="!isRunning" class="pause-button">Next</button>
+        <div class="d-flex justify-content-center">
+          <button @click="setupTimer" :disabled="isSet">Set</button>
+          <button @click="resetTimerCycle" :disabled="isRunning" class="reset-button">Reset</button>
         </div>
-        <div v-else>
-          <input class="form-control" type="date" v-model="startDate" />
-          <input class="form-control" type="time" v-model="startTime" />
-          <button @click="createPomodoroEvent()">Create</button>
+        <div v-if="cycles">
+          Remaining cycles: {{ cycles }}
         </div>
+        <div :class="{ timerWork: !relaxing, timerRelaxing: relaxing }">{{ formatTime }}</div>
+        <div class="progress-bar">
+          <div class="progress" :style="{ width: progressBarWidth }"></div>
+        </div>
+        <button @click="startTimer" :disabled="isRunning || !isSet">Start</button>
+        <button @click="pauseTimer" :disabled="!isRunning" class="pause-button">Pause</button>
+        <button @click="forceCycle" :disabled="!isRunning" class="pause-button">Next</button>
       </div>
     </div>
   </div>

@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import TimeMachine from './TimeMachine.vue';
 import Pomodoro from './Pomodoro.vue';
+import PomodoroEvent from './PomodoroEvent.vue';
 import { store } from "@/store";
 
 const router = useRouter();
@@ -101,6 +102,10 @@ setUserPfp();
     <div class="modal fade" id="PomodoroModal" data-bs-backdrop="false" tabindex="-1" aria-labelledby="Pomodoro"
         aria-hidden="true">
         <Pomodoro />
+    </div>
+    <div class="modal fade" id="PomodoroEventModal" data-bs-backdrop="false" tabindex="-1"
+        aria-labelledby="PomodoroEvent" aria-hidden="true">
+        <PomodoroEvent />
     </div>
 </template>
 
