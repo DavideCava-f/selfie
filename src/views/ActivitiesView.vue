@@ -15,7 +15,7 @@ var ActUpdateText = ref("")
 var ActUpdateDeadlineDate = ref("")
 var ActUpdateDeadlineTime = ref("")
 
-watch(()=>store.value.deltaDateTime, () => {
+watch(() => store.value.deltaDateTime, () => {
   //console.log("watch activity")
   getAct()
 })
@@ -74,10 +74,10 @@ function getAct() {
     .then((data) => {
       data.forEach((el) => {
         console.log(el)
-        let date = (el.dates[0].deadline).slice(0,-1);
+        let date = (el.dates[0].deadline).slice(0, -1);
         if (!el.completed) {
 
-          if (Temporal.PlainDateTime.compare(store.value.simDateTime ,Temporal.PlainDateTime.from(date)) <= 0 || !el.dates[0].deadline) {
+          if (Temporal.PlainDateTime.compare(store.value.simDateTime, Temporal.PlainDateTime.from(date)) <= 0 || !el.dates[0].deadline) {
             console.log(el.dates[0].deadline)
             TODOAct.value.push(el)
           } else {
@@ -136,7 +136,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <NavBar />
   <div class="container">
     <div class="row">
       <div class="col">

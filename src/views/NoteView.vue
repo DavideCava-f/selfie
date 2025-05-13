@@ -30,8 +30,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <NavBar />
-
   <div class="container">
     <div class="m-3 d-flex justify-content-evenly input-group">
       <div class="m-3">
@@ -91,24 +89,24 @@ onMounted(() => {
               <hr />
               <div v-if="note.markdown">
 
-              <p :class="[
-                { selected: selectedCard == note._id },
-                'card-text',
-                'notSelected',
-              ]" v-html="marked.parse(note.Text)" style=""></p>
+                <p :class="[
+                  { selected: selectedCard == note._id },
+                  'card-text',
+                  'notSelected',
+                ]" v-html="marked.parse(note.Text)" style=""></p>
               </div>
               <div v-else>
 
-              <p :class="[
-                { selected: selectedCard == note._id },
-                'card-text',
-                'notSelected',
-              ]" style="">{{ note.Text }}</p>
+                <p :class="[
+                  { selected: selectedCard == note._id },
+                  'card-text',
+                  'notSelected',
+                ]" style="">{{ note.Text }}</p>
               </div>
               <span v-for="tag in note.Tags">
                 <span class="badge text-bg-warning mx-1 mb-1">{{
                   tag.name
-                  }}</span>
+                }}</span>
               </span>
               <div>
                 <span><button class="btn btn-outline-danger" @click="DeleteNote(note._id)">
@@ -179,7 +177,7 @@ onMounted(() => {
               </div>
               <div class="d-flex justify-content-between align-items-center">
                 <label>
-              <input class="form-check-input" type="checkbox" id="untilAck" v-model="NCMarkDown" />
+                  <input class="form-check-input" type="checkbox" id="untilAck" v-model="NCMarkDown" />
                   MarkDown
                 </label>
                 <button @click.prevent="CreateNote" :disabled="!enabled" class="btn btn-primary">
@@ -227,10 +225,10 @@ onMounted(() => {
                   'border-danger': !enabledUpdate,
                 }" v-model="NUtags" type="text" class="form-control" placeholder="Add tags (comma separated)" />
               </div>
-                <label>
-              <input class="form-check-input" type="checkbox" v-model="NUMarkDown" />
-                  MarkDown
-                </label>
+              <label>
+                <input class="form-check-input" type="checkbox" v-model="NUMarkDown" />
+                MarkDown
+              </label>
               <div class="d-flex justify-content-between align-items-center">
                 <button @click.prevent="SaveAfterUpdate()" :disabled="!enabledUpdate" class="btn btn-primary">
                   <i class="fas fa-save me-2"></i>Save Note

@@ -72,9 +72,8 @@ function getVisibleDate(date) {
 </script>
 
 <template>
-    <NavBar />
     <div class="container-fluid">
-        <div class="row justify-content-center p-3 " >
+        <div class="row justify-content-center p-3 ">
             <div class="col-lg-3 col-12 "><!-- colonna prossimi eventi -->
 
                 <div class="card text-bg-danger mb-3" style="max-height: 80vh;">
@@ -94,20 +93,20 @@ function getVisibleDate(date) {
                                 <div class="d-flex justify-content-center">
                                     <table class="table-success">
                                         <thead>
-                                        <tr>
-                                            <th scope="col">Start</th>
-                                            <th scope="col">End</th>
-                                        </tr>
+                                            <tr>
+                                                <th scope="col">Start</th>
+                                                <th scope="col">End</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        <tr v-for="date in event.dates" :key="date.begin">
-                                            <td>{{ getVisibleDate(date.begin) }}</td>
-                                            <td>{{ getVisibleDate(date.end) }}</td>
-                                        </tr>
+                                            <tr v-for="date in event.dates" :key="date.begin">
+                                                <td>{{ getVisibleDate(date.begin) }}</td>
+                                                <td>{{ getVisibleDate(date.end) }}</td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                                
+
                                 <!-- <div v-for="date in event.dates">
                                     <p>{{ getVisibleDate(date.begin) }}</p>
                                     <p>{{ getVisibleDate(date.end) }}</p>

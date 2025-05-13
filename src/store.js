@@ -1,4 +1,4 @@
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 // import OpenAI from "openai";
 import { Temporal } from "@js-temporal/polyfill";
 import { getEventsOfWeek, getEventsOfDay, getEventsOfMonth } from "@/eventGetter";
@@ -81,17 +81,18 @@ const store = ref({
   activitiesOfMonth: [],
 
   pomodoros: [],
+  activePomodoro: null,
 
   toggle: false,
 
-  update: () => {
-    getEventsOfDay();
-    getEventsOfWeek();
-    getEventsOfMonth();
-    getActivitiesOfDay();
-    getActivitiesOfMonth();
-    getActivitiesOfWeek();
-    getPomodoros();
+  update: async () => {
+    await getEventsOfDay();
+    await getEventsOfWeek();
+    await getEventsOfMonth();
+    await getActivitiesOfDay();
+    await getActivitiesOfMonth();
+    await getActivitiesOfWeek();
+    await getPomodoros();
     store.value.toggle = !store.value.toggle;
   },
 
@@ -122,5 +123,11 @@ setInterval(
   notipol,
   10000
 );
+
+// watch(() => store.value.pomodoros, () => {
+//   if (store.value.activePomodoro && store.value.pomodoros.map((pomodoro) => pomodoro._id).includes(store.value.activePomodoro._id)) {
+//     store.value.activePomodoro = store.value.pomodoros.find((pomodoro) => store.value.activePomodoro._id === pomodoro._id);
+//   }
+// })
 
 export { store };

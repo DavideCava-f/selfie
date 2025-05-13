@@ -1,6 +1,5 @@
 import express from "express";
 import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
 import { Pomodoro } from "../schemas.js";
 import verifyToken from "./middleware.js";
 const router = express.Router();
@@ -17,6 +16,7 @@ router.post("/", verifyToken, async function(req, res) {
       cycles: req.body.cycles,
       studyMins: req.body.studyMins,
       pauseMins: req.body.pauseMins,
+      completedCycles: 0,
     });
     res.status(200).send();
   } catch (error) {
@@ -38,5 +38,62 @@ router.get("/", verifyToken, async function(req, res) {
   }
 });
 
+
+router.delete("/", verifyToken, async function(req, res) {
+  try {
+    const id = req.query.id;
+    await Pomodoro.deleteOne({ _id: id });
+    res.status(200).send();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
+  }
+});
+
+router.put("/", verifyToken, async function(req, res) {
+  try {
+    const id = req.query.id;
+    await Pomodoro.updateOne({ _id: id }, {
+      $inc: {
+        completedCycles: 1
+      }
+    });
+    res.status(200).send();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
+  }
+});
+
+router.put("/sweep", verifyToken, async function(req, res) {
+  try {
+    const ids = req.body.ids;
+    console.log(ids);
+    await Pomodoro.updateMany(
+      { _id: { $in: ids } },
+      [{ $set: { completedCycles: "$cycles" }}]
+    );
+    res.status(200).send();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
+  }
+});
+
+router.put("/reset", verifyToken, async function(req, res) {
+  try {
+    const id = req.query.id;
+    await Pomodoro.updateOne(
+      { _id: id }, {
+      $set: {
+        completedCycles: 0
+      }}
+    );
+    res.status(200).send();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
+  }
+})
 
 export default router;
