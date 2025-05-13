@@ -1,6 +1,8 @@
 <script setup>
 import { ref, computed, onUnmounted, watch } from 'vue';
 import { store } from "@/store";
+import "vue3-toastify/dist/index.css";
+import { toast } from "vue3-toastify";
 
 const DEFAULT_STUDY_MINS = 30;
 const DEFAULT_PAUSE_MINS = 5;
@@ -14,6 +16,7 @@ var TotalTime = ref(1)
 var relaxingTime = computed(() => { return relaxingMinutes.value * 60 })
 var relaxing = ref(false);
 const INITIAL_TIME = computed(() => { return relaxing.value ? relaxingTime.value : SetMinutes.value * 60 });
+var barTime = ref(1) //Non prendo direttamente dal set altrimenti la barra si sballa
 const time = ref(0);
 var cycles = ref(0);
 const isRunning = ref(false);
@@ -31,13 +34,14 @@ const formatTime = computed(() => {
 });
 
 const progressBarWidth = computed(() => {
-  return `${(time.value / INITIAL_TIME.value) * 100}%`;
+  return `${(time.value / barTime.value) * 100}%`;
 });
 
 function setupTimer() {
   pauseTimer();
   relaxing.value = false
   time.value = INITIAL_TIME.value
+  barTime.value = INITIAL_TIME.value
   cycles.value = SetCycles.value
   isSet.value = true;
 }
@@ -48,15 +52,62 @@ async function tick() {
   } else {
     if (cycles.value > 1) {
       if (!relaxing.value) {
+        let notificationMessage = "Started Relax Cycle n:" + cycles.value
+      toast( notificationMessage, {
+        theme: "auto",
+        type: "default",
+        position: "top-left",
+        transition: "slide",
+        autoClose: true,
+        dangerouslyHTMLString: true,
+        style: {
+          backgroundColor: '#fff8b3', // soft yellow
+          color: '#333',              // dark text for contrast
+          border: '1px solid #e6c200',
+          fontWeight: 'bold',
+        }
+      });
         time.value = relaxingTime.value
+        barTime.value = relaxingTime.value
         relaxing.value = true
+
+        
       } else {
         AdvanceCycle();
+        let notificationMessage = "Ricominciato ciclo n:" + cycles.value
+      toast( notificationMessage, {
+        theme: "auto",
+        type: "default",
+        position: "top-left",
+        transition: "slide",
+        autoClose: true,
+        dangerouslyHTMLString: true,
+        style: {
+          backgroundColor: '#fff8b3', // soft yellow
+          color: '#333',              // dark text for contrast
+          border: '1px solid #e6c200',
+          fontWeight: 'bold',
+        }
+      });
       }
     } else {
       cycles.value = 0;
       pauseTimer();
-      alert('Time is up!');
+        let notificationMessage = "FINITOOOOOO"
+      toast( notificationMessage, {
+        theme: "auto",
+        type: "default",
+        position: "top-left",
+        transition: "slide",
+        autoClose: true,
+        dangerouslyHTMLString: true,
+        style: {
+          backgroundColor: '#fff8b3', // soft yellow
+          color: '#333',              // dark text for contrast
+          border: '1px solid #e6c200',
+          fontWeight: 'bold',
+        }
+      });
     }
   }
 }
@@ -67,6 +118,21 @@ function forceCycle() {
 
 function startTimer() {
   isRunning.value = true;
+        let notificationMessage = "INIZIATOOOOO"
+      toast( notificationMessage, {
+        theme: "auto",
+        type: "default",
+        position: "top-left",
+        transition: "slide",
+        autoClose: true,
+        dangerouslyHTMLString: true,
+        style: {
+          backgroundColor: '#fff8b3', // soft yellow
+          color: '#333',              // dark text for contrast
+          border: '1px solid #e6c200',
+          fontWeight: 'bold',
+        }
+      });
   timerId = setInterval(tick, 1000);
 }
 
@@ -82,12 +148,14 @@ function AdvanceCycle() {
   relaxing.value = false
   cycles.value--;
   time.value = INITIAL_TIME.value;
+  barTime.value = INITIAL_TIME.value;
 }
 
 async function resetTimerCycle() {
   pauseTimer();
   relaxing.value = false
   time.value = INITIAL_TIME.value;
+  barTime.value = INITIAL_TIME.value;
   cycles.value = SetCycles.value;
 }
 
@@ -287,13 +355,13 @@ onUnmounted(() => {
   .progressRelaxing {
     background-color: #4caf50;
     height: 270px;
-    border-radius: 100px;
+    border-radius: 20px;
     transition: width 0.5s ease-in-out;
   }
   .progressWork {
     background-color: #ff0000;
     height: 270px;
-    border-radius: 100px;
+    border-radius: 20px;
     transition: width 0.5s ease-in-out;
   }
 button {
