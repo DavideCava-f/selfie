@@ -235,9 +235,12 @@ onUnmounted(() => {
             Remaining cycles: {{ cycles }}
           </div>
           <div :class="{ timerWork: !relaxing, timerRelaxing: relaxing }">{{ formatTime }}</div>
-          <div class="progress-bar">
-            <div class="progress" :style="{ width: progressBarWidth }"></div>
-          </div>
+          <div class="pomodoro-top">
+  <div class="pomodoro-leaf"></div>
+</div>
+      <div class="progress-bar">
+        <div :class="{progressWork:!relaxing, progressRelaxing:relaxing}" :style="{ width: progressBarWidth }"></div>
+      </div>
           <button @click="startTimer" :disabled="isRunning">Start</button>
           <button @click="pauseTimer" :disabled="!isRunning" class="pause-button">Pause</button>
           <button @click="forceCycle" :disabled="!isRunning" class="pause-button">Next</button>
