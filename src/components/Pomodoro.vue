@@ -280,13 +280,19 @@ onUnmounted(() => {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.progress {
-  background-color: #4caf50;
-  height: 20px;
-  border-radius: 20px;
-  transition: width 0.5s ease-in-out;
-}
 
+  .progressRelaxing {
+    background-color: #4caf50;
+    height: 270px;
+    border-radius: 100px;
+    transition: width 0.5s ease-in-out;
+  }
+  .progressWork {
+    background-color: #ff0000;
+    height: 270px;
+    border-radius: 100px;
+    transition: width 0.5s ease-in-out;
+  }
 button {
   font-size: 1.5rem;
   padding: 10px 20px;
