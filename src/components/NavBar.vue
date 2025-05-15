@@ -28,7 +28,7 @@ setUserPfp();
 
 
 <template>
-    <div class="container-fluid bg-danger">
+    <div class="container-fluid " style="background: #6F0D31;">
         <div class="row g-0 d-flex justify-content-between">
             <div class="col-1 my-1">
                 <button class="btn btn-primary navbar-toggler d-md-none" type="button" data-bs-toggle="collapse"

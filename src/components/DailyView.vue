@@ -59,7 +59,18 @@ watch(() => store.value.dayOffset, () => getPomodoros());
 
 <template>
   <div class="d-flex flex-column justify-content-center">
-    <div class="d-flex justify-content-between flex-fill bg-light text-center mx-1 my-3 rounded-3">
+    <div class="p-lg-1 p-0 my-lg-0 my-2">
+      <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
+        <button type="button" class="btn btn-outline-dark active" @click="eventsMode(0)" ref="EvButt">
+          Events
+        </button>
+        <button type="button" class="btn btn-outline-primary" @click="eventsMode(1)" ref="ActButt">
+          Activities
+        </button>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between flex-fill bg-light text-center mx-1 rounded-3">
       <button class="btn d-flex align-self-center" @click="getDate(-1)">
         <img src="@/assets/Indietro.svg" />
       </button>
@@ -81,17 +92,7 @@ watch(() => store.value.dayOffset, () => getPomodoros());
       </button>
     </div>
 
-    <div class="mx-1">
-      <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
-        <button type="button" class="btn btn-outline-primary active" @click="eventsMode(0)" ref="EvButt">
-          Events
-        </button>
-        <button type="button" class="btn btn-outline-primary" @click="eventsMode(1)" ref="ActButt">
-          Activities
-        </button>
-      </div>
-    </div>
-
+    
     <div v-if="isEvent">
       <div v-if="store.eventsOfDay.length !== 0" class="overflow-scroll rounded-3 w-100" style="max-height: 70vh;">
         <button v-for="event in store.eventsOfDay" class="btn w-100 bg-light my-1 p-3 rounded-3"

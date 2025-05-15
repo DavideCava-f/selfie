@@ -30,97 +30,111 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container">
-    <div class="m-3 d-flex justify-content-evenly input-group">
-      <div class="m-3">
-        SortByCreationDate:
-        <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByDate(0)">
-          Newest to Oldest
-        </button>
-        <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByDate(1)">
-          Oldest to Newest
-        </button>
+  <div class="container  text-white">
+    <div class="row ">
+      <div class="col-12 d-flex justify-content-center">
+        <h1>Ordinamento</h1>
       </div>
-      <div class="m-3">
-        SortByLastUpdate:
-        <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByDate(2)">
-          Newest to Oldest
-        </button>
-        <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByDate(3)">
-          Oldest to Newest
-        </button>
+      <div class="col-3">
+        Data di creazione:
+        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+          <button class="btn btn-outline-success responsive-button rounded-end my-sm-0" @click="SortByDate(1)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
+            </svg>
+          </button>
+          <button class="btn btn-outline-success responsive-button rounded-end my-sm-0" @click="SortByDate(0)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"/>
+            </svg>
+          </button>
+        </div>
       </div>
-      <div class="m-3">
-        SortByTitle:
-        <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByTitle(0)">
-          A-Z
-        </button>
-        <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByTitle(1)">
-          Z-A
-        </button>
+      <div class="col-3">
+        Ultima modifica:
+        <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
+          <button class="btn btn-outline-success responsive-button rounded-end my-sm-0" @click="SortByDate(2)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
+            </svg>
+          </button>
+          <button class="btn btn-outline-success responsive-button rounded-end my-sm-0" @click="SortByDate(3)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"/>
+            </svg>
+          </button>
+
+        </div>
       </div>
-      <div class="m-3">
-        SortByTitle:
-        <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByLength(0)">
-          Length Cresc
-        </button>
-        <button class="btn btn-outline-success rounded-end my-sm-0" @click="SortByLength(1)">
-          Length Decr
-        </button>
+      <div class="col-3">
+        Titolo:
+        <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
+          <button class="btn btn-outline-success responsive-button rounded-end my-sm-0" @click="SortByTitle(0)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sort-alpha-down" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M10.082 5.629 9.664 7H8.598l1.789-5.332h1.234L13.402 7h-1.12l-.419-1.371zm1.57-.785L11 2.687h-.047l-.652 2.157z"/>
+              <path d="M12.96 14H9.028v-.691l2.579-3.72v-.054H9.098v-.867h3.785v.691l-2.567 3.72v.054h2.645zM4.5 2.5a.5.5 0 0 0-1 0v9.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L4.5 12.293z"/>
+            </svg>
+          </button>
+          <button class="btn btn-outline-success lg-btn responsive-button rounded-end my-sm-0" @click="SortByTitle(1)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sort-alpha-down-alt" viewBox="0 0 16 16">
+              <path d="M12.96 7H9.028v-.691l2.579-3.72v-.054H9.098v-.867h3.785v.691l-2.567 3.72v.054h2.645z"/>
+              <path fill-rule="evenodd" d="M10.082 12.629 9.664 14H8.598l1.789-5.332h1.234L13.402 14h-1.12l-.419-1.371zm1.57-.785L11 9.688h-.047l-.652 2.156z"/>
+              <path d="M4.5 2.5a.5.5 0 0 0-1 0v9.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L4.5 12.293z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="col-3">
+        Lunghezza:
+        <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
+          <button class="btn btn-outline-success responsive-button rounded-end my-sm-0" @click="SortByLength(0)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"/>
+            </svg>
+          </button>
+          <button class="btn btn-outline-success responsive-button rounded-end my-sm-0" @click="SortByLength(1)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
-
-  <div class="container">
-    <div class="row justify-content-center">
-      <div v-for="note in NotesList" :key="note._id">
-        <div @click="() => {
-          if (selectedCard != note._id) {
-            selectedCard = note._id;
-          } else {
-            selectedCard = -1;
-          }
-          console.log(note.Text.length);
-        }
-        " class="col-md-7 mb-4">
-          <div class="card rounded-3">
-            <div class="card-body">
-              <h1 class="card-title fw-bold">{{ note.Title }}</h1>
-              <hr />
-              <div v-if="note.markdown">
-
-                <p :class="[
-                  { selected: selectedCard == note._id },
-                  'card-text',
-                  'notSelected',
-                ]" v-html="marked.parse(note.Text)" style=""></p>
-              </div>
-              <div v-else>
-
-                <p :class="[
-                  { selected: selectedCard == note._id },
-                  'card-text',
-                  'notSelected',
-                ]" style="">{{ note.Text }}</p>
-              </div>
-              <span v-for="tag in note.Tags">
-                <span class="badge text-bg-warning mx-1 mb-1">{{
-                  tag.name
-                }}</span>
-              </span>
-              <div>
-                <span><button class="btn btn-outline-danger" @click="DeleteNote(note._id)">
-                    Delete Note
-                  </button>
-                </span>
-                <span><button class="btn btn-outline-primary" @click="DuplicateNote(note._id)">
-                    Duplicate Note
-                  </button></span>
-                <span><button class="btn btn-outline-info" data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasWithBothOptions" @click="UpdateNote(note._id)">
-                    UpdateNote
-                  </button></span>
-              </div>
+  <div class="container my-2 d-flex justify-content-center">
+    <div class="row ">
+      <div class="col-lg-6 col-12 my-lg-3 my-2" v-for="note in NotesList" :key="note._id">
+        <div class="card" @click="() => {
+            if (selectedCard != note._id) {
+              selectedCard = note._id;
+            } else {
+              selectedCard = -1;
+            }
+            console.log(note.Text.length);
+          }">
+          <h2 class="card-header fw-bold" style="background-color: #c2c2c2;">{{ note.Title }}</h2>
+          <div class="card-body" style="background-color: #c2c2c2;">
+            <hr />
+            <div v-if="note.markdown" >
+              <p :class="[
+                { selected: selectedCard == note._id },
+                'card-text',
+                'notSelected',
+              ]" v-html="marked.parse(note.Text)" style="background-color: #cccccc;"></p>
+            </div>
+            <div v-else style="background-color: #c2c2c2;">
+              <p :class="[
+                { selected: selectedCard == note._id },
+                'card-text',
+                'notSelected',
+              ]" style="background-color: #cccccc;">{{ note.Text }}</p>
+            </div>
+            <span v-for="tag in note.Tags">
+              <span class="badge text-bg-warning mx-1 mb-1">{{
+                tag.name
+              }}</span>
+            </span>
+            <div class="card-footer" style="background-color: #c2c2c2;">
               <div>
                 <span>
                   Last Updated:<b> {{ getVisibleDate(note.lastUpDate) }}</b>
@@ -128,6 +142,19 @@ onMounted(() => {
                 <span>
                   Creation:<b> {{ getVisibleDate(note.creationDate) }}</b>
                 </span>
+              </div>
+              <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
+                <span><button type="button" class="btn btn-outline-danger" @click="DeleteNote(note._id)">
+                    Delete Note
+                  </button>
+                </span>
+                <span><button type="button" class="btn btn-outline-primary" @click="DuplicateNote(note._id)">
+                    Duplicate Note
+                  </button></span>
+                <span><button type="button" class="btn btn-outline-info" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasWithBothOptions" @click="UpdateNote(note._id)">
+                    UpdateNote
+                  </button></span>
               </div>
             </div>
           </div>
@@ -272,4 +299,23 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
 }
+
+.responsive-button {
+    font-size: 1rem;
+    padding: 10px 16px;
+  }
+
+  @media (max-width: 768px) {
+    .responsive-button {
+      font-size: 0.8rem;
+      padding: 6px 12px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .responsive-button {
+      font-size: 0.7rem;
+      padding: 4px 8px;
+    }
+  }
 </style>

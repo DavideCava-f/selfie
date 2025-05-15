@@ -144,14 +144,14 @@ function getVisibleDate(date) {
             <div class="col-lg-3 col-12">
                 <div class="card text-bg-danger mb-3" style="max-height: 80vh;">
                     <div class="card-header align-items-center">
-                        <h2 class="mx-auto">Progetti in corso</h2>
+                        <h2 class="mx-auto">Utlimo pomodoro completato</h2>
                     </div>
                     <div class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center">
                         <div v-if="pomodoro.value">
 
                         </div>
                         <div v-else>
-                            Non ci sono progetti in corso
+                            Non è ancora stato completato nessun pomodoro
                         </div>
                     </div>
                 </div>
