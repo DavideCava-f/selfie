@@ -53,48 +53,48 @@ async function tick() {
     if (cycles.value > 1) {
       if (!relaxing.value) {
         let notificationMessage = "Started Relax Cycle n:" + cycles.value
-      toast( notificationMessage, {
-        theme: "auto",
-        type: "default",
-        position: "top-left",
-        transition: "slide",
-        autoClose: true,
-        dangerouslyHTMLString: true,
-        style: {
-          backgroundColor: '#fff8b3', // soft yellow
-          color: '#333',              // dark text for contrast
-          border: '1px solid #e6c200',
-          fontWeight: 'bold',
-        }
-      });
+        toast(notificationMessage, {
+          theme: "auto",
+          type: "default",
+          position: "top-left",
+          transition: "slide",
+          autoClose: true,
+          dangerouslyHTMLString: true,
+          style: {
+            backgroundColor: '#fff8b3', // soft yellow
+            color: '#333',              // dark text for contrast
+            border: '1px solid #e6c200',
+            fontWeight: 'bold',
+          }
+        });
         time.value = relaxingTime.value
         barTime.value = relaxingTime.value
         relaxing.value = true
 
-        
+
       } else {
         AdvanceCycle();
         let notificationMessage = "Ricominciato ciclo n:" + cycles.value
-      toast( notificationMessage, {
-        theme: "auto",
-        type: "default",
-        position: "top-left",
-        transition: "slide",
-        autoClose: true,
-        dangerouslyHTMLString: true,
-        style: {
-          backgroundColor: '#fff8b3', // soft yellow
-          color: '#333',              // dark text for contrast
-          border: '1px solid #e6c200',
-          fontWeight: 'bold',
-        }
-      });
+        toast(notificationMessage, {
+          theme: "auto",
+          type: "default",
+          position: "top-left",
+          transition: "slide",
+          autoClose: true,
+          dangerouslyHTMLString: true,
+          style: {
+            backgroundColor: '#fff8b3', // soft yellow
+            color: '#333',              // dark text for contrast
+            border: '1px solid #e6c200',
+            fontWeight: 'bold',
+          }
+        });
       }
     } else {
       cycles.value = 0;
       pauseTimer();
-        let notificationMessage = "FINITOOOOOO"
-      toast( notificationMessage, {
+      let notificationMessage = "FINITOOOOOO"
+      toast(notificationMessage, {
         theme: "auto",
         type: "default",
         position: "top-left",
@@ -118,21 +118,21 @@ function forceCycle() {
 
 function startTimer() {
   isRunning.value = true;
-        let notificationMessage = "INIZIATOOOOO"
-      toast( notificationMessage, {
-        theme: "auto",
-        type: "default",
-        position: "top-left",
-        transition: "slide",
-        autoClose: true,
-        dangerouslyHTMLString: true,
-        style: {
-          backgroundColor: '#fff8b3', // soft yellow
-          color: '#333',              // dark text for contrast
-          border: '1px solid #e6c200',
-          fontWeight: 'bold',
-        }
-      });
+  let notificationMessage = "INIZIATOOOOO"
+  toast(notificationMessage, {
+    theme: "auto",
+    type: "default",
+    position: "top-left",
+    transition: "slide",
+    autoClose: true,
+    dangerouslyHTMLString: true,
+    style: {
+      backgroundColor: '#fff8b3', // soft yellow
+      color: '#333',              // dark text for contrast
+      border: '1px solid #e6c200',
+      fontWeight: 'bold',
+    }
+  });
   timerId = setInterval(tick, 1000);
 }
 
@@ -157,6 +157,7 @@ async function resetTimerCycle() {
   time.value = INITIAL_TIME.value;
   barTime.value = INITIAL_TIME.value;
   cycles.value = SetCycles.value;
+  isSet.value = false;
 }
 
 async function findFactorsAsync(tot) {
@@ -248,7 +249,7 @@ onUnmounted(() => {
       </div>
       <div class="modal-body d-flex flex-column text-center">
         <div class="brand">Pomodoro Timer</div>
-        <div>
+        <div v-if="!isSet">
           <div>
             <input v-model="TotalTime" type="number" min="1" />
             <button @click="CalcTime">Generate intervals</button>
@@ -271,12 +272,12 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <div>
+        <div v-if="!isSet">
           <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
             <button type="button" class="btn btn-outline-primary active" @click="mode = 0">
               Now
             </button>
-            <button type="button" class="btn btn-outline-primary" @click="mode = 1">
+            <button type="button" :disabled="isRunning" class="btn btn-outline-primary" @click="mode = 1">
               Plan
             </button>
           </div>
@@ -304,11 +305,12 @@ onUnmounted(() => {
           </div>
           <div :class="{ timerWork: !relaxing, timerRelaxing: relaxing }">{{ formatTime }}</div>
           <div class="pomodoro-top">
-  <div class="pomodoro-leaf"></div>
-</div>
-      <div class="progress-bar">
-        <div :class="{progressWork:!relaxing, progressRelaxing:relaxing}" :style="{ width: progressBarWidth }"></div>
-      </div>
+            <div class="pomodoro-leaf"></div>
+          </div>
+          <div class="progress-bar">
+            <div :class="{ progressWork: !relaxing, progressRelaxing: relaxing }" :style="{ width: progressBarWidth }">
+            </div>
+          </div>
           <button @click="startTimer" :disabled="isRunning">Start</button>
           <button @click="pauseTimer" :disabled="!isRunning" class="pause-button">Pause</button>
           <button @click="forceCycle" :disabled="!isRunning" class="pause-button">Next</button>
@@ -352,18 +354,20 @@ onUnmounted(() => {
 }
 
 
-  .progressRelaxing {
-    background-color: #4caf50;
-    height: 270px;
-    border-radius: 20px;
-    transition: width 0.5s ease-in-out;
-  }
-  .progressWork {
-    background-color: #ff0000;
-    height: 270px;
-    border-radius: 20px;
-    transition: width 0.5s ease-in-out;
-  }
+.progressRelaxing {
+  background-color: #4caf50;
+  height: 270px;
+  border-radius: 20px;
+  transition: width 0.5s ease-in-out;
+}
+
+.progressWork {
+  background-color: #ff0000;
+  height: 270px;
+  border-radius: 20px;
+  transition: width 0.5s ease-in-out;
+}
+
 button {
   font-size: 1.5rem;
   padding: 10px 20px;
@@ -402,7 +406,8 @@ button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
-  .pomodoro-top {
+
+.pomodoro-top {
   display: flex;
   justify-content: center;
   margin-top: 10px;
