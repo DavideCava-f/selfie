@@ -31,13 +31,15 @@ onMounted(() => {
 
 <template>
   <div class="container  text-white">
-    <div class="row ">
+    <div class="row align-items-end">
       <div class="col-12 d-flex justify-content-center">
-        <h1>Ordinamento</h1>
+        <h1>Note</h1>
       </div>
       <div class="col-3">
-        Data di creazione:
-        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+        <div class="col-lg-6 col-12">
+          Data di creazione:
+        </div>
+        <div class="btn-group col-lg-6 col-12 " role="group" aria-label="Basic radio toggle button group">
           <button class="btn btn-outline-success responsive-button rounded-end my-sm-0" @click="SortByDate(1)">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
               <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
@@ -51,8 +53,10 @@ onMounted(() => {
         </div>
       </div>
       <div class="col-3">
-        Ultima modifica:
-        <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
+        <div class="col-lg-6 col-12">
+          Ultima modifica:
+        </div>
+        <div class="btn-group col-lg-6 col-12 " role="group" aria-label="Basic radio toggle button group">
           <button class="btn btn-outline-success responsive-button rounded-end my-sm-0" @click="SortByDate(2)">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
               <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
@@ -67,8 +71,10 @@ onMounted(() => {
         </div>
       </div>
       <div class="col-3">
-        Titolo:
-        <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
+        <div class="col-lg-6 col-12">
+          Titolo:
+        </div>
+        <div class="btn-group col-lg-6 col-12 " role="group" aria-label="Basic radio toggle button group">
           <button class="btn btn-outline-success responsive-button rounded-end my-sm-0" @click="SortByTitle(0)">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sort-alpha-down" viewBox="0 0 16 16">
               <path fill-rule="evenodd" d="M10.082 5.629 9.664 7H8.598l1.789-5.332h1.234L13.402 7h-1.12l-.419-1.371zm1.57-.785L11 2.687h-.047l-.652 2.157z"/>
@@ -85,8 +91,8 @@ onMounted(() => {
         </div>
       </div>
       <div class="col-3">
-        Lunghezza:
-        <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
+        <div class="col-lg-6 col-12">Lunghezza:</div>
+        <div class="btn-group col-lg-6 col-12 " role="group" aria-label="Basic radio toggle button group">
           <button class="btn btn-outline-success responsive-button rounded-end my-sm-0" @click="SortByLength(0)">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"/>
@@ -102,8 +108,8 @@ onMounted(() => {
     </div>
   </div>
   <div class="container my-2 d-flex justify-content-center">
-    <div class="row ">
-      <div class="col-lg-6 col-12 my-lg-3 my-2" v-for="note in NotesList" :key="note._id">
+    <div class="row">
+      <div class="col-lg-6 col-12 my-lg-3 my-2 hover-div" v-for="note in NotesList" :key="note._id">
         <div class="card" @click="() => {
             if (selectedCard != note._id) {
               selectedCard = note._id;
@@ -137,23 +143,23 @@ onMounted(() => {
             <div class="card-footer" style="background-color: #c2c2c2;">
               <div>
                 <span>
-                  Last Updated:<b> {{ getVisibleDate(note.lastUpDate) }}</b>
+                  Ultima modifica:<b> {{ getVisibleDate(note.lastUpDate) }}</b>
                 </span>
                 <span>
-                  Creation:<b> {{ getVisibleDate(note.creationDate) }}</b>
+                  Creazione:<b> {{ getVisibleDate(note.creationDate) }}</b>
                 </span>
               </div>
-              <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
-                <span><button type="button" class="btn btn-outline-danger" @click="DeleteNote(note._id)">
-                    Delete Note
+              <div class="btn-group " role="group" aria-label="Basic radio toggle button group" >
+                <span><button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#DeleteNoteModal">
+                    Cancella
                   </button>
                 </span>
                 <span><button type="button" class="btn btn-outline-primary" @click="DuplicateNote(note._id)">
-                    Duplicate Note
+                    Duplica
                   </button></span>
-                <span><button type="button" class="btn btn-outline-info" data-bs-toggle="offcanvas"
+                <span><button type="button" class="btn btn-outline-dark" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasWithBothOptions" @click="UpdateNote(note._id)">
-                    UpdateNote
+                    Modifica
                   </button></span>
               </div>
             </div>
@@ -164,14 +170,15 @@ onMounted(() => {
   </div>
   <div>
     <RouterLink to="#create-note">
-
-      <button class="btn btn-danger border-5 rounded-circle btn-outline-danger fx-button" style="" type="button"
+      <button class="btn btn-primary rounded-circle fx-button d-flex align-items-center justify-content-center hover-div " style="" type="button"
         data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-        +
+        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+        </svg>
       </button>
+  <!--     <button @click.prevent="getNotes">GetNotes</button> -->
 
     </RouterLink>
-    <button @click.prevent="getNotes">GetNotes</button>
   </div>
 
   <div class="offcanvas offcanvas-end offcanvas-size-xl" tabindex="1" id="offcanvasExample"
@@ -267,6 +274,31 @@ onMounted(() => {
       </div>
     </div>
   </div>
+
+
+
+  <!-- Modal di conferma -->
+<div class="modal fade" id="DeleteNoteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteLabel">Conferma eliminazione</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+      </div>
+      
+      <div class="modal-body">
+        Sei sicuro di voler eliminare questo elemento? L'azione non può essere annullata.
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+        <button type="button" @click="DeleteNote(selectedCard)" data-bs-dismiss="modal" class="btn btn-danger" id="confirmDeleteBtn">Conferma</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
 </template>
 
 <style scoped>
@@ -288,16 +320,12 @@ onMounted(() => {
   position: fixed;
   /* Posiziona l'elemento in modo fisso */
   bottom: 10vh;
-  /* Distanza dal bordo superiore */
+  /* Distanza dal bordo inferiore */
   right: 15vw;
   width: 10vh;
   aspect-ratio: 1/1;
   /*Cerchio*/
 
-  text-align: center;
-
-  justify-content: center;
-  align-items: center;
 }
 
 .responsive-button {
@@ -318,4 +346,13 @@ onMounted(() => {
       padding: 4px 8px;
     }
   }
+
+  .hover-div {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hover-div:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
 </style>

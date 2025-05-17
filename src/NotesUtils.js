@@ -67,10 +67,16 @@ export function getVisibleDate(date) {
   /* NotesList.value = NotesList.value.sort((i,j) => {
      
    } )*/
-
+  const formatter = new Intl.DateTimeFormat('it-IT', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+  });
+  var formatted = formatter.format(new Date(date));
   //var no= NotesList.value[0].lastUpDate
+  console.log("formatted", formatted);
   var str =
-    new Date(date).toDateString() +
+    formatted +
     " " +
     new Date(date).toTimeString().split(" ")[0];
   str = str.slice(0, -3);
