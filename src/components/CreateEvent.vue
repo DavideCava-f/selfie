@@ -4,6 +4,7 @@ import { ref, watch, watchEffect, reactive, computed } from "vue";
 import { store } from "@/store";
 import { EventCreator } from "@/eventCreator";
 import { Temporal } from "@js-temporal/polyfill";
+import DatePicker from "@/components/DatePicker.vue"
 
 const eventTitle = ref(null);
 const eventText = ref(null);
@@ -290,7 +291,8 @@ watch(eventBeginDate, setDayOfWeek);
         <div class="my-2">
           <label>Start</label>
           <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
-            <input class="form-control" type="date" v-model="eventBeginDate" />
+            <!-- <input class="form-control" type="date" v-model="eventBeginDate" /> -->
+            <DatePicker v-model:date="eventBeginDate" />
             <input class="form-control" type="time" v-model="eventBeginTime" />
             <button class="btn btn-outline-primary" @click="setBeginNow">
               Now
