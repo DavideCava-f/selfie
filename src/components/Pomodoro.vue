@@ -29,7 +29,8 @@ var startTime = ref(null);
 let lancetta = ref(null);
 let pomodoro = ref(null);
 let RateOfChange = ref();
-let colorValue = ref()
+let colorValue = ref();
+let relaxChange = ref();
 
 const formatTime = computed(() => {
   const minutes = Math.floor(time.value / 60);
@@ -54,6 +55,9 @@ function setupTimer() {
   colorValue.value = 92;
   RateOfChange.value = colorValue.value/INITIAL_TIME.value;
   console.log("RateOfChange: " + RateOfChange.value);
+  relaxChange.value = colorValue.value/relaxingTime.value;
+  console.log("RelaxChange: " + relaxChange.value);
+
 }
 
 async function tick() {
@@ -61,17 +65,21 @@ async function tick() {
     time.value--;
     lancetta.value.style.transform = `rotate(${-(time.value / barTime.value) * 360}deg)`;
     if(relaxing.value){
-
+      console.log("colorValue: " + colorValue.value);
+      colorValue.value += relaxChange.value; 
+      console.log("ColorValue: " + colorValue.value);
+      pomodoro.value.style.backgroundColor = `hsl(${colorValue.value}, 99%, 37%)`;
     }
     else{
-      console.log("rate of change " + RateOfChange.value);
       colorValue.value -= RateOfChange.value; 
-      console.log("hsl: " + (colorValue.value));
       pomodoro.value.style.backgroundColor = `hsl(${colorValue.value}, 99%, 37%)`;
     }
   } else {
     if (cycles.value > 1) {
       if (!relaxing.value) {
+        lancetta.value.style.transform = "rotate(0deg)";
+        colorValue.value = 0;
+        pomodoro.value.style.backgroundColor = "hsl(0, 99%, 37%)";
         let notificationMessage = "Started Relax Cycle n:" + cycles.value
         toast(notificationMessage, {
           theme: "auto",
@@ -138,7 +146,6 @@ function forceCycle() {
 
 function startTimer() {
   isRunning.value = true;
-  //pomodoro.value.style.backgroundColor = "";
   let notificationMessage = "INIZIATOOOOO"
   toast(notificationMessage, {
     theme: "auto",
@@ -171,6 +178,8 @@ function AdvanceCycle() {
   time.value = INITIAL_TIME.value;
   barTime.value = INITIAL_TIME.value;
   lancetta.value.style.transform = "rotate(0deg)";
+  pomodoro.value.style.backgroundColor = "hsl(92, 99%, 37%)";
+  colorValue.value = 92;
 }
 
 async function resetTimerCycle() {
@@ -504,10 +513,6 @@ button:disabled {
 	content: '';
 }
 
-/* $orange: #F68657;
-$green: #70bd63;
-$bg: #f8c985; */
-
 .clock {
 	background-color: hsl(0, 99%, 37%);
 	width: 15vmax;
@@ -528,11 +533,5 @@ $bg: #f8c985; */
 	transform-origin: 50% 100%;
   transition: rotate 1s linear;
 }
-
-/* .minute {
-	transform: rotate(0);
-	height: 48%;
-	background: darken(#F68657, 20);
-} */
 
 </style>
