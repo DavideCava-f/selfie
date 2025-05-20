@@ -26,6 +26,10 @@ const isSet = ref(false);
 var mode = ref(0);
 var startDate = ref(null);
 var startTime = ref(null);
+let lancetta = ref(null);
+let pomodoro = ref(null);
+let RateOfChange = ref();
+let colorValue = ref()
 
 const formatTime = computed(() => {
   const minutes = Math.floor(time.value / 60);
@@ -44,11 +48,27 @@ function setupTimer() {
   barTime.value = INITIAL_TIME.value
   cycles.value = SetCycles.value
   isSet.value = true;
+  lancetta.value.style.transform = "rotate(0deg)";
+  //pomodoro.value.style.backgroundColor = "#44cf69";
+  pomodoro.value.style.backgroundColor = "hsl(92, 99%, 37%)";
+  colorValue.value = 92;
+  RateOfChange.value = colorValue.value/INITIAL_TIME.value;
+  console.log("RateOfChange: " + RateOfChange.value);
 }
 
 async function tick() {
   if (time.value > 0) {
     time.value--;
+    lancetta.value.style.transform = `rotate(${-(time.value / barTime.value) * 360}deg)`;
+    if(relaxing.value){
+
+    }
+    else{
+      console.log("rate of change " + RateOfChange.value);
+      colorValue.value -= RateOfChange.value; 
+      console.log("hsl: " + (colorValue.value));
+      pomodoro.value.style.backgroundColor = `hsl(${colorValue.value}, 99%, 37%)`;
+    }
   } else {
     if (cycles.value > 1) {
       if (!relaxing.value) {
@@ -118,6 +138,7 @@ function forceCycle() {
 
 function startTimer() {
   isRunning.value = true;
+  //pomodoro.value.style.backgroundColor = "";
   let notificationMessage = "INIZIATOOOOO"
   toast(notificationMessage, {
     theme: "auto",
@@ -149,6 +170,7 @@ function AdvanceCycle() {
   cycles.value--;
   time.value = INITIAL_TIME.value;
   barTime.value = INITIAL_TIME.value;
+  lancetta.value.style.transform = "rotate(0deg)";
 }
 
 async function resetTimerCycle() {
@@ -158,6 +180,8 @@ async function resetTimerCycle() {
   barTime.value = INITIAL_TIME.value;
   cycles.value = SetCycles.value;
   isSet.value = false;
+  lancetta.value.style.transform = "rotate(0deg)";
+  pomodoro.value.style.backgroundColor = "hsl(92, 99%, 37%)";
 }
 
 async function findFactorsAsync(tot) {
@@ -212,6 +236,8 @@ function reset() {
   relaxingMinutes.value = DEFAULT_PAUSE_MINS;
   TotalTime.value = 1;
   isSet.value = false;
+  lancetta.value.style.transform = "rotate(0)";
+  pomodoro.value.style.backgroundColor = "#44cf69";
 }
 
 function createPomodoroEvent() {
@@ -305,12 +331,16 @@ onUnmounted(() => {
           </div>
           <div :class="{ timerWork: !relaxing, timerRelaxing: relaxing }">{{ formatTime }}</div>
           <div class="pomodoro-top">
-            <div class="pomodoro-leaf"></div>
+            <div class="leaf-1"></div>
+            <div class="stem"></div>
+            <div class="leaf-2"></div>
           </div>
-          <div class="progress-bar">
-            <div :class="{ progressWork: !relaxing, progressRelaxing: relaxing }" :style="{ width: progressBarWidth }">
+          <div class="d-flex justify-content-center">
+            <div class="clock" ref="pomodoro">
+              <div class="minute" ref="lancetta"></div>
             </div>
           </div>
+
           <button @click="startTimer" :disabled="isRunning">Start</button>
           <button @click="pauseTimer" :disabled="!isRunning" class="pause-button">Pause</button>
           <button @click="forceCycle" :disabled="!isRunning" class="pause-button">Next</button>
@@ -419,7 +449,90 @@ button:disabled {
   height: 30px;
   background-color: #4caf50;
   border-radius: 50% 50% 0 0;
-  transform: rotate(-10deg);
+  transform: rotate(-30deg);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
+
+.leaf-1 {
+	width: 3vmax;
+	height: 3vmax;
+	border-radius: 0 70px;
+	background-color: #1f801f;
+  /* transform: rotate(0deg); */
+  transform : translateY(25%) rotate(0deg);
+  margin-right: 0;
+}
+.leaf-2 {
+	width: 3vmax;
+	height: 3vmax;
+	border-radius: 0 70px;
+	background-color: #1f801f;
+	/* transform: rotate(90deg); */
+  transform : translateY(25%) rotate(90deg);
+  margin-left: 0;
+}
+
+.stem {
+	position: absolute;
+	margin: 0;
+	width: /* 20px */ 1.5vmax; 
+	height: /* 60px */ 4.5vmax;
+	border-radius: 10px/5px;
+	background-color: #1f801f;
+}
+
+.stem:before {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 1.5vmax;
+	height: 0.75vmax;
+	border-radius: 10px/5px;
+	background-color: #1f801f;
+	content: '';
+}
+
+.stem:after {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 1.5vmax;
+	height: 0.75vmax;
+	border-radius: 10px/5px;
+	background-color: #1f801f;
+	content: '';
+}
+
+/* $orange: #F68657;
+$green: #70bd63;
+$bg: #f8c985; */
+
+.clock {
+	background-color: hsl(0, 99%, 37%);
+	width: 15vmax;
+	height: 15vmax;
+	border-radius: 50%;
+	position: relative;
+}
+
+.minute {
+	position: absolute;
+	margin: auto;
+	left: 49%;
+	bottom: 50%;
+	background: #000000;
+	width: 2%;
+	height: 48%;
+	transform: rotate(0);
+	transform-origin: 50% 100%;
+  transition: rotate 1s linear;
+}
+
+/* .minute {
+	transform: rotate(0);
+	height: 48%;
+	background: darken(#F68657, 20);
+} */
+
 </style>

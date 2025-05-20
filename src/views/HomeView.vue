@@ -74,7 +74,7 @@ function getVisibleDate(date) {
 <template>
     <div class="container-fluid">
         <div class="row justify-content-center p-3 ">
-            <div class="col-lg-3 col-12 "><!-- colonna prossimi eventi -->
+            <div class="col-lg-3 col-12 animate-card-downward"><!-- colonna prossimi eventi -->
 
                 <div class="card text-bg-danger mb-3" style="max-height: 80vh;">
                     <div class="card-header align-items-center">
@@ -116,7 +116,7 @@ function getVisibleDate(date) {
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-12"><!-- colonna ultima nota -->
+            <div class="col-lg-3 col-12 animate-card-upward"><!-- colonna ultima nota -->
 
                 <div class="card text-bg-danger mb-3" style="max-height: 80vh;">
                     <div class="card-header align-items-center">
@@ -141,7 +141,7 @@ function getVisibleDate(date) {
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-12">
+            <div class="col-lg-3 col-12 animate-card-downward">
                 <div class="card text-bg-danger mb-3" style="max-height: 80vh;">
                     <div class="card-header align-items-center">
                         <h2 class="mx-auto">Utlimo pomodoro completato</h2>
@@ -180,5 +180,33 @@ function getVisibleDate(date) {
 <style scoped>
 .bg {
     background-color: rgb(252, 114, 109);
+}
+
+.animate-card-downward{
+    opacity:0;
+    transform: translateY(-100%);
+    animation: slideIn 0.7s ease-out forwards;
+}
+
+.animate-card-upward{
+    opacity:0;
+    transform: translateY(100%);
+    animation: slideIn 0.7s ease-out forwards;
+}
+
+@media (max-width: 480px) {
+    .animate-card-downward {
+        transform: translateX(-100%);
+    }
+    .animate-card-upward {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes slideIn {
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 </style>

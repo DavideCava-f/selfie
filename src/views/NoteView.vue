@@ -169,6 +169,7 @@ onMounted(() => {
     </div>
   </div>
   <div>
+    <!-- crea una nuova nota -->
     <RouterLink to="#create-note">
       <button class="btn btn-primary rounded-circle fx-button d-flex align-items-center justify-content-center hover-div " style="" type="button"
         data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
