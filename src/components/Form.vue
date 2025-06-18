@@ -68,7 +68,6 @@ async function addUser() {
         password: Password.value,
         surname: UserSU.value.surname,
         email: UserSU.value.username,
-        course: UserSU.value.prog,
       }),
     });
     console.log("Registrazione effettuata");
@@ -215,19 +214,6 @@ function cseePswd() {
                         Please choose a username.
                       </div>
                     </div>
-
-                    <label class="form-label" for="corsi">Programme</label>
-                    <!-- corso di studi -->
-                    <select class="form-select mb-1" aria-label="Programme" id="corsi" v-model="UserSU.prog" required>
-                      <option selected disabled id="choose">Choose...</option>
-                      <option v-for="corso in corsi" class="text-black">
-                        {{ corso }}
-                      </option>
-                    </select>
-                    <div class="invalid-feedback">
-                      Please choose a programme.
-                    </div>
-
                     <div data-mdb-input-init class="form-outline mb-4">
                       <label class="form-label" for="password">Password</label>
                       <div class="input-group">

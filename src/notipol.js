@@ -3,6 +3,15 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import { Temporal } from "@js-temporal/polyfill";
 import router from "./router/Router";
+import { ref } from "vue";
+
+let msg = ref(null);
+let notificationMessage = ref("");
+
+async function snooze(act){
+
+}
+
 
 async function setNotedTrue(eventId, dateId) {
   await fetch(`${store.value.url}:${store.value.port}/notification`, {
@@ -56,8 +65,9 @@ async function EventNotification(event) {
         if (advance === type &&
           !nextDate.noted &&
           Temporal.Duration.compare(distance, duration) <= 0) {
-          const notificationMessage = `"${event.title}" is happening in less than ${type}!`;
-          toast(notificationMessage, {
+          notificationMessage.value = `"${event.title}" is happening in less than ${type}!`;
+          msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
+          toast(msg.value, {
             theme: "auto",
             type: "default",
             position: "top-left",
@@ -86,8 +96,9 @@ async function ActivityNotification(act) {
 
 
   if (act.notification.isLate == false) { //Se arrivto qui significa scaduto non servono ulteriori controlli
-    const notificationMessage = `"${act.title}" is Expired!`;
-    toast(notificationMessage, {
+    notificationMessage.value = `"${act.title}" is Expired!`;
+    msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
+    toast(msg.value, {
       theme: "auto",
       type: "default",
       position: "top-left",
@@ -109,8 +120,9 @@ async function ActivityNotification(act) {
 
     if (Temporal.PlainDateTime.compare(deadline.add({ days: 1 }), now) <= 0) {
 
-      const notificationMessage = `"${act.title}" is One Day Late`;
-      toast(notificationMessage, {
+      notificationMessage.value = `"${act.title}" is One Day Late`;
+      msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
+      toast(msg.value, {
         theme: "auto",
         type: "default",
         position: "top-left",
@@ -133,8 +145,8 @@ async function ActivityNotification(act) {
 
     if (Temporal.PlainDateTime.compare(deadline.add({ weeks: 1 }), now) <= 0) {
 
-      const notificationMessage = `"${act.title}" is One Week`;
-      toast(notificationMessage, {
+      notificationMessage.value = `"${act.title}" is One Week`;
+      toast(msg.value, {
         theme: "auto",
         type: "default",
         position: "top-left",
