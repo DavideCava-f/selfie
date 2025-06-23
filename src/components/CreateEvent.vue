@@ -4,6 +4,7 @@ import { ref, watch, watchEffect, reactive, computed } from "vue";
 import { store } from "@/store";
 import { EventCreator } from "@/eventCreator";
 import { Temporal } from "@js-temporal/polyfill";
+import DatePicker from './DatePicker.vue';
 
 const eventTitle = ref(null);
 const eventText = ref(null);
@@ -312,6 +313,7 @@ watch(eventBeginDate, setDayOfWeek);
               Reset
             </button>
           </div>
+          <DatePicker/>
         </div>
         <div class="my-2">
           <button class="btn btn-outline-success" type="button" id="tuttoIlGiorno" @click="allDay">
