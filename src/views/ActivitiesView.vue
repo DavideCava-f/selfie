@@ -118,7 +118,7 @@ function SaveUpdateActivity() {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      "id": id,
+      "id_Act": id,
       "title": ActUpdateTitle.value,
       "text": ActUpdateText.value,
       "deadlineDate": deadline,

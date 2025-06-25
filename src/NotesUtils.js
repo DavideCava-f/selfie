@@ -34,11 +34,15 @@ export function SortByDate(v) {
 export function SortByTitle(v) {
   if (v == 0) {
     NotesList.value.sort((i, j) => {
-      return i.Title[0] > j.Title[0] ? 1 : -1;
+     
+    
+      return i.Title[0].toLowerCase() > j.Title.toLowerCase() ? 1 : -1;
+    
     });
   } else if (v == 1) {
     NotesList.value.sort((i, j) => {
-      return i.Title[0] < j.Title[0] ? 1 : -1;
+    
+      return i.Title[0].toLowerCase() < j.Title.toLowerCase() ? 1 : -1;
     });
   }
 }

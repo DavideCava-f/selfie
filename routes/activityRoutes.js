@@ -71,8 +71,10 @@ router.put("/noted", verifyToken, async function(req, res) {
     }
 });
 
-router.put("/noted", verifyToken, async function(req, res) {
+router.put("/update", verifyToken, async function(req, res) {
     try {
+        console.log(req.body.text)
+        console.log(req.body.id_Act)
         const Acts = await Activity.updateOne({ _id: req.body.id_Act }, {
             $set: {
 
