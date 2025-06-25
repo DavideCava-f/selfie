@@ -6,9 +6,12 @@ import { EventCreator } from "@/eventCreator";
 import { Temporal } from "@js-temporal/polyfill";
 import DatePicker from './DatePicker.vue';
 
+const props = defineProps({
+  date: String
+});
 const eventTitle = ref(null);
 const eventText = ref(null);
-const eventBeginDate = ref(null);
+const eventBeginDate = ref(store.value.simDate);
 const eventBeginTime = ref(null);
 const eventEndDate = ref(null);
 const eventEndTime = ref(null);

@@ -7,6 +7,7 @@ import { getActivitiesOfMonth } from "@/activityGetter";
 import { getPomodoros } from "@/pomodoroGetter";
 import VisualizeEvent from "@/components/VisualizeEvent.vue";
 import ModifyEvent from "@/components/ModifyEvent.vue";
+import Create from "@/components/Create.vue";
 import ActivityModal from "@/components/ActivityModal.vue";
 
 let weekdays = ref([]);
@@ -17,6 +18,7 @@ const giorniSettimana = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 let selectedDay = ref(null);
 let eventsOfSelectedDay = ref({});
 const activitiesOfSelectedDay = ref({});
+let DayNewEvent = ref(store.value.simDate);
 
 function reload() {
     store.value.monthOffset = 0;
@@ -130,13 +132,16 @@ watch(() => store.value.monthOffset, () => getPomodoros());
                 <p>{{ day }}</p>
             </div>
         </div>
-        <div class="d-flex flex-wrap w-100 border border-white m-0"> <!-- celle dei giorni nel mense -->
-            <div v-for="i in dayInMonth" class="d-flex flex-column flex-fill justify-content-start border"
+        <div class="d-flex flex-wrap w-100 border border-white m-0" > <!-- celle dei giorni nel mense -->
+            <div v-for="i in dayInMonth" class="d-flex flex-column flex-fill justify-content-start border" data-bs-target="#CreateEV" data-bs-toggle="modal" @click="() => {
+                DayNewEvent = firstDay.toString().slice(0, firstDay.toString().lastIndexOf('-')+1) + i.toString().padStart(2,'0')
+            }"
                 style="width: calc(100%/7); max-width: calc(100%/7); height: 15vh">
                 <div class="d-flex flex-row justify-content-between align-items-center">
                     <div
                         :class="['d-flex', 'justify-content-center', 'align-items-center', 'text-wrap', 'flex-fill', 'h-100', store.simDateTime.day === i && store.monthOffset === 0 ? 'bg-danger' : '']">
                         {{ i }}
+                        {{ DayNewEvent }}
                     </div>
                     <button v-if="store.activitiesOfMonth.find((d) => d.day === i)"
                         class="btn rounded-5 bg-danger w-25 h-25 fs-100"
@@ -225,6 +230,9 @@ watch(() => store.value.monthOffset, () => getPomodoros());
                         @click="store.activePomodoro = pomodoro">
                         🍅 {{ pomodoro.beginDate.split("T")[1].slice(0, 5) }}
                     </button>
+                    <button class="btn btn-primary" data-bs-target="#CreateEV" data-bs-toggle="modal">
+                        +
+                    </button>
                 </div>
             </div>
         </div>
@@ -232,6 +240,9 @@ watch(() => store.value.monthOffset, () => getPomodoros());
 
     <div class=" modal fade" id="VisualizeActivitiesModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
         <ActivityModal :activities="activitiesOfSelectedDay" />
+    </div>
+    <div class=" modal fade" id="CreateEV" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
+        <Create :date="DayNewEvent"/>
     </div>
 </template>
 
