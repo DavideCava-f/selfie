@@ -82,18 +82,22 @@ watch(() => store.value.weekOffset, () => getPomodoros());
       <button class="btn d-flex align-self-center" @click="prevWeek">
         <img src="@/assets/Indietro.svg" />
       </button>
-      <div class="align-self-center">
-        {{ thisMonday.toLocaleString("it-IT", { month: "long", year: "numeric" }) }}
+      <div class="d-flex flex-row justify-content-center align-items-center w-100">
+        <div class="align-self-center text-dark">
+          {{ (thisMonday.toLocaleString("it-IT", { month: "long", year: "numeric" })).charAt(0).toUpperCase() + thisMonday.toLocaleString("it-IT", { month: "long", year: "numeric" }).slice(1) }}
+        </div>
         <button v-if="store.weekOffset !== 0" class="btn" @click="store.weekOffset = 0">R</button>
       </div>
+        
+
       <button class="btn d-flex align-self-center" @click="nextWeek">
         <img src="@/assets/avanti.svg" />
       </button>
     </div>
 
-    <div class="container-fluid d-flex flex-column justify-content-start my-2 w-100 p-0" style="min-height: 70vh;">
+    <div class="container-fluid d-flex flex-column justify-content-center my-2 w-100 p-0" style="min-height: 70vh;">
       <div v-for="day in store.week" class="row w-100 border fillable align-self-center align-items-center p-0">
-        <div class="h-100 p-0 d-flex flex-column flex-lg-row flex-fill justify-content-center align-items-center"
+        <div class="h-100 p-0 d-flex flex-column flex-lg-row flex-fill justify-content-center align-items-center "
           style="width: 12%; max-width: 12%;">
           <div class="d-flex flex-column align-items-center text-white rounded-circle text-wrap position-static">
             <div class="fw-bold fs-6">
@@ -112,14 +116,12 @@ watch(() => store.value.weekOffset, () => getPomodoros());
               </svg>
             </div>
           </div>
-          <div v-if="store.activitiesOfWeek.find((d) => d.day === store.week.indexOf(day))"
-            class="d-flex flex-column align-items-center ms-1">
-            <button class="btn rounded-pill bg-danger text-white"
-              @click="activitiesOfSelectedDay = store.activitiesOfWeek.find((d) => d.day === store.week.indexOf(day)).activities; console.log(activitiesOfSelectedDay)"
+          <button v-if="store.activitiesOfWeek.find((d) => d.day === store.week.indexOf(day))"
+            class="btn bg-danger activity-button d-flex d-inline-block align-items-center justify-content-center"
+            @click="activitiesOfSelectedDay = store.activitiesOfWeek.find((d) => d.day === store.week.indexOf(day)).activities; console.log(activitiesOfSelectedDay)"
               data-bs-target="#VisualizeActivitiesModal" data-bs-toggle="modal">
-              A
-            </button>
-          </div>
+                <img src="@/assets/ActivityLogo.svg" alt="Activities" width="w-100">
+          </button>
         </div>
 
         <div class="h-100 d-flex flex-row justify-content-between border-start gap-1 flex-wrap" style="width: 88%;">
@@ -206,5 +208,13 @@ watch(() => store.value.weekOffset, () => getPomodoros());
   50% {
     opacity: 1;
   }
+}
+
+.activity-button{
+    width: 20%;
+    height: 100%;
+    display: flex;
+    margin-left: 0%;
+    margin-right: 0%;
 }
 </style>
