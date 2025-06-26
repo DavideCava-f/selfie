@@ -4,7 +4,7 @@ import { ref, watch, watchEffect, reactive, computed } from "vue";
 import { store } from "@/store";
 import { EventCreator } from "@/eventCreator";
 import { Temporal } from "@js-temporal/polyfill";
-import DatePicker from './DatePicker.vue';
+import DateTimePicker from './DateTimePicker.vue';
 
 const eventTitle = ref(null);
 const eventText = ref(null);
@@ -291,8 +291,10 @@ watch(eventBeginDate, setDayOfWeek);
         <div class="my-2">
           <label>Start</label>
           <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
-            <input class="form-control" type="date" v-model="eventBeginDate" />
-            <input class="form-control" type="time" v-model="eventBeginTime" />
+            <!-- <input class="form-control" type="date" v-model="eventBeginDate" /> -->
+            <!-- <input class="form-control" type="time" v-model="eventBeginTime" /> -->
+            ciao nano
+            <DateTimePicker v-model:date="eventBeginDate" v-model:time="eventBeginTime" />
             <button class="btn btn-outline-primary" @click="setBeginNow">
               Now
             </button>
@@ -313,7 +315,6 @@ watch(eventBeginDate, setDayOfWeek);
               Reset
             </button>
           </div>
-          <DatePicker/>
         </div>
         <div class="my-2">
           <button class="btn btn-outline-success" type="button" id="tuttoIlGiorno" @click="allDay">
@@ -376,6 +377,7 @@ watch(eventBeginDate, setDayOfWeek);
         <div v-if="notifiable" class="row my-2">
           <div class="col-sm-6 col-12">
             <label>When to notify</label>
+            <!-- FIXME: il multiple select su telefono non funziona! -->
             <select class="form-select" multiple size="3" aria-label="Multiple select"
               v-model="notificationRawSelected">
               <option v-for="(advance, idx) in store.advance" :key="idx" :value="advance[1]"
