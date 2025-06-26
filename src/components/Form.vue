@@ -32,7 +32,9 @@ function resetValues() {
 }
 
 async function validateForm() {
-  const response = await fetch(`${store.value.url}:${store.value.port}/user/login?email=${User.value}&password=${Password.value}`)
+  const response = await fetch(`${store.value.url}:${store.value.port}/user/login?email=${User.value}&password=${Password.value}`, {
+    credentials: "include"
+  })
   if (response.status === 401) {
     alert("Email o password errati");
   } else if (response.status === 500) {
@@ -200,7 +202,8 @@ function cseePswd() {
 
                     <div data-mdb-input-init class="form-outline mb-1">
                       <label class="form-label" for="surname">Surname</label>
-                      <input type="text" id="surname" class="form-control" name="surname" v-model="UserSU.surname" required />
+                      <input type="text" id="surname" class="form-control" name="surname" v-model="UserSU.surname"
+                        required />
                       <div class="invalid-feedback">
                         Please choose a surname.
                       </div>
@@ -208,8 +211,8 @@ function cseePswd() {
 
                     <div data-mdb-input-init class="form-outline mb-1">
                       <label class="form-label" for="form2Example11">Username</label>
-                      <input type="text" id="username" class="form-control" placeholder="Email address" name="username" v-model="UserSU.username"
-                        required />
+                      <input type="text" id="username" class="form-control" placeholder="Email address" name="username"
+                        v-model="UserSU.username" required />
                       <div class="invalid-feedback">
                         Please choose a username.
                       </div>

@@ -34,7 +34,9 @@ async function update() {
 async function getNearEvents() {
     console.log("suca");
     const max = (store.value.advance.twoWeeks[0].add(store.value.advance.twelveHr[0].add(store.value.advance.halfHr[0]))).toString();
-    fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}&isNotification=${false}&max=${max}`)
+    fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}&isNotification=${false}&max=${max}`, {
+        credentials: "include"
+    })
         .then(response => {
             //console.log(response);
             return response.json();
@@ -182,14 +184,14 @@ function getVisibleDate(date) {
     background-color: rgb(252, 114, 109);
 }
 
-.animate-card-downward{
-    opacity:0;
+.animate-card-downward {
+    opacity: 0;
     transform: translateY(-100%);
     animation: slideIn 0.7s ease-out forwards;
 }
 
-.animate-card-upward{
-    opacity:0;
+.animate-card-upward {
+    opacity: 0;
     transform: translateY(100%);
     animation: slideIn 0.7s ease-out forwards;
 }
@@ -198,6 +200,7 @@ function getVisibleDate(date) {
     .animate-card-downward {
         transform: translateX(-100%);
     }
+
     .animate-card-upward {
         transform: translateX(100%);
     }
