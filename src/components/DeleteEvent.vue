@@ -16,6 +16,7 @@ function deleteEvent(i) {
       'Content-Type': 'application/json'
     },
     method: "delete",
+    credentials: "include",
     body: JSON.stringify({
       "idEvent": store.value.activeEventId,
       "idOp": i,
@@ -31,7 +32,8 @@ function deleteEvent(i) {
 
 function getEvent() {
   fetch(`${store.value.url}:${store.value.port}/event/OneEvent?id=${store.value.activeEventId}`, {
-    method: "get"
+    method: "get",
+    credentials: "include"
   }
   ).then(response => { return response.json() })
     .then(data => {

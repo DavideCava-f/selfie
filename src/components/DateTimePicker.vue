@@ -48,7 +48,6 @@ watch(
     (newDate) => {
         if (!newDate) return;
         const plain = Temporal.PlainDate.from(newDate);
-        selectedYear.value = plain.year;
         selectedMonth.value = months[plain.month - 1];
         selectedDay.value = plain.day;
     },

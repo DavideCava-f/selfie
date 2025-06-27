@@ -11,7 +11,8 @@ var event = ref({
 
 function getEvent() {
   fetch(`${store.value.url}:${store.value.port}/event/OneEvent?id=${store.value.activeEventId}`, {
-    method: "get"
+    method: "get",
+    credentials: "include"
   }
   ).then(response => { return response.json() })
     .then(data => {

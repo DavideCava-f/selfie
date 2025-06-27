@@ -9,14 +9,10 @@ import DateTimePicker from './DateTimePicker.vue';
 const props = defineProps({
   date: String
 });
-watch(() => props.date, () => {console.log(props.date)})
+watch(() => props.date, () => { if (props.date !== undefined && props.date !== null) eventBeginDate.value = props.date })
 const eventTitle = ref(null);
 const eventText = ref(null);
-const eventBeginDate = computed(() =>
-  props.date !== undefined && props.date !== null
-    ? props.date
-    : store.value.simDate
-)
+const eventBeginDate = ref(null);
 const eventBeginTime = ref(null);
 const eventEndDate = ref(null);
 const eventEndTime = ref(null);
@@ -311,7 +307,7 @@ watch(eventBeginDate, setDayOfWeek);
           </button>
         </div>
         <div class="form-check my-2">
-          <input class="form-check-input" type="checkbox" id="repeatable" :disabled="!eventBeginDate || eventBeginDate.toString() !== eventEndDate.toString()
+          <input class="form-check-input" type="checkbox" id="repeatable" :disabled="!eventBeginDate || eventBeginDate?.toString() !== eventEndDate?.toString()
             " v-model="repeatable" />
           <label class="form-check-label" for="repeatable">Repeatable</label>
         </div>

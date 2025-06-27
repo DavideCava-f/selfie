@@ -68,7 +68,8 @@ function updateEvent(i) {
 function getEvent() {
   console.log("dio porco:" + store.value.activeEventId);
   fetch(`${store.value.url}:${store.value.port}/event/OneEvent?id=${store.value.activeEventId}`, {
-    method: "get"
+    method: "get",
+    credentials: "include"
   }
   ).then(response => { return response.json() })
     .then(data => {
