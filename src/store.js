@@ -35,6 +35,7 @@ const store = ref({
   realDay: computed(() => store.value.realDate.dayOfWeek - 1),
   simDay: computed(() => store.value.simDate.dayOfWeek - 1),
 
+
   week: [
     "Monday",
     "Tuesday",

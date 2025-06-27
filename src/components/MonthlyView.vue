@@ -107,6 +107,17 @@ onMounted(async () => {
 watch(() => store.value.monthOffset, () => getEventsOfMonth());
 watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
 watch(() => store.value.monthOffset, () => getPomodoros());
+
+function tooSmall(str){
+    console.log(window.innerWidth);
+    if(window.innerWidth < 550) {
+        return " ";
+    }
+    console.log(str);
+    return str;
+}
+
+
 </script>
 
 <template>
@@ -116,12 +127,16 @@ watch(() => store.value.monthOffset, () => getPomodoros());
             <button class="btn d-flex align-self-center" @click="changeMonth(-1)">
                 <img src="@/assets/Indietro.svg" />
             </button>
-            <div class="align-self-center text-dark">{{ firstDay.toLocaleString("it-IT", {
-                month: "long", year:
-                    "numeric"
-            }) }}
+            <div class="d-flex flex-row justify-content-center align-items-center w-100">
+                <div class="align-self-center text-dark">
+                {{ 
+                (firstDay.toLocaleString("it-IT", { month: "long", year: "numeric" })).charAt(0).toUpperCase() + firstDay.toLocaleString("it-IT", { month: "long", year: "numeric" }).slice(1)
+                }}
+                </div>
                 <button v-if="store.monthOffset !== 0" class="btn" @click="reload()">R</button>
             </div>
+            
+
             <button class="btn d-flex align-self-center" @click="changeMonth(1)">
                 <img src="@/assets/avanti.svg" />
             </button>
@@ -138,17 +153,17 @@ watch(() => store.value.monthOffset, () => getPomodoros());
                 DayNewEvent = firstDay.toString().slice(0, firstDay.toString().lastIndexOf('-')+1) + i.toString().padStart(2,'0')
             }"
                 style="width: calc(100%/7); max-width: calc(100%/7); height: 15vh">
-                <div class="d-flex flex-row justify-content-between align-items-center">
+                <div class="d-flex flex-row justify-content-between align-items-center m-0 h-25">
                     <div
-                        :class="['d-flex', 'justify-content-center', 'align-items-center', 'text-wrap', 'flex-fill', 'h-100', store.simDateTime.day === i && store.monthOffset === 0 ? 'bg-danger' : '']">
+                        :class="['d-flex', 'justify-content-center', 'align-items-center', 'text-wrap', 'flex-fill', 'h-100', 'z-0',store.simDateTime.day === i && store.monthOffset === 0 ? 'bg-dark' : '']">
                         {{ i }}
                         {{ DayNewEvent }}
                     </div>
                     <button v-if="store.activitiesOfMonth.find((d) => d.day === i)"
-                        class="btn rounded-5 bg-danger w-25 h-25 fs-100"
+                        class="btn bg-danger activity-button d-flex d-inline-block align-items-center justify-content-center"
                         @click="activitiesOfSelectedDay = store.activitiesOfMonth.find((d) => d.day === i).activities; console.log(activitiesOfSelectedDay)"
                         data-bs-target="#VisualizeActivitiesModal" data-bs-toggle="modal">
-                        A
+                        <img src="@/assets/ActivityLogo.svg" alt="Activities" width="w-100">
                     </button>
                 </div>
                 <div class="mx-0 mt-1 p-0 d-flex flex-column" style="overflow: hidden;">
@@ -190,7 +205,7 @@ watch(() => store.value.monthOffset, () => getPomodoros());
                             class="btn btn-danger d-flex d-inline-block align-items-center 
                             text-truncate event text-nowrap" @click="store.activePomodoro = pomodoro"
                             data-bs-target="#PomodoroEventModal" data-bs-toggle="modal">
-                            🍅 {{ pomodoro.beginDate.split("T")[1].slice(0, 5) }}
+                            🍅 {{ tooSmall(pomodoro.beginDate.split("T")[1].slice(0, 5)) }}
                         </button>
                         <button v-if="contaPom(i) > 2 - conta(i)"
                             class="btn event d-flex d-inline-block align-self-center align-items-center text-nowrap"
@@ -252,5 +267,11 @@ watch(() => store.value.monthOffset, () => getPomodoros());
     line-height: 1;
     max-width: 100%;
     min-height: 25%
+}
+
+.activity-button{
+    width: 20%;
+    height: 100%;
+    display: flex;
 }
 </style>

@@ -45,8 +45,8 @@ setUserPfp();
                 <div class="collapse d-md-flex" id="navbar">
                     <ul class="nav d-flex flex-row justify-content-center align-items-center">
                         <li class="nav-item">
-                            <RouterLink v-if="currentRoute !== '/home'" class="nav-link active text-white" to="/home">
-                                <img src="@/assets/HomeLogo.svg" alt="Home" width="w-100">
+                            <RouterLink v-if="currentRoute !== '/home'" class="nav-link active text-white" to="/home" >
+                                    <img src="@/assets/HomeLogo.svg" alt="Home" width="w-100">
                             </RouterLink>
                         </li>
                         <li class="nav-item">
