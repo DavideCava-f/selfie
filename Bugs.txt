@@ -3,6 +3,7 @@ Bug Ritrovati Non Risolti
 - Generici
 
 - Gestire la palette generale del progetto, per i vari modal
+- Migliorare Interfaccia delle notifiche
 
 - L0GIN
 - Passa a LOGIN quando SIGNUP
@@ -17,12 +18,14 @@ Bug Ritrovati Non Risolti
 - Notifiche eventi non arrivano
 - Migliorare interfaccia visualize eventi
 - Integrare Date Picker per modifica
+- Pulsante Timido di create che si nasconde dietro le attivita
 
 ATTIVITA
 
 - Integrare Date Picker per attivita
-- Verticalizzare Interfaccia
+- Verticalizzare Interfaccia(Da telefono e tutto schiacciato)
 
 POMODORO
 
 - Interfaccia piu leggera e user friendly
+- Ultimo pomodoro completato da fare
