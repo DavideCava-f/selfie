@@ -19,7 +19,7 @@ const beginTime = computed({
     set: value => emit("update:time", value)
 });
 
-const selectedYear = computed(() => Temporal.PlainDate.from(beginDate.value).year)
+const selectedYear = computed(() => beginDate.value ? Temporal.PlainDate.from(beginDate?.value).year : new Date().getFullYear())
 
 const size = 300
 const center = size / 2
@@ -74,33 +74,37 @@ watch(
 </script>
 
 <template>
-    <div class="flex flex-col items-center justify-content-between align-items-center">
+    <div class="d-flex flex-row justify-content-lg-between justify-content-center align-items-center flex-wrap gap-2">
         <div>
-            <svg :width="size" :height="size" :viewBox="`0 0 ${size} ${size}`">
-                <g :transform="`translate(${center}, ${center})`">
-                    <OrbitalSelector :items="months" :radius="120" color="#FDD128" v-model:selected="selectedMonth" />
-                    <OrbitalSelector :key="`first-${selectedYear}-${selectedMonth}`" :items="days.slice(0, 18)"
-                        :radius="90" color="#87A96B" v-model:selected="selectedDay" />
-                    <OrbitalSelector :key="`second-${selectedYear}-${selectedMonth}`" :items="days.slice(18)"
-                        :radius="60" color="#87A96B" v-model:selected="selectedDay" />
-                </g>
-            </svg>
+            <div>
+                <svg :width="size" :height="size" :viewBox="`0 0 ${size} ${size}`">
+                    <g :transform="`translate(${center}, ${center})`">
+                        <OrbitalSelector :items="months" :radius="120" color="#FDD128"
+                            v-model:selected="selectedMonth" />
+                        <OrbitalSelector :key="`first-${selectedYear}-${selectedMonth}`" :items="days.slice(0, 18)"
+                            :radius="90" color="#87A96B" v-model:selected="selectedDay" />
+                        <OrbitalSelector :key="`second-${selectedYear}-${selectedMonth}`" :items="days.slice(18)"
+                            :radius="60" color="#87A96B" v-model:selected="selectedDay" />
+                    </g>
+                </svg>
+            </div>
+            <div>
+                <input class="form-control" type="date" v-model="beginDate" />
+            </div>
         </div>
         <div>
-            <input class="form-control" type="date" v-model="beginDate" />
-        </div>
-    </div>
-    <div class="flex flex-col items-center justify-content-between align-items-center">
-        <div>
-            <svg :width="size" :height="size" :viewBox="`0 0 ${size} ${size}`">
-                <g :transform="`translate(${center}, ${center})`">
-                    <OrbitalSelector :items="hours" :radius="90" color="#BC544B" v-model:selected="selectedHour" />
-                    <OrbitalSelector :items="minutes" :radius="60" color="#87A96B" v-model:selected="selectedMinute" />
-                </g>
-            </svg>
-        </div>
-        <div>
-            <input class="form-control" type="time" v-model="beginTime" />
+            <div>
+                <svg :width="size" :height="size" :viewBox="`0 0 ${size} ${size}`">
+                    <g :transform="`translate(${center}, ${center})`">
+                        <OrbitalSelector :items="hours" :radius="90" color="#BC544B" v-model:selected="selectedHour" />
+                        <OrbitalSelector :items="minutes" :radius="60" color="#87A96B"
+                            v-model:selected="selectedMinute" />
+                    </g>
+                </svg>
+            </div>
+            <div>
+                <input class="form-control" type="time" v-model="beginTime" />
+            </div>
         </div>
     </div>
 </template>

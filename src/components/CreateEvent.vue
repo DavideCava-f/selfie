@@ -282,23 +282,19 @@ watch(eventBeginDate, setDayOfWeek);
 
         <div class="my-2">
           <label>Start</label>
-          <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
-            <DateTimePicker v-model:date="eventBeginDate" v-model:time="eventBeginTime" />
-            <button class="btn btn-outline-primary" @click="setBeginNow">
-              Now
-            </button>
-          </div>
+          <br />
+          <button class="btn btn-outline-primary" @click="setBeginNow">
+            Now
+          </button>
+          <DateTimePicker v-model:date="eventBeginDate" v-model:time="eventBeginTime" />
         </div>
         <div class="my-2">
           <label>End</label>
-          <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
-            <!-- <input class="form-control" type="date" :min="eventBeginDate" v-model="eventEndDate" /> -->
-            <!-- <input class="form-control" type="time" v-model="eventEndTime" /> -->
-            <DateTimePicker v-model:date="eventEndDate" v-model:time="eventEndTime" :min="eventBeginDate" />
-            <button class="btn btn-outline-primary" @click="setEndNow">
-              Now
-            </button>
-          </div>
+          <br />
+          <button class="btn btn-outline-primary" @click="setEndNow">
+            Now
+          </button>
+          <DateTimePicker v-model:date="eventEndDate" v-model:time="eventEndTime" :min="eventBeginDate" />
         </div>
         <div class="my-2">
           <button class="btn btn-outline-success" type="button" id="tuttoIlGiorno" @click="allDay">
