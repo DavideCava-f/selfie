@@ -1,10 +1,27 @@
 Bug Ritrovati Non Risolti
-- L0GIN
-nada
 
-- N0TE
-nada
+L0GIN
+- Passa a LOGIN quando SIGNUP
 
-- CALENDARIO 
+N0TE
+- Fare in modo che la duplicazione non allarghi la nota
+
+CALENDARIO 
+- Repatable che rimane aperto nella create
 - BUG grafico sull'indicatore rosso che invade altro giorno(da telefono)
 - ERRORE sull'eliminazione degli eventi da errore (C is null...) ma li elimina correttamente tranne a volte che ne elimina 2 alla volta
+- Pulsante Timido di create che si nasconde dietro le attivita
+
+COSE DA FARE:
+- Gestire la palette generale del progetto, per i vari modal
+- Migliorare Interfaccia delle notifiche
+- Migliorare interfaccia visualize eventi
+- Integrare Date Picker per modifica
+
+ATTIVITA
+- Integrare Date Picker per attivita
+- Verticalizzare Interfaccia(Da telefono e tutto schiacciato)
+
+POMODORO
+- Interfaccia piu leggera e user friendly
+- Ultimo pomodoro completato da fare

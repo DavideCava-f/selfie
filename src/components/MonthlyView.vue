@@ -157,7 +157,7 @@ function tooSmall(str){
                     <div
                         :class="['d-flex', 'justify-content-center', 'align-items-center', 'text-wrap', 'flex-fill', 'h-100', 'z-0',store.simDateTime.day === i && store.monthOffset === 0 ? 'bg-dark' : '']">
                         {{ i }}
-                        {{ DayNewEvent }}
+                    
                     </div>
                     <button v-if="store.activitiesOfMonth.find((d) => d.day === i)"
                         class="btn bg-danger activity-button d-flex d-inline-block align-items-center justify-content-center"
