@@ -150,7 +150,7 @@ setInterval(
           nextDate: nextDate
         },
       });
-    })
+    });
   },
   300000
 )
