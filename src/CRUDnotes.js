@@ -46,7 +46,7 @@ export function CreateNote() {
   NCtags.value = "";
   NCtitle.value = "";
   NCcontent.value = "";
-  NCMarkDown.value = "";
+  NCMarkDown.value = false;
       //do something awesome that makes the world a better place
     });
 }

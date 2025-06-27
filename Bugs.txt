@@ -1,0 +1,17 @@
+Bug Ritrovati Non Risolti
+
+- L0GIN
+
+- Manda notifiche anche nella schermata di LOGIN, errori periodici nella console
+- 401 APPENA ARRIVATO
+
+- N0TE
+- Per Ora NULLA
+
+- CALENDARIO 
+
+- BUG grafico sull'indicatore rosso che invade altro giorno(da telefono)
+- Errore sulla creazione di un evento (500)
+- ERRORE sulla creazione evento (Invalid ISO string)
+- ERRORE sull'eliminazione degli eventi da errore (C is null...) ma li elimina correttamente tranne a volte che ne elimina 2 alla volta
+- Notifiche eventi non arrivano

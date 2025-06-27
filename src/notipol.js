@@ -146,6 +146,7 @@ async function ActivityNotification(act) {
     if (Temporal.PlainDateTime.compare(deadline.add({ weeks: 1 }), now) <= 0) {
 
       notificationMessage.value = `"${act.title}" is One Week`;
+      msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
       toast(msg.value, {
         theme: "auto",
         type: "default",
