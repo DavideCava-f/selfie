@@ -34,8 +34,9 @@ router.get("/login", async function(req, res) {
     const token = jwt.sign({ userId: user._id }, process.env.JWT_KEY, {
       expiresIn: "1h",
     });
-    res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "Strict" }).status(200).send();
+    res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "Lax" }).status(200).send();
   } catch (error) {
+    console.error(error)
     res.status(500).json({ error: "Login failed" });
   } finally {
   }

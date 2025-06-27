@@ -12,7 +12,9 @@ const pfpSrc = ref("");
 
 
 async function setUserPfp() {
-    const response = await fetch(`${store.value.url}:${store.value.port}/user/info`);
+    const response = await fetch(`${store.value.url}:${store.value.port}/user/info`, {
+        credentials: "include"
+    });
     const user = await response.json();
     const username = user.name.slice(0, 3);
     pfpSrc.value = `https://dummyimage.com/100x100/ffff00/000000.png&text=${username}`;

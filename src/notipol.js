@@ -8,7 +8,7 @@ import { ref } from "vue";
 let msg = ref(null);
 let notificationMessage = ref("");
 
-async function snooze(act){
+async function snooze(act) {
 
 }
 
@@ -198,13 +198,17 @@ async function notipol() {
   Notification.requestPermission();
   const max = (store.value.advance.twoWeeks[0].add(store.value.advance.twelveHr[0].add(store.value.advance.halfHr[0]))).toString();
   //console.log("max: " + max.toString());
-  let response = await fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}&isNotification=${true}&max=${max}`);
+  let response = await fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}&isNotification=${true}&max=${max}`, {
+    credentials: "include"
+  });
   let Events = await response.json();
   let now = Temporal.PlainDateTime.from(store.value.simDateTime)
   console.log("notipol!");
   console.log(Events)
   await Events.forEach(el => { EventNotification(el) });
-  let activities = await fetch(`${store.value.url}:${store.value.port}/activity`);
+  let activities = await fetch(`${store.value.url}:${store.value.port}/activity`, {
+    credentials: "include"
+  });
   let Acts = await activities.json();
   let Expired = Acts.filter((el) => {
     let deadline = Temporal.PlainDateTime.from(el.dates[0].deadline.slice(0, -1))

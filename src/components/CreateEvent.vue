@@ -1,10 +1,10 @@
 <script setup>
 import OpenAI from "openai";
-import { ref, watch, watchEffect, reactive, computed } from "vue";
+import { ref, watch, watchEffect, reactive, computed, onMounted } from "vue";
 import { store } from "@/store";
 import { EventCreator } from "@/eventCreator";
 import { Temporal } from "@js-temporal/polyfill";
-import DatePicker from './DatePicker.vue';
+import DateTimePicker from './DateTimePicker.vue';
 
 const props = defineProps({
   date: String
@@ -72,21 +72,11 @@ function setEndNow() {
   eventEndTime.value = store.value.simTime.slice(0, 5);
 }
 
-function resetBegin() {
-  eventBeginDate.value = "";
-  eventBeginTime.value = "00:00";
-}
-
-function resetEnd() {
-  eventEndDate.value = "";
-  eventEndTime.value = "00:01";
-}
-
 function resetFields() {
   eventTitle.value = "";
   eventText.value = "";
-  resetBegin();
-  resetEnd();
+  setBeginNow();
+  setEndNow();
   repeatable.value = false;
   frequenceSelected.value = { type: "d", option: [...Array(7)] };
   repetitionSelected.value = { type: "i", option: "" };
@@ -268,7 +258,9 @@ function createEvent() {
   resetFields();
 }
 
-resetFields();
+onMounted(() => {
+  resetFields();
+})
 
 watch(eventBeginDate, setDayOfWeek);
 </script>
@@ -299,30 +291,19 @@ watch(eventBeginDate, setDayOfWeek);
 
         <div class="my-2">
           <label>Start</label>
-          <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
-            <input class="form-control" type="date" v-model="eventBeginDate" />
-            <input class="form-control" type="time" v-model="eventBeginTime" />
-            <button class="btn btn-outline-primary" @click="setBeginNow">
-              Now
-            </button>
-            <button class="btn btn-outline-danger" @click="resetBegin">
-              Reset
-            </button>
-          </div>
+          <br>
+          <button class="btn btn-outline-primary" @click="setBeginNow">
+            Now
+          </button>
+          <DateTimePicker v-model:date="eventBeginDate" v-model:time="eventBeginTime" />
         </div>
         <div class="my-2">
           <label>End</label>
-          <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
-            <input class="form-control" type="date" :min="eventBeginDate" v-model="eventEndDate" />
-            <input class="form-control" type="time" v-model="eventEndTime" />
-            <button class="btn btn-outline-primary" @click="setEndNow">
-              Now
-            </button>
-            <button class="btn btn-outline-danger" @click="resetEnd">
-              Reset
-            </button>
-          </div>
-          <DatePicker/>
+          <br />
+          <button class="btn btn-outline-primary" @click="setEndNow">
+            Now
+          </button>
+          <DateTimePicker v-model:date="eventEndDate" v-model:time="eventEndTime" :min="eventBeginDate" />
         </div>
         <div class="my-2">
           <button class="btn btn-outline-success" type="button" id="tuttoIlGiorno" @click="allDay">
@@ -330,8 +311,7 @@ watch(eventBeginDate, setDayOfWeek);
           </button>
         </div>
         <div class="form-check my-2">
-          <input class="form-check-input" type="checkbox" id="repeatable" :disabled="eventBeginDate.toString() !== eventEndDate.toString() ||
-            !eventBeginDate
+          <input class="form-check-input" type="checkbox" id="repeatable" :disabled="!eventBeginDate || eventBeginDate.toString() !== eventEndDate.toString()
             " v-model="repeatable" />
           <label class="form-check-label" for="repeatable">Repeatable</label>
         </div>
@@ -385,6 +365,7 @@ watch(eventBeginDate, setDayOfWeek);
         <div v-if="notifiable" class="row my-2">
           <div class="col-sm-6 col-12">
             <label>When to notify</label>
+            <!-- FIXME: il multiple select su telefono non funziona! -->
             <select class="form-select" multiple size="3" aria-label="Multiple select"
               v-model="notificationRawSelected">
               <option v-for="(advance, idx) in store.advance" :key="idx" :value="advance[1]"
