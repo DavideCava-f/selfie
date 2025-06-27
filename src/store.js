@@ -4,7 +4,10 @@ import { Temporal } from "@js-temporal/polyfill";
 import { getEventsOfWeek, getEventsOfDay, getEventsOfMonth } from "@/eventGetter";
 import { getActivitiesOfDay, getActivitiesOfMonth, getActivitiesOfWeek } from "@/activityGetter";
 import { getPomodoros } from "@/pomodoroGetter";
-import { notipol } from "@/notipol";
+import { notipol, openDate } from "@/notipol";
+import SnoozeToast from "@/components/SnoozeToast.vue";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export const NotesList = ref([]);
 
@@ -86,6 +89,8 @@ const store = ref({
 
   toggle: false,
 
+  snoozed: [],
+
   update: async () => {
     await getEventsOfDay();
     await getEventsOfWeek();
@@ -124,6 +129,31 @@ setInterval(
   notipol,
   10000
 );
+
+setInterval(
+  () => {
+    const copy = [...store.value.snoozed];
+    store.value.snoozed = [];
+    copy.forEach((notification) => {
+      const { event, notificationMessage, nextDate } = notification;
+      toast(SnoozeToast, {
+        theme: "auto",
+        type: "default",
+        position: "top-left",
+        transition: "slide",
+        autoClose: event.notification.untilAck ? false : 5000,
+        onClick: () => openDate(nextDate),
+        expandCustomProps: true,
+        contentProps: {
+          event: event,
+          message: notificationMessage,
+          nextDate: nextDate
+        },
+      });
+    })
+  },
+  300000
+)
 
 // watch(() => store.value.pomodoros, () => {
 //   if (store.value.activePomodoro && store.value.pomodoros.map((pomodoro) => pomodoro._id).includes(store.value.activePomodoro._id)) {

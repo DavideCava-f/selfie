@@ -4,13 +4,9 @@ import "vue3-toastify/dist/index.css";
 import { Temporal } from "@js-temporal/polyfill";
 import router from "./router/Router";
 import { ref } from "vue";
+import SnoozeToast from "@/components/SnoozeToast.vue";
 
 let msg = ref(null);
-
-async function snooze(act) {
-
-}
-
 
 async function setNotedTrue(eventId, advanceId) {
   await fetch(`${store.value.url}:${store.value.port}/notification`, {
@@ -64,15 +60,19 @@ async function EventNotification(event) {
           !advance.noted &&
           Temporal.Duration.compare(distance, duration) <= 0) {
           const notificationMessage = `"${event.title}" is happening in less than ${type}!`;
-          msg.value = `<strong>${notificationMessage}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
-          toast(msg.value, {
+          toast(SnoozeToast, {
             theme: "auto",
             type: "default",
             position: "top-left",
             transition: "slide",
             autoClose: untilAck ? false : 5000,
             onClick: () => openDate(nextDate),
-            dangerouslyHTMLString: true,
+            expandCustomProps: true,
+            contentProps: {
+              event: event,
+              message: notificationMessage,
+              nextDate: nextDate
+            },
           });
           const notification = new Notification(notificationMessage);
           setNotedTrue(event._id, advance._id);
@@ -231,4 +231,4 @@ async function notipol() {
   }
 }
 
-export { notipol };
+export { notipol, openDate };
