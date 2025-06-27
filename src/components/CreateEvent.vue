@@ -282,7 +282,7 @@ watch(eventBeginDate, setDayOfWeek);
 
         <div class="my-2">
           <label>Start</label>
-          <br />
+          <br>
           <button class="btn btn-outline-primary" @click="setBeginNow">
             Now
           </button>
