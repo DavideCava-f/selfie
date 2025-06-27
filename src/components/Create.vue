@@ -6,11 +6,16 @@ import CreateActivity from './CreateActivity.vue';
 
 let choice = ref(Boolean);
 
+const props = defineProps({
+  date: String
+});
+
 onMounted(() => {
     console.log("mounted create")
     choice.value = true;
 });
 
+watch(() => props.date,()=> {console.log(props.date)})
 
 </script>
 
@@ -26,7 +31,7 @@ onMounted(() => {
             </div>
             <div class="modal-body">
                 <div v-if="choice">
-                    <CreateEvent />
+                    <CreateEvent :date="props.date"/>
                 </div>
                 <div v-else>
                     <CreateActivity @created="store.update()" />

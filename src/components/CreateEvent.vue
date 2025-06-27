@@ -9,9 +9,10 @@ import DatePicker from './DatePicker.vue';
 const props = defineProps({
   date: String
 });
+watch(() => props.date, () => {console.log(props.date)})
 const eventTitle = ref(null);
 const eventText = ref(null);
-const eventBeginDate = ref(store.value.simDate);
+const eventBeginDate = computed(() => props.date)
 const eventBeginTime = ref(null);
 const eventEndDate = ref(null);
 const eventEndTime = ref(null);
@@ -32,6 +33,7 @@ watchEffect(() => {
   console.log(notificationRawSelected.value);
   console.log(notificationSelected.value);
 });
+
 const notifyUntilAck = ref(false);
 const eventLink = ref(null);
 

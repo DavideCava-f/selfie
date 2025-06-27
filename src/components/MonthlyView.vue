@@ -20,6 +20,7 @@ let eventsOfSelectedDay = ref({});
 const activitiesOfSelectedDay = ref({});
 let DayNewEvent = ref(store.value.simDate);
 
+watch(DayNewEvent, () => {console.log(DayNewEvent.value)})
 function reload() {
     store.value.monthOffset = 0;
     updateWeekDays(firstDay.value);
