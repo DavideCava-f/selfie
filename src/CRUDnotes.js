@@ -53,7 +53,7 @@ export function CreateNote() {
 export function DuplicateNote(id) {
   var tagsStr = "";
   var elem = NotesList.value.find((el) => el._id.toString() == id);
-  NCtitle.value =  elem.Title + " (copia) ";
+  NCtitle.value = elem.Title;
   NCcontent.value = elem.Text;
   var ArrTags = elem.Tags;
   ArrTags.forEach((el) => {

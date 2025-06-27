@@ -3,7 +3,6 @@ import { ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import TimeMachine from './TimeMachine.vue';
 import Pomodoro from './Pomodoro.vue';
-import PomodoroEvent from './PomodoroEvent.vue';
 import { store } from "@/store";
 
 const router = useRouter();
@@ -12,9 +11,7 @@ const pfpSrc = ref("");
 
 
 async function setUserPfp() {
-    const response = await fetch(`${store.value.url}:${store.value.port}/user/info`, {
-        credentials: "include"
-    });
+    const response = await fetch(`${store.value.url}:${store.value.port}/user/info`);
     const user = await response.json();
     const username = user.name.slice(0, 3);
     pfpSrc.value = `https://dummyimage.com/100x100/ffff00/000000.png&text=${username}`;
@@ -30,7 +27,7 @@ setUserPfp();
 
 
 <template>
-    <div class="container-fluid " style="background: #6F0D31;">
+    <div class="container-fluid bg-danger">
         <div class="row g-0 d-flex justify-content-between">
             <div class="col-1 my-1">
                 <button class="btn btn-primary navbar-toggler d-md-none" type="button" data-bs-toggle="collapse"
@@ -65,9 +62,12 @@ setUserPfp();
                         </li>
                         <li class="nav-item">
                             <!-- Non sara' un RouterLink -->
-                            <button class="nav-link text-white" data-bs-target="#PomodoroModal" data-bs-toggle="modal">
+                            <RouterLink class="nav-link text-white" to="#">
+                            <button class="nav-link text-white" data-bs-target="#PomodoroModal"
+                                data-bs-toggle="modal">
                                 <img src="@/assets/PomodoroLogo.svg" alt="Pomodoro" class="w-100">
                             </button>
+                            </RouterLink>
                         </li>
                         <li class="nav-item">
                             <button class="nav-link text-white" data-bs-target="#timeMachineModal"
@@ -101,13 +101,9 @@ setUserPfp();
         aria-labelledby="timeMachineModalLabel" aria-hidden="true">
         <TimeMachine />
     </div>
-    <div class="modal fade" id="PomodoroModal" data-bs-backdrop="false" tabindex="-1" aria-labelledby="Pomodoro"
-        aria-hidden="true">
+    <div class="modal fade" id="PomodoroModal" data-bs-backdrop="false" tabindex="-1"
+        aria-labelledby="Pomodoro" aria-hidden="true">
         <Pomodoro />
-    </div>
-    <div class="modal fade" id="PomodoroEventModal" data-bs-backdrop="false" tabindex="-1"
-        aria-labelledby="PomodoroEvent" aria-hidden="true">
-        <PomodoroEvent />
     </div>
 </template>
 

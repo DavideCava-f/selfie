@@ -3,15 +3,6 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import { Temporal } from "@js-temporal/polyfill";
 import router from "./router/Router";
-import { ref } from "vue";
-
-let msg = ref(null);
-let notificationMessage = ref("");
-
-async function snooze(act) {
-
-}
-
 
 async function setNotedTrue(eventId, dateId) {
   await fetch(`${store.value.url}:${store.value.port}/notification`, {
@@ -65,9 +56,8 @@ async function EventNotification(event) {
         if (advance === type &&
           !nextDate.noted &&
           Temporal.Duration.compare(distance, duration) <= 0) {
-          notificationMessage.value = `"${event.title}" is happening in less than ${type}!`;
-          msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
-          toast(msg.value, {
+          const notificationMessage = `"${event.title}" is happening in less than ${type}!`;
+          toast(notificationMessage, {
             theme: "auto",
             type: "default",
             position: "top-left",
@@ -88,41 +78,39 @@ async function EventNotification(event) {
   }
 }
 
-async function ActivityNotification(act) {
+async function ActivityNotification(act){
 
-  let isModified = false
-  let deadline = Temporal.PlainDateTime.from(act.dates[0].deadline.slice(0, -1))
+    let isModified = false
+    let deadline = Temporal.PlainDateTime.from(act.dates[0].deadline.slice(0,-1))
   let now = Temporal.PlainDateTime.from(store.value.simDateTime)
 
 
-  if (act.notification.isLate == false) { //Se arrivto qui significa scaduto non servono ulteriori controlli
-    notificationMessage.value = `"${act.title}" is Expired!`;
-    msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
-    toast(msg.value, {
-      theme: "auto",
-      type: "default",
-      position: "top-left",
-      transition: "slide",
-      autoClose: false,
-      dangerouslyHTMLString: true,
-      style: {
-        backgroundColor: '#fff8b3', // soft yellow
-        color: '#333',              // dark text for contrast
-        border: '1px solid #e6c200',
-        fontWeight: 'bold',
-      }
-    });
-    //TOSTAMI
-    //Metti il noti
-    act.notification.isLate = true
-    isModified = true
-  } else if (act.notification.oneDayLate == false) {
+    if(act.notification.isLate == false){ //Se arrivto qui significa scaduto non servono ulteriori controlli
+      const notificationMessage = `"${act.title}" is Expired!`;
+      toast(notificationMessage, {
+        theme: "auto",
+        type: "default",
+        position: "top-left",
+        transition: "slide",
+        autoClose: false,
+        dangerouslyHTMLString: true,
+        style: {
+          backgroundColor: '#fff8b3', // soft yellow
+          color: '#333',              // dark text for contrast
+          border: '1px solid #e6c200',
+          fontWeight: 'bold',
+        }
+      });
+      //TOSTAMI
+//Metti il noti
+      act.notification.isLate = true
+      isModified = true
+    }else if(act.notification.oneDayLate == false){
 
-    if (Temporal.PlainDateTime.compare(deadline.add({ days: 1 }), now) <= 0) {
+      if(Temporal.PlainDateTime.compare(deadline.add({days:1}),now) <= 0){
 
-      notificationMessage.value = `"${act.title}" is One Day Late`;
-      msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
-      toast(msg.value, {
+      const notificationMessage = `"${act.title}" is One Day Late`;
+      toast(notificationMessage, {
         theme: "auto",
         type: "default",
         position: "top-left",
@@ -136,17 +124,17 @@ async function ActivityNotification(act) {
           fontWeight: 'bold',
         }
       });
-      //Tostami
+        //Tostami
       act.notification.oneDayLate = true
       isModified = true
-    }
+      }
 
-  } else if (act.notification.oneWeekLate == false) {
+    }else if(act.notification.oneWeekLate == false){
 
-    if (Temporal.PlainDateTime.compare(deadline.add({ weeks: 1 }), now) <= 0) {
+      if(Temporal.PlainDateTime.compare(deadline.add({weeks:1}),now) <= 0){
 
-      notificationMessage.value = `"${act.title}" is One Week`;
-      toast(msg.value, {
+      const notificationMessage = `"${act.title}" is One Week`;
+      toast(notificationMessage, {
         theme: "auto",
         type: "default",
         position: "top-left",
@@ -160,59 +148,55 @@ async function ActivityNotification(act) {
           fontWeight: 'bold',
         }
       });
-      //Tostami
+        //Tostami
       act.notification.oneWeekLate = true
       isModified = true
+      }
+
     }
 
-  }
 
+      
+    if(isModified){ //Altrimenti non ce bisogno di fetch
 
-
-  if (isModified) { //Altrimenti non ce bisogno di fetch
-
-
-    await fetch(`${store.value.url}:${store.value.port}/activity/noted`, {
+      
+    await fetch(`${store.value.url}:${store.value.port}/activity/noted`,{
       method: "put",
       credentials: "include",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        id_Act: act._id,
-        isLateModified: act.notification.isLate,
-        oneDayModified: act.notification.oneDayLate,
-        oneWeekModified: act.notification.oneWeekLate
+      body: JSON.stringify({ 
+          id_Act : act._id,
+          isLateModified : act.notification.isLate,
+          oneDayModified : act.notification.oneDayLate,
+          oneWeekModified : act.notification.oneWeekLate
 
       }),
     }
     );
-
-  }
+  
+}
 
 
 }
 
 async function notipol() {
-  Notification.requestPermission();
   const max = (store.value.advance.twoWeeks[0].add(store.value.advance.twelveHr[0].add(store.value.advance.halfHr[0]))).toString();
   //console.log("max: " + max.toString());
-  let response = await fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}&isNotification=${true}&max=${max}`, {
-    credentials: "include"
-  });
+  let response = await fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}&isNotification=${true}&max=${max}`);
   let Events = await response.json();
   let now = Temporal.PlainDateTime.from(store.value.simDateTime)
   console.log("notipol!");
   console.log(Events)
+  Notification.requestPermission();
   await Events.forEach(el => { EventNotification(el) });
-  let activities = await fetch(`${store.value.url}:${store.value.port}/activity`, {
-    credentials: "include"
-  });
+  let activities = await fetch(`${store.value.url}:${store.value.port}/activity`);
   let Acts = await activities.json();
   let Expired = Acts.filter((el) => {
-    let deadline = Temporal.PlainDateTime.from(el.dates[0].deadline.slice(0, -1))
-    return el.completed == false && Temporal.PlainDateTime.compare(deadline, now) < 0;
+    let deadline = Temporal.PlainDateTime.from(el.dates[0].deadline.slice(0,-1))
+   return  el.completed == false && Temporal.PlainDateTime.compare(deadline,now) < 0;
   })
   console.log("ACTST")
   console.log(Expired)
@@ -223,7 +207,7 @@ async function notipol() {
     console.log(oneDayFromNow.toString())
     console.log(oneWeekFromNow.toString())
     console.log(now.toString())
-   */
+   */ 
   Expired.forEach((el) => {
     ActivityNotification(el)
   })

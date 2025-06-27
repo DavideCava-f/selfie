@@ -1,9 +1,8 @@
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 // import OpenAI from "openai";
 import { Temporal } from "@js-temporal/polyfill";
 import { getEventsOfWeek, getEventsOfDay, getEventsOfMonth } from "@/eventGetter";
 import { getActivitiesOfDay, getActivitiesOfMonth, getActivitiesOfWeek } from "@/activityGetter";
-import { getPomodoros } from "@/pomodoroGetter";
 import { notipol } from "@/notipol";
 
 export const NotesList = ref([]);
@@ -80,19 +79,15 @@ const store = ref({
   activitiesOfWeek: [],
   activitiesOfMonth: [],
 
-  pomodoros: [],
-  activePomodoro: null,
-
   toggle: false,
 
-  update: async () => {
-    await getEventsOfDay();
-    await getEventsOfWeek();
-    await getEventsOfMonth();
-    await getActivitiesOfDay();
-    await getActivitiesOfMonth();
-    await getActivitiesOfWeek();
-    await getPomodoros();
+  update: () => {
+    getEventsOfDay();
+    getEventsOfWeek();
+    getEventsOfMonth();
+    getActivitiesOfDay();
+    getActivitiesOfMonth();
+    getActivitiesOfWeek();
     store.value.toggle = !store.value.toggle;
   },
 
@@ -123,11 +118,5 @@ setInterval(
   notipol,
   10000
 );
-
-// watch(() => store.value.pomodoros, () => {
-//   if (store.value.activePomodoro && store.value.pomodoros.map((pomodoro) => pomodoro._id).includes(store.value.activePomodoro._id)) {
-//     store.value.activePomodoro = store.value.pomodoros.find((pomodoro) => store.value.activePomodoro._id === pomodoro._id);
-//   }
-// })
 
 export { store };

@@ -32,9 +32,7 @@ function resetValues() {
 }
 
 async function validateForm() {
-  const response = await fetch(`${store.value.url}:${store.value.port}/user/login?email=${User.value}&password=${Password.value}`, {
-    credentials: "include"
-  })
+  const response = await fetch(`${store.value.url}:${store.value.port}/user/login?email=${User.value}&password=${Password.value}`)
   if (response.status === 401) {
     alert("Email o password errati");
   } else if (response.status === 500) {
@@ -70,6 +68,7 @@ async function addUser() {
         password: Password.value,
         surname: UserSU.value.surname,
         email: UserSU.value.username,
+        course: UserSU.value.prog,
       }),
     });
     console.log("Registrazione effettuata");
@@ -202,8 +201,7 @@ function cseePswd() {
 
                     <div data-mdb-input-init class="form-outline mb-1">
                       <label class="form-label" for="surname">Surname</label>
-                      <input type="text" id="surname" class="form-control" name="surname" v-model="UserSU.surname"
-                        required />
+                      <input type="text" id="surname" class="form-control" name="surname" v-model="UserSU.surname" required />
                       <div class="invalid-feedback">
                         Please choose a surname.
                       </div>
@@ -211,12 +209,25 @@ function cseePswd() {
 
                     <div data-mdb-input-init class="form-outline mb-1">
                       <label class="form-label" for="form2Example11">Username</label>
-                      <input type="text" id="username" class="form-control" placeholder="Email address" name="username"
-                        v-model="UserSU.username" required />
+                      <input type="text" id="username" class="form-control" placeholder="Email address" name="username" v-model="UserSU.username"
+                        required />
                       <div class="invalid-feedback">
                         Please choose a username.
                       </div>
                     </div>
+
+                    <label class="form-label" for="corsi">Programme</label>
+                    <!-- corso di studi -->
+                    <select class="form-select mb-1" aria-label="Programme" id="corsi" v-model="UserSU.prog" required>
+                      <option selected disabled id="choose">Choose...</option>
+                      <option v-for="corso in corsi" class="text-black">
+                        {{ corso }}
+                      </option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Please choose a programme.
+                    </div>
+
                     <div data-mdb-input-init class="form-outline mb-4">
                       <label class="form-label" for="password">Password</label>
                       <div class="input-group">

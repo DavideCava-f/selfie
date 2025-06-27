@@ -8,7 +8,6 @@ import cookieParser from "cookie-parser";
 import { User, Event, Note } from "./schemas.js";
 import notesRoutes from "./routes/notesRoutes.js";
 import eventsRoutes from "./routes/eventsRoutes.js";
-import pomodoroRoutes from "./routes/pomodoroRoutes.js";
 import usersRoutes from "./routes/usersRoute.js";
 import activityRoutes from "./routes/activityRoutes.js";
 import verifyToken from "./routes/middleware.js";
@@ -17,7 +16,7 @@ const __filename = fileURLToPath(import.meta.url); // get the resolved path to t
 const __dirname = path.dirname(__filename); // get the name of the directory
 global.rootDir = __dirname;
 dotenv.config();
-// dotenv.config({ path: `${global.rootDir}/.env` });
+//dotenv.config({ path: `${global.rootDir}/.env` });
 
 // MongoDB & Mongoose
 // Atlas dev database
@@ -31,16 +30,12 @@ await mongoose.connect(uri);
 console.log("MongoDB connection settled");
 
 // Routes
-app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true
-}));
+app.use(cors());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.static(path.join(global.rootDir, "dist")));
 app.use(cookieParser());
 app.use("/note", notesRoutes);
 app.use("/event", eventsRoutes);
-app.use("/pomodoro", pomodoroRoutes);
 app.use("/user", usersRoutes);
 app.use("/activity", activityRoutes);
 

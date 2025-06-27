@@ -3,7 +3,6 @@ import { ref, onMounted, watch, computed } from "vue";
 import { store } from '@/store';
 import { getEventsOfWeek } from "@/eventGetter";
 import { getActivitiesOfWeek } from "@/activityGetter";
-import { getPomodoros } from "@/pomodoroGetter";
 import { Temporal } from "@js-temporal/polyfill";
 import VisualizeEvent from "@/components/VisualizeEvent.vue";
 import ActivityModal from "@/components/ActivityModal.vue";
@@ -68,12 +67,10 @@ function prevWeek() {
 onMounted(() => {
   getEventsOfWeek();
   getActivitiesOfWeek();
-  getPomodoros();
 });
 
 watch(() => store.value.weekOffset, () => getEventsOfWeek());
 watch(() => store.value.weekOffset, () => getActivitiesOfWeek());
-watch(() => store.value.weekOffset, () => getPomodoros());
 </script>
 
 <template>
@@ -148,17 +145,6 @@ watch(() => store.value.weekOffset, () => getPomodoros());
                   <path d="M10 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0" />
                 </svg>
               </span>
-            </div>
-          </button>
-          <button v-for="pomodoro in store.pomodoros.filter((p) => Temporal.PlainDate.compare(Temporal.PlainDate.from(p.beginDate.split('T')[0]),
-            thisMonday.add({ days: store.week.indexOf(day) })) === 0)"
-            class="btn btn-danger fillable p-2 d-flex justify-content-between align-items-center gap-3"
-            @click="store.activePomodoro = pomodoro" data-bs-target="#PomodoroEventModal" data-bs-toggle="modal">
-            <div class="fw-bold text-start event">
-              🍅
-            </div>
-            <div class="text-end flex-fill text-nowrap">
-              {{ pomodoro.beginDate.split("T")[1].slice(0, 5) }}
             </div>
           </button>
         </div>

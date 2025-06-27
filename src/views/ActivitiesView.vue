@@ -8,7 +8,6 @@ import { Temporal } from '@js-temporal/polyfill';
 var CompletedAct = ref([])
 var RetardedAct = ref([])
 var TODOAct = ref([])
-var selectedCard = ref(-1)
 
 var ActUpdateId = ref("")
 var ActUpdateTitle = ref("")
@@ -16,7 +15,7 @@ var ActUpdateText = ref("")
 var ActUpdateDeadlineDate = ref("")
 var ActUpdateDeadlineTime = ref("")
 
-watch(() => store.value.deltaDateTime, () => {
+watch(()=>store.value.deltaDateTime, () => {
   //console.log("watch activity")
   getAct()
 })
@@ -75,10 +74,10 @@ function getAct() {
     .then((data) => {
       data.forEach((el) => {
         console.log(el)
-        let date = (el.dates[0].deadline).slice(0, -1);
+        let date = (el.dates[0].deadline).slice(0,-1);
         if (!el.completed) {
 
-          if (Temporal.PlainDateTime.compare(store.value.simDateTime, Temporal.PlainDateTime.from(date)) <= 0 || !el.dates[0].deadline) {
+          if (Temporal.PlainDateTime.compare(store.value.simDateTime ,Temporal.PlainDateTime.from(date)) <= 0 || !el.dates[0].deadline) {
             console.log(el.dates[0].deadline)
             TODOAct.value.push(el)
           } else {
@@ -137,19 +136,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container text-white">
+  <NavBar />
+  <div class="container">
     <div class="row">
       <div class="col">
-        <h1 class="text-center">Attività</h1>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <h2 class="text-center">Attività da completare</h2>
-        <div v-if="TODOAct.length == 0">
-          <h4 class="text-center my-3">Nessuna attività da completare</h4>
-        </div>
-        <div class="hover-div" v-else v-for="act in TODOAct">
+        Activities Completed
+        <div v-for="act in CompletedAct">
           <div class="card rounded-3">
             <div class="card-body">
               <h1 class="card-title fw-bold">{{ act.title }}</h1>
@@ -161,11 +153,36 @@ onMounted(() => {
                   Date(act.dates[0].deadline).toLocaleString() }}
               </div>
               <div>
-                <span><button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#DeleteActModal" @click="selectedCard = act._id">
+                <span><button class="btn btn-outline-danger" @click="deleteAct(act._id)">
                     Delete Act
                   </button>
                 </span>
-  
+                <label>Completed</label>
+                <input type="checkbox" @change="toggleChange(act._id, act.completed)" v-model="act.completed">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        Todo Activities
+        <div v-for="act in TODOAct">
+          <div class="card rounded-3">
+            <div class="card-body">
+              <h1 class="card-title fw-bold">{{ act.title }}</h1>
+              <hr />
+              {{ act.text }}
+              <hr />
+              <div>
+                Creation:{{ new Date(act.dates[0].creation).toLocaleString() }} | Deadline:{{ new
+                  Date(act.dates[0].deadline).toLocaleString() }}
+              </div>
+              <div>
+                <span><button class="btn btn-outline-danger" @click="deleteAct(act._id)">
+                    Delete Act
+                  </button>
+                </span>
+
                 <span><button class="btn btn-outline-info" data-bs-target="#updateEventModal" data-bs-toggle="modal"
                     @click="updateAct(act._id, act.text, act.title, act.dates[0].deadline)">
                     Update Act
@@ -178,75 +195,41 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      <div class="col">
-        <h2 class="text-center text-danger">Attività in ritardo</h2>
-        <div v-if="RetardedAct.length == 0">
-          <h4 class="text-center my-3">Nessuna attività in ritardo</h4>
-        </div>
-        <div class="hover-div" v-else v-for="act in RetardedAct">
-          <div class="card rounded-3">
-            <div class="card-body">
-              <h1 class="card-title fw-bold">{{ act.title }}</h1>
-              <hr />
-              {{ act.text }}
-              <hr />
-              <div>
-                Creation:{{ new Date(act.dates[0].creation).toLocaleString() }} | Deadline:{{ new
+    </div>
+    <div class="col">
+      Retarded Activities
+      <div v-for="act in RetardedAct">
+        <div class="card rounded-3">
+          <div class="card-body">
+            <h1 class="card-title fw-bold">{{ act.title }}</h1>
+            <hr />
+            {{ act.text }}
+            <hr />
+            <div>
+              Creation:{{ new Date(act.dates[0].creation).toLocaleString() }} | Deadline:{{ new
                 Date(act.dates[0].deadline).toLocaleString() }}
             </div>
             <div>
-              <span><button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#DeleteActModal" @click="selectedCard = act._id">
-                Delete Act
-              </button>
-            </span>
-            <span><button class="btn btn-outline-info" data-bs-target="#updateEventModal" data-bs-toggle="modal"
-              @click="updateAct(act._id, act.text, act.title, act.dates[0].deadline)">
-              Update Act
-            </button>
-          </span>
-          <label>Completed</label>
-          <input type="checkbox" @change="toggleChange(act._id, act.completed)" v-model="act.completed">
+              <span><button class="btn btn-outline-danger" @click="deleteAct(act._id)">
+                  Delete Act
+                </button>
+              </span>
+              <span><button class="btn btn-outline-info" data-bs-target="#updateEventModal" data-bs-toggle="modal"
+                  @click="updateAct(act._id, act.text, act.title, act.dates[0].deadline)">
+                  Update Act
+                </button>
+              </span>
+              <label>Completed</label>
+              <input type="checkbox" @change="toggleChange(act._id, act.completed)" v-model="act.completed">
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-</div>
-<div class="col">
-  <h2 class="text-center text-success">Attività completate</h2>
-  <div v-if="CompletedAct.length == 0">
-    <h4 class="text-center my-3">Nessuna attività completata</h4>
-  </div>
-  <div class="hover-div" v-else v-for="act in CompletedAct">
-    <div class="card rounded-3">
-      <div class="card-body">
-        <h1 class="card-title fw-bold">{{ act.title }}</h1>
-        <hr />
-        {{ act.text }}
-        <hr />
-        <div>
-          Creation:{{ new Date(act.dates[0].creation).toLocaleString() }} | Deadline:{{ new
-            Date(act.dates[0].deadline).toLocaleString() }}
-        </div>
-        <div>
-          <span><button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#DeleteActModal" @click="selectedCard = act._id">
-              Delete Act
-            </button>
-          </span>
-          <label>Completed</label>
-          <input type="checkbox" @change="toggleChange(act._id, act.completed)" v-model="act.completed">
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-  <!-- bottone per creare una attività -->
-  <button class="btn btn-primary rounded-circle fx-button d-flex align-items-center justify-content-center hover-div " style="position: fixed; right: 10; bottom: 10"
+  <button class="btn bg-danger rounded-5 m-3" style="position: fixed; right: 0; bottom: 0"
     data-bs-target="#createEventModal" data-bs-toggle="modal">
-    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-    </svg>
+    +
   </button>
 
   <div class="modal fade" id="createEventModal" data-bs-backdrop="false" tabindex="-1"
@@ -301,52 +284,6 @@ onMounted(() => {
       </div>
     </div>
   </div>
-
-
-
-<!-- Modal di conferma -->
-<div class="modal fade" id="DeleteActModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      
-      <div class="modal-header">
-        <h5 class="modal-title" id="confirmDeleteLabel">Conferma eliminazione</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
-      </div>
-      
-      <div class="modal-body">
-        Sei sicuro di voler eliminare questo elemento? L'azione non può essere annullata.
-      </div>
-      
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-        <button type="button" @click="deleteAct(selectedCard)" data-bs-dismiss="modal" class="btn btn-danger" id="confirmDeleteBtn">Conferma</button>
-      </div>
-      
-    </div>
-  </div>
-</div>
 </template>
 
-<style scoped>
-.fx-button {
-  position: fixed;
-  /* Posiziona l'elemento in modo fisso */
-  bottom: 10vh;
-  /* Distanza dal bordo inferiore */
-  right: 15vw;
-  width: 10vh;
-  aspect-ratio: 1/1;
-  /*Cerchio*/
-}
-
-
-.hover-div {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.hover-div:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-</style>
+<style scoped></style>
