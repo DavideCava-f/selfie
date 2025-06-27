@@ -12,7 +12,11 @@ const props = defineProps({
 watch(() => props.date, () => {console.log(props.date)})
 const eventTitle = ref(null);
 const eventText = ref(null);
-const eventBeginDate = computed(() => props.date)
+const eventBeginDate = computed(() =>
+  props.date !== undefined && props.date !== null
+    ? props.date
+    : store.value.simDate
+)
 const eventBeginTime = ref(null);
 const eventEndDate = ref(null);
 const eventEndTime = ref(null);
