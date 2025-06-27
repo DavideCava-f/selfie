@@ -29,7 +29,7 @@ const selectedMonth = ref(months[0])
 const days = computed(() => Array.from({ length: Temporal.PlainDate.from({ year: selectedYear.value, month: months.indexOf(selectedMonth.value) + 1, day: 1 }).daysInMonth }, (_, i) => i + 1));
 const selectedDay = ref(days[0])
 
-const hours = Array.from({ length: 24 }, (_, i) => i)
+const hours = Array.from({ length: 24 }, (_, i) => (i + 12) % 24)
 const selectedHour = ref(hours[0])
 const minutes = Array.from({ length: 12 }, (_, i) => i * 5)
 const selectedMinute = ref(minutes[0])
@@ -95,7 +95,7 @@ watch(
             <div>
                 <svg :width="size" :height="size" :viewBox="`0 0 ${size} ${size}`">
                     <g :transform="`translate(${center}, ${center})`">
-                        <OrbitalSelector :items="hours" :radius="90" color="#BC544B" v-model:selected="selectedHour" />
+                        <OrbitalSelector :items="hours" :radius="120" color="#BC544B" v-model:selected="selectedHour" />
                         <OrbitalSelector :items="minutes" :radius="60" color="#87A96B"
                             v-model:selected="selectedMinute" />
                     </g>

@@ -80,6 +80,8 @@ function resetFields() {
 }
 
 function allDay() {
+  console.log("EVENT BEGIN TIME");
+  console.log(eventBeginTime.value);
   eventBeginTime.value = "00:00";
   eventEndTime.value = "23:59";
 }

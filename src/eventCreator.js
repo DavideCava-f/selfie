@@ -27,10 +27,10 @@ class EventCreator {
       }
     };
     const baseBeginDateTime = Temporal.PlainDateTime.from(
-      `${eventBeginDate}T${eventBeginTime}:00.000`,
+      `${eventBeginDate}T${eventBeginTime}.000`,
     );
     const baseEndDateTime = Temporal.PlainDateTime.from(
-      `${eventEndDate}T${eventEndTime}:00.000`,
+      `${eventEndDate}T${eventEndTime}.000`,
     );
     for (let i = 0; i < n; i++) {
       event.dates.push({
@@ -81,10 +81,10 @@ class EventCreator {
       }
     };
     const baseBeginDateTime = Temporal.PlainDateTime.from(
-      `${eventBeginDate}T${eventBeginTime}:00.000`,
+      `${eventBeginDate}T${eventBeginTime}.000`,
     );
     const baseEndDateTime = Temporal.PlainDateTime.from(
-      `${eventEndDate}T${eventEndTime}:00.000`,
+      `${eventEndDate}T${eventEndTime}.000`,
     );
     let i = 0;
     do {
@@ -143,10 +143,10 @@ class EventCreator {
       }
     };
     const baseBeginDateTime = Temporal.PlainDateTime.from(
-      `${eventBeginDate}T${eventBeginTime}:00.000`,
+      `${eventBeginDate}T${eventBeginTime}.000`,
     );
     const baseEndDateTime = Temporal.PlainDateTime.from(
-      `${eventEndDate}T${eventEndTime}:00.000`,
+      `${eventEndDate}T${eventEndTime}.000`,
     );
     const weekDaysOn = weekDays
       .map((o, i) => [o, i])
@@ -218,10 +218,10 @@ class EventCreator {
       }
     };
     const baseBeginDateTime = Temporal.PlainDateTime.from(
-      `${eventBeginDate}T${eventBeginTime}:00.000`,
+      `${eventBeginDate}T${eventBeginTime}.000`,
     );
     const baseEndDateTime = Temporal.PlainDateTime.from(
-      `${eventEndDate}T${eventEndTime}:00.000`,
+      `${eventEndDate}T${eventEndTime}.000`,
     );
     const weekDaysOn = weekDays
       .map((o, i) => [o, i])
@@ -307,10 +307,10 @@ class EventCreator {
       }
     };
     const baseBeginDateTime = Temporal.PlainDateTime.from(
-      `${eventBeginDate}T${eventBeginTime}:00.000`,
+      `${eventBeginDate}T${eventBeginTime}.000`,
     );
     const baseEndDateTime = Temporal.PlainDateTime.from(
-      `${eventEndDate}T${eventEndTime}:00.000`,
+      `${eventEndDate}T${eventEndTime}.000`,
     );
     for (let i = 0; i < n; i++) {
       event.dates.push({
@@ -361,10 +361,10 @@ class EventCreator {
       }
     };
     const baseBeginDateTime = Temporal.PlainDateTime.from(
-      `${eventBeginDate}T${eventBeginTime}:00.000`,
+      `${eventBeginDate}T${eventBeginTime}.000`,
     );
     const baseEndDateTime = Temporal.PlainDateTime.from(
-      `${eventEndDate}T${eventEndTime}:00.000`,
+      `${eventEndDate}T${eventEndTime}.000`,
     );
     let i = 0;
     do {
