@@ -11,6 +11,8 @@ class EventCreator {
     eventBeginTime,
     eventEndDate,
     eventEndTime,
+    notificationSelected,
+    notifyUntilAck
   ) {
     const event = {
       dates: [],
@@ -19,6 +21,10 @@ class EventCreator {
         text: eventText,
         link: eventLink,
       },
+      notification: {
+        advance: [],
+        untilAck: notifyUntilAck
+      }
     };
     const baseBeginDateTime = Temporal.PlainDateTime.from(
       `${eventBeginDate}T${eventBeginTime}:00.000`,
@@ -59,6 +65,8 @@ class EventCreator {
     eventBeginTime,
     eventEndDate,
     eventEndTime,
+    notificationSelected,
+    notifyUntilAck
   ) {
     const event = {
       dates: [],
@@ -67,6 +75,10 @@ class EventCreator {
         text: eventText,
         link: eventLink,
       },
+      notification: {
+        advance: [],
+        untilAck: notifyUntilAck
+      }
     };
     const baseBeginDateTime = Temporal.PlainDateTime.from(
       `${eventBeginDate}T${eventBeginTime}:00.000`,
@@ -115,6 +127,8 @@ class EventCreator {
     eventBeginTime,
     eventEndDate,
     eventEndTime,
+    notificationSelected,
+    notifyUntilAck
   ) {
     const event = {
       dates: [],
@@ -123,6 +137,10 @@ class EventCreator {
         text: eventText,
         link: eventLink,
       },
+      notification: {
+        advance: [],
+        untilAck: notifyUntilAck
+      }
     };
     const baseBeginDateTime = Temporal.PlainDateTime.from(
       `${eventBeginDate}T${eventBeginTime}:00.000`,
@@ -184,6 +202,8 @@ class EventCreator {
     eventBeginTime,
     eventEndDate,
     eventEndTime,
+    notificationSelected,
+    notifyUntilAck
   ) {
     const event = {
       dates: [],
@@ -192,6 +212,10 @@ class EventCreator {
         text: eventText,
         link: eventLink,
       },
+      notification: {
+        advance: [],
+        untilAck: notifyUntilAck
+      }
     };
     const baseBeginDateTime = Temporal.PlainDateTime.from(
       `${eventBeginDate}T${eventBeginTime}:00.000`,
@@ -267,6 +291,8 @@ class EventCreator {
     eventBeginTime,
     eventEndDate,
     eventEndTime,
+    notificationSelected,
+    notifyUntilAck
   ) {
     const event = {
       dates: [],
@@ -275,6 +301,10 @@ class EventCreator {
         text: eventText,
         link: eventLink,
       },
+      notification: {
+        advance: [],
+        untilAck: notifyUntilAck
+      }
     };
     const baseBeginDateTime = Temporal.PlainDateTime.from(
       `${eventBeginDate}T${eventBeginTime}:00.000`,
@@ -315,6 +345,8 @@ class EventCreator {
     eventBeginTime,
     eventEndDate,
     eventEndTime,
+    notificationSelected,
+    notifyUntilAck
   ) {
     const event = {
       dates: [],
@@ -323,6 +355,10 @@ class EventCreator {
         text: eventText,
         link: eventLink,
       },
+      notification: {
+        advance: [],
+        untilAck: notifyUntilAck
+      }
     };
     const baseBeginDateTime = Temporal.PlainDateTime.from(
       `${eventBeginDate}T${eventBeginTime}:00.000`,
