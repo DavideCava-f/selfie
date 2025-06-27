@@ -22,7 +22,8 @@ function getEvent() {
 
 watch(() => store.value.toggle, () => {
   console.log("watch visual");
-  getEvent();
+  if (store.value.activeEventId)
+    getEvent();
 });
 </script>
 

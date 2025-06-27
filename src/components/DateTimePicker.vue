@@ -57,6 +57,7 @@ watch(
     [selectedHour, selectedMinute],
     ([h, m]) => {
         const plain = Temporal.PlainTime.from({ hour: h, minute: m });
+        console.log(plain.toString());
         beginTime.value = plain.toString();
     },
 );
@@ -66,6 +67,7 @@ watch(
     (newTime) => {
         if (!newTime) return;
         const plain = Temporal.PlainTime.from(newTime);
+        console.log(plain.toString());
         selectedHour.value = plain.hour;
         selectedMinute.value = plain.minute;
     },

@@ -29,11 +29,6 @@ const repetitionSelected = ref({
 const notifiable = ref(false);
 const notificationRawSelected = ref([]);
 const notificationSelected = computed(() => Object.keys(store.value.advance).map((advance) => notificationRawSelected.value.includes(advance)));
-watchEffect(() => {
-  console.log(notificationRawSelected.value);
-  console.log(notificationSelected.value);
-});
-
 const notifyUntilAck = ref(false);
 const eventLink = ref(null);
 
@@ -60,12 +55,15 @@ async function generateDetails() {
 
 function setBeginNow() {
   eventBeginDate.value = store.value.simDate;
-  eventBeginTime.value = store.value.simTime.slice(0, 5);
+  eventBeginTime.value = store.value.simTime.slice(0, 5) + ":00";
+  console.log("SET BEGIN NOW");
+  console.log(eventBeginTime.value);
+  console.log(store.value.simTime);
 }
 
 function setEndNow() {
   eventEndDate.value = store.value.simDate;
-  eventEndTime.value = store.value.simTime.slice(0, 5);
+  eventEndTime.value = store.value.simTime.slice(0, 5) + ":00";
 }
 
 function resetFields() {
@@ -82,8 +80,8 @@ function resetFields() {
 function allDay() {
   console.log("EVENT BEGIN TIME");
   console.log(eventBeginTime.value);
-  eventBeginTime.value = "00:00";
-  eventEndTime.value = "23:59";
+  eventBeginTime.value = "00:00:00";
+  eventEndTime.value = "23:59:00";
 }
 
 function setDayOfWeek() {
