@@ -7,13 +7,6 @@ const angle = 360 / (props.items?.length || 1);
 </script>
 
 <template>
-  <!-- <g v-for="(item, i) in props.items" :key="item" :transform="`rotate(${angle * i}) translate(0, -${props.radius})`" -->
-  <!--   class="selector" @click="emit('update:selected', item)"> -->
-  <!--   <circle class="circle" :r="selected === item ? 14 : 10" :fill="selected === item ? '#3b82f6' : color" /> -->
-  <!--   <text y="5" text-anchor="middle" fill="#111" font-size="13" style="user-select: none; pointer-events: none;"> -->
-  <!--     {{ item }} -->
-  <!--   </text> -->
-  <!-- </g> -->
   <g v-for="(item, i) in props.items" :key="item" :transform="`rotate(${angle * i}) translate(0, -${props.radius})`"
     class="selector" @click="emit('update:selected', item)">
     <rect class="rect" :x="-item.toString().length * 3 - (selected === item ? 14 : 10)"

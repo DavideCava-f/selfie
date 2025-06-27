@@ -6,7 +6,7 @@ import { toast } from "vue3-toastify";
 import { Temporal } from "@js-temporal/polyfill";
 import OrbitalSelector from './OrbitalSelector.vue'
 
-const props = defineProps(["date", "time"]);
+const props = defineProps(["date", "time", "min"]);
 const emit = defineEmits(["update:date", "update:time"]);
 
 const beginDate = computed({
@@ -19,17 +19,21 @@ const beginTime = computed({
     set: value => emit("update:time", value)
 });
 
+const selectedYear = computed(() => Temporal.PlainDate.from(beginDate.value).year)
+
 const size = 300
 const center = size / 2
 
-const years = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() + i)
-const selectedYear = ref(years[0])
 const months = Array.from({ length: 12 }, (_, i) => ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"][i])
 const selectedMonth = ref(months[0])
 const days = computed(() => Array.from({ length: Temporal.PlainDate.from({ year: selectedYear.value, month: months.indexOf(selectedMonth.value) + 1, day: 1 }).daysInMonth }, (_, i) => i + 1));
 const selectedDay = ref(days[0])
 
-// 1. when any picker changes, emit a new beginDate
+const hours = Array.from({ length: 24 }, (_, i) => i)
+const selectedHour = ref(hours[0])
+const minutes = Array.from({ length: 12 }, (_, i) => i * 5)
+const selectedMinute = ref(minutes[0])
+
 watch(
     [selectedYear, selectedMonth, selectedDay],
     ([y, m, d]) => {
@@ -39,7 +43,6 @@ watch(
     },
 );
 
-// 2. when the parent gives you a new props.date, split it back into the selectors
 watch(
     () => beginDate.value,
     (newDate) => {
@@ -50,25 +53,54 @@ watch(
         selectedDay.value = plain.day;
     },
 );
+
+watch(
+    [selectedHour, selectedMinute],
+    ([h, m]) => {
+        const plain = Temporal.PlainTime.from({ hour: h, minute: m });
+        beginTime.value = plain.toString();
+    },
+);
+
+watch(
+    () => beginTime.value,
+    (newTime) => {
+        if (!newTime) return;
+        const plain = Temporal.PlainTime.from(newTime);
+        selectedHour.value = plain.hour;
+        selectedMinute.value = plain.minute;
+    },
+);
 </script>
 
 <template>
     <div class="flex flex-col items-center justify-content-between align-items-center">
         <div>
-            <select class="form-select" v-model="selectedYear">
-                <option v-for="year in years">{{ year }}</option>
-            </select>
-        </div>
-        <div>
             <svg :width="size" :height="size" :viewBox="`0 0 ${size} ${size}`">
                 <g :transform="`translate(${center}, ${center})`">
                     <OrbitalSelector :items="months" :radius="120" color="#FDD128" v-model:selected="selectedMonth" />
-                    <OrbitalSelector :items="days.slice(0, 15)" :radius="90" color="#87A96B"
-                        v-model:selected="selectedDay" />
-                    <OrbitalSelector :items="days.slice(15)" :radius="70" color="#87A96B"
-                        v-model:selected="selectedDay" />
+                    <OrbitalSelector :key="`first-${selectedYear}-${selectedMonth}`" :items="days.slice(0, 18)"
+                        :radius="90" color="#87A96B" v-model:selected="selectedDay" />
+                    <OrbitalSelector :key="`second-${selectedYear}-${selectedMonth}`" :items="days.slice(18)"
+                        :radius="60" color="#87A96B" v-model:selected="selectedDay" />
                 </g>
             </svg>
+        </div>
+        <div>
+            <input class="form-control" type="date" v-model="beginDate" />
+        </div>
+    </div>
+    <div class="flex flex-col items-center justify-content-between align-items-center">
+        <div>
+            <svg :width="size" :height="size" :viewBox="`0 0 ${size} ${size}`">
+                <g :transform="`translate(${center}, ${center})`">
+                    <OrbitalSelector :items="hours" :radius="90" color="#BC544B" v-model:selected="selectedHour" />
+                    <OrbitalSelector :items="minutes" :radius="60" color="#87A96B" v-model:selected="selectedMinute" />
+                </g>
+            </svg>
+        </div>
+        <div>
+            <input class="form-control" type="time" v-model="beginTime" />
         </div>
     </div>
 </template>

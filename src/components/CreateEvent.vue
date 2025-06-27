@@ -292,8 +292,9 @@ watch(eventBeginDate, setDayOfWeek);
         <div class="my-2">
           <label>End</label>
           <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
-            <input class="form-control" type="date" :min="eventBeginDate" v-model="eventEndDate" />
-            <input class="form-control" type="time" v-model="eventEndTime" />
+            <!-- <input class="form-control" type="date" :min="eventBeginDate" v-model="eventEndDate" /> -->
+            <!-- <input class="form-control" type="time" v-model="eventEndTime" /> -->
+            <DateTimePicker v-model:date="eventEndDate" v-model:time="eventEndTime" :min="eventBeginDate" />
             <button class="btn btn-outline-primary" @click="setEndNow">
               Now
             </button>
