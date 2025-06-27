@@ -94,20 +94,28 @@ function setDayOfWeek() {
 }
 
 function canCreateEvent() {
-  return (
-    eventTitle.value &&
-    eventBeginDate.value &&
-    eventBeginTime.value &&
-    eventEndDate.value &&
-    eventEndTime.value &&
-    (repetitionSelected.value.type &&
-      (repetitionSelected.value.type === "n" ||
-        repetitionSelected.value.type === "u")
-      ? repetitionSelected.value.option
-      : true) &&
-    (Temporal.PlainDate.compare(eventBeginDate.value, eventEndDate.value) <= 0) &&
-    (Temporal.PlainTime.compare(eventBeginTime.value, eventEndTime.value) <= 0)
-  );
+  try {
+    const beginDateTime = Temporal.PlainDate.from(eventBeginDate.value)
+      .toPlainDateTime(Temporal.PlainTime.from(eventBeginTime.value));
+    const endDateTime = Temporal.PlainDate.from(eventEndDate.value)
+      .toPlainDateTime(Temporal.PlainTime.from(eventEndTime.value));
+
+    return (
+      eventTitle.value &&
+      eventBeginDate.value &&
+      eventBeginTime.value &&
+      eventEndDate.value &&
+      eventEndTime.value &&
+      (repetitionSelected.value.type &&
+        (repetitionSelected.value.type === "n" ||
+          repetitionSelected.value.type === "u")
+        ? repetitionSelected.value.option
+        : true) &&
+      Temporal.PlainDateTime.compare(beginDateTime, endDateTime) <= 0
+    );
+  } catch (e) {
+    return false;
+  }
 }
 
 function createEvent() {
