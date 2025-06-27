@@ -43,7 +43,10 @@ class EventCreator {
       const i = Object.keys(store.value.advance).indexOf(d);
       console.log(i);
       if (notificationSelected[i]) {
-        event.notification.advance.push(store.value.advance[d][1]);
+        event.notification.advance.push({
+          ofType: store.value.advance[d][1],
+          noted: false
+        });
       }
     }
     console.log(event);
@@ -100,11 +103,15 @@ class EventCreator {
         Temporal.PlainDate.from(untilDate),
       ) !== 1
     );
+
     for (const d in store.value.advance) {
       const i = Object.keys(store.value.advance).indexOf(d);
       console.log(i);
       if (notificationSelected[i]) {
-        event.notification.advance.push(store.value.advance[d][1]);
+        event.notification.advance.push({
+          ofType: store.value.advance[d][1],
+          noted: false
+        });
       }
     }
     console.log(event);
@@ -176,11 +183,15 @@ class EventCreator {
         d.end = d.end.add({ weeks: n }).toString() + "Z";
         d.noted = false;
       });
+
     for (const d in store.value.advance) {
       const i = Object.keys(store.value.advance).indexOf(d);
       console.log(i);
       if (notificationSelected[i]) {
-        event.notification.advance.push(store.value.advance[d][1]);
+        event.notification.advance.push({
+          ofType: store.value.advance[d][1],
+          noted: false
+        });
       }
     }
     return fetch(`${store.value.url}:${store.value.port}/event`, {
@@ -269,7 +280,10 @@ class EventCreator {
       const i = Object.keys(store.value.advance).indexOf(d);
       console.log(i);
       if (notificationSelected[i]) {
-        event.notification.advance.push(store.value.advance[d][1]);
+        event.notification.advance.push({
+          ofType: store.value.advance[d][1],
+          noted: false
+        });
       }
     }
     console.log(event);
@@ -323,7 +337,10 @@ class EventCreator {
       const i = Object.keys(store.value.advance).indexOf(d);
       console.log(i);
       if (notificationSelected[i]) {
-        event.notification.advance.push(store.value.advance[d][1]);
+        event.notification.advance.push({
+          ofType: store.value.advance[d][1],
+          noted: false
+        });
       }
     }
     console.log(event);
@@ -384,7 +401,10 @@ class EventCreator {
       const i = Object.keys(store.value.advance).indexOf(d);
       console.log(i);
       if (notificationSelected[i]) {
-        event.notification.advance.push(store.value.advance[d][1]);
+        event.notification.advance.push({
+          ofType: store.value.advance[d][1],
+          noted: false
+        });
       }
     }
     console.log(event);

@@ -16,7 +16,11 @@ router.post("/", verifyToken, async function(req, res) {
       userId: req.userId,
       dates: req.body.dates,
       title: req.body.title,
-      details: req.body.details
+      details: req.body.details,
+      notification: {
+        advance: req.body.notification.advance,
+        untilAck: req.body.notification.untilAck
+      }
     });
   } catch (error) {
     res.status(500).send(error);
@@ -39,7 +43,6 @@ router.get("/OneEvent", verifyToken, async function(req, res) {
   try {
     const event = await Event.findOne({ _id: req.query.id });
     res.status(200).json(event);
-    //res.status(200).send("aa")
   } catch {
     res.status(500).send();
   } finally {

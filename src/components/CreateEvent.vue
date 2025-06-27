@@ -56,9 +56,6 @@ async function generateDetails() {
 function setBeginNow() {
   eventBeginDate.value = store.value.simDate;
   eventBeginTime.value = store.value.simTime.slice(0, 5) + ":00";
-  console.log("SET BEGIN NOW");
-  console.log(eventBeginTime.value);
-  console.log(store.value.simTime);
 }
 
 function setEndNow() {
@@ -78,8 +75,6 @@ function resetFields() {
 }
 
 function allDay() {
-  console.log("EVENT BEGIN TIME");
-  console.log(eventBeginTime.value);
   eventBeginTime.value = "00:00:00";
   eventEndTime.value = "23:59:00";
 }
@@ -370,13 +365,24 @@ watch(eventBeginDate, setDayOfWeek);
           <div class="col-sm-6 col-12">
             <label>When to notify</label>
             <!-- FIXME: il multiple select su telefono non funziona! -->
-            <select class="form-select" multiple size="3" aria-label="Multiple select"
-              v-model="notificationRawSelected">
-              <option v-for="(advance, idx) in store.advance" :key="idx" :value="advance[1]"
-                :selected="Object.keys(store.advance).indexOf(idx) === 0">
+
+            <div v-for="(advance, idx) in store.advance" :key="idx" class="form-check"
+              @click="console.log(notificationRawSelected)">
+              <input class="form-check-input" type="checkbox" :id="'notify-' + idx" :value="advance[1]"
+                v-model="notificationRawSelected">
+              <label class="form-check-label" :for="'notify-' + idx">
                 {{ advance[1] }}
-              </option>
-            </select>
+              </label>
+            </div>
+
+            <!-- <select class="form-select" multiple size="3" aria-label="Multiple select" -->
+            <!--   v-model="notificationRawSelected"> -->
+            <!--   <option v-for="(advance, idx) in store.advance" :key="idx" :value="advance[1]" -->
+            <!--     :selected="Object.keys(store.advance).indexOf(idx) === 0"> -->
+            <!--     {{ advance[1] }} -->
+            <!--   </option> -->
+            <!-- </select> -->
+
           </div>
           <div class="col-sm-6 col-12 my-sm-0 my-3">
             <label>Type of notification</label>

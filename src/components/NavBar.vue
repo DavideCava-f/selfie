@@ -21,7 +21,9 @@ async function setUserPfp() {
 }
 
 async function logout() {
-    const response = await fetch(`${store.value.url}:${store.value.port}/user/logout`);
+    const response = await fetch(`${store.value.url}:${store.value.port}/user/logout`, {
+        credentials: "include"
+    });
     router.push("/login");
 }
 

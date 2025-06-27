@@ -6,14 +6,13 @@ import router from "./router/Router";
 import { ref } from "vue";
 
 let msg = ref(null);
-let notificationMessage = ref("");
 
 async function snooze(act) {
 
 }
 
 
-async function setNotedTrue(eventId, dateId) {
+async function setNotedTrue(eventId, advanceId) {
   await fetch(`${store.value.url}:${store.value.port}/notification`, {
     method: "put",
     credentials: "include",
@@ -24,7 +23,7 @@ async function setNotedTrue(eventId, dateId) {
     //make sure to serialize your JSON body
     body: JSON.stringify({
       id_Event: eventId,
-      id_Date: dateId,
+      id_Advance: advanceId,
       setNoted: true
     }),
   })
@@ -55,18 +54,17 @@ async function EventNotification(event) {
   console.log("NEXT DATE: " + nextDate);
 
   if (nextDate != undefined) {
-    console.log(event.notification);
     event.notification.advance.forEach(advance => {
       console.log(advance);
       for (const d in store.value.advance) {
         const duration = store.value.advance[d][0];
         const type = store.value.advance[d][1];
         const distance = Temporal.PlainDateTime.from(nextDate.begin.toString().slice(0, -1)).since(Now);
-        if (advance === type &&
-          !nextDate.noted &&
+        if (advance.ofType === type &&
+          !advance.noted &&
           Temporal.Duration.compare(distance, duration) <= 0) {
-          notificationMessage.value = `"${event.title}" is happening in less than ${type}!`;
-          msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
+          const notificationMessage = `"${event.title}" is happening in less than ${type}!`;
+          msg.value = `<strong>${notificationMessage}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
           toast(msg.value, {
             theme: "auto",
             type: "default",
@@ -77,7 +75,7 @@ async function EventNotification(event) {
             dangerouslyHTMLString: true,
           });
           const notification = new Notification(notificationMessage);
-          setNotedTrue(event._id, nextDate._id);
+          setNotedTrue(event._id, advance._id);
         }
       }
     }
