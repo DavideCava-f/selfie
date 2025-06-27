@@ -29,10 +29,10 @@ router.put("/", verifyToken, async function(req, res) {
     if (req.body.setNoted) {
       await Event.updateOne({
         _id: req.body.id_Event,
-        'dates._id': req.body.id_Date
+        'notification.advance._id': req.body.id_Advance
       },
         {
-          $set: { 'dates.$.noted': true }
+          $set: { 'notification.advance.$.noted': true }
         }
       );
     }
@@ -41,5 +41,6 @@ router.put("/", verifyToken, async function(req, res) {
     res.status(500).json(error);
   }
 });
+
 
 export default router;

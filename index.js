@@ -11,6 +11,7 @@ import eventsRoutes from "./routes/eventsRoutes.js";
 import pomodoroRoutes from "./routes/pomodoroRoutes.js";
 import usersRoutes from "./routes/usersRoute.js";
 import activityRoutes from "./routes/activityRoutes.js";
+import notificationRoutes from "./routes/notificationRoutes.js";
 import verifyToken from "./routes/middleware.js";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
@@ -43,6 +44,7 @@ app.use("/event", eventsRoutes);
 app.use("/pomodoro", pomodoroRoutes);
 app.use("/user", usersRoutes);
 app.use("/activity", activityRoutes);
+app.use("/notification", notificationRoutes);
 
 app.get("/checkauth", verifyToken, async function(req, res) {
   res.status(200).send();
