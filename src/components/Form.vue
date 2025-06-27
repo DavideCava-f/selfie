@@ -73,7 +73,8 @@ async function addUser() {
       }),
     });
     console.log("Registrazione effettuata");
-    router.push("/home");
+    resetValues();
+    SignUp.value = false;
   } else {
     alert("Errore generale");
   }

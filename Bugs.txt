@@ -1,10 +1,9 @@
 Bug Ritrovati Non Risolti
 - L0GIN
-- Manda notifiche anche nella schermata di LOGIN, errori periodici nella console
-- 401 APPENA ARRIVATO
+nada
 
 - N0TE
-- Per Ora NULLA
+nada
 
 - CALENDARIO 
 - BUG grafico sull'indicatore rosso che invade altro giorno(da telefono)
