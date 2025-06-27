@@ -1,11 +1,28 @@
 Bug Ritrovati Non Risolti
+
+- Generici
+
+- Gestire la palette generale del progetto, per i vari modal
+
 - L0GIN
-nada
+- Passa a LOGIN quando SIGNUP
+
 
 - N0TE
-nada
+- Fare in modo che la duplicazione non allarghi la nota
 
 - CALENDARIO 
 - BUG grafico sull'indicatore rosso che invade altro giorno(da telefono)
 - ERRORE sull'eliminazione degli eventi da errore (C is null...) ma li elimina correttamente tranne a volte che ne elimina 2 alla volta
 - Notifiche eventi non arrivano
+- Migliorare interfaccia visualize eventi
+- Integrare Date Picker per modifica
+
+ATTIVITA
+
+- Integrare Date Picker per attivita
+- Verticalizzare Interfaccia
+
+POMODORO
+
+- Interfaccia piu leggera e user friendly
