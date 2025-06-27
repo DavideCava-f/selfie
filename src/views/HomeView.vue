@@ -145,7 +145,7 @@ function getVisibleDate(date) {
                     </div>
                     <div class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center">
                         <div v-if="pomodoro.value">
-
+                            <!-- TODO -->
                         </div>
                         <div v-else>
                             Non è ancora stato completato nessun pomodoro

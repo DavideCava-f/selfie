@@ -53,9 +53,9 @@ function setupTimer() {
   //pomodoro.value.style.backgroundColor = "#44cf69";
   pomodoro.value.style.backgroundColor = "hsl(92, 99%, 37%)";
   colorValue.value = 92;
-  RateOfChange.value = colorValue.value/INITIAL_TIME.value;
+  RateOfChange.value = colorValue.value / INITIAL_TIME.value;
   console.log("RateOfChange: " + RateOfChange.value);
-  relaxChange.value = colorValue.value/relaxingTime.value;
+  relaxChange.value = colorValue.value / relaxingTime.value;
   console.log("RelaxChange: " + relaxChange.value);
 
 }
@@ -64,14 +64,14 @@ async function tick() {
   if (time.value > 0) {
     time.value--;
     lancetta.value.style.transform = `rotate(${-(time.value / barTime.value) * 360}deg)`;
-    if(relaxing.value){
+    if (relaxing.value) {
       console.log("colorValue: " + colorValue.value);
-      colorValue.value += relaxChange.value; 
+      colorValue.value += relaxChange.value;
       console.log("ColorValue: " + colorValue.value);
       pomodoro.value.style.backgroundColor = `hsl(${colorValue.value}, 99%, 37%)`;
     }
-    else{
-      colorValue.value -= RateOfChange.value; 
+    else {
+      colorValue.value -= RateOfChange.value;
       pomodoro.value.style.backgroundColor = `hsl(${colorValue.value}, 99%, 37%)`;
     }
   } else {
@@ -464,74 +464,78 @@ button:disabled {
 
 
 .leaf-1 {
-	width: 3vmax;
-	height: 3vmax;
-	border-radius: 0 70px;
-	background-color: #1f801f;
+  width: 3vmax;
+  height: 3vmax;
+  border-radius: 0 70px;
+  background-color: #1f801f;
   /* transform: rotate(0deg); */
-  transform : translateY(25%) rotate(0deg);
+  transform: translateY(25%) rotate(0deg);
   margin-right: 0;
 }
+
 .leaf-2 {
-	width: 3vmax;
-	height: 3vmax;
-	border-radius: 0 70px;
-	background-color: #1f801f;
-	/* transform: rotate(90deg); */
-  transform : translateY(25%) rotate(90deg);
+  width: 3vmax;
+  height: 3vmax;
+  border-radius: 0 70px;
+  background-color: #1f801f;
+  /* transform: rotate(90deg); */
+  transform: translateY(25%) rotate(90deg);
   margin-left: 0;
 }
 
 .stem {
-	position: absolute;
-	margin: 0;
-	width: /* 20px */ 1.5vmax; 
-	height: /* 60px */ 4.5vmax;
-	border-radius: 10px/5px;
-	background-color: #1f801f;
+  position: absolute;
+  margin: 0;
+  width:
+    /* 20px */
+    1.5vmax;
+  height:
+    /* 60px */
+    4.5vmax;
+  border-radius: 10px/5px;
+  background-color: #1f801f;
 }
 
 .stem:before {
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 1.5vmax;
-	height: 0.75vmax;
-	border-radius: 10px/5px;
-	background-color: #1f801f;
-	content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.5vmax;
+  height: 0.75vmax;
+  border-radius: 10px/5px;
+  background-color: #1f801f;
+  content: '';
 }
 
 .stem:after {
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	width: 1.5vmax;
-	height: 0.75vmax;
-	border-radius: 10px/5px;
-	background-color: #1f801f;
-	content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 1.5vmax;
+  height: 0.75vmax;
+  border-radius: 10px/5px;
+  background-color: #1f801f;
+  content: '';
 }
 
 .clock {
-	background-color: hsl(0, 99%, 37%);
-	width: 15vmax;
-	height: 15vmax;
-	border-radius: 50%;
-	position: relative;
+  background-color: hsl(0, 99%, 37%);
+  width: 15vmax;
+  height: 15vmax;
+  border-radius: 50%;
+  position: relative;
 }
 
 .minute {
-	position: absolute;
-	margin: auto;
-	left: 49%;
-	bottom: 50%;
-	background: #000000;
-	width: 2%;
-	height: 48%;
-	transform: rotate(0);
-	transform-origin: 50% 100%;
+  position: absolute;
+  margin: auto;
+  left: 49%;
+  bottom: 50%;
+  background: #000000;
+  width: 2%;
+  height: 48%;
+  transform: rotate(0);
+  transform-origin: 50% 100%;
   transition: rotate 1s linear;
 }
-
 </style>

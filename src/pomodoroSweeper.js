@@ -71,7 +71,9 @@ async function sweepPomodoros() {
   await Promise.all(promiseCreation);
 
   if (promiseCreation.length > 0) {
-    const response = await fetch(`${store.value.url}:${store.value.port}/pomodoro`);
+    const response = await fetch(`${store.value.url}:${store.value.port}/pomodoro`, {
+      credentials: "include"
+    });
     store.value.pomodoros = (await response.json());
   }
 }

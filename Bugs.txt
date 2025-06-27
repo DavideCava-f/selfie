@@ -1,7 +1,7 @@
-Bug Ritrovati Non Risolti
+BUGS:
 
-L0GIN
-- Passa a LOGIN quando SIGNUP
+POMODORO
+- quando sono su plan e chiudo viene fuori un'errore sul parametro 'style' della variabile lancetta/pomodoro
 
 N0TE
 - Fare in modo che la duplicazione non allarghi la nota
