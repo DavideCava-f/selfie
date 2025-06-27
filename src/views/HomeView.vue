@@ -11,17 +11,12 @@ let pomodoro = ref({});
 const router = useRouter();
 
 
-function getLastNote() {
-    fetch(`${store.value.url}:${store.value.port}/note/last`, {
+async function getLastNote() {
+    const response = await fetch(`${store.value.url}:${store.value.port}/note/last`, {
         credentials: "include",
-    })
-        .then(response => {
-            //console.log(response);
-            return response.json();
-        }).then(data => {
-            console.log(data);
-            lastnote.value = data;
-        });
+    });
+    if (!response.ok) return;
+    lastnote.value = await response.json();
 }
 
 async function update() {
@@ -127,13 +122,13 @@ function getVisibleDate(date) {
                     <div class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center ">
                         <button @click="gotoNote" class="w-100 btn bg-success rounded-3 text-black my-1">
                             <h1 v-if="loaded">
-                                {{ lastnote.Title }}
+                                {{ lastnote?.Title }}
                             </h1>
                             <h1 v-else>
                                 caricamento in corso...
                             </h1>
                             <p v-if="loaded">
-                                {{ lastnote.Text }}
+                                {{ lastnote?.Text }}
                             </p>
                             <p v-else>
                                 caricamento in corso...

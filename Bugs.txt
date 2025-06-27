@@ -8,4 +8,3 @@ nada
 - CALENDARIO 
 - BUG grafico sull'indicatore rosso che invade altro giorno(da telefono)
 - ERRORE sull'eliminazione degli eventi da errore (C is null...) ma li elimina correttamente tranne a volte che ne elimina 2 alla volta
-- Notifiche eventi non arrivano

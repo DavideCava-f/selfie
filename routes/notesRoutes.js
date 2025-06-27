@@ -45,7 +45,7 @@ router.put("/", verifyToken, async function(req, res) {
           lastUpDate: UpdateDate,
           Text: req.body.content_note,
           Tags: JSON.parse(req.body.tags_note),
-          markdown:req.body.markdown_note
+          markdown: req.body.markdown_note
         },
       },
     );
@@ -63,15 +63,17 @@ router.get("/", verifyToken, async function(req, res) {
 });
 
 router.get("/last", verifyToken, async function(req, res) {
-  try{
-    const lastnotes = await Note.find({userId: req.userId}).sort({lastUpDate: -1}).limit(1);
-    const lastnote= lastnotes[0];
-    res.json(lastnote);
-  } 
-  catch(err){
+  try {
+    const lastnotes = await Note.find({ userId: req.userId }).sort({ lastUpDate: -1 }).limit(1);
+    const lastnote = lastnotes[0];
+    if (lastnote === undefined)
+      res.send(404)
+    else
+      res.json(lastnote);
+  }
+  catch (err) {
     console.log(err);
-  }finally{
-
+  } finally {
   }
 });
 
