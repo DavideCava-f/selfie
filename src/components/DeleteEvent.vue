@@ -51,8 +51,8 @@ watch(() => store.value.activeEventId, () => {
 
 <template>
   <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
+    <div class="modal-content custom-modal">
+      <div class="modal-header bg-header">
         <h1 class="modal-title fs-4" id="staticBackdropLabel">
           {{ event.title }}
         </h1>
@@ -63,9 +63,9 @@ watch(() => store.value.activeEventId, () => {
       </div>
       <div class="modal-body">
         <div class="my-2">
-          <div>
-            <button @click="deleteEvent(0)" data-bs-dismiss="modal">Delete Only this Event</button>
-            <button @click="deleteEvent(1)" data-bs-dismiss="modal">Delete All Events like this</button>
+          <div class="input-group">
+            <button class="btn btn-dark" @click="deleteEvent(0)" data-bs-dismiss="modal">Delete Only this Event</button>
+            <button class="btn btn-dark" @click="deleteEvent(1)" data-bs-dismiss="modal">Delete All Events like this</button>
           </div>
         </div>
 
@@ -74,4 +74,25 @@ watch(() => store.value.activeEventId, () => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+
+.custom-modal {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(200, 50, 100, 0.1);
+  border: 1px solid #ff0051;
+  background-color: #ffd0da;
+}
+.bg-header {
+  background-color: #f383a5;
+}
+.bg-body{
+
+  background-color: #f383a5;
+}
+
+
+</style>
+
+

@@ -55,8 +55,8 @@ function createActivity() {
 
 <template>
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content custom-modal">
+            <div class="modal-header bg-header">
                 <h1 class="modal-title fs-4" id="staticBackdropLabel">
                     Create new Activity
                 </h1>
@@ -102,4 +102,17 @@ function createActivity() {
 
 </template>
 
-<style scoped></style>
+<style scoped>
+
+.custom-modal {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(200, 50, 100, 0.1);
+  border: 1px solid #ff0051;
+  background-color: #ffd0da;
+}
+.bg-header {
+  background-color: #f383a5;
+}
+
+</style>

@@ -8,14 +8,12 @@ N0TE
 
 CALENDARIO 
 - Repatable che rimane aperto nella create
-- BUG grafico sull'indicatore rosso che invade altro giorno(da telefono)
-- ERRORE sull'eliminazione degli eventi da errore (C is null...) ma li elimina correttamente tranne a volte che ne elimina 2 alla volta
+- ERRORE sull'eliminazione degli eventi da errore (C is null...) ma li elimina correttamente 
 - Pulsante Timido di create che si nasconde dietro le attivita
 
 COSE DA FARE:
 - Gestire la palette generale del progetto, per i vari modal
 - Migliorare Interfaccia delle notifiche
-- Migliorare interfaccia visualize eventi
 - Integrare Date Picker per modifica
 
 ATTIVITA
