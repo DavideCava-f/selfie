@@ -22,6 +22,14 @@ const redIn = /^(\w+(,\w+)*)?$/;
 var enabled = computed(() => redIn.test(NCtags.value));
 var enabledUpdate = computed(() => redIn.test(NUtags.value));
 var selectedCard = ref(-1);
+var toDelete = ref(-1)
+function expand(id){
+            if (selectedCard.value != id) {
+              selectedCard.value = id;
+            } else {
+              selectedCard.value = -1;
+            }
+}
 
 onMounted(() => {
   getNotes();
@@ -110,31 +118,29 @@ onMounted(() => {
   <div class="container my-2 d-flex justify-content-center">
     <div class="row">
       <div class="col-lg-6 col-12 my-lg-3 my-2 hover-div" v-for="note in NotesList" :key="note._id">
-        <div class="card" @click="() => {
-            if (selectedCard != note._id) {
-              selectedCard = note._id;
-            } else {
-              selectedCard = -1;
-            }
-            console.log(note.Text.length);
-          }">
+        <div class="card">
           <h2 class="card-header fw-bold" style="background-color: #c2c2c2;">{{ note.Title }}</h2>
-          <div class="card-body" style="background-color: #c2c2c2;">
+          <div class="card-body"  style="background-color: #c2c2c2;">
             <hr />
+            <div @click="expand(note._id)">
             <div v-if="note.markdown" >
               <p :class="[
                 { selected: selectedCard == note._id },
                 'card-text',
+                'outText',
                 'notSelected',
               ]" v-html="marked.parse(note.Text)" style="background-color: #cccccc;"></p>
+
             </div>
             <div v-else style="background-color: #c2c2c2;">
               <p :class="[
                 { selected: selectedCard == note._id },
                 'card-text',
+                'outText',
                 'notSelected',
               ]" style="background-color: #cccccc;">{{ note.Text }}</p>
             </div>
+          </div>
             <span v-for="tag in note.Tags">
               <span class="badge text-bg-warning mx-1 mb-1">{{
                 tag.name
@@ -150,7 +156,7 @@ onMounted(() => {
                 </span>
               </div>
               <div class="btn-group " role="group" aria-label="Basic radio toggle button group" >
-                <span><button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#DeleteNoteModal">
+                <span><button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" @click="() => {toDelete = note._id}" data-bs-target="#DeleteNoteModal">
                     Cancella
                   </button>
                 </span>
@@ -198,24 +204,35 @@ onMounted(() => {
             <form>
               <div class="mb-3">
                 <label class="form-label">Title</label>
+                <div class="input-group">
+
                 <input type="text" class="form-control" v-model="NCtitle" placeholder="Enter note title" />
+                <button type="button" @click="() => {NCtitle = '' }" class="btn btn-light">&times;</button>
+
+                </div>
               </div>
               <div class="mb-3">
                 <label class="form-label">Content</label>
+                <div class="input-group">
                 <textarea v-model="NCcontent" rows="10" class="form-control"
                   placeholder="Start typing your note..."></textarea>
+                <button type="button" @click="() => {NCcontent = '' }" class="btn btn-light">&times;</button>
+                </div>
               </div>
               <div class="mb-3">
                 <label class="form-label">Tags</label>
+                <div class="input-group">
                 <input :class="{ border: !enabled, 'border-danger': !enabled }" v-model="NCtags" type="text"
                   class="form-control" placeholder="Add tags (comma separated)" />
+                <button type="button" @click="() => {NCtags = '' }" class="btn btn-light">&times;</button>
+                </div>
               </div>
               <div class="d-flex justify-content-between align-items-center">
                 <label>
                   <input class="form-check-input" type="checkbox" id="untilAck" v-model="NCMarkDown" />
                   MarkDown
                 </label>
-                <button @click.prevent="CreateNote" :disabled="!enabled" class="btn btn-primary">
+                <button @click.prevent="CreateNote" :disabled="!enabled" data-bs-dismiss="offcanvas" class="btn btn-primary">
                   <i class="fas fa-save me-2"></i>Save Note
                 </button>
               </div>
@@ -226,10 +243,7 @@ onMounted(() => {
     </div>
   </div>
 
-  <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
-    aria-controls="offcanvasWithBothOptions">
-    Enable both scrolling & backdrop
-  </button>
+
   <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions"
     aria-labelledby="offcanvasWithBothOptionsLabel">
     <div class="offcanvas-header">
@@ -246,26 +260,35 @@ onMounted(() => {
             <form>
               <div class="mb-3">
                 <label class="form-label">Title</label>
+                <div class="input-group">
                 <input type="text" class="form-control" v-model="NUtitle" placeholder="Enter note title" />
+                <button type="button" @click="() => {NUtitle = '' }" class="btn btn-light">&times;</button>
+                </div>
               </div>
               <div class="mb-3">
                 <label class="form-label">Content</label>
-                <textarea v-model="NUcontent" rows="10" class="form-control"
+                <div class="input-group">      
+                  <textarea v-model="NUcontent" rows="10" class="form-control"
                   placeholder="Start typing your note..."></textarea>
+                <button type="button" @click="() => {NUcontent = '' }" class="btn btn-light">&times;</button>
+                </div>
               </div>
               <div class="mb-3">
                 <label class="form-label">Tags</label>
+                <div class="input-group">
                 <input :class="{
                   border: !enabledUpdate,
                   'border-danger': !enabledUpdate,
                 }" v-model="NUtags" type="text" class="form-control" placeholder="Add tags (comma separated)" />
+                <button type="button" @click="() => {NUtags = '' }" class="btn btn-light">&times;</button>
+                </div>
               </div>
               <label>
                 <input class="form-check-input" type="checkbox" v-model="NUMarkDown" />
                 MarkDown
               </label>
               <div class="d-flex justify-content-between align-items-center">
-                <button @click.prevent="SaveAfterUpdate()" :disabled="!enabledUpdate" class="btn btn-primary">
+                <button @click.prevent="SaveAfterUpdate()" :disabled="!enabledUpdate" data-bs-dismiss="offcanvas" class="btn btn-primary">
                   <i class="fas fa-save me-2"></i>Save Note
                 </button>
               </div>
@@ -294,7 +317,7 @@ onMounted(() => {
       
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-        <button type="button" @click="DeleteNote(selectedCard)" data-bs-dismiss="modal" class="btn btn-danger" id="confirmDeleteBtn">Conferma</button>
+        <button type="button" @click="DeleteNote(toDelete)" data-bs-dismiss="modal" class="btn btn-danger" id="confirmDeleteBtn">Conferma</button>
       </div>
       
     </div>
@@ -303,6 +326,11 @@ onMounted(() => {
 </template>
 
 <style scoped>
+
+.outText{
+  white-space: pre-wrap;
+
+}
 .notSelected {
   max-height: 50px;
   overflow: hidden;

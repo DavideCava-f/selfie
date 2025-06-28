@@ -72,6 +72,7 @@ export function DuplicateNote(id) {
 
 export function DeleteNote(id) {
   //Use marked before writing on NotesArea(markdown)
+  console.log(id)
   console.log(typeof id);
   fetch(`${store.value.url}:${store.value.port}/note`, {
     method: "delete",
@@ -91,8 +92,9 @@ export function DeleteNote(id) {
       return response.json();
     })
     .then(() => {
-      NotesList.value = NotesList.value.filter((el) => el._id.toString() != id);
-      //do something awesome that makes the world a better place
+     // NotesList.value = NotesList.value.filter((el) => el._id.toString() != id);
+     getNotes() 
+     //do something awesome that makes the world a better place
     });
 }
 
