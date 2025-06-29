@@ -1,22 +1,21 @@
 <script setup>
 import { defineProps } from 'vue';
-import { store } from "@/store"
+import { store } from "@/store";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+import { openDate } from "@/notipol.js"
 
 const props = defineProps({
   event: Object,
   message: String,
-  nextDate: String
+  nextDate: Object,
+  onReshow: Function
 });
 
 async function snooze() {
   console.log("SNOOZE: " + props.event);
-  store.value.snoozed.push({
-    event: props.event,
-    notificationMessage: props.message,
-    nextDate: props.nextDate
-  });
+  props.onReshow();
 }
-
 </script>
 
 <template>
