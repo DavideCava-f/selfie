@@ -209,6 +209,7 @@ function tooSmall(str) {
                             @click="() => {
                                 selectedDay = i;
                                 eventsOfSelectedDay = store.eventsOfMonth.find((d) => (d.day) === i).events;
+                                store.activeDate = firstDay.add({ days: i - 1 });
                             }" data-bs-target="#AltriEventi" data-bs-toggle="modal">
                             altri eventi
                         </button>

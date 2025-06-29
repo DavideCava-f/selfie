@@ -67,7 +67,12 @@ function getEvent() {
       eventTitle.value = data.title
       eventText.value = data.details.text
       eventLink.value = data.details.link
-      eventBeginDate.value = store.value.activeDate.toString();
+      if(store.value.activeDate === null) {
+        store.value.activeDate = data.dates[0].begin.split("T")[0];
+      }
+      else{
+        eventBeginDate.value = store.value.activeDate.toString();
+      }
       eventBeginTime.value = data.dates[0].begin.split("T")[1].substring(0, 5) + ":00";
       eventEndDate.value = store.value.activeDate.toString();
       eventEndTime.value = data.dates[0].end.split("T")[1].substring(0, 5) + ":00";

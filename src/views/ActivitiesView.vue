@@ -144,12 +144,12 @@ onMounted(() => {
       </div>
     </div>
     <div class="row">
-      <div class="col">
+      <div class="col-12 col-sm-6">
         <h2 class="text-center">Attività da completare</h2>
         <div v-if="TODOAct.length == 0">
           <h4 class="text-center my-3">Nessuna attività da completare</h4>
         </div>
-        <div class="hover-div" v-else v-for="act in TODOAct">
+        <div class="hover-div m-2" v-else v-for="act in TODOAct">
           <div class="card rounded-3">
             <div class="card-body">
               <h1 class="card-title fw-bold">{{ act.title }}</h1>
@@ -178,12 +178,12 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col-12 col-sm-6">
         <h2 class="text-center text-danger">Attività in ritardo</h2>
         <div v-if="RetardedAct.length == 0">
           <h4 class="text-center my-3">Nessuna attività in ritardo</h4>
         </div>
-        <div class="hover-div" v-else v-for="act in RetardedAct">
+        <div class="hover-div m-2" v-else v-for="act in RetardedAct">
           <div class="card rounded-3">
             <div class="card-body">
               <h1 class="card-title fw-bold">{{ act.title }}</h1>
@@ -217,7 +217,7 @@ onMounted(() => {
   <div v-if="CompletedAct.length == 0">
     <h4 class="text-center my-3">Nessuna attività completata</h4>
   </div>
-  <div class="hover-div" v-else v-for="act in CompletedAct">
+  <div class="hover-div m-2" v-else v-for="act in CompletedAct">
     <div class="card rounded-3">
       <div class="card-body">
         <h1 class="card-title fw-bold">{{ act.title }}</h1>

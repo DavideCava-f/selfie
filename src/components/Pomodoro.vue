@@ -242,8 +242,10 @@ function reset() {
   relaxingMinutes.value = DEFAULT_PAUSE_MINS;
   TotalTime.value = 1;
   isSet.value = false;
-  lancetta.value.style.transform = "rotate(0)";
-  pomodoro.value.style.backgroundColor = "#44cf69";
+  if(mode.value === 0){
+    lancetta.value.style.transform = "rotate(0)";
+    pomodoro.value.style.backgroundColor = "#44cf69";
+  }
 }
 
 function createPomodoroEvent() {

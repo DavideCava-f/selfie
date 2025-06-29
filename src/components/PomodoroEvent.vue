@@ -234,16 +234,18 @@ function resetCycles() {
 }
 
 watch(() => store.value.activePomodoro?._id, () => {
-  if (store.value.activePomodoro) {
+    if (store.value.activePomodoro) {
     SetMinutes.value = store.value.activePomodoro.studyMins;
     SetCycles.value = store.value.activePomodoro.cycles;
     relaxingMinutes.value = store.value.activePomodoro.pauseMins;
-  }
-  time.value = 0;
-  cycles.value = 0;
-  isSet.value = false;
-  relaxing.value = false;
-  pauseTimer();
+    }
+    time.value = 0;
+    cycles.value = 0;
+    isSet.value = false;
+    relaxing.value = false;
+    pauseTimer();
+    resetTimerCycle();
+  
 });
 
 </script>
