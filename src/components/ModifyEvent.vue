@@ -1,9 +1,10 @@
 <script setup>
 import OpenAI from "openai";
-import { ref, watch, watchEffect, reactive } from "vue";
+import { ref, watch, watchEffect, reactive, onMounted } from "vue";
 import { store } from "@/store";
 import { EventCreator } from "@/eventCreator";
 import { Temporal } from "@js-temporal/polyfill";
+import DateTimePicker from './DateTimePicker.vue';
 
 var event = ref(
   {
@@ -12,29 +13,14 @@ var event = ref(
     dates: []
   });
 
-watch(() => [store.value.activeEventId, store.value.activeDate], () => {
-  console.log("watch modify");
-  getEvent();
-})
-
-
 const eventTitle = ref(null);
 const eventText = ref(null);
 const eventBeginDate = ref(null);
 const eventBeginTime = ref(null);
 const eventEndDate = ref(null);
 const eventEndTime = ref(null);
-const dayOfWeek = ref(null);
-const repeatable = ref(false);
-const frequenceSelected = ref({
-  type: "d",
-  option: [...Array(7)],
-});
-const repetitionSelected = ref({
-  type: "i",
-  option: "",
-});
 const eventLink = ref(null);
+const updateOnlyThis = ref(false);
 
 function updateEvent(i) {
   //Da mettere Date del giorno selezionato
@@ -55,8 +41,8 @@ function updateEvent(i) {
       title: eventTitle.value,
       text: eventText.value,
       link: eventLink.value,
-      beginDate: eventBeginDate.value + "T" + eventBeginTime.value + ":00.000Z",
-      endDate: eventEndDate.value + "T" + eventEndTime.value + ":00.000Z"
+      beginDate: eventBeginDate.value + "T" + eventBeginTime.value + ".000Z",
+      endDate: eventEndDate.value + "T" + eventEndTime.value + ".000Z"
     })
   }
   ).then(response => { return response.json() })
@@ -76,78 +62,59 @@ function getEvent() {
       eventText.value = data.details.text
       eventLink.value = data.details.link
       eventBeginDate.value = store.value.activeDate.toString();
-      eventBeginTime.value = data.dates[0].begin.split("T")[1].substring(0, 5);
+      eventBeginTime.value = data.dates[0].begin.split("T")[1].substring(0, 5) + ":00";
       eventEndDate.value = store.value.activeDate.toString();
-      eventEndTime.value = data.dates[0].end.split("T")[1].substring(0, 5);
-      console.log("titol " + eventTitle.value)
+      eventEndTime.value = data.dates[0].end.split("T")[1].substring(0, 5) + ":00";
+      console.log("HOLA DIO CAN " + eventTitle.value)
     });
 }
 
 function setBeginNow() {
   eventBeginDate.value = store.value.simDate;
-  eventBeginTime.value = store.value.simTime.slice(0, 5);
+  eventBeginTime.value = store.value.simTime.slice(0, 5) + ":00";
 }
 
 function setEndNow() {
   eventEndDate.value = store.value.simDate;
-  eventEndTime.value = store.value.simTime.slice(0, 5);
-}
-
-function resetBegin() {
-  eventBeginDate.value = "";
-  eventBeginTime.value = "00:00";
-}
-
-function resetEnd() {
-  eventEndDate.value = "";
-  eventEndTime.value = "00:01";
+  eventEndTime.value = store.value.simTime.slice(0, 5) + ":00";
 }
 
 function resetFields() {
   eventTitle.value = "";
   eventText.value = "";
-  resetBegin();
-  resetEnd();
-  repeatable.value = false;
-  frequenceSelected.value = { type: "d", option: [...Array(7)] };
-  repetitionSelected.value = { type: "i", option: "" };
+  setBeginNow();
+  setEndNow();
   eventLink.value = "";
 }
 
 function allDay() {
-  eventBeginTime.value = "00:00";
-  eventEndTime.value = "23:59";
-}
-
-function setDayOfWeek() {
-  if (!eventBeginDate.value) return;
-  frequenceSelected.value.option = [...Array(7)];
-  dayOfWeek.value = Temporal.PlainDate.from(eventBeginDate.value).dayOfWeek - 1;
-  frequenceSelected.value.option[dayOfWeek.value] = true;
+  eventBeginTime.value = "00:00:00";
+  eventEndTime.value = "23:59:00";
 }
 
 function canCreateEvent() {
-  return (
-    eventTitle.value &&
-    eventBeginDate.value &&
-    eventBeginTime.value &&
-    eventEndDate.value &&
-    eventEndTime.value &&
-    (repetitionSelected.value.type &&
-      (repetitionSelected.value.type === "n" ||
-        repetitionSelected.value.type === "u")
-      ? repetitionSelected.value.option
-      : true)
-  );
+  try {
+    const beginDateTime = Temporal.PlainDate.from(eventBeginDate.value)
+      .toPlainDateTime(Temporal.PlainTime.from(eventBeginTime.value));
+    const endDateTime = Temporal.PlainDate.from(eventEndDate.value)
+      .toPlainDateTime(Temporal.PlainTime.from(eventEndTime.value));
+
+    return (
+      eventTitle.value &&
+      eventBeginDate.value &&
+      eventBeginTime.value &&
+      eventEndDate.value &&
+      eventEndTime.value &&
+      Temporal.PlainDateTime.compare(beginDateTime, endDateTime) <= 0
+    );
+  } catch (e) {
+    return false;
+  }
 }
 
-
-resetFields();
-
-watch(() => eventBeginDate, () => {
-  console.log("watch modify date")
-  setDayOfWeek();
-
+watch(() => [store.value.activeEventId, store.value.activeDate], () => {
+  console.log("WATCH MODIFY");
+  getEvent();
 });
 </script>
 
@@ -180,41 +147,29 @@ watch(() => eventBeginDate, () => {
         <br />
 
         <div class="form-check my-2">
-          <input class="form-check-input" type="checkbox" id="repeatable" :disabled="eventBeginDate.toString() !== eventEndDate.toString() ||
-            !eventBeginDate
-            " v-model="repeatable" />
-          <label class="form-check-label" for="repeatable">Update OnlyThis</label>
+          <input class="form-check-input" type="checkbox" id="updateOnlyThis" v-model="updateOnlyThis" />
+          <label class="form-check-label" for="updateOnlyThis">Update OnlyThis</label>
         </div>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-          :disabled="!canCreateEvent() || repeatable" @click="updateEvent(0)">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" :disabled="updateOnlyThis"
+          @click="updateEvent(0)">
           Update All Events
         </button>
-        <div v-if="repeatable" class="row my-2">
+        <div v-if="updateOnlyThis" class="row my-2">
           <div class="my-2">
             <label>Start</label>
-            <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
-              <input class="form-control" type="date" v-model="eventBeginDate" />
-              <input class="form-control" type="time" v-model="eventBeginTime" />
-              <button class="btn btn-outline-primary" @click="setBeginNow">
-                Now
-              </button>
-              <button class="btn btn-outline-danger" @click="resetBegin">
-                Reset
-              </button>
-            </div>
+            <br>
+            <button class="btn btn-outline-primary" @click="setBeginNow">
+              Now
+            </button>
+            <DateTimePicker v-model:date="eventBeginDate" v-model:time="eventBeginTime" />
           </div>
           <div class="my-2">
             <label>End</label>
-            <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
-              <input class="form-control" type="date" :min="eventBeginDate" v-model="eventEndDate" />
-              <input class="form-control" type="time" v-model="eventEndTime" />
-              <button class="btn btn-outline-primary" @click="setEndNow">
-                Now
-              </button>
-              <button class="btn btn-outline-danger" @click="resetEnd">
-                Reset
-              </button>
-            </div>
+            <br />
+            <button class="btn btn-outline-primary" @click="setEndNow">
+              Now
+            </button>
+            <DateTimePicker v-model:date="eventEndDate" v-model:time="eventEndTime" :min="eventBeginDate" />
           </div>
           <div class="my-2">
             <button class="btn btn-outline-success" type="button" id="tuttoIlGiorno" @click="allDay">
@@ -237,7 +192,6 @@ watch(() => eventBeginDate, () => {
 </template>
 
 <style scoped>
-
 .custom-modal {
   border-radius: 12px;
   overflow: hidden;
@@ -245,13 +199,12 @@ watch(() => eventBeginDate, () => {
   border: 1px solid #ff0051;
   background-color: #ffd0da;
 }
+
 .bg-header {
   background-color: #f383a5;
 }
-.bg-body{
 
+.bg-body {
   background-color: #f383a5;
 }
-
-
 </style>

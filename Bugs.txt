@@ -26,3 +26,4 @@ ATTIVITA
 POMODORO
 - Interfaccia piu leggera e user friendly
 - Ultimo pomodoro completato da fare
+- Per gli eventi pomodoro bisogna mettere la 

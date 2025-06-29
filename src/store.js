@@ -8,6 +8,7 @@ import { notipol, openDate } from "@/notipol";
 import SnoozeToast from "@/components/SnoozeToast.vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import router from "./router/Router.js"
 
 export const NotesList = ref([]);
 
@@ -153,7 +154,16 @@ setInterval(
     });
   },
   300000
-)
+);
+
+setInterval(
+  () => {
+    if (!store.value.checkAuth()) {
+      router.push("/login");
+    }
+  },
+  10000
+);
 
 // watch(() => store.value.pomodoros, () => {
 //   if (store.value.activePomodoro && store.value.pomodoros.map((pomodoro) => pomodoro._id).includes(store.value.activePomodoro._id)) {

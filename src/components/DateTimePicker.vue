@@ -46,11 +46,16 @@ watch(
 watch(
     () => beginDate.value,
     (newDate) => {
+        console.log("DATE TIME PICKER: new date");
+        console.log(newDate);
         if (!newDate) return;
         const plain = Temporal.PlainDate.from(newDate);
         selectedMonth.value = months[plain.month - 1];
         selectedDay.value = plain.day;
+        console.log(selectedMonth.value);
+        console.log(selectedDay.value);
     },
+    { immediate: true }
 );
 
 watch(
@@ -71,6 +76,7 @@ watch(
         selectedHour.value = plain.hour;
         selectedMinute.value = plain.minute;
     },
+    { immediate: true }
 );
 </script>
 

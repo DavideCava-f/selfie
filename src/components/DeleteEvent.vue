@@ -65,7 +65,8 @@ watch(() => store.value.activeEventId, () => {
         <div class="my-2">
           <div class="input-group">
             <button class="btn btn-dark" @click="deleteEvent(0)" data-bs-dismiss="modal">Delete Only this Event</button>
-            <button class="btn btn-dark" @click="deleteEvent(1)" data-bs-dismiss="modal">Delete All Events like this</button>
+            <button class="btn btn-dark" @click="deleteEvent(1)" data-bs-dismiss="modal">Delete All Events like
+              this</button>
           </div>
         </div>
 
@@ -75,8 +76,6 @@ watch(() => store.value.activeEventId, () => {
 </template>
 
 <style scoped>
-
-
 .custom-modal {
   border-radius: 12px;
   overflow: hidden;
@@ -84,15 +83,13 @@ watch(() => store.value.activeEventId, () => {
   border: 1px solid #ff0051;
   background-color: #ffd0da;
 }
+
 .bg-header {
   background-color: #f383a5;
 }
-.bg-body{
+
+.bg-body {
 
   background-color: #f383a5;
 }
-
-
 </style>
-
-

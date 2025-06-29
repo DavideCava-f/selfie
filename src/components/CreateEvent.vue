@@ -259,7 +259,7 @@ function createEvent() {
 
 onMounted(() => {
   resetFields();
-})
+});
 
 watch(eventBeginDate, setDayOfWeek);
 </script>
@@ -412,7 +412,6 @@ watch(eventBeginDate, setDayOfWeek);
 </template>
 
 <style scoped>
-
 .custom-modal {
   border-radius: 12px;
   overflow: hidden;
@@ -420,8 +419,8 @@ watch(eventBeginDate, setDayOfWeek);
   border: 1px solid #ff0051;
   background-color: #ffd0da;
 }
+
 .bg-header {
   background-color: #f383a5;
 }
-
 </style>
