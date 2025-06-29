@@ -7,6 +7,7 @@ import { ref } from "vue";
 import SnoozeToast from "@/components/SnoozeToast.vue";
 
 let msg = ref(null);
+let notificationMessage = ref(null);
 
 async function setNotedTrue(eventId, dateId) {
   await fetch(`${store.value.url}:${store.value.port}/notification`, {
@@ -103,21 +104,21 @@ async function ActivityNotification(act) {
   let deadline = Temporal.PlainDateTime.from(act.dates[0].deadline.slice(0, -1))
   let now = Temporal.PlainDateTime.from(store.value.simDateTime)
 
-
   if (act.notification.isLate == false) { //Se arrivto qui significa scaduto non servono ulteriori controlli
     notificationMessage.value = `"${act.title}" is Expired!`;
     msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
     toast(msg.value, {
-      theme: "auto",
+      toastId: Date.now(),
+      theme:"auto",
       type: "default",
       position: "top-left",
       transition: "slide",
       autoClose: false,
       dangerouslyHTMLString: true,
       style: {
-        backgroundColor: '#fff8b3', // soft yellow
-        color: '#333',              // dark text for contrast
-        border: '1px solid #e6c200',
+        backgroundColor: '#000000', // soft yellow
+        color: '#FFF',              // dark text for contrast
+        border: '2px solid rgb(25, 0, 255)',
         fontWeight: 'bold',
       }
     });
@@ -132,6 +133,7 @@ async function ActivityNotification(act) {
       notificationMessage.value = `"${act.title}" is One Day Late`;
       msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
       toast(msg.value, {
+      toastId: Date.now(),
         theme: "auto",
         type: "default",
         position: "top-left",
@@ -139,9 +141,9 @@ async function ActivityNotification(act) {
         autoClose: false,
         dangerouslyHTMLString: true,
         style: {
-          backgroundColor: '##ff8300', // orange 
+          backgroundColor: '#000000', // orange 
           color: '#333',              // dark text for contrast
-          border: '1px solid #e6c200',
+        border: '2px solid rgb(255, 251, 0)',
           fontWeight: 'bold',
         }
       });
@@ -157,6 +159,7 @@ async function ActivityNotification(act) {
       notificationMessage.value = `"${act.title}" is One Week`;
       msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
       toast(msg.value, {
+      toastId: Date.now(),
         theme: "auto",
         type: "default",
         position: "top-left",
@@ -164,9 +167,9 @@ async function ActivityNotification(act) {
         autoClose: false,
         dangerouslyHTMLString: true,
         style: {
-          backgroundColor: '##ff0000', // red 
+          backgroundColor: '#000000', // red 
           color: '#333',              // dark text for contrast
-          border: '1px solid #e6c200',
+          border: '2px solid rgb(255, 0, 0)',
           fontWeight: 'bold',
         }
       });

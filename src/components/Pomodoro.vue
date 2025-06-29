@@ -108,10 +108,12 @@ async function tick() {
           autoClose: true,
           dangerouslyHTMLString: true,
           style: {
-            backgroundColor: '#fff8b3', // soft yellow
-            color: '#333',              // dark text for contrast
-            border: '1px solid #e6c200',
-            fontWeight: 'bold',
+            backgroundColor: '#ff08b3',  // Giallo tenue
+    color: '#333333',            // Testo scuro per contrasto
+    border: '1px solid #e6c200', // Giallo più saturo per bordo
+    fontWeight: 'bold',
+    padding: '12px 16px',
+    borderRadius: '8px',
           }
         });
       }

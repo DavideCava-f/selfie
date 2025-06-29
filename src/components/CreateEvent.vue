@@ -18,7 +18,6 @@ watch(() => props.date, () => {
 
 watch(()=> store.value.toggle, () => { resetFields() });
 
-
 const eventTitle = ref(null);
 const eventText = ref(null);
 const eventBeginDate = ref(null);
@@ -41,6 +40,7 @@ const notificationSelected = computed(() => Object.keys(store.value.advance).map
 const notifyUntilAck = ref(false);
 const eventLink = ref(null);
 
+watch([eventBeginDate, eventEndDate], () => repeatable.value = false)
 async function generateDetails() {
   const completion = await store.value.openai.chat.completions.create({
     model: "deepseek/deepseek-r1-distill-llama-70b:free",
