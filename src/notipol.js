@@ -41,6 +41,30 @@ function openDate(date) {
   store.value.monthOffset += Math.round(distance.total({ unit: 'months', relativeTo: store.value.simDateTime }));
 }
 
+function showToast(untilAck, nextDate, event, notificationMessage) {
+  const scheduleReshow = () => {
+    // schedule the next one in 5 minutes (300 000 ms)
+    setTimeout(() => {
+      showToast(untilAck, nextDate, event, notificationMessage);
+    }, 5 * 60 * 1000)
+  }
+
+  toast(SnoozeToast, {
+    theme: "auto",
+    type: "default",
+    position: "top-left",
+    transition: "slide",
+    autoClose: untilAck ? false : 5000,
+    expandCustomProps: true,
+    contentProps: {
+      event: event,
+      message: notificationMessage,
+      nextDate: nextDate,
+      onReshow: scheduleReshow
+    },
+  });
+}
+
 async function EventNotification(event) {
   let Now = Temporal.PlainDateTime.from(store.value.simDateTime);
   let untilAck = event.notification.untilAck;
@@ -60,20 +84,7 @@ async function EventNotification(event) {
           !nextDate.noted &&
           Temporal.Duration.compare(distance, duration) <= 0) {
           const notificationMessage = `"${event.title}" is happening in less than ${type}!`;
-          toast(SnoozeToast, {
-            theme: "auto",
-            type: "default",
-            position: "top-left",
-            transition: "slide",
-            autoClose: untilAck ? false : 5000,
-            onClick: () => openDate(nextDate),
-            expandCustomProps: true,
-            contentProps: {
-              event: event,
-              message: notificationMessage,
-              nextDate: nextDate
-            },
-          });
+          showToast(untilAck, nextDate, event, notificationMessage);
           const notification = new Notification(notificationMessage);
           setNotedTrue(event._id, nextDate._id);
         }

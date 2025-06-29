@@ -5,8 +5,6 @@ import { getEventsOfWeek, getEventsOfDay, getEventsOfMonth } from "@/eventGetter
 import { getActivitiesOfDay, getActivitiesOfMonth, getActivitiesOfWeek } from "@/activityGetter";
 import { getPomodoros } from "@/pomodoroGetter";
 import { notipol, openDate } from "@/notipol";
-import SnoozeToast from "@/components/SnoozeToast.vue";
-import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import router from "./router/Router.js"
 
@@ -90,8 +88,6 @@ const store = ref({
 
   toggle: false,
 
-  snoozed: [],
-
   update: async () => {
     await getEventsOfDay();
     await getEventsOfWeek();
@@ -129,31 +125,6 @@ setInterval(
 setInterval(
   notipol,
   10000
-);
-
-setInterval(
-  () => {
-    const copy = [...store.value.snoozed];
-    store.value.snoozed = [];
-    copy.forEach((notification) => {
-      const { event, notificationMessage, nextDate } = notification;
-      toast(SnoozeToast, {
-        theme: "auto",
-        type: "default",
-        position: "top-left",
-        transition: "slide",
-        autoClose: event.notification.untilAck ? false : 5000,
-        onClick: () => openDate(nextDate),
-        expandCustomProps: true,
-        contentProps: {
-          event: event,
-          message: notificationMessage,
-          nextDate: nextDate
-        },
-      });
-    });
-  },
-  300000
 );
 
 setInterval(
