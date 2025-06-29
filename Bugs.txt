@@ -1,14 +1,13 @@
 BUGS:
 
 POMODORO
-- quando sono su plan e chiudo viene fuori un'errore sul parametro 'style' della variabile lancetta/pomodoro
+
 
 N0TE
 - Per Ora OK
 
 CALENDARIO 
 - Repatable che rimane aperto nella create
-- Pulsante Timido di create che si nasconde dietro le attivita
 
 COSE DA FARE:
 - Gestire la palette generale del progetto, per i vari modal
@@ -20,9 +19,8 @@ COSE DA FARE:
 
 ATTIVITA
 - Integrare Date Picker per attivita
-- Verticalizzare Interfaccia(Da telefono e tutto schiacciato)
+
 
 POMODORO
 - Interfaccia piu leggera e user friendly
 - Ultimo pomodoro completato da fare
-- Se apri un pomodoro intanto che ne va uno si INCULA tutto
