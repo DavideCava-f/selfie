@@ -7,9 +7,18 @@ import { Temporal } from "@js-temporal/polyfill";
 import DateTimePicker from './DateTimePicker.vue';
 
 const props = defineProps({
-  date: String
+  date: String,
+  closed: Boolean
 });
-watch(() => props.date, () => { if (props.date !== undefined && props.date !== null) eventBeginDate.value = props.date })
+watch(() => props.date, () => { 
+  if (props.date !== undefined && props.date !== null){
+    eventBeginDate.value = props.date
+    resetFields();
+  }});
+
+watch(()=> store.value.toggle, () => { resetFields() });
+
+
 const eventTitle = ref(null);
 const eventText = ref(null);
 const eventBeginDate = ref(null);
@@ -271,8 +280,6 @@ watch(eventBeginDate, setDayOfWeek);
         <h1 class="modal-title fs-4" id="staticBackdropLabel">
           Create new event
         </h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-          @click="resetFields"></button>
       </div>
       <div class="modal-body">
         <div class="my-2">
