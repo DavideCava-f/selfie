@@ -109,11 +109,9 @@ watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
 watch(() => store.value.monthOffset, () => getPomodoros());
 
 function tooSmall(str){
-    console.log(window.innerWidth);
     if(window.innerWidth < 550) {
         return " ";
     }
-    console.log(str);
     return str;
 }
 

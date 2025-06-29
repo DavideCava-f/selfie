@@ -38,9 +38,6 @@ const formatTime = computed(() => {
   return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 });
 
-const progressBarWidth = computed(() => {
-  return `${(time.value / barTime.value) * 100}%`;
-});
 
 function setupTimer() {
   pauseTimer();
@@ -339,6 +336,7 @@ onUnmounted(() => {
             Remaining cycles: {{ cycles }}
           </div>
           <div :class="{ timerWork: !relaxing, timerRelaxing: relaxing }">{{ formatTime }}</div>
+
           <div class="pomodoro-top">
             <div class="leaf-1"></div>
             <div class="stem"></div>
