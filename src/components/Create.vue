@@ -5,17 +5,21 @@ import CreateEvent from './CreateEvent.vue';
 import CreateActivity from './CreateActivity.vue';
 
 let choice = ref(Boolean);
+let closed = ref(false);
 
 const props = defineProps({
-  date: String
+    date: String,
+    closed: Boolean
 });
 
 onMounted(() => {
     console.log("mounted create")
     choice.value = true;
+    closed.value = false;
 });
 
 watch(() => props.date,()=> {console.log(props.date)})
+watch(() => props.closed, () => {console.log(props.closed)})
 
 </script>
 
@@ -27,11 +31,11 @@ watch(() => props.date,()=> {console.log(props.date)})
                     Create Event
                 </button>
                 <button class="btn modal-title fs-4" @click="choice = false">Create Activity</button>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="store.toggle=!store.toggle"></button>
             </div>
-            <div class="modal-body">
+            <div class="">
                 <div v-if="choice">
-                    <CreateEvent :date="props.date"/>
+                    <CreateEvent :date="props.date" :closed="props.closed"/>
                 </div>
                 <div v-else>
                     <CreateActivity @created="store.update()" />
