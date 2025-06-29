@@ -60,7 +60,6 @@ function createActivity() {
                 <h1 class="modal-title fs-4" id="staticBackdropLabel">
                     Create new Activity
                 </h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click=""></button>
             </div>
             <div class="modal-body">
                 <div class="my-2">

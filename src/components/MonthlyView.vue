@@ -202,7 +202,7 @@ function tooSmall(str) {
                             class="btn btn-danger d-flex d-inline-block align-items-center 
                             text-truncate event text-nowrap" @click="store.activePomodoro = pomodoro"
                             data-bs-target="#PomodoroEventModal" data-bs-toggle="modal">
-                            🍅 {{ tooSmall(pomodoro.beginDate.split("T")[1].slice(0, 5)) }}
+                            <span>🍅</span> <span class="d-none d-sm-block">{{ pomodoro.beginDate.split("T")[1].slice(0, 5) }}</span>
                         </button>
                         <button v-if="contaPom(i) > 2 - conta(i)"
                             class="btn event d-flex d-inline-block align-self-center align-items-center text-nowrap"
@@ -232,7 +232,7 @@ function tooSmall(str) {
                 <div class="modal-body d-flex flex-column">
                     <button v-for="event in eventsOfSelectedDay" @click="() => {
                         store.activeEventId = event._id; store.toggle = !store.toggle;
-                    }" data-bs-target="#VisualizeEventModalM" data-bs-toggle="modal" class="btn"
+                    }" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal" class="btn"
                         :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
                         {{ event.title }}
                     </button>
