@@ -20,7 +20,7 @@ let eventsOfSelectedDay = ref({});
 const activitiesOfSelectedDay = ref({});
 let DayNewEvent = ref(store.value.simDate);
 
-watch(DayNewEvent, () => {console.log(DayNewEvent.value)})
+watch(DayNewEvent, () => { console.log(DayNewEvent.value) })
 function reload() {
     store.value.monthOffset = 0;
     updateWeekDays(firstDay.value);
@@ -108,12 +108,10 @@ watch(() => store.value.monthOffset, () => getEventsOfMonth());
 watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
 watch(() => store.value.monthOffset, () => getPomodoros());
 
-function tooSmall(str){
-    console.log(window.innerWidth);
-    if(window.innerWidth < 550) {
+function tooSmall(str) {
+    if (window.innerWidth < 550) {
         return " ";
     }
-    console.log(str);
     return str;
 }
 
@@ -129,13 +127,14 @@ function tooSmall(str){
             </button>
             <div class="d-flex flex-row justify-content-center align-items-center w-100">
                 <div class="align-self-center text-dark">
-                {{ 
-                (firstDay.toLocaleString("it-IT", { month: "long", year: "numeric" })).charAt(0).toUpperCase() + firstDay.toLocaleString("it-IT", { month: "long", year: "numeric" }).slice(1)
-                }}
+                    {{
+                        (firstDay.toLocaleString("it-IT", { month: "long", year: "numeric" })).charAt(0).toUpperCase() +
+                        firstDay.toLocaleString("it-IT", { month: "long", year: "numeric" }).slice(1)
+                    }}
                 </div>
                 <button v-if="store.monthOffset !== 0" class="btn" @click="reload()">R</button>
             </div>
-            
+
 
             <button class="btn d-flex align-self-center" @click="changeMonth(1)">
                 <img src="@/assets/avanti.svg" />
@@ -148,16 +147,16 @@ function tooSmall(str){
                 <p>{{ day }}</p>
             </div>
         </div>
-        <div class="d-flex flex-wrap w-100 border border-white m-0" > <!-- celle dei giorni nel mense -->
-            <div v-for="i in dayInMonth" class="d-flex flex-column flex-fill justify-content-start border" data-bs-target="#CreateEV" data-bs-toggle="modal" @click="() => {
-                DayNewEvent = firstDay.toString().slice(0, firstDay.toString().lastIndexOf('-')+1) + i.toString().padStart(2,'0')
-            }"
-                style="width: calc(100%/7); max-width: calc(100%/7); height: 15vh">
+        <div class="d-flex flex-wrap w-100 border border-white m-0"> <!-- celle dei giorni nel mense -->
+            <div v-for="i in dayInMonth" class="d-flex flex-column flex-fill justify-content-start border"
+                data-bs-target="#CreateEV" data-bs-toggle="modal" @click="() => {
+                    DayNewEvent = firstDay.toString().slice(0, firstDay.toString().lastIndexOf('-') + 1) + i.toString().padStart(2, '0')
+                }" style="width: calc(100%/7); max-width: calc(100%/7); height: 15vh">
                 <div class="d-flex flex-row justify-content-between align-items-center m-0 h-25">
                     <div
-                        :class="['d-flex', 'justify-content-center', 'align-items-center', 'text-wrap', 'flex-fill', 'h-100', 'z-0',store.simDateTime.day === i && store.monthOffset === 0 ? 'bg-dark' : '']">
+                        :class="['d-flex', 'justify-content-center', 'align-items-center', 'text-wrap', 'flex-fill', 'h-100', 'z-0', store.simDateTime.day === i && store.monthOffset === 0 ? 'bg-dark' : '']">
                         {{ i }}
-                    
+
                     </div>
                     <button v-if="store.activitiesOfMonth.find((d) => d.day === i)"
                         class="btn bg-danger activity-button d-flex d-inline-block align-items-center justify-content-center"
@@ -258,7 +257,7 @@ function tooSmall(str){
         <ActivityModal :activities="activitiesOfSelectedDay" />
     </div>
     <div class=" modal fade" id="CreateEV" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
-        <Create :date="DayNewEvent"/>
+        <Create :date="DayNewEvent" />
     </div>
 </template>
 
@@ -269,7 +268,7 @@ function tooSmall(str){
     min-height: 25%
 }
 
-.activity-button{
+.activity-button {
     width: 20%;
     height: 100%;
     display: flex;

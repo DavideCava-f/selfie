@@ -7,32 +7,15 @@ const router = express.Router();
 dotenv.config();
 const uri = process.env.MONGODB_DEV;
 
-router.put("/all", verifyToken, async function(req, res) {
-  try {
-    if (req.body.setNoted) {
-      await Event.updateOne({ _id: req.body.id_Event }, {
-        $set:
-        {
-          'notification.advance.$[].noted': true
-        }
-      });
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).send();
-  } finally {
-  }
-});
-
 router.put("/", verifyToken, async function(req, res) {
   try {
     if (req.body.setNoted) {
       await Event.updateOne({
         _id: req.body.id_Event,
-        'notification.advance._id': req.body.id_Advance
+        'dates._id': req.body.id_Date
       },
         {
-          $set: { 'notification.advance.$.noted': true }
+          $set: { 'dates.$.noted': true }
         }
       );
     }

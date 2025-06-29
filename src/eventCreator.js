@@ -45,7 +45,6 @@ class EventCreator {
       if (notificationSelected[i]) {
         event.notification.advance.push({
           ofType: store.value.advance[d][1],
-          noted: false
         });
       }
     }
@@ -110,7 +109,6 @@ class EventCreator {
       if (notificationSelected[i]) {
         event.notification.advance.push({
           ofType: store.value.advance[d][1],
-          noted: false
         });
       }
     }
@@ -190,7 +188,6 @@ class EventCreator {
       if (notificationSelected[i]) {
         event.notification.advance.push({
           ofType: store.value.advance[d][1],
-          noted: false
         });
       }
     }
@@ -282,7 +279,6 @@ class EventCreator {
       if (notificationSelected[i]) {
         event.notification.advance.push({
           ofType: store.value.advance[d][1],
-          noted: false
         });
       }
     }
@@ -339,7 +335,6 @@ class EventCreator {
       if (notificationSelected[i]) {
         event.notification.advance.push({
           ofType: store.value.advance[d][1],
-          noted: false
         });
       }
     }
@@ -403,7 +398,6 @@ class EventCreator {
       if (notificationSelected[i]) {
         event.notification.advance.push({
           ofType: store.value.advance[d][1],
-          noted: false
         });
       }
     }

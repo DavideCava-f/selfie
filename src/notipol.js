@@ -8,7 +8,7 @@ import SnoozeToast from "@/components/SnoozeToast.vue";
 
 let msg = ref(null);
 
-async function setNotedTrue(eventId, advanceId) {
+async function setNotedTrue(eventId, dateId) {
   await fetch(`${store.value.url}:${store.value.port}/notification`, {
     method: "put",
     credentials: "include",
@@ -19,7 +19,7 @@ async function setNotedTrue(eventId, advanceId) {
     //make sure to serialize your JSON body
     body: JSON.stringify({
       id_Event: eventId,
-      id_Advance: advanceId,
+      id_Date: dateId,
       setNoted: true
     }),
   })
@@ -57,7 +57,7 @@ async function EventNotification(event) {
         const type = store.value.advance[d][1];
         const distance = Temporal.PlainDateTime.from(nextDate.begin.toString().slice(0, -1)).since(Now);
         if (advance.ofType === type &&
-          !advance.noted &&
+          !nextDate.noted &&
           Temporal.Duration.compare(distance, duration) <= 0) {
           const notificationMessage = `"${event.title}" is happening in less than ${type}!`;
           toast(SnoozeToast, {
@@ -75,7 +75,7 @@ async function EventNotification(event) {
             },
           });
           const notification = new Notification(notificationMessage);
-          setNotedTrue(event._id, advance._id);
+          setNotedTrue(event._id, nextDate._id);
         }
       }
     }
