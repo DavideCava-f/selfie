@@ -15,6 +15,9 @@ COSE DA FARE:
 - Gestire la palette generale del progetto, per i vari modal
 - Migliorare Interfaccia delle notifiche
 - Integrare Date Picker per modifica
+- Click sulla visualizzazione settimanale per creare evento
+- Milgiorare schermata altri eventi
+
 
 ATTIVITA
 - Integrare Date Picker per attivita

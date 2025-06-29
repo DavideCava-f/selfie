@@ -1,6 +1,6 @@
 <script setup>
 import { store } from '@/store';
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { Temporal } from "@js-temporal/polyfill";
 
 var event = ref({
@@ -8,6 +8,16 @@ var event = ref({
   details: "",
   dates: []
 });
+
+var isUrl = computed(() => {try{
+const url = new URL(event.value.details.link)
+ return url.protocol === "http:" || url.protocol ==="https:";
+}catch{
+  return false
+}
+
+})
+
 
 function getEvent() {
   fetch(`${store.value.url}:${store.value.port}/event/OneEvent?id=${store.value.activeEventId}`, {
@@ -59,8 +69,11 @@ watch(() => store.value.toggle, () => {
 
         </div>
         <div class="my-2">
-
-          <a :href="event.details.link"> LONK </a>
+          Risorsa o Luogo:
+          <a v-if="isUrl" :href="event.details.link"> LONK </a>
+          <span v-else>
+            {{ event.details.link }}
+          </span>
         </div>
       
         <div class="my-2  ">
