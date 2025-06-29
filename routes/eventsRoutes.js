@@ -119,8 +119,8 @@ router.put("/OneEvent", verifyToken, async function(req, res) {
       const activeDate = req.body.date
       let startOfDay = Temporal.PlainDateTime.from(activeDate);
       let endOfDay = startOfDay.add({ hours: 23, minutes: 59, seconds: 59 });
-      startOfDay = startOfDay.toString();
-      endOfDay = endOfDay.toString();
+      startOfDay = new Date(startOfDay.toString());
+      endOfDay = new Date(endOfDay.toString());
       await Event.updateOne({ _id: req.body.id }, {
         $pull: {
           dates: {
