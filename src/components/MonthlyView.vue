@@ -113,7 +113,7 @@ function tooSmall(str){
     if(window.innerWidth < 550) {
         return " ";
     }
-    console.log(str);
+   // console.log(str);
     return str;
 }
 

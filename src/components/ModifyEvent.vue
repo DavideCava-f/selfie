@@ -14,6 +14,7 @@ var event = ref(
 
 watch(() => [store.value.activeEventId, store.value.activeDate], () => {
   console.log("watch modify");
+  if(store.value.activeEventId)
   getEvent();
 })
 
