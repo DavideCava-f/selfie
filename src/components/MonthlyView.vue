@@ -114,8 +114,6 @@ function tooSmall(str) {
     }
     return str;
 }
-
-
 </script>
 
 <template>

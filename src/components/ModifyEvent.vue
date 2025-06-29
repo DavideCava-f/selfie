@@ -13,6 +13,12 @@ var event = ref(
     dates: []
   });
 
+watch(() => [store.value.activeEventId, store.value.activeDate], () => {
+  console.log("watch modify");
+  if (store.value.activeEventId)
+    getEvent();
+})
+
 const eventTitle = ref(null);
 const eventText = ref(null);
 const eventBeginDate = ref(null);
@@ -112,10 +118,10 @@ function canCreateEvent() {
   }
 }
 
-watch(() => [store.value.activeEventId, store.value.activeDate], () => {
-  console.log("WATCH MODIFY");
-  getEvent();
-});
+// watch(() => [store.value.activeEventId, store.value.activeDate], () => {
+//   console.log("WATCH MODIFY");
+//   getEvent();
+// });
 </script>
 
 <template>

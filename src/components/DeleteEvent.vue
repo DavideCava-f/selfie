@@ -10,7 +10,6 @@ var event = ref({
 });
 
 function deleteEvent(i) {
-  console.log(store.value.activeEventId)
   fetch(`${store.value.url}:${store.value.port}/event/OneEvent`, {
     headers: {
       'Content-Type': 'application/json'
@@ -25,7 +24,9 @@ function deleteEvent(i) {
 
   }).then(response => { return response.json() })
     .then(data => {
-      console.log(data);
+  console.log(store.value.activeEventId + "GOGOGOGOGOGOGOGOGOGO")
+  store.value.activeEventId = null;
+      store.value.activeDate = null
       store.value.update();
     });
 }
@@ -43,7 +44,8 @@ function getEvent() {
 
 watch(() => store.value.activeEventId, () => {
   console.log("watch visual");
-  getEvent();
+  if(store.value.activeEventId)
+    getEvent();
 });
 
 </script>
