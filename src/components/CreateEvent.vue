@@ -10,10 +10,13 @@ const props = defineProps({
   date: String,
   closed: Boolean
 });
+
+
 watch(() => props.date, () => { 
   if (props.date !== undefined && props.date !== null){
-    eventBeginDate.value = props.date
     resetFields();
+    eventBeginDate.value = props.date
+    eventEndDate.value = props.date
   }});
 
 watch(()=> store.value.toggle, () => { resetFields() });
@@ -75,7 +78,7 @@ function setEndNow() {
 function resetFields() {
   eventTitle.value = "";
   eventText.value = "";
-  setBeginNow();
+  setBeginNow(); 
   setEndNow();
   repeatable.value = false;
   frequenceSelected.value = { type: "d", option: [...Array(7)] };

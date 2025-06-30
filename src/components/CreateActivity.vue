@@ -33,6 +33,9 @@ function createActivity() {
     console.log("create activity");
     console.log(activityDeadlineDate.value);
     console.log(activityDeadlineTime.value);
+   
+    let simDate = store.value.simDateTime.toString().split('.')[0] + '.000Z'
+    console.log(simDate)
     fetch(`${store.value.url}:${store.value.port}/activity`, {
         credentials: "include",
         method: "POST",
@@ -43,7 +46,8 @@ function createActivity() {
         body: JSON.stringify({
             title: activityTitle.value,
             text: activityText.value,
-            deadlineDate: activityDeadlineDate.value + "T" + activityDeadlineTime.value + ":00.000Z"
+            deadlineDate: activityDeadlineDate.value + "T" + activityDeadlineTime.value + ":00.000Z",
+            creationDate : simDate
         })
     }).then(response => {
         console.log("non ci arrivo");

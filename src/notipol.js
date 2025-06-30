@@ -103,54 +103,7 @@ async function ActivityNotification(act) {
   let isModified = false
   let deadline = Temporal.PlainDateTime.from(act.dates[0].deadline.slice(0, -1))
   let now = Temporal.PlainDateTime.from(store.value.simDateTime)
-
-  if (act.notification.isLate == false) { //Se arrivto qui significa scaduto non servono ulteriori controlli
-    notificationMessage.value = `"${act.title}" is Expired!`;
-    msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
-    toast(msg.value, {
-      theme:"auto",
-      type: "default",
-      position: "top-left",
-      transition: "slide",
-      autoClose: false,
-      dangerouslyHTMLString: true,
-      style: {
-        backgroundColor: '#000000', // soft yellow
-        color: '#FFF',              // dark text for contrast
-        border: '2px solid rgb(25, 0, 255)',
-        fontWeight: 'bold',
-      }
-    });
-    //TOSTAMI
-    //Metti il noti
-    act.notification.isLate = true
-    isModified = true
-  } else if (act.notification.oneDayLate == false) {
-
-    if (Temporal.PlainDateTime.compare(deadline.add({ days: 1 }), now) <= 0) {
-
-      notificationMessage.value = `"${act.title}" is One Day Late`;
-      msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
-      toast(msg.value, {
-        theme: "auto",
-        type: "default",
-        position: "top-left",
-        transition: "slide",
-        autoClose: false,
-        dangerouslyHTMLString: true,
-        style: {
-          backgroundColor: '#000000', // orange 
-          color: '#333',              // dark text for contrast
-        border: '2px solid rgb(255, 251, 0)',
-          fontWeight: 'bold',
-        }
-      });
-      //Tostami
-      act.notification.oneDayLate = true
-      isModified = true
-    }
-
-  } else if (act.notification.oneWeekLate == false) {
+  if (act.notification.oneWeekLate == false) {
 
     if (Temporal.PlainDateTime.compare(deadline.add({ weeks: 1 }), now) <= 0) {
 
@@ -172,11 +125,58 @@ async function ActivityNotification(act) {
       });
       //Tostami
       act.notification.oneWeekLate = true
+      act.notification.oneDayLate = true
+      act.notification.isLate = true
+      isModified = true
+    }
+  } if (act.notification.oneDayLate == false) {
+
+    if (Temporal.PlainDateTime.compare(deadline.add({ days: 1 }), now) <= 0) {
+
+      notificationMessage.value = `"${act.title}" is One Day Late`;
+      msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
+      toast(msg.value, {
+        theme: "auto",
+        type: "default",
+        position: "top-left",
+        transition: "slide",
+        autoClose: false,
+        dangerouslyHTMLString: true,
+        style: {
+          backgroundColor: '#000000', // orange 
+          color: '#333',              // dark text for contrast
+        border: '2px solid rgb(255, 251, 0)',
+          fontWeight: 'bold',
+        }
+      });
+      //Tostami
+      act.notification.oneDayLate = true
+      act.notification.isLate = true
       isModified = true
     }
 
+  } if (act.notification.isLate == false) { //Se arrivto qui significa scaduto non servono ulteriori controlli
+    notificationMessage.value = `"${act.title}" is Expired!`;
+    msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
+    toast(msg.value, {
+      theme:"auto",
+      type: "default",
+      position: "top-left",
+      transition: "slide",
+      autoClose: false,
+      dangerouslyHTMLString: true,
+      style: {
+        backgroundColor: '#000000', // soft yellow
+        color: '#FFF',              // dark text for contrast
+        border: '2px solid rgb(25, 0, 255)',
+        fontWeight: 'bold',
+      }
+    });
+    //TOSTAMI
+    //Metti il noti
+    act.notification.isLate = true
+    isModified = true
   }
-
 
 
   if (isModified) { //Altrimenti non ce bisogno di fetch
