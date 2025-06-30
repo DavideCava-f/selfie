@@ -195,8 +195,10 @@ async function resetTimerCycle() {
   barTime.value = INITIAL_TIME.value;
   cycles.value = SetCycles.value;
   isSet.value = false;
-  lancetta.value.style.transform = "rotate(0deg)";
-  pomodoro.value.style.backgroundColor = "hsl(92, 99%, 37%)";
+  if(lancetta.value){
+    lancetta.value.style.transform = "rotate(0deg)";
+    pomodoro.value.style.backgroundColor = "hsl(92, 99%, 37%)";
+  }
 }
 
 function deletePomodoroEvent() {

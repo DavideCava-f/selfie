@@ -9,9 +9,9 @@ async function sweepPomodoros() {
   let pomodorosToSweep = store.value.pomodoros.filter((pomodoro) => {
     if (pomodoro.beginDate) {
       const finishPomodoroDateTime = Temporal.PlainDateTime.from(pomodoro.beginDate.slice(0, -1)).add({ minutes: (pomodoro.studyMins + pomodoro.pauseMins) * pomodoro.cycles });
-      console.log(pomodoro.beginDate);
-      console.log(pomodoro.completedCycles < pomodoro.cycles);
-      console.log(Temporal.PlainDate.compare(store.value.simDate, finishPomodoroDateTime.toPlainDate()));
+      //console.log(pomodoro.beginDate);
+      //console.log(pomodoro.completedCycles < pomodoro.cycles);
+      //console.log(Temporal.PlainDate.compare(store.value.simDate, finishPomodoroDateTime.toPlainDate()));
       const cond = pomodoro.completedCycles < pomodoro.cycles &&
         Temporal.PlainDate.compare(store.value.simDate, finishPomodoroDateTime.toPlainDate()) > 0;
       return cond;
@@ -19,7 +19,7 @@ async function sweepPomodoros() {
       return false;
     }
   }).map(pomodoro => ({ ...pomodoro }));
-  console.log(pomodorosToSweep);
+  //console.log(pomodorosToSweep);
 
   console.log("about to sweep");
   await fetch(`${store.value.url}:${store.value.port}/pomodoro/sweep`, {
@@ -49,11 +49,11 @@ async function sweepPomodoros() {
     pomodoro.completedCycles = 0;
     console.log(typeof pomodoro.beginDate);
   });
-  console.log("Pomodoros to sweep");
-  console.log(pomodorosToSweep);
+  //console.log("Pomodoros to sweep");
+  //console.log(pomodorosToSweep);
 
   const promiseCreation = pomodorosToSweep.map((pomodoro) => {
-    console.log(pomodoro.beginDate.toString());
+    //console.log(pomodoro.beginDate.toString());
     return fetch(`${store.value.url}:${store.value.port}/pomodoro`, {
       credentials: "include",
       method: "POST",
@@ -69,8 +69,8 @@ async function sweepPomodoros() {
       })
     })
   });
-  console.log("Pomodoros to create (promises)");
-  console.log(promiseCreation);
+  //console.log("Pomodoros to create (promises)");
+  //console.log(promiseCreation);
 
   await Promise.all(promiseCreation);
 

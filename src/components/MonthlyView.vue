@@ -164,7 +164,7 @@ function tooSmall(str) {
                     </button>
                 </div>
                 <div class="mx-0 mt-1 p-0 d-flex flex-column" style="overflow: hidden;">
-                    <div v-if="conta(i) > 2" class="d-flex flex-column align-items-start " style="overflow: hidden;">
+                    <div v-if="conta(i) + contaPom(i) > 2" class="d-flex flex-column align-items-start " style="overflow: hidden;">
                         <button @click="() => {
                             store.activeEventId = event._id; store.toggle = !store.toggle;
                             store.activeDate = firstDay.add({ days: i - 1 });
@@ -176,10 +176,19 @@ function tooSmall(str) {
                             :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
                             {{ event.title }}
                         </button>
+                        <button v-if="contaPom(i)>0 && (conta(i)<=1 )" v-for="pomodoro in store.pomodoros.filter((p) => Temporal.PlainDate.compare(Temporal.PlainDate.from(p.beginDate.slice(0, -1)), firstDay.add({ days: i - 1 })) === 0).slice(0, 2 - (conta(i)>2 ? 2 : conta(i)))"
+                            class="btn btn-danger d-flex d-inline-block align-items-center text-truncate event text-nowrap"
+                            @click="store.activePomodoro = pomodoro" data-bs-target="#PomodoroEventModal"
+                            data-bs-toggle="modal"
+                            :style="{'font-size': '100%',}">
+                            <span>🍅</span> <span class="d-none d-sm-block">{{ pomodoro.beginDate.split("T")[1].slice(0, 5) }}</span>
+                        </button>
+                        
                         <button class="btn event d-flex d-inline-block align-self-center align-items-center text-nowrap"
                             @click="() => {
                                 selectedDay = i;
-                                eventsOfSelectedDay = store.eventsOfMonth.find((d) => (d.day) === i).events;
+                                if(conta(i) > 0)
+                                    eventsOfSelectedDay = (store.eventsOfMonth.find((d) => (d.day) === i)).events;
                             }" data-bs-target="#AltriEventi" data-bs-toggle="modal">
                             altri eventi
                         </button>
@@ -204,7 +213,7 @@ function tooSmall(str) {
                             data-bs-target="#PomodoroEventModal" data-bs-toggle="modal">
                             <span>🍅</span> <span class="d-none d-sm-block">{{ pomodoro.beginDate.split("T")[1].slice(0, 5) }}</span>
                         </button>
-                        <button v-if="contaPom(i) > 2 - conta(i)"
+                        <!-- <button v-if="contaPom(i) > 2 - conta(i)"
                             class="btn event d-flex d-inline-block align-self-center align-items-center text-nowrap"
                             @click="() => {
                                 selectedDay = i;
@@ -212,7 +221,7 @@ function tooSmall(str) {
                                 store.activeDate = firstDay.add({ days: i - 1 });
                             }" data-bs-target="#AltriEventi" data-bs-toggle="modal">
                             altri eventi
-                        </button>
+                        </button> -->
                     </div>
                 </div>
 

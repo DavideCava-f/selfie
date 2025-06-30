@@ -59,11 +59,6 @@ watch(() => store.value.deltaDateTime, () => {
     update();
 });
 
-function gotoNote() {
-    console.log("gotoNote");
-    router.push("/notes");
-}
-
 function getVisibleDate(date) {
     date = date.slice(0, -1);
     var str =
@@ -72,6 +67,16 @@ function getVisibleDate(date) {
         new Date(date).toTimeString().split(" ")[0];
     str = str.slice(0, -3);
     return str;
+}
+
+function ToEvent(event) {
+    const d1 = Temporal.PlainDate.from(store.value.simDate);
+    const d2 = Temporal.PlainDate.from(event.dates[0].begin.slice(0, 10));
+
+    const diff = d2.since(d1);
+    console.log("week offsett:",diff.days%7 );
+    store.value.weekOffset+= Math.floor(diff.days / 7);
+    router.push('/calendar');
 }
 
 </script>
@@ -90,11 +95,10 @@ function getVisibleDate(date) {
                             <h1>Non ci sono eventi prossimi</h1>
                         </div>
                         <div v-else>
-                            <button v-for="event in nearEvents" @click="router.push('/calendar')"
+                            <button v-for="event in nearEvents" @click="ToEvent(event)"
                                 class="w-100 btn bg-success rounded-3 text-black my-1 align-items-center">
                                 <h2>{{ event.title }}</h2>
                                 {{ event.details.text }}
-                                <h3>ripetizioni:</h3>
                                 <div class="d-flex justify-content-center">
                                     <table class="table-success">
                                         <thead>
@@ -104,9 +108,9 @@ function getVisibleDate(date) {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="date in event.dates" :key="date.begin">
-                                                <td>{{ getVisibleDate(date.begin) }}</td>
-                                                <td>{{ getVisibleDate(date.end) }}</td>
+                                            <tr >
+                                                <td>{{ getVisibleDate(event.dates[0].begin) }}</td>
+                                                <td>{{ getVisibleDate(event.dates[0].end) }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -128,7 +132,7 @@ function getVisibleDate(date) {
                         <h2 class="mx-auto">Ultima nota modificata</h2>
                     </div>
                     <div class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center ">
-                        <button @click="gotoNote" class="w-100 btn bg-success rounded-3 text-black my-1">
+                        <button @click="router.push('/notes');" class="w-100 btn bg-success rounded-3 text-black my-1">
                             <h1 v-if="loaded">
                                 {{ lastnote?.Title }}
                             </h1>

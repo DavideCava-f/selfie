@@ -50,6 +50,9 @@ function visualMode(i) {
                     <button class="btn btn-outline-dark" @click="visualMode(1)" ref="monthButt">
                         Monthly
                     </button>
+                    <button class="btn btn-outline-dark" @click="isWeekly? store.weekOffset = 0 : store.monthOffset = 0; store.dayOffset = 0;">
+                        Oggi
+                    </button>
                 </div>
                 <component :is="isWeekly ? WeeklyView : MonthlyView"></component>
                 <button class="btn btn-primary rounded-circle fx-button d-flex align-items-center justify-content-center hover-div " style="position:fixed; right: 10; bottom: 10; z-index: 10"
