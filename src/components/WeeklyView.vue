@@ -5,7 +5,6 @@ import { getEventsOfWeek } from "@/eventGetter";
 import { getActivitiesOfWeek } from "@/activityGetter";
 import { getPomodoros } from "@/pomodoroGetter";
 import { Temporal } from "@js-temporal/polyfill";
-import VisualizeEvent from "@/components/VisualizeEvent.vue";
 import ActivityModal from "@/components/ActivityModal.vue";
 import Create from "@/components/Create.vue";
 

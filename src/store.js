@@ -1,10 +1,10 @@
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 // import OpenAI from "openai";
 import { Temporal } from "@js-temporal/polyfill";
 import { getEventsOfWeek, getEventsOfDay, getEventsOfMonth } from "@/eventGetter";
 import { getActivitiesOfDay, getActivitiesOfMonth, getActivitiesOfWeek } from "@/activityGetter";
 import { getPomodoros } from "@/pomodoroGetter";
-import { notipol, openDate } from "@/notipol";
+import { notipol } from "@/notipol";
 import "vue3-toastify/dist/index.css";
 import router from "./router/Router.js"
 
@@ -149,10 +149,5 @@ setInterval(
   10000
 );
 
-// watch(() => store.value.pomodoros, () => {
-//   if (store.value.activePomodoro && store.value.pomodoros.map((pomodoro) => pomodoro._id).includes(store.value.activePomodoro._id)) {
-//     store.value.activePomodoro = store.value.pomodoros.find((pomodoro) => store.value.activePomodoro._id === pomodoro._id);
-//   }
-// })
 
 export { store };

@@ -1,35 +1,15 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import NavBar from '@/components/NavBar.vue';
-import CreateEvent from "@/components/CreateEvent.vue";
+import { ref } from "vue";
 import VisualizeEvent from "@/components/VisualizeEvent.vue";
 import ModifyEvent from "@/components/ModifyEvent.vue";
 import DeleteEvent from "@/components/DeleteEvent.vue";
 import { store } from '@/store';
-import { Temporal } from "@js-temporal/polyfill";
 import MonthlyView from "@/components/MonthlyView.vue";
 import WeeklyView from "@/components/WeeklyView.vue";
 import DailyView from "@/components/DailyView.vue";
 import Create from "@/components/Create.vue";
 
 const isWeekly = ref(Boolean);
-
-let weekButt = ref(null);
-let monthButt = ref(null);
-
-function visualMode(i) {
-    if (i === 0) {
-        isWeekly.value = true;
-        weekButt.value.classList.add('active');
-        monthButt.value.classList.remove('active');
-
-    } else {
-        isWeekly.value = false;
-        monthButt.value.classList.add('active');
-        weekButt.value.classList.remove('active');
-    }
-}
-
 
 </script>
 
@@ -44,10 +24,10 @@ function visualMode(i) {
                 style="position: relative; background-color: #d16b7f;">
                 <!-- colonna calendario -->
                 <div class="p-lg-1 p-0 btn-group my-lg-0 my-1 mx-lg-0 mx-1" role="group">
-                    <button class="btn btn-outline-dark active" @click="visualMode(0)" ref="weekButt">
+                    <button @click="isWeekly=true" ref="weekButt" :class="{ 'active': isWeekly, 'btn': true, 'btn-outline-dark':true }">
                         Weekly
                     </button>
-                    <button class="btn btn-outline-dark" @click="visualMode(1)" ref="monthButt">
+                    <button @click="isWeekly=false" ref="monthButt" :class="{ 'active': !isWeekly, 'btn': true, 'btn-outline-dark':true }">
                         Monthly
                     </button>
                     <button class="btn btn-outline-dark" @click="isWeekly? store.weekOffset = 0 : store.monthOffset = 0; store.dayOffset = 0;">
@@ -61,20 +41,23 @@ function visualMode(i) {
                         <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
                     </svg>
                 </button>
-                <!-- Finestra MODALE di inserimento evento -->
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="createEventModal" data-bs-backdrop="false" tabindex="-1"
         aria-labelledby="createEventModal" aria-hidden="true">
         <Create/>
     </div>
+
     <div class="modal fade" id="VisualizeEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
         <VisualizeEvent />
     </div>
+
     <div class="modal fade" id="ModifyEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
         <ModifyEvent />
     </div>
+    
     <div class="modal fade" id="DeleteEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
         <DeleteEvent />
     </div>

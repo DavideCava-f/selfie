@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onUnmounted, watch } from 'vue';
+import { ref, computed, onUnmounted } from 'vue';
 import { store } from "@/store";
 import "vue3-toastify/dist/index.css";
 import { toast } from "vue3-toastify";
@@ -41,6 +41,10 @@ const formatTime = computed(() => {
 
 
 function setupTimer() {
+  if ((SetMinutes.value < 1 || !(/^-?[\d.]+(?:e-?\d+)?$/.test(SetMinutes.value)) ) || (SetCycles.value < 1 || !(/^-?[\d.]+(?:e-?\d+)?$/.test(SetCycles.value))) || (relaxingMinutes.value < 0 || !(/^-?[\d.]+(?:e-?\d+)?$/.test(relaxingMinutes.value)))) {
+    alert("Please set valid values for minutes, cycles, and relaxing minutes.");
+    return;
+  }
   pauseTimer();
   relaxing.value = false
   time.value = INITIAL_TIME.value
@@ -48,7 +52,6 @@ function setupTimer() {
   cycles.value = SetCycles.value
   isSet.value = true;
   lancetta.value.style.transform = "rotate(0deg)";
-  //pomodoro.value.style.backgroundColor = "#44cf69";
   pomodoro.value.style.backgroundColor = "hsl(92, 99%, 37%)";
   colorValue.value = 92;
   RateOfChange.value = colorValue.value / INITIAL_TIME.value;
@@ -226,6 +229,11 @@ async function findFactorsAsync(tot) {
 }
 
 async function CalcTime() {
+  if( TotalTime.value < 1) {
+    alert("Total time must be at least 1 minute.");
+    return;
+  }
+  
   let totalTime = TotalTime.value
   let divis = await findFactorsAsync(totalTime);
   if (divis.length == 0) return;
@@ -261,7 +269,6 @@ function reset() {
     lancetta.value.style.transform = "rotate(0)";
     pomodoro.value.style.backgroundColor = "#44cf69";
   }
-
 }
 
 function createPomodoroEvent() {
@@ -302,39 +309,40 @@ onUnmounted(() => {
       <div class="modal-body d-flex flex-column text-center">
         <div class="brand">Pomodoro Timer</div>
         <div v-if="!isSet">
-          <div>
+          <div class="container">
             <input v-model="TotalTime" type="number" min="1" />
-            <button @click="CalcTime">Generate intervals</button>
-            <label>
-              Minutes
-              <input v-model="SetMinutes" />
-            </label>
-            <br>
-            <label>
-              Cycles
-              <select v-model="SetCycles">
-                <option v-for="n in Math.max(SetCycles, 50)" :key="n" :value="n">{{ n }}</option>
-              </select>
-            </label>
-            <br>
-            <label>
-              RelaxingMinutes
-              <input v-model="relaxingMinutes" />
-            </label>
+            <button @click="CalcTime" class="button-style">Generate intervals</button>
+            <div class="row">
+              <div class="col-4 d-flex flex-column">
+                Study minutes:
+                <input v-model="SetMinutes" style="width: 100%;" />
+              </div>
+              <div class="col-4 d-flex flex-column">
+                Cycles  
+                <input  v-model="SetCycles" type="number" min="1" max="50" style="width: 100%;"/>
+                  <!-- <select v-model="SetCycles">
+                    <option v-for="n in Math.max(SetCycles, 50)" :key="n" :value="n">{{ n }}</option>
+                  </select> -->         
+              </div>
+              <div class="col-4 d-flex flex-column">
+                  Relax minutes:
+                  <input  v-model="relaxingMinutes" style="width: 100%;"/>
+              </div>
+            </div>
+            
           </div>
         </div>
 
         <div v-if="!isSet">
-          <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
-            <button type="button" class="btn btn-outline-primary active" @click="mode = 0">
+          <div class="btn-group my-2" role="group" aria-label="button group">
+            <button :class="{ 'active': mode===0, 'btn': true, 'btn-outline-success':true }" @click="mode = 0" style="font-size: 1.5rem;">
               Now
             </button>
-            <button type="button" :disabled="isRunning" class="btn btn-outline-primary" @click="mode = 1">
+            <button :disabled="isRunning" :class="{'active': mode===1, 'btn': true, 'btn-outline-dark':true }" @click="mode = 1" style="font-size: 1.5rem;">
               Plan
             </button>
           </div>
         </div>
-
         <div class="d-flex justify-content-between">
           <label>
             Studying Minutes: {{ SetMinutes }}
@@ -349,8 +357,8 @@ onUnmounted(() => {
 
         <div v-if="mode === 0">
           <div class="d-flex justify-content-center">
-            <button @click="setupTimer" :disabled="isSet">Set</button>
-            <button @click="resetTimerCycle" :disabled="isRunning" class="reset-button">Reset</button>
+            <button @click="setupTimer" :disabled="isSet" class="button-style">Set</button>
+            <button @click="resetTimerCycle" :disabled="isRunning" class="reset-button button-style">Reset</button>
           </div>
           <div v-if="cycles">
             Remaining cycles: {{ cycles }}
@@ -368,9 +376,9 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <button @click="startTimer" :disabled="isRunning">Start</button>
-          <button @click="pauseTimer" :disabled="!isRunning" class="pause-button">Pause</button>
-          <button @click="forceCycle" :disabled="!isRunning" class="pause-button">Next</button>
+          <button @click="startTimer" :disabled="isRunning" class="button-style">Start</button>
+          <button @click="pauseTimer" :disabled="!isRunning" class="pause-button button-style">Pause</button>
+          <button @click="forceCycle" :disabled="!isRunning" class="pause-button button-style">Next</button>
         </div>
         <div v-else>
           <DateTimePicker v-model:date="startDate" v-model:time="startTime" />
@@ -424,7 +432,7 @@ onUnmounted(() => {
   transition: width 0.5s ease-in-out;
 }
 
-button {
+.button-style {
   font-size: 1.5rem;
   padding: 10px 20px;
   margin: 5px;
@@ -437,9 +445,7 @@ button {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-button:hover:not(:disabled) {
-  background-color: #45a049;
-}
+
 
 .reset-button {
   background-color: #ff5252;

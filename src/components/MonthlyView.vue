@@ -5,8 +5,6 @@ import { store } from "@/store";
 import { getEventsOfMonth } from "@/eventGetter";
 import { getActivitiesOfMonth } from "@/activityGetter";
 import { getPomodoros } from "@/pomodoroGetter";
-import VisualizeEvent from "@/components/VisualizeEvent.vue";
-import ModifyEvent from "@/components/ModifyEvent.vue";
 import Create from "@/components/Create.vue";
 import ActivityModal from "@/components/ActivityModal.vue";
 

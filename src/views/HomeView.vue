@@ -1,5 +1,4 @@
 <script setup>
-import NavBar from "@/components/NavBar.vue";
 import { store } from "@/store";
 import { ref, onBeforeMount, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
@@ -87,7 +86,7 @@ function ToEvent(event) {
             <div class="col-lg-3 col-12 animate-card-downward"><!-- colonna prossimi eventi -->
 
                 <div class="card text-bg-danger mb-3" style="max-height: 80vh;">
-                    <div class="card-header align-items-center">
+                    <div class="card-header d-flex align-items-center ">
                         <h2 class="mx-auto">Eventi prossimi</h2>
                     </div>
                     <div class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center">
@@ -115,11 +114,6 @@ function ToEvent(event) {
                                         </tbody>
                                     </table>
                                 </div>
-
-                                <!-- <div v-for="date in event.dates">
-                                    <p>{{ getVisibleDate(date.begin) }}</p>
-                                    <p>{{ getVisibleDate(date.end) }}</p>
-                                </div> -->
                             </button>
                         </div>
                     </div>
@@ -128,7 +122,7 @@ function ToEvent(event) {
             <div class="col-lg-3 col-12 animate-card-upward"><!-- colonna ultima nota -->
 
                 <div class="card text-bg-danger mb-3" style="max-height: 80vh;">
-                    <div class="card-header align-items-center">
+                    <div class="card-header d-flex align-items-center">
                         <h2 class="mx-auto">Ultima nota modificata</h2>
                     </div>
                     <div class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center ">
@@ -152,8 +146,8 @@ function ToEvent(event) {
             </div>
             <div class="col-lg-3 col-12 animate-card-downward">
                 <div class="card text-bg-danger mb-3" style="max-height: 80vh;">
-                    <div class="card-header align-items-center">
-                        <h2 class="mx-auto">Utlimo pomodoro completato</h2>
+                    <div class="card-header d-flex align-items-center justify-content-center text-center">
+                        <h1 class="mx-auto">Utlimo pomodoro completato</h1>
                     </div>
                     <div class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center">
                         <div v-if="!pomodoro.value" class="rounded" style="background-color: #f383a5;">
@@ -202,23 +196,6 @@ function ToEvent(event) {
                         </div>
                     </div>
                 </div>
-
-
-                <!-- <div class="align-items-center">
-                    <h2 class="mx-auto">Report ultimo pomodoro</h2>
-                </div>
-                <div class="container-fluid bg-danger d-flex flex-column overflow-scroll rounded-4"
-                    style="max-height: 80vh">
-                    <div class="bg-success rounded-3 text-black m-2">
-                        <div v-if="pomodoro.value">
-
-                        </div>
-                        <div v-else>
-                            Nessun pomodoro fatto
-                        </div>
-
-                    </div>
-                </div> -->
             </div>
         </div>
     </div>
