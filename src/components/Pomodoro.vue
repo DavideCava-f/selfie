@@ -41,6 +41,10 @@ const formatTime = computed(() => {
 
 
 function setupTimer() {
+  if ((SetMinutes.value < 1 || !(/^-?[\d.]+(?:e-?\d+)?$/.test(SetMinutes.value)) ) || (SetCycles.value < 1 || !(/^-?[\d.]+(?:e-?\d+)?$/.test(SetCycles.value))) || (relaxingMinutes.value < 0 || !(/^-?[\d.]+(?:e-?\d+)?$/.test(relaxingMinutes.value)))) {
+    alert("Please set valid values for minutes, cycles, and relaxing minutes.");
+    return;
+  }
   pauseTimer();
   relaxing.value = false
   time.value = INITIAL_TIME.value
@@ -265,7 +269,6 @@ function reset() {
     lancetta.value.style.transform = "rotate(0)";
     pomodoro.value.style.backgroundColor = "#44cf69";
   }
-
 }
 
 function createPomodoroEvent() {
@@ -308,7 +311,7 @@ onUnmounted(() => {
         <div v-if="!isSet">
           <div class="container">
             <input v-model="TotalTime" type="number" min="1" />
-            <button @click="CalcTime">Generate intervals</button>
+            <button @click="CalcTime" class="button-style">Generate intervals</button>
             <div class="row">
               <div class="col-4 d-flex flex-column">
                 Study minutes:
@@ -331,16 +334,15 @@ onUnmounted(() => {
         </div>
 
         <div v-if="!isSet">
-          <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
-            <button type="button" class="btn btn-outline-primary active" @click="mode = 0">
+          <div class="btn-group my-2" role="group" aria-label="button group">
+            <button :class="{ 'active': mode===0, 'btn': true, 'btn-outline-success':true }" @click="mode = 0" style="font-size: 1.5rem;">
               Now
             </button>
-            <button type="button" :disabled="isRunning" class="btn btn-outline-primary" @click="mode = 1">
+            <button :disabled="isRunning" :class="{'active': mode===1, 'btn': true, 'btn-outline-dark':true }" @click="mode = 1" style="font-size: 1.5rem;">
               Plan
             </button>
           </div>
         </div>
-
         <div class="d-flex justify-content-between">
           <label>
             Studying Minutes: {{ SetMinutes }}
@@ -355,8 +357,8 @@ onUnmounted(() => {
 
         <div v-if="mode === 0">
           <div class="d-flex justify-content-center">
-            <button @click="setupTimer" :disabled="isSet">Set</button>
-            <button @click="resetTimerCycle" :disabled="isRunning" class="reset-button">Reset</button>
+            <button @click="setupTimer" :disabled="isSet" class="button-style">Set</button>
+            <button @click="resetTimerCycle" :disabled="isRunning" class="reset-button button-style">Reset</button>
           </div>
           <div v-if="cycles">
             Remaining cycles: {{ cycles }}
@@ -374,9 +376,9 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <button @click="startTimer" :disabled="isRunning">Start</button>
-          <button @click="pauseTimer" :disabled="!isRunning" class="pause-button">Pause</button>
-          <button @click="forceCycle" :disabled="!isRunning" class="pause-button">Next</button>
+          <button @click="startTimer" :disabled="isRunning" class="button-style">Start</button>
+          <button @click="pauseTimer" :disabled="!isRunning" class="pause-button button-style">Pause</button>
+          <button @click="forceCycle" :disabled="!isRunning" class="pause-button button-style">Next</button>
         </div>
         <div v-else>
           <DateTimePicker v-model:date="startDate" v-model:time="startTime" />
@@ -430,7 +432,7 @@ onUnmounted(() => {
   transition: width 0.5s ease-in-out;
 }
 
-button {
+.button-style {
   font-size: 1.5rem;
   padding: 10px 20px;
   margin: 5px;
@@ -443,9 +445,7 @@ button {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-button:hover:not(:disabled) {
-  background-color: #45a049;
-}
+
 
 .reset-button {
   background-color: #ff5252;
