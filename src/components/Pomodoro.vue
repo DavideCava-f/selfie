@@ -51,9 +51,7 @@ function setupTimer() {
   pomodoro.value.style.backgroundColor = "hsl(92, 99%, 37%)";
   colorValue.value = 92;
   RateOfChange.value = colorValue.value / INITIAL_TIME.value;
-  console.log("RateOfChange: " + RateOfChange.value);
   relaxChange.value = colorValue.value / relaxingTime.value;
-  console.log("RelaxChange: " + relaxChange.value);
 
 }
 
@@ -95,8 +93,6 @@ async function tick() {
         time.value = relaxingTime.value
         barTime.value = relaxingTime.value
         relaxing.value = true
-
-
       } else {
         AdvanceCycle();
         let notificationMessage = "Ricominciato ciclo n:" + cycles.value
@@ -135,6 +131,22 @@ async function tick() {
           fontWeight: 'bold',
         }
       });
+      fetch(`${store.value.url}:${store.value.port}/pomodoro`, {
+        credentials: "include",
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          beginDate: null,
+          cycles: SetCycles.value,
+          studyMins: SetMinutes.value,
+          pauseMins: relaxingMinutes.value,
+          completedCycles: SetCycles.value, 
+          completedDate: store.value.simDateTime, // Use the simulated date time
+        })
+        }).then(() => { console.log("pomodoro created correctly"); store.value.update(); });
     }
   }
 }
@@ -248,6 +260,7 @@ function reset() {
     lancetta.value.style.transform = "rotate(0)";
     pomodoro.value.style.backgroundColor = "#44cf69";
   }
+  
 }
 
 function createPomodoroEvent() {
@@ -263,6 +276,8 @@ function createPomodoroEvent() {
       cycles: SetCycles.value,
       studyMins: SetMinutes.value,
       pauseMins: relaxingMinutes.value,
+      completedCycles: 0, // Assuming all cycles are completed
+      completedDate: null // No completion date yet
     })
   }).then(() => { console.log("pomodoro created correctly"); store.value.update(); });
 }

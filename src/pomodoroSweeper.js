@@ -7,13 +7,17 @@ async function sweepPomodoros() {
   // Li completa (taggandoli per evitare il doppio sweep) e crea nuovi pomodori
   // dei cicli rimanenti a oggi;
   let pomodorosToSweep = store.value.pomodoros.filter((pomodoro) => {
-    const finishPomodoroDateTime = Temporal.PlainDateTime.from(pomodoro.beginDate.slice(0, -1)).add({ minutes: (pomodoro.studyMins + pomodoro.pauseMins) * pomodoro.cycles });
-    console.log(pomodoro.beginDate);
-    console.log(pomodoro.completedCycles < pomodoro.cycles);
-    console.log(Temporal.PlainDate.compare(store.value.simDate, finishPomodoroDateTime.toPlainDate()));
-    const cond = pomodoro.completedCycles < pomodoro.cycles &&
-      Temporal.PlainDate.compare(store.value.simDate, finishPomodoroDateTime.toPlainDate()) > 0;
-    return cond;
+    if (pomodoro.beginDate) {
+      const finishPomodoroDateTime = Temporal.PlainDateTime.from(pomodoro.beginDate.slice(0, -1)).add({ minutes: (pomodoro.studyMins + pomodoro.pauseMins) * pomodoro.cycles });
+      console.log(pomodoro.beginDate);
+      console.log(pomodoro.completedCycles < pomodoro.cycles);
+      console.log(Temporal.PlainDate.compare(store.value.simDate, finishPomodoroDateTime.toPlainDate()));
+      const cond = pomodoro.completedCycles < pomodoro.cycles &&
+        Temporal.PlainDate.compare(store.value.simDate, finishPomodoroDateTime.toPlainDate()) > 0;
+      return cond;
+    } else {
+      return false;
+    }
   }).map(pomodoro => ({ ...pomodoro }));
   console.log(pomodorosToSweep);
 

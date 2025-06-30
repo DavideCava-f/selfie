@@ -9,7 +9,6 @@ let closed = ref(false);
 
 const props = defineProps({
     date: String,
-    closed: Boolean
 });
 
 onMounted(() => {
@@ -19,7 +18,6 @@ onMounted(() => {
 });
 
 watch(() => props.date,()=> {console.log(props.date)})
-watch(() => props.closed, () => {console.log(props.closed)})
 
 </script>
 
@@ -35,7 +33,7 @@ watch(() => props.closed, () => {console.log(props.closed)})
             </div>
             <div class="">
                 <div v-if="choice">
-                    <CreateEvent :date="props.date" :closed="props.closed"/>
+                    <CreateEvent :date="props.date" />
                 </div>
                 <div v-else>
                     <CreateActivity @created="store.update()" />
