@@ -16,7 +16,8 @@ router.post("/", verifyToken, async function(req, res) {
       cycles: req.body.cycles,
       studyMins: req.body.studyMins,
       pauseMins: req.body.pauseMins,
-      completedCycles: 0,
+      completedCycles: req.body.completedCycles, // Default to 0 if not provided
+      completedDate: req.body.completedDate // Default to null if not provided,
     });
     res.status(200).send();
   } catch (error) {
@@ -30,7 +31,7 @@ router.post("/", verifyToken, async function(req, res) {
  * */
 router.get("/", verifyToken, async function(req, res) {
   try {
-    const pomodoros = await Pomodoro.find({ userId: req.userId });
+    const pomodoros = await Pomodoro.find({ userId: req.userId, beginDate:{$ne: null} });
     res.status(200).json(pomodoros);
   } catch (error) {
     console.error(error);
@@ -56,6 +57,9 @@ router.put("/", verifyToken, async function(req, res) {
     await Pomodoro.updateOne({ _id: id }, {
       $inc: {
         completedCycles: 1
+      },
+      $set:{
+        completedDate: req.query.completedDate
       }
     });
     res.status(200).send();
@@ -94,6 +98,21 @@ router.put("/reset", verifyToken, async function(req, res) {
     console.error(error);
     res.status(500).json(error);
   }
-})
+});
+
+router.get("/last", verifyToken, async function(req, res) {
+  try {
+    const lastPomodoro = await Pomodoro.find({ userId: req.userId }).sort({completedDate: -1 }).limit(1);
+    if (lastPomodoro.length === 0) {
+      return res.status(404).send("No pomodoros found");
+    }
+    console.log("Last pomodoro found:");
+    console.log(lastPomodoro[0]);
+    res.status(200).json(lastPomodoro[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
+  }
+});
 
 export default router;

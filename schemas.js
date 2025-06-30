@@ -49,7 +49,8 @@ const PomodoroSchema = new Schema({
     studyMins: Number,
     pauseMins: Number,
     completedCycles: Number,
-})
+    completedDate: Date
+});
 
 const NoteSchema = new Schema({
     userId: { type: Schema.Types.ObjectId, ref: "User" },

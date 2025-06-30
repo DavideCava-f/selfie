@@ -129,6 +129,16 @@ async function tick() {
           fontWeight: 'bold',
         }
       });
+      fetch(`${store.value.url}:${store.value.port}/pomodoro?id=${store.value.activePomodoro._id}&completedDate=${store.value.simDateTime}`, {
+        credentials: "include",
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          'Content-Type': 'application/json',
+        },
+      }).then(() => {
+        console.log("pomodoro updated correctly");
+      });
       alert('Time is up!');
     }
   }

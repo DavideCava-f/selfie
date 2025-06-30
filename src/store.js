@@ -11,6 +11,7 @@ import router from "./router/Router.js"
 export const NotesList = ref([]);
 
 const store = ref({
+  // DATE AND TIME
   realDateTime: Temporal.Now.plainDateTimeISO(),
   deltaDateTime: Temporal.Duration.from({
     years: 0,
@@ -56,6 +57,8 @@ const store = ref({
   // defaultHeaders: {},
   // dangerouslyAllowBrowser: true,
   // }),
+  
+  //SERVER:
 
   //url: "https://site232465.tw.cs.unibo.it",
   url: "http://localhost",
@@ -69,6 +72,7 @@ const store = ref({
     return response.ok;
   },
 
+  //EVENTS
   activeEventId: null,
   activeDate: null,
 
@@ -83,9 +87,17 @@ const store = ref({
   activitiesOfWeek: [],
   activitiesOfMonth: [],
 
+  // POMODORO
   pomodoros: [],
   activePomodoro: null,
+  last_pomodoro:{
+    studyTime: 0,
+    breakTime: 0,
+    cycles: 0,
+    completed: false
+  },
 
+  //UTILITIES
   toggle: false,
 
   update: async () => {
@@ -99,6 +111,7 @@ const store = ref({
     store.value.toggle = !store.value.toggle;
   },
 
+  //NOTIFICHE
   advance: { // non avendo le Tuple ho dovuto adattarmi al meglio delle mie possibilità ♠♥♣♦ 
     oneDay: [Temporal.Duration.from({ days: 1 }), "oneDay"],
     twoDays: [Temporal.Duration.from({ days: 2 }), "twoDays"],
