@@ -4,24 +4,23 @@ import { ref, watch, watchEffect, reactive } from "vue";
 import { store } from "@/store";
 import { EventCreator } from "@/eventCreator";
 import { Temporal } from "@js-temporal/polyfill";
-
+import DateTimePicker from './DateTimePicker.vue';
 
 const emit = defineEmits(["created"]);
 
 const activityTitle = ref(null);
 const activityText = ref(null);
+const deadline = ref(false);
 const activityDeadlineDate = ref(null);
 const activityDeadlineTime = ref(null);
 
 function canCreateActivity() {
-    return activityTitle.value &&
-        activityDeadlineDate.value &&
-        activityDeadlineTime.value;
+    return activityTitle.value;
 }
 
 function setDeadlineNow() {
     activityDeadlineDate.value = store.value.simDate.toString();
-    activityDeadlineTime.value = store.value.simTime.slice(0, 5);
+    activityDeadlineTime.value = store.value.simTime.slice(0, 5) + ":00";
 }
 
 function resetDeadline() {
@@ -33,7 +32,7 @@ function createActivity() {
     console.log("create activity");
     console.log(activityDeadlineDate.value);
     console.log(activityDeadlineTime.value);
-   
+
     let simDate = store.value.simDateTime.toString().split('.')[0] + '.000Z'
     console.log(simDate)
     fetch(`${store.value.url}:${store.value.port}/activity`, {
@@ -46,8 +45,8 @@ function createActivity() {
         body: JSON.stringify({
             title: activityTitle.value,
             text: activityText.value,
-            deadlineDate: activityDeadlineDate.value + "T" + activityDeadlineTime.value + ":00.000Z",
-            creationDate : simDate
+            deadlineDate: activityDeadlineDate.value ? activityDeadlineDate.value + "T" + activityDeadlineTime.value + ".000Z" : null,
+            creationDate: simDate
         })
     }).then(response => {
         console.log("non ci arrivo");
@@ -81,16 +80,20 @@ function createActivity() {
                 <br />
 
                 <div class="my-2">
-                    <label>Deadline (optional)</label>
-                    <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
-                        <input class="form-control" type="date" v-model="activityDeadlineDate" />
-                        <input class="form-control" type="time" v-model="activityDeadlineTime" />
+                    <div>
+                        <input type="checkbox" v-model="deadline" class="form-check-input" id="deadline">
+                        <label class="form-check-label" for="deadline">Deadline (optional)</label>
+                    </div>
+                    <div v-if="deadline" class="d-flex gap-2">
                         <button class="btn btn-outline-primary" @click="setDeadlineNow">
                             Now
                         </button>
                         <button class="btn btn-outline-danger" @click="resetDeadline">
                             Reset
                         </button>
+                    </div>
+                    <div v-if="deadline">
+                        <DateTimePicker v-model:date="activityDeadlineDate" v-model:time="activityDeadlineTime" />
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end">
@@ -106,16 +109,15 @@ function createActivity() {
 </template>
 
 <style scoped>
-
 .custom-modal {
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(200, 50, 100, 0.1);
-  border: 1px solid #ff0051;
-  background-color: #ffd0da;
-}
-.bg-header {
-  background-color: #f383a5;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(200, 50, 100, 0.1);
+    border: 1px solid #ff0051;
+    background-color: #ffd0da;
 }
 
+.bg-header {
+    background-color: #f383a5;
+}
 </style>

@@ -17,7 +17,7 @@ onMounted(() => {
     closed.value = false;
 });
 
-watch(() => props.date,()=> {console.log(props.date)})
+watch(() => props.date, () => { console.log(props.date) })
 
 </script>
 
@@ -29,7 +29,7 @@ watch(() => props.date,()=> {console.log(props.date)})
                     Create Event
                 </button>
                 <button class="btn modal-title fs-4" @click="choice = false">Create Activity</button>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="store.toggle=!store.toggle"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="">
                 <div v-if="choice">
@@ -44,17 +44,15 @@ watch(() => props.date,()=> {console.log(props.date)})
 </template>
 
 <style scoped>
-
 .custom-modal {
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(200, 50, 100, 0.1);
-  border: 1px solid #ff0051;
-  background-color: #ffd0da;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(200, 50, 100, 0.1);
+    border: 1px solid #ff0051;
+    background-color: #ffd0da;
 }
+
 .bg-header {
-  background-color: #f383a5;
+    background-color: #f383a5;
 }
-
-
 </style>

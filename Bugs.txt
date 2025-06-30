@@ -1,6 +1,7 @@
 BUGS:
 
 POMODORO
+- Integrare Date Picker per pomodoro plan (Trava)
 
 
 N0TE
@@ -12,14 +13,11 @@ CALENDARIO
 COSE DA FARE:
 - Gestire la palette generale del progetto, per i vari modal
 - Migliorare Interfaccia delle notifiche
-- Integrare Date Picker per modifica
-- Click sulla visualizzazione settimanale per creare evento
+- Click sulla visualizzazione settimanale per creare evento (Trava)
 - Milgiorare schermata altri eventi
 
-
 ATTIVITA
-- Integrare Date Picker per attivita
-
+- Integrare Date Picker per attivita (Trava)
 
 POMODORO
 - Interfaccia piu leggera e user friendly

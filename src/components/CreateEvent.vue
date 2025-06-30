@@ -10,14 +10,14 @@ const props = defineProps({
   date: String,
 });
 
-watch(() => props.date, () => { 
-  if (props.date !== undefined && props.date !== null){
+watch(() => props.date, () => {
+  if (props.date !== undefined && props.date !== null) {
+    console.log("MANNAGGIA A GESU'");
     resetFields();
     eventBeginDate.value = props.date
     eventEndDate.value = props.date
-  }});
-
-watch(()=> store.value.toggle, () => { resetFields() });
+  }
+});
 
 const eventTitle = ref(null);
 const eventText = ref(null);
@@ -76,7 +76,7 @@ function setEndNow() {
 function resetFields() {
   eventTitle.value = "";
   eventText.value = "";
-  setBeginNow(); 
+  setBeginNow();
   setEndNow();
   repeatable.value = false;
   frequenceSelected.value = { type: "d", option: [...Array(7)] };
@@ -372,8 +372,6 @@ watch(eventBeginDate, setDayOfWeek);
         <div v-if="notifiable" class="row my-2">
           <div class="col-sm-6 col-12">
             <label>When to notify</label>
-            <!-- FIXME: il multiple select su telefono non funziona! -->
-
             <div v-for="(advance, idx) in store.advance" :key="idx" class="form-check"
               @click="console.log(notificationRawSelected)">
               <input class="form-check-input" type="checkbox" :id="'notify-' + idx" :value="advance[1]"

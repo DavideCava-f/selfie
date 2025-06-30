@@ -76,7 +76,6 @@ const ActivitySchema = new Schema({
     text: String,
     completed: Boolean,
     notification: { //Ogni campo indica se notificato in quel momento
-
         isLate: Boolean,
         oneDayLate: Boolean,
         oneWeekLate: Boolean,
