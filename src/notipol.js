@@ -108,7 +108,6 @@ async function ActivityNotification(act) {
     notificationMessage.value = `"${act.title}" is Expired!`;
     msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
     toast(msg.value, {
-      toastId: Date.now(),
       theme:"auto",
       type: "default",
       position: "top-left",
@@ -133,7 +132,6 @@ async function ActivityNotification(act) {
       notificationMessage.value = `"${act.title}" is One Day Late`;
       msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
       toast(msg.value, {
-      toastId: Date.now(),
         theme: "auto",
         type: "default",
         position: "top-left",
@@ -159,7 +157,6 @@ async function ActivityNotification(act) {
       notificationMessage.value = `"${act.title}" is One Week`;
       msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
       toast(msg.value, {
-      toastId: Date.now(),
         theme: "auto",
         type: "default",
         position: "top-left",
