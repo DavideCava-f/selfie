@@ -200,8 +200,6 @@ async function ActivityNotification(act) {
     );
 
   }
-
-
 }
 
 async function notipol() {
@@ -222,9 +220,16 @@ async function notipol() {
       credentials: "include"
     });
     let Acts = await activities.json();
+    let toReturn = false
     let Expired = Acts.filter((el) => {
+      if(!el.dates[0].deadline){
+        toReturn = false;
+      }else{
+
       let deadline = Temporal.PlainDateTime.from(el.dates[0].deadline.slice(0, -1))
-      return el.completed == false && Temporal.PlainDateTime.compare(deadline, now) < 0;
+      toReturn =  el.completed == false && Temporal.PlainDateTime.compare(deadline, now) < 0;
+      }
+      return toReturn
     })
     console.log("ACTST")
     console.log(Expired)
