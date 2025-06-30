@@ -111,8 +111,10 @@ function getAct() {
 function updateAct(id, text, title, deadline) {
   if(deadline){
     hasDeadline.value = true
+    console.log("bedig")
   ActUpdateDeadlineDate.value = deadline.split("T")[0]
   ActUpdateDeadlineTime.value = deadline.split("T")[1].substring(0, 5)
+  console.log(ActUpdateDeadlineDate.value)
 
   }else{
     hasDeadline.value = false
