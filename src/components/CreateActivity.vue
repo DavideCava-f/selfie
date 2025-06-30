@@ -71,6 +71,7 @@ function createActivity() {
                 <h1 class="modal-title fs-4" id="staticBackdropLabel">
                     Create new Activity
                 </h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click=""></button>
             </div>
             <div class="modal-body">
                 <div class="my-2">
@@ -95,17 +96,16 @@ function createActivity() {
                 <div v-if="hasDeadline">
                 <div class="my-2">
                     <div>
-                        <input type="checkbox" v-model="deadline" class="form-check-input" id="deadline">
+              <input class="form-control" type="date" v-model="ActivityDeadlineDate" />
+              <input class="form-control" type="time" v-model="ActivityDeadlineTime" />
                         <label class="form-check-label" for="deadline">Deadline (optional)</label>
                     </div>
-                    <div v-if="deadline" class="d-flex gap-2">
-                        <button class="btn btn-outline-primary" @click="setDeadlineNow">
+                        <button class="btn btn-outline-primary" @click="setDeadlineNow()">
                             Now
                         </button>
-                        <button class="btn btn-outline-danger" @click="resetDeadline">
+                        <button class="btn btn-outline-danger" @click="resetDeadline()">
                             Reset
                         </button>
-                    </div>
                 </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end">
