@@ -1,13 +1,11 @@
 BUGS:
 
 POMODORO
-- Integrare Date Picker per pomodoro plan (Trava)
 
 N0TE
 - Per Ora OK
 
 CALENDARIO 
-- Pulsante Timido di create che si nasconde dietro le attivita
 
 COSE DA FARE:
 - Gestire la palette generale del progetto, per i vari modal
