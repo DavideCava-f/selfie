@@ -10,14 +10,16 @@ const props = defineProps({
   date: String,
   closed: Boolean
 });
+
+
 watch(() => props.date, () => { 
   if (props.date !== undefined && props.date !== null){
-    eventBeginDate.value = props.date
     resetFields();
+    eventBeginDate.value = props.date
+    eventEndDate.value = props.date
   }});
 
 watch(()=> store.value.toggle, () => { resetFields() });
-
 
 const eventTitle = ref(null);
 const eventText = ref(null);
@@ -41,6 +43,7 @@ const notificationSelected = computed(() => Object.keys(store.value.advance).map
 const notifyUntilAck = ref(false);
 const eventLink = ref(null);
 
+watch([eventBeginDate, eventEndDate], () => repeatable.value = false)
 async function generateDetails() {
   const completion = await store.value.openai.chat.completions.create({
     model: "deepseek/deepseek-r1-distill-llama-70b:free",
@@ -75,7 +78,7 @@ function setEndNow() {
 function resetFields() {
   eventTitle.value = "";
   eventText.value = "";
-  setBeginNow();
+  setBeginNow(); 
   setEndNow();
   repeatable.value = false;
   frequenceSelected.value = { type: "d", option: [...Array(7)] };

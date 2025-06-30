@@ -42,7 +42,6 @@ function toggleChange(id, compl) {
 }
 
 function deleteAct(id) {
-  console.log(id)
   fetch(`${store.value.url}:${store.value.port}/activity`, {
     method: "delete",
     credentials: "include",
@@ -74,15 +73,14 @@ function getAct() {
     })
     .then((data) => {
       data.forEach((el) => {
-        console.log(el)
         let date = (el.dates[0].deadline).slice(0, -1);
         if (!el.completed) {
 
           if (Temporal.PlainDateTime.compare(store.value.simDateTime, Temporal.PlainDateTime.from(date)) <= 0 || !el.dates[0].deadline) {
-            console.log(el.dates[0].deadline)
             TODOAct.value.push(el)
           } else {
             RetardedAct.value.push(el)
+            console.log(el.dates[0].deadline)
           }
         } else {
           CompletedAct.value.push(el)
@@ -157,8 +155,8 @@ onMounted(() => {
               {{ act.text }}
               <hr />
               <div>
-                Creation:{{ new Date(act.dates[0].creation).toLocaleString() }} | Deadline:{{ new
-                  Date(act.dates[0].deadline).toLocaleString() }}
+                Creation:{{ act.dates[0].creation.toString().split('T')[0] }} , {{ act.dates[0].creation.toString().split('T')[1].slice(0,-5) }} |
+                Deadline:{{ act.dates[0].deadline.toString().split('T')[0] }} , {{ act.dates[0].deadline.toString().split('T')[1].slice(0,-5) }}
               </div>
               <div>
                 <span><button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#DeleteActModal" @click="selectedCard = act._id">
@@ -191,8 +189,8 @@ onMounted(() => {
               {{ act.text }}
               <hr />
               <div>
-                Creation:{{ new Date(act.dates[0].creation).toLocaleString() }} | Deadline:{{ new
-                Date(act.dates[0].deadline).toLocaleString() }}
+                Creation:{{ act.dates[0].creation.toString().split('T')[0] }} , {{ act.dates[0].creation.toString().split('T')[1].slice(0,-5) }} |
+                Deadline:{{ act.dates[0].deadline.toString().split('T')[0] }} , {{ act.dates[0].deadline.toString().split('T')[1].slice(0,-5) }}
             </div>
             <div>
               <span><button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#DeleteActModal" @click="selectedCard = act._id">
@@ -225,8 +223,8 @@ onMounted(() => {
         {{ act.text }}
         <hr />
         <div>
-          Creation:{{ new Date(act.dates[0].creation).toLocaleString() }} | Deadline:{{ new
-            Date(act.dates[0].deadline).toLocaleString() }}
+                Creation:{{ act.dates[0].creation.toString().split('T')[0] }} , {{ act.dates[0].creation.toString().split('T')[1].slice(0,-5) }} |
+                Deadline:{{ act.dates[0].deadline.toString().split('T')[0] }} , {{ act.dates[0].deadline.toString().split('T')[1].slice(0,-5) }}
         </div>
         <div>
           <span><button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#DeleteActModal" @click="selectedCard = act._id">

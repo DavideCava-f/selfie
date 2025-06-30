@@ -9,14 +9,14 @@ const router = express.Router();
 dotenv.config();
 
 router.post("/", verifyToken, async function(req, res) {
-    console.log(req.body.deadlineDate)
+    console.log(req.body.creationDate)
     try {
         await Activity.create({
             userId: req.userId,
             dates: [
                 {
-                    creation: new Date().toISOString(),
-                    deadline: req.body.deadlineDate
+                    deadline: req.body.deadlineDate,
+                    creation: req.body.creationDate
                 }
             ],
             title: req.body.title,
