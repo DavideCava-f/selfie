@@ -9,6 +9,8 @@ var CompletedAct = ref([])
 var RetardedAct = ref([])
 var TODOAct = ref([])
 var selectedCard = ref(-1)
+var hasDeadline = ref(false)
+
 
 var ActUpdateId = ref("")
 var ActUpdateTitle = ref("")
@@ -16,11 +18,17 @@ var ActUpdateText = ref("")
 var ActUpdateDeadlineDate = ref("")
 var ActUpdateDeadlineTime = ref("")
 
+watch (hasDeadline, () => {ActUpdateDeadlineDate.value = "", ActUpdateDeadlineTime.value=""})
 watch(() => store.value.deltaDateTime, () => {
   //console.log("watch activity")
   getAct()
 })
 
+function canUpdateActivity() {
+  let a = ((hasDeadline.value && ActUpdateDeadlineDate.value && ActUpdateDeadlineTime.value) || !hasDeadline.value)
+    return ActUpdateTitle.value && a
+        
+}
 
 function toggleChange(id, compl) {
   fetch(`${store.value.url}:${store.value.port}/activity`, {
@@ -73,6 +81,8 @@ function getAct() {
     })
     .then((data) => {
       data.forEach((el) => {
+        console.log(el.dates[0].deadline)
+        if(el.dates[0].deadline){
         let date = (el.dates[0].deadline).slice(0, -1);
         if (!el.completed) {
 
@@ -85,13 +95,32 @@ function getAct() {
         } else {
           CompletedAct.value.push(el)
         }
+      }else{
+      
+        if (!el.completed) {
+
+            TODOAct.value.push(el)
+          } else {
+            CompletedAct.value.push(el)
+          }
+        } 
       })
     });
 }
 
 function updateAct(id, text, title, deadline) {
+  if(deadline){
+    hasDeadline.value = true
   ActUpdateDeadlineDate.value = deadline.split("T")[0]
   ActUpdateDeadlineTime.value = deadline.split("T")[1].substring(0, 5)
+
+  }else{
+    hasDeadline.value = false
+  ActUpdateDeadlineDate.value = "" 
+  ActUpdateDeadlineTime.value = ""
+
+  }
+  
   ActUpdateId.value = id
   ActUpdateText.value = text
   ActUpdateTitle.value = title
@@ -107,8 +136,13 @@ function SaveUpdateActivity() {
   console.log(ActUpdateTitle.value)
   console.log(ActUpdateText.value)
 
-  const deadline = ActUpdateDeadlineDate.value + "T" + ActUpdateDeadlineTime.value + ":00.000Z"
+  let DeadlineDate = "" 
 
+    if(!ActUpdateDeadlineDate.value || !ActUpdateDeadlineTime.value){
+        DeadlineDate = null
+    }else{
+       DeadlineDate = ActUpdateDeadlineDate.value + "T" + ActUpdateDeadlineTime.value + ":00.000Z"
+    }
   fetch(`${store.value.url}:${store.value.port}/activity/update`, {
     credentials: "include",
     method: "put",
@@ -119,7 +153,7 @@ function SaveUpdateActivity() {
       "id_Act": id,
       "title": ActUpdateTitle.value,
       "text": ActUpdateText.value,
-      "deadlineDate": deadline,
+      "deadlineDate": DeadlineDate,
     }),
   })
     .then((response) => {
@@ -155,8 +189,11 @@ onMounted(() => {
               {{ act.text }}
               <hr />
               <div>
-                Creation:{{ act.dates[0].creation.toString().split('T')[0] }} , {{ act.dates[0].creation.toString().split('T')[1].slice(0,-5) }} |
+                Creation:{{ act.dates[0].creation.toString().split('T')[0] }} , {{ act.dates[0].creation.toString().split('T')[1].slice(0,-5) }} 
+                <span v-if="act.dates[0].deadline">
+                    |
                 Deadline:{{ act.dates[0].deadline.toString().split('T')[0] }} , {{ act.dates[0].deadline.toString().split('T')[1].slice(0,-5) }}
+                </span>
               </div>
               <div>
                 <span><button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#DeleteActModal" @click="selectedCard = act._id">
@@ -190,7 +227,10 @@ onMounted(() => {
               <hr />
               <div>
                 Creation:{{ act.dates[0].creation.toString().split('T')[0] }} , {{ act.dates[0].creation.toString().split('T')[1].slice(0,-5) }} |
+                <span v-if="act.dates[0].deadline">
+
                 Deadline:{{ act.dates[0].deadline.toString().split('T')[0] }} , {{ act.dates[0].deadline.toString().split('T')[1].slice(0,-5) }}
+                </span>
             </div>
             <div>
               <span><button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#DeleteActModal" @click="selectedCard = act._id">
@@ -224,7 +264,10 @@ onMounted(() => {
         <hr />
         <div>
                 Creation:{{ act.dates[0].creation.toString().split('T')[0] }} , {{ act.dates[0].creation.toString().split('T')[1].slice(0,-5) }} |
+                <span v-if="act.dates[0].deadline">
+
                 Deadline:{{ act.dates[0].deadline.toString().split('T')[0] }} , {{ act.dates[0].deadline.toString().split('T')[1].slice(0,-5) }}
+                </span>
         </div>
         <div>
           <span><button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#DeleteActModal" @click="selectedCard = act._id">
@@ -277,6 +320,14 @@ onMounted(() => {
 
           <br />
 
+                <div>
+
+                    <label for="title">Set Deadline</label>
+                    <input class="form-check-input" type="checkbox" v-model="hasDeadline"
+                        name="value" />
+
+                </div>
+                <div v-if="hasDeadline">
           <div class="my-2">
             <label>Deadline (optional)</label>
             <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
@@ -290,8 +341,9 @@ onMounted(() => {
                 </button>--->
             </div>
           </div>
+          </div>
           <div class="modal-footer d-flex justify-content-end">
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="SaveUpdateActivity()">
+            <button type="button" class="btn btn-primary" :disabled="!canUpdateActivity()" data-bs-dismiss="modal" @click="SaveUpdateActivity()">
               Update
             </button>
           </div>

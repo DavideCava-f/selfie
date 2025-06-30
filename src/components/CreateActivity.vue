@@ -10,17 +10,19 @@ const emit = defineEmits(["created"]);
 
 const activityTitle = ref(null);
 const activityText = ref(null);
-const deadline = ref(false);
-const activityDeadlineDate = ref(null);
-const activityDeadlineTime = ref(null);
+const hasDeadline = ref(false);
+var activityDeadlineDate = ref("");
+var activityDeadlineTime = ref("");
 
 function canCreateActivity() {
-    return activityTitle.value;
+  let a = ((hasDeadline.value && activityDeadlineDate.value && activityDeadlineTime.value) || !hasDeadline.value)
+    return activityTitle.value && a
+        
 }
-
+watch (hasDeadline, () => {activityDeadlineDate.value = "", activityDeadlineTime.value=""})
 function setDeadlineNow() {
     activityDeadlineDate.value = store.value.simDate.toString();
-    activityDeadlineTime.value = store.value.simTime.slice(0, 5) + ":00";
+    activityDeadlineTime.value = store.value.simTime.toString().slice(0, 5);
 }
 
 function resetDeadline() {
@@ -30,10 +32,16 @@ function resetDeadline() {
 
 function createActivity() {
     console.log("create activity");
-    console.log(activityDeadlineDate.value);
-    console.log(activityDeadlineTime.value);
-
+    console.log(activityDeadlineDate.value + "AAAAA");
+    console.log(activityDeadlineTime.value + "AAAASA");
+   
     let simDate = store.value.simDateTime.toString().split('.')[0] + '.000Z'
+    let DeadlineDate=""
+    if(!activityDeadlineDate.value || !activityDeadlineTime.value){
+        DeadlineDate = null
+    }else{
+       DeadlineDate = activityDeadlineDate.value + "T" + activityDeadlineTime.value + ":00.000Z"
+    }
     console.log(simDate)
     fetch(`${store.value.url}:${store.value.port}/activity`, {
         credentials: "include",
@@ -45,8 +53,8 @@ function createActivity() {
         body: JSON.stringify({
             title: activityTitle.value,
             text: activityText.value,
-            deadlineDate: activityDeadlineDate.value ? activityDeadlineDate.value + "T" + activityDeadlineTime.value + ".000Z" : null,
-            creationDate: simDate
+            deadlineDate: DeadlineDate,
+            creationDate : simDate
         })
     }).then(response => {
         console.log("non ci arrivo");
@@ -76,9 +84,15 @@ function createActivity() {
                     <textarea class="form-control" rows="4" placeholder="Start typing the details..."
                         v-model="activityText"></textarea>
                 </div>
-
                 <br />
+                <div>
 
+                    <label for="title">Set Deadline</label>
+                    <input class="form-check-input" type="checkbox" v-model="hasDeadline"
+                        name="value" />
+
+                </div>
+                <div v-if="hasDeadline">
                 <div class="my-2">
                     <div>
                         <input type="checkbox" v-model="deadline" class="form-check-input" id="deadline">
@@ -92,9 +106,7 @@ function createActivity() {
                             Reset
                         </button>
                     </div>
-                    <div v-if="deadline">
-                        <DateTimePicker v-model:date="activityDeadlineDate" v-model:time="activityDeadlineTime" />
-                    </div>
+                </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="createActivity"
