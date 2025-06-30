@@ -108,12 +108,7 @@ watch(() => store.value.monthOffset, () => getEventsOfMonth());
 watch(() => store.value.monthOffset, () => getActivitiesOfMonth());
 watch(() => store.value.monthOffset, () => getPomodoros());
 
-function tooSmall(str) {
-    if (window.innerWidth < 550) {
-        return " ";
-    }
-    return str;
-}
+
 </script>
 
 <template>
@@ -130,7 +125,6 @@ function tooSmall(str) {
                         firstDay.toLocaleString("it-IT", { month: "long", year: "numeric" }).slice(1)
                     }}
                 </div>
-                <button v-if="store.monthOffset !== 0" class="btn" @click="reload()">R</button>
             </div>
 
 

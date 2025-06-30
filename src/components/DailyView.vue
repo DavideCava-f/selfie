@@ -84,9 +84,6 @@ watch(() => store.value.dayOffset, () => getPomodoros());
       <div v-else class="align-self-center">
         {{ VisualizedDate.toString() }}
       </div>
-      <button v-if="store.dayOffset !== 0" class="btn" @click="store.dayOffset = 0">
-        R
-      </button>
       <button class="btn d-flex align-self-center" @click="getDate(1)">
         <img src="@/assets/avanti.svg" />
       </button>

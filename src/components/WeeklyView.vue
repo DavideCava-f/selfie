@@ -89,7 +89,6 @@ watch(() => store.value.weekOffset, () => getPomodoros());
           {{ (thisMonday.toLocaleString("it-IT", { month: "long", year: "numeric" })).charAt(0).toUpperCase() +
             thisMonday.toLocaleString("it-IT", { month: "long", year: "numeric" }).slice(1) }}
         </div>
-        <button v-if="store.weekOffset !== 0" class="btn" @click="store.weekOffset = 0">R</button>
       </div>
 
 
