@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onUnmounted, watch } from 'vue';
+import { ref, computed, onUnmounted } from 'vue';
 import { store } from "@/store";
 import "vue3-toastify/dist/index.css";
 import { toast } from "vue3-toastify";
@@ -48,7 +48,6 @@ function setupTimer() {
   cycles.value = SetCycles.value
   isSet.value = true;
   lancetta.value.style.transform = "rotate(0deg)";
-  //pomodoro.value.style.backgroundColor = "#44cf69";
   pomodoro.value.style.backgroundColor = "hsl(92, 99%, 37%)";
   colorValue.value = 92;
   RateOfChange.value = colorValue.value / INITIAL_TIME.value;
@@ -226,6 +225,11 @@ async function findFactorsAsync(tot) {
 }
 
 async function CalcTime() {
+  if( TotalTime.value < 1) {
+    alert("Total time must be at least 1 minute.");
+    return;
+  }
+  
   let totalTime = TotalTime.value
   let divis = await findFactorsAsync(totalTime);
   if (divis.length == 0) return;
@@ -302,25 +306,27 @@ onUnmounted(() => {
       <div class="modal-body d-flex flex-column text-center">
         <div class="brand">Pomodoro Timer</div>
         <div v-if="!isSet">
-          <div>
+          <div class="container">
             <input v-model="TotalTime" type="number" min="1" />
             <button @click="CalcTime">Generate intervals</button>
-            <label>
-              Minutes
-              <input v-model="SetMinutes" />
-            </label>
-            <br>
-            <label>
-              Cycles
-              <select v-model="SetCycles">
-                <option v-for="n in Math.max(SetCycles, 50)" :key="n" :value="n">{{ n }}</option>
-              </select>
-            </label>
-            <br>
-            <label>
-              RelaxingMinutes
-              <input v-model="relaxingMinutes" />
-            </label>
+            <div class="row">
+              <div class="col-4 d-flex flex-column">
+                Study minutes:
+                <input v-model="SetMinutes" style="width: 100%;" />
+              </div>
+              <div class="col-4 d-flex flex-column">
+                Cycles  
+                <input  v-model="SetCycles" type="number" min="1" max="50" style="width: 100%;"/>
+                  <!-- <select v-model="SetCycles">
+                    <option v-for="n in Math.max(SetCycles, 50)" :key="n" :value="n">{{ n }}</option>
+                  </select> -->         
+              </div>
+              <div class="col-4 d-flex flex-column">
+                  Relax minutes:
+                  <input  v-model="relaxingMinutes" style="width: 100%;"/>
+              </div>
+            </div>
+            
           </div>
         </div>
 

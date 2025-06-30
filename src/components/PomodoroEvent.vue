@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onUnmounted, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { store } from "@/store";
 import "vue3-toastify/dist/index.css";
 import { toast } from "vue3-toastify";
@@ -45,7 +45,6 @@ function setupTimer() {
   cycles.value = SetCycles.value - store.value.activePomodoro.completedCycles;
   isSet.value = true;
   lancetta.value.style.transform = "rotate(0deg)";
-  //pomodoro.value.style.backgroundColor = "#44cf69";
   pomodoro.value.style.backgroundColor = "hsl(92, 99%, 37%)";
   colorValue.value = 92;
   RateOfChange.value = colorValue.value / INITIAL_TIME.value;

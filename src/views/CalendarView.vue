@@ -1,12 +1,9 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import NavBar from '@/components/NavBar.vue';
-import CreateEvent from "@/components/CreateEvent.vue";
+import { ref } from "vue";
 import VisualizeEvent from "@/components/VisualizeEvent.vue";
 import ModifyEvent from "@/components/ModifyEvent.vue";
 import DeleteEvent from "@/components/DeleteEvent.vue";
 import { store } from '@/store';
-import { Temporal } from "@js-temporal/polyfill";
 import MonthlyView from "@/components/MonthlyView.vue";
 import WeeklyView from "@/components/WeeklyView.vue";
 import DailyView from "@/components/DailyView.vue";
@@ -29,8 +26,6 @@ function visualMode(i) {
         weekButt.value.classList.remove('active');
     }
 }
-
-
 </script>
 
 <template>
@@ -61,20 +56,23 @@ function visualMode(i) {
                         <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
                     </svg>
                 </button>
-                <!-- Finestra MODALE di inserimento evento -->
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="createEventModal" data-bs-backdrop="false" tabindex="-1"
         aria-labelledby="createEventModal" aria-hidden="true">
         <Create/>
     </div>
+
     <div class="modal fade" id="VisualizeEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
         <VisualizeEvent />
     </div>
+
     <div class="modal fade" id="ModifyEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
         <ModifyEvent />
     </div>
+    
     <div class="modal fade" id="DeleteEventModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
         <DeleteEvent />
     </div>

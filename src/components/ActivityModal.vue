@@ -1,8 +1,7 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
 import { Temporal } from "@js-temporal/polyfill";
 import { store } from "@/store";
-import { getActivitiesOfDay } from "@/activityGetter";
+import { get } from "mongoose";
 
 const props = defineProps({
   activities: Array
@@ -26,6 +25,16 @@ function toggleChange(id, compl) {
     store.value.update();
   });
 }
+
+function getVisibleDate(date) {
+    date = date.slice(0, -1);
+    var str =
+        new Date(date).toDateString() +
+        " " +
+        new Date(date).toTimeString().split(" ")[0];
+    str = str.slice(0, -3);
+    return str;
+}
 </script>
 
 <template>
@@ -36,18 +45,31 @@ function toggleChange(id, compl) {
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body d-flex flex-column">
-        <div v-for="activity in activities" class="d-flex justify-content-between align-items-center">
-          <div>
-            {{ activity.title }} | <span
-              :class="{ 'text-danger': Temporal.PlainDateTime.compare(store.simDateTime, activity.dates.deadline.slice(0, -1)) > 0 }">{{
-                activity.dates.deadline }}</span>
-          </div>
-          <div>
-            <label>Completed</label>
-            <input type="checkbox" @change="toggleChange(activity._id, activity.completed)" v-model="activity.completed"
-              data-bs-dismiss="modal">
-          </div>
+        <div class="my-2  ">
+          <table class="table table-bordered rounded border-secondary">
+            <thead>
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Deadline</th>
+              <th scope="col">Completed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="activity in activities" :key="activity._id">
+                <td>{{ activity.title}}</td>
+                <td :class="{ 'text-danger': Temporal.PlainDateTime.compare(store.simDateTime, activity.dates.deadline.slice(0, -1)) > 0 }">
+                  {{ getVisibleDate(activity.dates.deadline) }}
+                </td>
+                <td>
+                  <input type="checkbox" @change="toggleChange(activity._id, activity.completed)" v-model="activity.completed"
+                    data-bs-dismiss="modal">
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+        
+      
       </div>
     </div>
   </div>

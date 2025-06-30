@@ -1,9 +1,6 @@
 <script setup>
 import { defineProps } from 'vue';
-import { store } from "@/store";
-import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import { openDate } from "@/notipol.js"
 
 const props = defineProps({
   event: Object,

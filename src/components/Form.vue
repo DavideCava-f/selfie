@@ -1,8 +1,6 @@
 <script setup>
-import { computed } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { ref } from "vue";
-import { use } from "marked";
 import { store } from "@/store";
 
 var pswdStatus = ref(null);
@@ -13,16 +11,6 @@ var SignUp = ref(null);
 var UserSU = ref({})
 const router = useRouter();
 
-let listaCorsi = [
-  "Informatica",
-  "Informatica per il management",
-  "Ingegneria informatica",
-  "Ingegneria elettronica",
-  "Economia",
-  "Storia",
-  "Matematica",
-];
-const corsi = listaCorsi.sort();
 
 function resetValues() {
   User.value = "";

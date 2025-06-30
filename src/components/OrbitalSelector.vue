@@ -1,5 +1,4 @@
 <script setup>
-import { ref, computed, onUnmounted, watch } from 'vue';
 const props = defineProps(['items', 'radius', 'color', 'selected'])
 const emit = defineEmits(['update:selected'])
 

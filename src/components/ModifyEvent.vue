@@ -2,16 +2,9 @@
 import OpenAI from "openai";
 import { ref, watch, watchEffect, reactive, onMounted } from "vue";
 import { store } from "@/store";
-import { EventCreator } from "@/eventCreator";
 import { Temporal } from "@js-temporal/polyfill";
 import DateTimePicker from './DateTimePicker.vue';
 
-var event = ref(
-  {
-    title: "",
-    details: "",
-    dates: []
-  });
 
 watch(() => [store.value.activeEventId, store.value.activeDate], () => {
   console.log("watch modify");

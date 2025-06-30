@@ -1,6 +1,6 @@
 <script setup>
 import OpenAI from "openai";
-import { ref, watch, watchEffect, reactive, computed, onMounted } from "vue";
+import { ref, watch, computed, onMounted } from "vue";
 import { store } from "@/store";
 import { EventCreator } from "@/eventCreator";
 import { Temporal } from "@js-temporal/polyfill";

@@ -2,7 +2,6 @@
 import CreateActivity from '@/components/CreateActivity.vue';
 import { store } from "@/store";
 import { ref, onMounted, watch } from "vue";
-import NavBar from '@/components/NavBar.vue';
 import { Temporal } from '@js-temporal/polyfill';
 
 var CompletedAct = ref([])
