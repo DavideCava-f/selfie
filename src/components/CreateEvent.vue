@@ -8,8 +8,8 @@ import DateTimePicker from './DateTimePicker.vue';
 
 const props = defineProps({
   date: String,
-  closed: Boolean
 });
+
 watch(() => props.date, () => { 
   if (props.date !== undefined && props.date !== null){
     eventBeginDate.value = props.date
