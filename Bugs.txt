@@ -2,24 +2,17 @@ BUGS:
 
 POMODORO
 
-
 N0TE
 - Per Ora OK
 
 CALENDARIO 
-- Pulsante Timido di create che si nasconde dietro le attivita
 
 COSE DA FARE:
 - Gestire la palette generale del progetto, per i vari modal
 - Migliorare Interfaccia delle notifiche
-- Integrare Date Picker per modifica
-- Click sulla visualizzazione settimanale per creare evento
 - Milgiorare schermata altri eventi
 
-
 ATTIVITA
-- Integrare Date Picker per attivita
-
 
 POMODORO
 - Interfaccia piu leggera e user friendly

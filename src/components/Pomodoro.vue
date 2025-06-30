@@ -3,6 +3,7 @@ import { ref, computed, onUnmounted, watch } from 'vue';
 import { store } from "@/store";
 import "vue3-toastify/dist/index.css";
 import { toast } from "vue3-toastify";
+import DateTimePicker from './DateTimePicker.vue';
 
 const DEFAULT_STUDY_MINS = 30;
 const DEFAULT_PAUSE_MINS = 5;
@@ -24,8 +25,8 @@ let timerId = null;
 const isSet = ref(false);
 
 var mode = ref(0);
-var startDate = ref(null);
-var startTime = ref(null);
+var startDate = ref(store.value.simDate);
+var startTime = ref(store.value.simTime.slice(0, 5) + ":00");
 let lancetta = ref(null);
 let pomodoro = ref(null);
 let RateOfChange = ref();
@@ -105,11 +106,11 @@ async function tick() {
           dangerouslyHTMLString: true,
           style: {
             backgroundColor: '#ff08b3',  // Giallo tenue
-    color: '#333333',            // Testo scuro per contrasto
-            border: '2px solid rgb(255, 128, 0)',
-    fontWeight: 'bold',
-    padding: '12px 16px',
-    borderRadius: '8px',
+            color: '#333333',            // Testo scuro per contrasto
+            border: '1px solid #e6c200', // Giallo più saturo per bordo
+            fontWeight: 'bold',
+            padding: '12px 16px',
+            borderRadius: '8px',
           }
         });
       }
@@ -143,10 +144,10 @@ async function tick() {
           cycles: SetCycles.value,
           studyMins: SetMinutes.value,
           pauseMins: relaxingMinutes.value,
-          completedCycles: SetCycles.value, 
+          completedCycles: SetCycles.value,
           completedDate: store.value.simDateTime, // Use the simulated date time
         })
-        }).then(() => { console.log("pomodoro created correctly"); store.value.update(); });
+      }).then(() => { console.log("pomodoro created correctly"); store.value.update(); });
     }
   }
 }
@@ -256,11 +257,11 @@ function reset() {
   relaxingMinutes.value = DEFAULT_PAUSE_MINS;
   TotalTime.value = 1;
   isSet.value = false;
-  if(mode.value === 0){
+  if (mode.value === 0) {
     lancetta.value.style.transform = "rotate(0)";
     pomodoro.value.style.backgroundColor = "#44cf69";
   }
-  
+
 }
 
 function createPomodoroEvent() {
@@ -272,7 +273,7 @@ function createPomodoroEvent() {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      beginDate: startDate.value + "T" + startTime.value + ":00.000Z",
+      beginDate: startDate.value + "T" + startTime.value + ".000Z",
       cycles: SetCycles.value,
       studyMins: SetMinutes.value,
       pauseMins: relaxingMinutes.value,
@@ -372,8 +373,7 @@ onUnmounted(() => {
           <button @click="forceCycle" :disabled="!isRunning" class="pause-button">Next</button>
         </div>
         <div v-else>
-          <input class="form-control" type="date" v-model="startDate" />
-          <input class="form-control" type="time" v-model="startTime" />
+          <DateTimePicker v-model:date="startDate" v-model:time="startTime" />
           <button @click="createPomodoroEvent()">Create</button>
         </div>
       </div>

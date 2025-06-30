@@ -22,11 +22,11 @@ router.post("/", verifyToken, async function(req, res) {
             title: req.body.title,
             text: req.body.text,
             completed: false,
-        notification: {
-            isLate: false,
-            oneDayLate: false,
-            oneWeekLate: false
-        }
+            notification: {
+                isLate: false,
+                oneDayLate: false,
+                oneWeekLate: false
+            }
         });
         res.status(200).send();
     } catch (err) {
@@ -60,9 +60,9 @@ router.put("/noted", verifyToken, async function(req, res) {
         const Acts = await Activity.updateOne({ _id: req.body.id_Act }, {
             $set: {
 
-               "notification.isLate" : req.body.isLateModified, 
-               "notification.oneDayLate" : req.body.oneDayModified, 
-               "notification.oneWeekLate" : req.body.oneWeekModified, 
+                "notification.isLate": req.body.isLateModified,
+                "notification.oneDayLate": req.body.oneDayModified,
+                "notification.oneWeekLate": req.body.oneWeekModified,
             }
         })
         res.status(200).send()
