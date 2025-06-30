@@ -17,6 +17,7 @@ var ActUpdateText = ref("")
 var ActUpdateDeadlineDate = ref("")
 var ActUpdateDeadlineTime = ref("")
 
+watch(ActUpdateDeadlineDate, () => {console.log(ActUpdateDeadlineDate.value)})
 watch (hasDeadline, () => {ActUpdateDeadlineDate.value = "", ActUpdateDeadlineTime.value=""})
 watch(() => store.value.deltaDateTime, () => {
   //console.log("watch activity")
