@@ -85,9 +85,9 @@ async function tick() {
           autoClose: true,
           dangerouslyHTMLString: true,
           style: {
-            backgroundColor: '#fff8b3', // soft yellow
-            color: '#333',              // dark text for contrast
-            border: '1px solid #e6c200',
+            backgroundColor: '#000', // soft yellow
+            color: '#FFF',              // dark text for contrast
+            border: '2px solid rgb(255, 128, 0)',
             fontWeight: 'bold',
           }
         });
@@ -126,9 +126,9 @@ async function tick() {
         autoClose: true,
         dangerouslyHTMLString: true,
         style: {
-          backgroundColor: '#fff8b3', // soft yellow
+          backgroundColor: '#000', // soft yellow
           color: '#333',              // dark text for contrast
-          border: '1px solid #e6c200',
+            border: '2px solid rgb(255, 128, 0)',
           fontWeight: 'bold',
         }
       });
@@ -167,9 +167,9 @@ function startTimer() {
     autoClose: true,
     dangerouslyHTMLString: true,
     style: {
-      backgroundColor: '#fff8b3', // soft yellow
+      backgroundColor: '#000', // soft yellow
       color: '#333',              // dark text for contrast
-      border: '1px solid #e6c200',
+            border: '2px solid rgb(255, 128, 0)',
       fontWeight: 'bold',
     }
   });

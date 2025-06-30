@@ -19,7 +19,7 @@ async function snooze() {
 </script>
 
 <template>
-  <div>
+  <div >
     <p>{{ message }}</p>
     <button class="btn btn-secondary" @click="snooze">Snooze (5 min)</button>
   </div>
