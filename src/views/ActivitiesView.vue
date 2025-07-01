@@ -17,8 +17,6 @@ var ActUpdateText = ref("")
 var ActUpdateDeadlineDate = ref("")
 var ActUpdateDeadlineTime = ref("")
 
-watch(ActUpdateDeadlineDate, () => {console.log(ActUpdateDeadlineDate.value)})
-watch (hasDeadline, () => {ActUpdateDeadlineDate.value = "", ActUpdateDeadlineTime.value=""})
 watch(() => store.value.deltaDateTime, () => {
   //console.log("watch activity")
   getAct()
@@ -108,18 +106,24 @@ function getAct() {
     });
 }
 
+watch(ActUpdateDeadlineDate, () => {console.log(ActUpdateDeadlineDate.value)})
+watch (hasDeadline, (newVal) => {
+  if(!newVal){
+
+  ActUpdateDeadlineDate.value = ""
+  ActUpdateDeadlineTime.value=""
+  }
+})
 function updateAct(id, text, title, deadline) {
   if(deadline){
     hasDeadline.value = true
-    console.log("bedig")
+    console.log(deadline.split("T")[0] +", INUPDATEACT")
   ActUpdateDeadlineDate.value = deadline.split("T")[0]
   ActUpdateDeadlineTime.value = deadline.split("T")[1].substring(0, 5)
-  console.log(ActUpdateDeadlineDate.value)
+  console.log(ActUpdateDeadlineDate.value + ", INFIELD")
 
   }else{
-    hasDeadline.value = false
-  ActUpdateDeadlineDate.value = "" 
-  ActUpdateDeadlineTime.value = ""
+    hasDeadline.value = false //CIPENSAILWATCH
 
   }
   
