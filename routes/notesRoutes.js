@@ -9,11 +9,10 @@ const uri = process.env.MONGODB_DEV;
 
 router.post("/", verifyToken, async function(req, res) {
   try {
-    var creationDate = new Date().toISOString();
     await Note.create({
       userId: req.userId,
-      creationDate: creationDate,
-      lastUpDate: creationDate,
+      creationDate: req.body.creationDate,
+      lastUpDate: req.body.creationDate,
       Title: req.body.title,
       Text: req.body.content, //Campi singoli va bene stringa
       Tags: JSON.parse(req.body.tags), //Array di oggetti vuole l'oggetto
@@ -36,13 +35,12 @@ router.delete("/", verifyToken, async function(req, res) {
 router.put("/", verifyToken, async function(req, res) {
   try {
     let idNote = req.body.id_Note;
-    let UpdateDate = new Date().toISOString();
     await Note.updateOne(
       { _id: idNote },
       {
         $set: {
           Title: req.body.title_note,
-          lastUpDate: UpdateDate,
+          lastUpDate: req.body.lastUpdate,
           Text: req.body.content_note,
           Tags: JSON.parse(req.body.tags_note),
           markdown: req.body.markdown_note

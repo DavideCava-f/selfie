@@ -1,7 +1,7 @@
 <script setup>
 import { Temporal } from "@js-temporal/polyfill";
 import { store } from "@/store";
-import { get } from "mongoose";
+//import { get } from "mongoose";
 
 const props = defineProps({
   activities: Array

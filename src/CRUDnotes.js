@@ -23,7 +23,8 @@ export function CreateNote() {
 
   var Title = NCtitle.value || "New Note";
   var Content = NCcontent.value || "No Content";
-  console.log(Title);
+  var creationDate = store.value.simDateTime
+  console.log(creationDate);
   fetch(`${store.value.url}:${store.value.port}/note`, {
     method: "post",
     credentials: "include",
@@ -36,6 +37,7 @@ export function CreateNote() {
       title: Title,
       content: Content,
       tags: jsonTags,
+      creationDate: creationDate,
       markdown: NCMarkDown.value
     }),
   })
@@ -144,7 +146,7 @@ export function SaveAfterUpdate() {
   console.log(NUtitle.value);
   console.log(NUcontent.value);
   console.log(UjsonTags);
-
+  let lastUpdate = store.value.simDateTime
   fetch(`${store.value.url}:${store.value.port}/note`, {
     method: "put",
     credentials: "include",
@@ -157,6 +159,7 @@ export function SaveAfterUpdate() {
       id_Note: NUid.value,
       title_note: NUtitle.value || "No Title",
       content_note: NUcontent.value || "No Content",
+      lastUpdate: lastUpdate,
       tags_note: UjsonTags,
       markdown_note: NUMarkDown.value
     }),
