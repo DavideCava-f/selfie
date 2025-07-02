@@ -3,7 +3,6 @@ import { store } from "@/store";
 import { ref, onBeforeMount, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { Temporal } from "@js-temporal/polyfill";
-import { get } from "mongoose";
 
 let lastnote = ref({});
 let nearEvents = ref([]);
@@ -70,9 +69,9 @@ function getVisibleDate(date) {
     return str;
 }
 
-function getWeeklyIndex(date){
+function getWeeklyIndex(date) {
     const wday = Temporal.PlainDate.from(date).dayOfWeek;
-    return wday === 0 ? 7 : wday; 
+    return wday === 0 ? 7 : wday;
 }
 
 function ToEvent(event) {
@@ -85,9 +84,9 @@ function ToEvent(event) {
 
     const diff = d2.since(d1);
     store.value.weekOffset = Math.floor(diff.days / 7);
-    if(store.value.weekOffset === 0 && i2 < i1){
-        store.value.weekOffset = 1; 
-    } 
+    if (store.value.weekOffset === 0 && i2 < i1) {
+        store.value.weekOffset = 1;
+    }
     router.push('/calendar');
 }
 
@@ -209,8 +208,8 @@ function ToEvent(event) {
                                         Totale pomodoro:
                                     </h4>
                                     <p>{{ (pomodoro.studyMins + pomodoro.pauseMins) * pomodoro.cycles }} {{
-                                        (pomodoro.studyMins + pomodoro.pauseMins) *pomodoro.cycles > 1 ? "minuti":
-                                        "minuto" }}</p>
+                                        (pomodoro.studyMins + pomodoro.pauseMins) * pomodoro.cycles > 1 ? "minuti" :
+                                            "minuto" }}</p>
                                 </div>
                             </div>
                         </div>
