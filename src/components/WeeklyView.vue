@@ -31,31 +31,15 @@ function getColorFromTitle(title) {
 }
 
 function getInvertedColor(hex) {
-  // Remove '#' if present
-  hex = hex.replace(/^#/, '');
+  const clean = hex.replace(/^#/, '');
+    const bigint = parseInt(clean, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
 
-  // If shorthand notation, expand it (e.g., "abc" -> "aabbcc")
-  if (hex.length === 3) {
-    hex = hex.split('').map(char => char + char).join('');
-  }
-
-  // Validate hex color length
-  if (hex.length !== 6) {
-    throw new Error('Invalid HEX color.');
-  }
-
-  // Convert hex to RGB components
-  let r = parseInt(hex.substring(0, 2));
-  let g = parseInt(hex.substring(2, 4));
-  let b = parseInt(hex.substring(4, 6));
-
-  // Invert each color component
-  r = 255 - r;
-  g = 255 - g;
-  b = 255 - b;
-
-  // Convert the inverted values back to hex and return the result
-  return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+    const luminance =  0.299 * r + 0.587 * g + 0.114 * b;
+    luminance <128 ? hex = '#ffffff' : hex = '#000000';
+    return hex;
 }
 
 function nextWeek() {
