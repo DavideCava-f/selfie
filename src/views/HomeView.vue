@@ -3,7 +3,6 @@ import { store } from "@/store";
 import { ref, onBeforeMount, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { Temporal } from "@js-temporal/polyfill";
-import { get } from "mongoose";
 
 let lastnote = ref({});
 let nearEvents = ref([]);
