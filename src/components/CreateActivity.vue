@@ -15,14 +15,16 @@ var activityDeadlineDate = ref("");
 var activityDeadlineTime = ref("");
 
 function canCreateActivity() {
-  let a = ((hasDeadline.value && activityDeadlineDate.value && activityDeadlineTime.value) || !hasDeadline.value)
+    let a = ((hasDeadline.value && activityDeadlineDate.value && activityDeadlineTime.value) || !hasDeadline.value)
     return activityTitle.value && a
-        
+
 }
-watch (hasDeadline, () => {activityDeadlineDate.value = "", activityDeadlineTime.value=""})
+
+watch(hasDeadline, () => { activityDeadlineDate.value = "", activityDeadlineTime.value = "" })
+
 function setDeadlineNow() {
     activityDeadlineDate.value = store.value.simDate.toString();
-    activityDeadlineTime.value = store.value.simTime.toString().slice(0, 5);
+    activityDeadlineTime.value = store.value.simTime.toString().slice(0, 5) + ":00";
 }
 
 function resetDeadline() {
@@ -34,13 +36,13 @@ function createActivity() {
     console.log("create activity");
     console.log(activityDeadlineDate.value + "AAAAA");
     console.log(activityDeadlineTime.value + "AAAASA");
-   
+
     let simDate = store.value.simDateTime.toString().split('.')[0] + '.000Z'
-    let DeadlineDate=""
-    if(!activityDeadlineDate.value || !activityDeadlineTime.value){
+    let DeadlineDate = ""
+    if (!activityDeadlineDate.value || !activityDeadlineTime.value) {
         DeadlineDate = null
-    }else{
-       DeadlineDate = activityDeadlineDate.value + "T" + activityDeadlineTime.value + ":00.000Z"
+    } else {
+        DeadlineDate = activityDeadlineDate.value + "T" + activityDeadlineTime.value + ".000Z"
     }
     console.log(simDate)
     fetch(`${store.value.url}:${store.value.port}/activity`, {
@@ -54,7 +56,7 @@ function createActivity() {
             title: activityTitle.value,
             text: activityText.value,
             deadlineDate: DeadlineDate,
-            creationDate : simDate
+            creationDate: simDate
         })
     }).then(response => {
         console.log("non ci arrivo");
@@ -71,7 +73,7 @@ function createActivity() {
                 <h1 class="modal-title fs-4" id="staticBackdropLabel">
                     Create new Activity
                 </h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click=""></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click=""></button>
             </div>
             <div class="modal-body">
                 <div class="my-2">
@@ -89,24 +91,21 @@ function createActivity() {
                 <div>
 
                     <label for="title">Set Deadline</label>
-                    <input class="form-check-input" type="checkbox" v-model="hasDeadline"
-                        name="value" />
+                    <input class="form-check-input" type="checkbox" v-model="hasDeadline" name="value" />
 
                 </div>
                 <div v-if="hasDeadline">
-                <div class="my-2">
-                    <div>
-              <input class="form-control" type="date" v-model="ActivityDeadlineDate" />
-              <input class="form-control" type="time" v-model="ActivityDeadlineTime" />
-                        <label class="form-check-label" for="deadline">Deadline (optional)</label>
-                    </div>
+                    <div class="my-2">
+                        <div>
+                            <DateTimePicker v-model:date="activityDeadlineDate" v-model:time="activityDeadlineTime" />
+                        </div>
                         <button class="btn btn-outline-primary" @click="setDeadlineNow()">
                             Now
                         </button>
                         <button class="btn btn-outline-danger" @click="resetDeadline()">
                             Reset
                         </button>
-                </div>
+                    </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="createActivity"
