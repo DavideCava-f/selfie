@@ -78,6 +78,7 @@ export function getVisibleDate(date) {
   });
   var formatted = formatter.format(new Date(date));
   //var no= NotesList.value[0].lastUpDate
+  console.log("formatted", formatted);
   var str =
     formatted +
     " " +

@@ -12,6 +12,7 @@ const props = defineProps({
 
 watch(() => props.date, () => {
   if (props.date !== undefined && props.date !== null) {
+    console.log("MANNAGGIA A GESU'");
     resetFields();
     eventBeginDate.value = props.date
     eventEndDate.value = props.date
@@ -371,7 +372,8 @@ watch(eventBeginDate, setDayOfWeek);
         <div v-if="notifiable" class="row my-2">
           <div class="col-sm-6 col-12">
             <label>When to notify</label>
-            <div v-for="(advance, idx) in store.advance" :key="idx" class="form-check">
+            <div v-for="(advance, idx) in store.advance" :key="idx" class="form-check"
+              @click="console.log(notificationRawSelected)">
               <input class="form-check-input" type="checkbox" :id="'notify-' + idx" :value="advance[1]"
                 v-model="notificationRawSelected">
               <label class="form-check-label" :for="'notify-' + idx">

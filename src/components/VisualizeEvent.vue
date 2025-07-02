@@ -31,6 +31,7 @@ function getEvent() {
 }
 
 watch(() => store.value.toggle, () => {
+  console.log("watch visual");
   if (store.value.activeEventId != null)
     {getEvent();}
 });

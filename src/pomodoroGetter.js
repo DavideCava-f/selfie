@@ -6,6 +6,8 @@ async function getPomodoros() {
     credentials: "include"
   });
   store.value.pomodoros = (await response.json());
+  /* console.log("Pomodoros:");
+  console.log(store.value.pomodoros); */
   await sweepPomodoros();
 }
 

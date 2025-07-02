@@ -21,15 +21,13 @@ async function getLastNote() {
 }
 
 async function getLastPomodoro() {
+    console.log("Ultimo pomodoro");
     const response = await fetch(`${store.value.url}:${store.value.port}/pomodoro/last`, {
         credentials: "include",
     });
     if (!response.ok) return;
     pomodoro.value = await response.json();
-<<<<<<< Updated upstream
     console.log(pomodoro.value);
-=======
->>>>>>> Stashed changes
 }
 
 async function update() {
@@ -40,13 +38,16 @@ async function update() {
 }
 
 async function getNearEvents() {
+    console.log("suca");
     const max = (store.value.advance.twoWeeks[0].add(store.value.advance.twelveHr[0].add(store.value.advance.halfHr[0]))).toString();
     fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}&isNotification=${false}&max=${max}`, {
         credentials: "include"
     })
         .then(response => {
+            //console.log(response);
             return response.json();
         }).then(data => {
+            console.log("Near Eventssss:");
             nearEvents.value = data.slice(0, 5);
         });
 }
@@ -83,14 +84,10 @@ function ToEvent(event) {
     console.log("i1: " + i1 + " i2: " + i2);
 
     const diff = d2.since(d1);
-<<<<<<< Updated upstream
     store.value.weekOffset = Math.floor(diff.days / 7);
     if(store.value.weekOffset === 0 && i2 < i1){
         store.value.weekOffset = 1; 
     } 
-=======
-    store.value.weekOffset+= Math.floor(diff.days / 7);
->>>>>>> Stashed changes
     router.push('/calendar');
 }
 

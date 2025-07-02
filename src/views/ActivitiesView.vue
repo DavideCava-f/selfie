@@ -18,6 +18,7 @@ var ActUpdateDeadlineDate = ref("")
 var ActUpdateDeadlineTime = ref("")
 
 watch(() => store.value.deltaDateTime, () => {
+  //console.log("watch activity")
   getAct()
 })
 
@@ -78,6 +79,7 @@ function getAct() {
     })
     .then((data) => {
       data.forEach((el) => {
+        console.log(el.dates[0].deadline)
         if(el.dates[0].deadline){
         let date = (el.dates[0].deadline).slice(0, -1);
         if (!el.completed) {
@@ -86,6 +88,7 @@ function getAct() {
             TODOAct.value.push(el)
           } else {
             RetardedAct.value.push(el)
+            console.log(el.dates[0].deadline)
           }
         } else {
           CompletedAct.value.push(el)
@@ -103,6 +106,7 @@ function getAct() {
     });
 }
 
+watch(ActUpdateDeadlineDate, () => {console.log(ActUpdateDeadlineDate.value)})
 watch (hasDeadline, (newVal) => {
   if(!newVal){
 
@@ -113,8 +117,10 @@ watch (hasDeadline, (newVal) => {
 function updateAct(id, text, title, deadline) {
   if(deadline){
     hasDeadline.value = true
+    console.log(deadline.split("T")[0] +", INUPDATEACT")
   ActUpdateDeadlineDate.value = deadline.split("T")[0]
   ActUpdateDeadlineTime.value = deadline.split("T")[1].substring(0, 5)
+  console.log(ActUpdateDeadlineDate.value + ", INFIELD")
 
   }else{
     hasDeadline.value = false //CIPENSAILWATCH
@@ -130,6 +136,11 @@ function SaveUpdateActivity() {
 
   const id = ActUpdateId.value
 
+  console.log(id)
+  console.log(ActUpdateDeadlineDate.value)
+  console.log(ActUpdateDeadlineTime.value)
+  console.log(ActUpdateTitle.value)
+  console.log(ActUpdateText.value)
 
   let DeadlineDate = "" 
 

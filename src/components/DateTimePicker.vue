@@ -44,10 +44,14 @@ watch(
 watch(
     () => beginDate.value,
     (newDate) => {
+        console.log("DATE TIME PICKER: new date");
+        console.log(newDate);
         if (!newDate) return;
         const plain = Temporal.PlainDate.from(newDate);
         selectedMonth.value = months[plain.month - 1];
         selectedDay.value = plain.day;
+        console.log(selectedMonth.value);
+        console.log(selectedDay.value);
     },
     { immediate: true }
 );
@@ -56,6 +60,7 @@ watch(
     [selectedHour, selectedMinute],
     ([h, m]) => {
         const plain = Temporal.PlainTime.from({ hour: h, minute: m });
+        console.log(plain.toString());
         beginTime.value = plain.toString();
     },
 );
@@ -65,6 +70,7 @@ watch(
     (newTime) => {
         if (!newTime) return;
         const plain = Temporal.PlainTime.from(newTime);
+        console.log(plain.toString());
         selectedHour.value = plain.hour;
         selectedMinute.value = plain.minute;
     },

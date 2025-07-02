@@ -122,7 +122,7 @@ watch(() => store.value.weekOffset, () => getPomodoros());
           </div>
           <button v-if="store.activitiesOfWeek.find((d) => d.day === store.week.indexOf(day))"
             class="btn bg-danger activity-button d-flex d-inline-block align-items-center justify-content-center"
-            @click="activitiesOfSelectedDay = store.activitiesOfWeek.find((d) => d.day === store.week.indexOf(day)).activities;"
+            @click="activitiesOfSelectedDay = store.activitiesOfWeek.find((d) => d.day === store.week.indexOf(day)).activities; console.log(activitiesOfSelectedDay)"
             data-bs-target="#VisualizeActivitiesModal" data-bs-toggle="modal">
             <img src="@/assets/ActivityLogo.svg" alt="Activities" width="w-100">
           </button>
@@ -135,7 +135,7 @@ watch(() => store.value.weekOffset, () => getPomodoros());
             :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }"
             @click="store.activeEventId = event._id; store.toggle = !store.toggle;
             store.activeDate = thisMonday.add({ days: store.eventsOfWeek.find((d) => d.day === store.week.indexOf(day)).day });
-            " data-bs-target="#VisualizeEventModal" data-bs-toggle="modal">
+            console.log(store.activeDate);" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal">
             <div class="fw-bold text-start event">
               {{ event.title }}
             </div>

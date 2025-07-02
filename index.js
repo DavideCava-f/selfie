@@ -24,10 +24,12 @@ dotenv.config();
 // Atlas dev database
 //const uri = process.env.MONGODB_PROD;
 const uri = process.env.MONGODB_DEV;
+console.log(uri);
 
 let app = express();
 
 await mongoose.connect(uri);
+console.log("MongoDB connection settled");
 
 // Routes
 app.use(cors({
@@ -70,9 +72,13 @@ app.get("*", (req, res) => {
 
 app.listen(process.env.PORT_PROD, function() {
   global.startDate = new Date();
+  console.log(
+    `App listening on port ${process.env.PORT_PROD} started ${global.startDate.toLocaleString()}`,
+  );
 });
 
 process.on('SIGINT', async () => {
   await mongoose.connection.close();
+  console.log("MongoDB connection closed");
   process.exit(0);
 });
