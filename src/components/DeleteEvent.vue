@@ -8,6 +8,8 @@ var event = ref({
   dates: []
 });
 
+var datesCount = ref(0)
+
 function deleteEvent(i) {
   fetch(`${store.value.url}:${store.value.port}/event/OneEvent`, {
     headers: {
@@ -38,6 +40,7 @@ function getEvent() {
   ).then(response => { return response.json() })
     .then(data => {
       event.value = data
+      datesCount.value = data.dates.length
     });
 }
 
@@ -64,10 +67,14 @@ watch(() => store.value.activeEventId, () => {
       </div>
       <div class="modal-body">
         <div class="my-2">
+            Are you sure?
+            <hr>
           <div class="input-group">
-            <button class="btn btn-dark" @click="deleteEvent(0)" data-bs-dismiss="modal">Delete Only this Event</button>
-            <button class="btn btn-dark" @click="deleteEvent(1)" data-bs-dismiss="modal">Delete All Events like
-              this</button>
+
+            <button class="btn btn-dark" @click="deleteEvent(0)" data-bs-dismiss="modal">Delete Event</button>
+            <div v-if="datesCount > 1">
+            <button class="btn btn-dark" @click="deleteEvent(1)" data-bs-dismiss="modal">Delete This Multiple Event</button>
+            </div>
           </div>
         </div>
 

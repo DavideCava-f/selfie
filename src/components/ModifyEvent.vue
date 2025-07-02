@@ -20,6 +20,7 @@ const eventEndDate = ref(null);
 const eventEndTime = ref(null);
 const eventLink = ref(null);
 const updateOnlyThis = ref(false);
+var datesCount = ref(0);
 
 function updateEvent(i) {
   //Da mettere Date del giorno selezionato
@@ -46,6 +47,7 @@ function updateEvent(i) {
   }
   ).then(response => { return response.json() })
     .then(data => {
+      resetFields()
       store.value.update();
     });
 }
@@ -70,6 +72,8 @@ function getEvent() {
       eventEndDate.value = store.value.activeDate.toString();
       eventEndTime.value = data.dates[0].end.split("T")[1].substring(0, 5) + ":00";
       console.log("HOLA DIO CAN " + eventTitle.value)
+      console.log(data.dates.length + "msd;vlsd")
+      datesCount.value = data.dates.length
     });
 }
 
@@ -89,6 +93,8 @@ function resetFields() {
   setBeginNow();
   setEndNow();
   eventLink.value = "";
+  updateOnlyThis.value = false;
+
 }
 
 function allDay() {
@@ -129,7 +135,7 @@ function canCreateEvent() {
         <h1 class="modal-title fs-4" id="staticBackdropLabel">
           Modify event
         </h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+        <button type="button" class="btn-close"  data-bs-dismiss="modal" aria-label="Close"
           @click="resetFields"></button>
       </div>
       <div class="modal-body">
@@ -149,48 +155,52 @@ function canCreateEvent() {
           <input class="form-control" type="text" placeholder="Luogo fisico o virtuale" v-model="eventLink" />
         </div>
         <br />
+        <div v-if="datesCount > 1">
 
         <div class="form-check my-2">
           <input class="form-check-input" type="checkbox" id="updateOnlyThis" v-model="updateOnlyThis" />
           <label class="form-check-label" for="updateOnlyThis">Update OnlyThis</label>
         </div>
+        </div>
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal" :disabled="updateOnlyThis"
           @click="updateEvent(0)">
-          Update All Events
+          Update Event
         </button>
-        <div v-if="updateOnlyThis" class="row my-2">
-          <div class="my-2">
-            <label>Start</label>
-            <br>
-            <button class="btn btn-outline-primary" @click="setBeginNow">
-              Now
-            </button>
-            <DateTimePicker v-model:date="eventBeginDate" v-model:time="eventBeginTime" />
+          <div v-if="datesCount > 1">
+          <div v-if="updateOnlyThis" class="row my-2">
+            <div class="my-2">
+              <label>Start</label>
+              <br>
+              <button class="btn btn-outline-primary" @click="setBeginNow">
+                Now
+              </button>
+              <DateTimePicker v-model:date="eventBeginDate" v-model:time="eventBeginTime" />
+            </div>
+            <div class="my-2">
+              <label>End</label>
+              <br />
+              <button class="btn btn-outline-primary" @click="setEndNow">
+                Now
+              </button>
+              <DateTimePicker v-model:date="eventEndDate" v-model:time="eventEndTime" :min="eventBeginDate" />
+            </div>
+            <div class="my-2">
+              <button class="btn btn-outline-success" type="button" id="tuttoIlGiorno" @click="allDay">
+                All day
+              </button>
+            </div>
+            <div class="modal-footer d-flex justify-content-end">
+              <button class="btn btn-secondary" :disabled="!eventText" @click="generateDetails">
+                AI
+              </button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" :disabled="!canCreateEvent()"
+                @click="updateEvent(1)">
+                Update This Specific Event
+              </button>
+            </div>
           </div>
-          <div class="my-2">
-            <label>End</label>
-            <br />
-            <button class="btn btn-outline-primary" @click="setEndNow">
-              Now
-            </button>
-            <DateTimePicker v-model:date="eventEndDate" v-model:time="eventEndTime" :min="eventBeginDate" />
-          </div>
-          <div class="my-2">
-            <button class="btn btn-outline-success" type="button" id="tuttoIlGiorno" @click="allDay">
-              All day
-            </button>
-          </div>
-          <div class="modal-footer d-flex justify-content-end">
-            <button class="btn btn-secondary" :disabled="!eventText" @click="generateDetails">
-              AI
-            </button>
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" :disabled="!canCreateEvent()"
-              @click="updateEvent(1)">
-              Update This Event
-            </button>
           </div>
         </div>
-      </div>
     </div>
   </div>
 </template>
