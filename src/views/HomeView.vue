@@ -3,6 +3,7 @@ import { store } from "@/store";
 import { ref, onBeforeMount, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { Temporal } from "@js-temporal/polyfill";
+import { get } from "mongoose";
 
 let lastnote = ref({});
 let nearEvents = ref([]);
@@ -69,13 +70,24 @@ function getVisibleDate(date) {
     return str;
 }
 
+function getWeeklyIndex(date){
+    const wday = Temporal.PlainDate.from(date).dayOfWeek;
+    return wday === 0 ? 7 : wday; 
+}
+
 function ToEvent(event) {
     const d1 = Temporal.PlainDate.from(store.value.simDate);
     const d2 = Temporal.PlainDate.from(event.dates[0].begin.slice(0, 10));
+    const i1 = getWeeklyIndex(store.value.simDate);
+    const i2 = getWeeklyIndex(event.dates[0].begin.slice(0, 10));
+
+    console.log("i1: " + i1 + " i2: " + i2);
 
     const diff = d2.since(d1);
-    console.log("week offsett:", diff.days % 7);
-    store.value.weekOffset += Math.floor(diff.days / 7);
+    store.value.weekOffset = Math.floor(diff.days / 7);
+    if(store.value.weekOffset === 0 && i2 < i1){
+        store.value.weekOffset = 1; 
+    } 
     router.push('/calendar');
 }
 
