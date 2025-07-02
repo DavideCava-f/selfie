@@ -6,14 +6,11 @@ async function getEventsOfDay() {
     credentials: "include"
   });
   store.value.eventsOfDay = (await response.json());
-  /* console.log("Events of day:");
-  console.log(store.value.eventsOfDay); */
 }
 
 async function getEventsOfMonth() {
   try {
     const firstDay = store.value.simDate.with({ day: 1 }).add({ months: store.value.monthOffset });
-    //console.log(firstDay);
     const response = await fetch(`${store.value.url}:${store.value.port}/event/eventOfMonth?firstday=${firstDay}`, {
       credentials: "include"
     });
@@ -23,7 +20,6 @@ async function getEventsOfMonth() {
         events: date.events
       }
     });
-    //console.log(store.value.eventsOfMonth);
   }
   catch (err) {
     console.log(err);

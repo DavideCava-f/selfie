@@ -23,7 +23,6 @@ function deleteEvent(i) {
 
   }).then(response => { return response.json() })
     .then(data => {
-  console.log(store.value.activeEventId + "GOGOGOGOGOGOGOGOGOGO")
   store.value.activeEventId = null;
       store.value.activeDate = null
       store.value.update();
@@ -42,7 +41,6 @@ function getEvent() {
 }
 
 watch(() => store.value.activeEventId, () => {
-  console.log("watch visual");
   if(store.value.activeEventId)
     getEvent();
 });

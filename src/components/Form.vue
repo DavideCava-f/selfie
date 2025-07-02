@@ -28,7 +28,6 @@ async function validateForm() {
   } else if (response.status === 500) {
     alert("Errore interno al server");
   } else if (response.status === 200) {
-    console.log("Login effettuato");
     router.push("/home");
   } else {
     alert("Errore generale");
@@ -41,7 +40,6 @@ async function addUser() {
     return;
   }
   const response = await fetch(`${store.value.url}:${store.value.port}/user/isnew?email=${UserSU.value.username}`)
-  console.log(response.status);
   if (response.status === 400) {
     alert("Utente già esistente");
     document.getElementById("username").value = "";
@@ -60,7 +58,6 @@ async function addUser() {
         email: UserSU.value.username,
       }),
     });
-    console.log("Registrazione effettuata");
     resetValues();
     SignUp.value = false;
   } else {

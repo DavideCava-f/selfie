@@ -33,9 +33,6 @@ function resetDeadline() {
 }
 
 function createActivity() {
-    console.log("create activity");
-    console.log(activityDeadlineDate.value + "AAAAA");
-    console.log(activityDeadlineTime.value + "AAAASA");
 
     let simDate = store.value.simDateTime.toString().split('.')[0] + '.000Z'
     let DeadlineDate = ""
@@ -44,7 +41,6 @@ function createActivity() {
     } else {
         DeadlineDate = activityDeadlineDate.value + "T" + activityDeadlineTime.value + ".000Z"
     }
-    console.log(simDate)
     fetch(`${store.value.url}:${store.value.port}/activity`, {
         credentials: "include",
         method: "POST",
@@ -59,7 +55,6 @@ function createActivity() {
             creationDate: simDate
         })
     }).then(response => {
-        console.log("non ci arrivo");
         emit('created');
     });
 }

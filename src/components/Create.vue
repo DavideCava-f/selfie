@@ -17,7 +17,6 @@ onMounted(() => {
     closed.value = false;
 });
 
-watch(() => props.date, () => { console.log(props.date) })
 
 </script>
 

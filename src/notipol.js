@@ -28,14 +28,9 @@ async function setNotedTrue(eventId, dateId) {
 
 function openDate(date) {
   router.push("/calendar");
-  console.log(date);
   let begin = Temporal.PlainDateTime.from(date.begin.slice(0, -1));
-  console.log(begin);
   let distance = begin.since(store.value.simDateTime, { smallestUnit: "seconds", largestUnit: "months" });
 
-  console.log(distance.total({ unit: 'days' }));
-  console.log(distance.total({ unit: 'weeks', relativeTo: store.value.simDateTime }));
-  console.log(distance.total({ unit: 'months', relativeTo: store.value.simDateTime }));
 
   store.value.dayOffset += Math.round(distance.total({ unit: 'days' }));
   store.value.weekOffset += Math.round(distance.total({ unit: 'weeks', relativeTo: store.value.simDateTime }));
@@ -72,11 +67,9 @@ async function EventNotification(event) {
   let dates = event.dates;
   // FIXME: siamo sicuri che con find venga trovata la prima data dell'evento da notificare?
   let nextDate = dates.find(date => Temporal.PlainDateTime.compare(Temporal.PlainDateTime.from(date.begin.slice(0, -1)), Now) >= 1) //Trovo la data successiva e dopo faccio i controlli
-  console.log("NEXT DATE: " + nextDate);
 
   if (nextDate != undefined) {
     event.notification.advance.forEach(advance => {
-      console.log(advance);
       for (const d in store.value.advance) {
         const duration = store.value.advance[d][0];
         const type = store.value.advance[d][1];
@@ -204,17 +197,13 @@ async function ActivityNotification(act) {
 
 async function notipol() {
   if (await store.value.checkAuth()) {
-    console.log("inside notipol");
     Notification.requestPermission();
     const max = (store.value.advance.twoWeeks[0].add(store.value.advance.twelveHr[0].add(store.value.advance.halfHr[0]))).toString();
-    //console.log("max: " + max.toString());
     let response = await fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}&isNotification=${true}&max=${max}`, {
       credentials: "include"
     });
     let Events = await response.json();
     let now = Temporal.PlainDateTime.from(store.value.simDateTime)
-    console.log("notipol!");
-    console.log(Events)
     await Events.forEach(el => { EventNotification(el) });
     let activities = await fetch(`${store.value.url}:${store.value.port}/activity`, {
       credentials: "include"
@@ -231,15 +220,10 @@ async function notipol() {
       }
       return toReturn
     })
-    console.log("ACTST")
-    console.log(Expired)
     /*
       const oneDayFromNow = now.add({ days: 1 });
       const oneWeekFromNow = now.add({ days: 7 });
   
-      console.log(oneDayFromNow.toString())
-      console.log(oneWeekFromNow.toString())
-      console.log(now.toString())
      */
     Expired.forEach((el) => {
       ActivityNotification(el)

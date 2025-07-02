@@ -20,7 +20,6 @@ router.put("/", verifyToken, async function(req, res) {
       );
     }
   } catch (error) {
-    console.log(error);
     res.status(500).json(error);
   }
 });

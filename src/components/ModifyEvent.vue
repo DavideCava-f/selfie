@@ -7,7 +7,6 @@ import DateTimePicker from './DateTimePicker.vue';
 
 
 watch(() => [store.value.activeEventId, store.value.activeDate], () => {
-  console.log("watch modify");
   if (store.value.activeEventId)
     getEvent();
 })
@@ -23,9 +22,6 @@ const updateOnlyThis = ref(false);
 
 function updateEvent(i) {
   //Da mettere Date del giorno selezionato
-  console.log(eventTitle.value)
-  console.log(eventText.value)
-  console.log(eventLink.value)
   fetch(`${store.value.url}:${store.value.port}/event/OneEvent`, {
     credentials: "include",
     method: "PUT",
@@ -69,7 +65,6 @@ function getEvent() {
       eventBeginTime.value = data.dates[0].begin.split("T")[1].substring(0, 5) + ":00";
       eventEndDate.value = store.value.activeDate.toString();
       eventEndTime.value = data.dates[0].end.split("T")[1].substring(0, 5) + ":00";
-      console.log("HOLA DIO CAN " + eventTitle.value)
     });
 }
 
@@ -117,7 +112,6 @@ function canCreateEvent() {
 }
 
 // watch(() => [store.value.activeEventId, store.value.activeDate], () => {
-//   console.log("WATCH MODIFY");
 //   getEvent();
 // });
 </script>

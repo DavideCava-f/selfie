@@ -9,7 +9,6 @@ const router = express.Router();
 dotenv.config();
 
 router.post("/", verifyToken, async function(req, res) {
-    console.log(req.body.creationDate)
     try {
         await Activity.create({
             userId: req.userId,
@@ -30,7 +29,6 @@ router.post("/", verifyToken, async function(req, res) {
         });
         res.status(200).send();
     } catch (err) {
-        console.log(err);
         res.status(500).send();
     }
 });
@@ -55,7 +53,6 @@ router.delete("/", verifyToken, async function(req, res) {
 });
 
 router.put("/noted", verifyToken, async function(req, res) {
-    console.log(req.body.isLateModified)
     try {
         const Acts = await Activity.updateOne({ _id: req.body.id_Act }, {
             $set: {
@@ -73,8 +70,6 @@ router.put("/noted", verifyToken, async function(req, res) {
 
 router.put("/update", verifyToken, async function(req, res) {
     try {
-        console.log(req.body.text)
-        console.log(req.body.id_Act)
         const Acts = await Activity.updateOne({ _id: req.body.id_Act }, {
             $set: {
 
@@ -120,7 +115,6 @@ router.get("/ofday", verifyToken, async function(req, res) {
         );
         res.status(200).json(activities);
     } catch (error) {
-        console.log(error);
         res.status(500).json({ error: error });
     }
 });
@@ -139,10 +133,8 @@ router.get("/ofweek", verifyToken, async function(req, res) {
             { $group: { _id: "$day", activities: { $push: "$$ROOT" } } },
             { $sort: { _id: 1 } }
         ]);
-        console.log(activities);
         res.status(200).json(activities);
     } catch (error) {
-        console.log(error);
         res.status(200).json({ error: error })
     }
 });
@@ -161,10 +153,8 @@ router.get("/ofmonth", verifyToken, async function(req, res) {
             { $group: { _id: "$day", activities: { $push: "$$ROOT" } } },
             { $sort: { _id: 1 } }
         ]);
-        console.log(activities);
         res.status(200).json(activities);
     } catch (err) {
-        console.log(err);
         res.status(500).json({ error: err });
     } finally {
     }

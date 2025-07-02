@@ -1,7 +1,6 @@
 <script setup>
 import { Temporal } from "@js-temporal/polyfill";
 import { store } from "@/store";
-//import { get } from "mongoose";
 
 const props = defineProps({
   activities: Array
@@ -21,7 +20,6 @@ function toggleChange(id, compl) {
       completion: compl
     }),
   }).then(() => {
-    console.log("dio merda");
     store.value.update();
   });
 }

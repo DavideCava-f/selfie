@@ -70,7 +70,6 @@ router.get("/last", verifyToken, async function(req, res) {
       res.json(lastnote);
   }
   catch (err) {
-    console.log(err);
   } finally {
   }
 });

@@ -48,9 +48,7 @@ function setupTimer() {
   pomodoro.value.style.backgroundColor = "hsl(92, 99%, 37%)";
   colorValue.value = 92;
   RateOfChange.value = colorValue.value / INITIAL_TIME.value;
-  console.log("RateOfChange: " + RateOfChange.value);
   relaxChange.value = colorValue.value / relaxingTime.value;
-  console.log("RelaxChange: " + relaxChange.value);
 }
 
 async function tick() {
@@ -58,9 +56,7 @@ async function tick() {
     time.value--;
     lancetta.value.style.transform = `rotate(${-(time.value / barTime.value) * 360}deg)`;
     if (relaxing.value) {
-      console.log("colorValue: " + colorValue.value);
       colorValue.value += relaxChange.value;
-      console.log("ColorValue: " + colorValue.value);
       pomodoro.value.style.backgroundColor = `hsl(${colorValue.value}, 99%, 37%)`;
     }
     else {
@@ -135,9 +131,7 @@ async function tick() {
           Accept: "application/json",
           'Content-Type': 'application/json',
         },
-      }).then(() => {
-        console.log("pomodoro updated correctly");
-      });
+      })
       alert('Time is up!');
     }
   }
@@ -201,7 +195,6 @@ async function resetTimerCycle() {
 }
 
 function deletePomodoroEvent() {
-  console.log("delete pomodoro");
   fetch(`${store.value.url}:${store.value.port}/pomodoro?id=${store.value.activePomodoro._id}`, {
     credentials: "include",
     method: "DELETE",
@@ -210,7 +203,6 @@ function deletePomodoroEvent() {
       'Content-Type': 'application/json',
     }
   }).then(() => {
-    console.log("pomodoro deleted correctly");
     store.value.activePomodoro = null;
     store.value.update();
   });
@@ -225,7 +217,6 @@ function updateCompletedCycles() {
       'Content-Type': 'application/json',
     },
   }).then(() => {
-    console.log("pomodoro updated correctly");
     store.value.update();
   })
 }
@@ -239,7 +230,6 @@ function resetCycles() {
       'Content-Type': 'application/json',
     },
   }).then(() => {
-    console.log("pomodoro resetted correctly");
     store.value.update();
   })
 }
