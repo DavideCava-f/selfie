@@ -41,14 +41,12 @@ class EventCreator {
     }
     for (const d in store.value.advance) {
       const i = Object.keys(store.value.advance).indexOf(d);
-      console.log(i);
       if (notificationSelected[i]) {
         event.notification.advance.push({
           ofType: store.value.advance[d][1],
         });
       }
     }
-    console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",
@@ -105,14 +103,12 @@ class EventCreator {
 
     for (const d in store.value.advance) {
       const i = Object.keys(store.value.advance).indexOf(d);
-      console.log(i);
       if (notificationSelected[i]) {
         event.notification.advance.push({
           ofType: store.value.advance[d][1],
         });
       }
     }
-    console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",
@@ -184,7 +180,6 @@ class EventCreator {
 
     for (const d in store.value.advance) {
       const i = Object.keys(store.value.advance).indexOf(d);
-      console.log(i);
       if (notificationSelected[i]) {
         event.notification.advance.push({
           ofType: store.value.advance[d][1],
@@ -275,14 +270,12 @@ class EventCreator {
     });
     for (const d in store.value.advance) {
       const i = Object.keys(store.value.advance).indexOf(d);
-      console.log(i);
       if (notificationSelected[i]) {
         event.notification.advance.push({
           ofType: store.value.advance[d][1],
         });
       }
     }
-    console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",
@@ -331,14 +324,12 @@ class EventCreator {
     }
     for (const d in store.value.advance) {
       const i = Object.keys(store.value.advance).indexOf(d);
-      console.log(i);
       if (notificationSelected[i]) {
         event.notification.advance.push({
           ofType: store.value.advance[d][1],
         });
       }
     }
-    console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",
@@ -394,14 +385,12 @@ class EventCreator {
     );
     for (const d in store.value.advance) {
       const i = Object.keys(store.value.advance).indexOf(d);
-      console.log(i);
       if (notificationSelected[i]) {
         event.notification.advance.push({
           ofType: store.value.advance[d][1],
         });
       }
     }
-    console.log(event);
     return fetch(`${store.value.url}:${store.value.port}/event`, {
       method: "POST",
       credentials: "include",

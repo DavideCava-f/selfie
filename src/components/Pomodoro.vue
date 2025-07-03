@@ -64,9 +64,7 @@ async function tick() {
     time.value--;
     lancetta.value.style.transform = `rotate(${-(time.value / barTime.value) * 360}deg)`;
     if (relaxing.value) {
-      console.log("colorValue: " + colorValue.value);
       colorValue.value += relaxChange.value;
-      console.log("ColorValue: " + colorValue.value);
       pomodoro.value.style.backgroundColor = `hsl(${colorValue.value}, 99%, 37%)`;
     }
     else {
@@ -150,7 +148,7 @@ async function tick() {
           completedCycles: SetCycles.value,
           completedDate: store.value.simDateTime, // Use the simulated date time
         })
-      }).then(() => { console.log("pomodoro created correctly"); store.value.update(); });
+      }).then(() => { store.value.update(); });
     }
   }
 }
@@ -287,7 +285,7 @@ function createPomodoroEvent() {
       completedCycles: 0, // Assuming all cycles are completed
       completedDate: null // No completion date yet
     })
-  }).then(() => { console.log("pomodoro created correctly"); store.value.update(); });
+  }).then(() => { store.value.update(); });
 }
 
 onUnmounted(() => {

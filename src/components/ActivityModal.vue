@@ -21,7 +21,6 @@ function toggleChange(id, compl) {
       completion: compl
     }),
   }).then(() => {
-    console.log("dio merda");
     store.value.update();
   });
 }

@@ -49,7 +49,6 @@ onMounted(async () => {
   await getEventsOfDay();
   await getActivitiesOfDay();
   await getPomodoros();
-  console.log((store.value.eventsOfDay).length);
 });
 
 watch(() => store.value.dayOffset, () => getEventsOfDay());
@@ -91,9 +90,9 @@ watch(() => store.value.dayOffset, () => getPomodoros());
 
     
     <div v-if="isEvent">
-      <div v-if="store.eventsOfDay.length !== 0" class="overflow-scroll rounded-3 w-100" style="max-height: 70vh;">
+      <div v-if="store.eventsOfDay.length !== 0" class="border border-dark overflow-scroll rounded-3 w-100" style="max-height: 70vh;">
         <button v-for="event in store.eventsOfDay" class="btn w-100 bg-light my-1 p-3 rounded-3"
-          @click="store.activeEventId = event._id; store.toggle = !store.toggle; store.activeDate = store.simDate.add({ days: store.dayOffset }); console.log(store.activeEventId)"
+          @click="store.activeEventId = event._id; store.toggle = !store.toggle; store.activeDate = store.simDate.add({ days: store.dayOffset }); "
           data-bs-target="#VisualizeEventModal" data-bs-toggle="modal">
           <h4>{{ event.title }}</h4>
           {{ event.details.text }}
@@ -102,10 +101,10 @@ watch(() => store.value.dayOffset, () => getPomodoros());
           </footer>
         </button>
       </div>
-      <div v-else class="overflow-scroll rounded-3" style="max-height: 70vh;">
+      <div v-else class="border border-dark overflow-scroll rounded-3" style="max-height: 70vh;">
         <h4 class="text-center">No events for this day</h4>
       </div>
-      <div class="overflow-scroll rounded-3 w-100" style="max-height: 40vh;">
+      <div class="border border-dark overflow-scroll rounded-3 w-100" style="max-height: 40vh;">
         <button v-for="pomodoro in store.pomodoros.filter((p) => Temporal.PlainDate.compare(Temporal.PlainDate.from(p.beginDate.split('T')[0]),
           VisualizedDate) === 0)" class="btn btn-danger w-100 my-1 p-3 rounded-3"
           @click="store.activePomodoro = pomodoro" data-bs-target="#PomodoroEventModal" data-bs-toggle="modal">

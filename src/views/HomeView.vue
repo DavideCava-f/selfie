@@ -18,13 +18,10 @@ async function getLastNote() {
     });
     if (!response.ok) return;
     lastnote.value = await response.json();
-    console.log("Ultima nota:", lastnote.value);
-    console.log("Ultima nota:", lastnote.value.Title);
-    console.log("Ultima nota:", lastnote.value.Text);
+    
 }
 
 async function getLastPomodoro() {
-    console.log("Ultimo pomodoro");
     const response = await fetch(`${store.value.url}:${store.value.port}/pomodoro/last`, {
         credentials: "include",
     });
@@ -40,16 +37,13 @@ async function update() {
 }
 
 async function getNearEvents() {
-    console.log("suca");
     const max = (store.value.advance.twoWeeks[0].add(store.value.advance.twelveHr[0].add(store.value.advance.halfHr[0]))).toString();
     fetch(`${store.value.url}:${store.value.port}/event/nearEvents?today=${store.value.simDateTime}&isNotification=${false}&max=${max}`, {
         credentials: "include"
     })
         .then(response => {
-            //console.log(response);
             return response.json();
         }).then(data => {
-            console.log("Near Eventssss:");
             nearEvents.value = data.slice(0, 5);
         });
 }
@@ -83,8 +77,6 @@ function ToEvent(event) {
     const i1 = getWeeklyIndex(store.value.simDate);
     const i2 = getWeeklyIndex(event.dates[0].begin.slice(0, 10));
 
-    console.log("i1: " + i1 + " i2: " + i2);
-
     const diff = d2.since(d1);
     store.value.weekOffset = Math.floor(diff.days / 7);
     if (store.value.weekOffset === 0 && i2 < i1) {
@@ -102,11 +94,11 @@ function ToEvent(event) {
 
                 <div class="card text-bg-danger mb-3" style="max-height: 80vh;">
                     <div class="card-header d-flex align-items-center ">
-                        <h2 class="mx-auto">Eventi prossimi</h2>
+                        <h2 class="mx-auto">Near events</h2>
                     </div>
                     <div class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center">
                         <div v-if="nearEvents.length == 0" class="text-center">
-                            <h1>Non ci sono eventi prossimi</h1>
+                            <h1>There are no near events</h1>
                         </div>
                         <div v-else>
                             <button v-for="event in nearEvents" @click="ToEvent(event)"
@@ -138,7 +130,7 @@ function ToEvent(event) {
 
                 <div class="card text-bg-danger mb-3" style="max-height: 80vh;">
                     <div class="card-header d-flex align-items-center">
-                        <h2 class="mx-auto">Ultima nota modificata</h2>
+                        <h2 class="mx-auto">Last note modified</h2>
                     </div>
                     <div   v-if="lastnote!==null" class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center ">
                         <button v-if="lastnote.markdown" @click="router.push('/notes');" class="w-100 btn bg-success rounded-3 text-black my-1">
@@ -160,7 +152,7 @@ function ToEvent(event) {
                     </div>
                     <div v-else class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center ">
                         <h2 class="text-center">
-                            nessuna nota trovata...
+                            No note found...
                         </h2>
                     </div>
                 </div>
@@ -168,17 +160,17 @@ function ToEvent(event) {
             <div class="col-lg-3 col-12 animate-card-downward">
                 <div class="card text-bg-danger mb-3" style="max-height: 80vh;">
                     <div class="card-header d-flex align-items-center justify-content-center text-center">
-                        <h2 class="mx-auto">Utlimo pomodoro completato</h2>
+                        <h2 class="mx-auto">Last pomodoro completed</h2>
                     </div>
                     <div class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center">
                         <div v-if="pomodoro !== null" class="rounded" style="background-color: #f383a5;">
                             <div class="row g-0 text-dark">
                                 <div class="col-12 d-flex flex-column align-items-center">
-                                    Durata
+                                    Duration
                                 </div>
                                 <div class="col-6 d-flex flex-column align-items-center ">
                                     <h4>
-                                        Studio
+                                        Study
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             fill="currentColor" class="bi bi-book" viewBox="0 0 16 16">
                                             <path
@@ -189,7 +181,7 @@ function ToEvent(event) {
                                 </div>
                                 <div class="col-6 d-flex flex-column align-items-center">
                                     <h4>
-                                        Pausa
+                                        Relax
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             fill="currentColor" class="bi bi-pause-fill" viewBox="0 0 16 16">
                                             <path
@@ -200,7 +192,7 @@ function ToEvent(event) {
                                 </div>
                                 <div class="col-12 d-flex flex-column align-items-center">
                                     <h4>
-                                        cicli
+                                        Cycles
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             fill="currentColor" class="bi bi-arrow-counterclockwise"
                                             viewBox="0 0 16 16">
@@ -214,7 +206,7 @@ function ToEvent(event) {
                                 </div>
                                 <div class="col-12 d-flex flex-column align-items-center">
                                     <h4>
-                                        Totale pomodoro:
+                                        Total pomodoro time:
                                     </h4>
                                     <p>{{ (pomodoro.studyMins + pomodoro.pauseMins) * pomodoro.cycles }} {{
                                         (pomodoro.studyMins + pomodoro.pauseMins) * pomodoro.cycles > 1 ? "minuti" :
@@ -224,7 +216,7 @@ function ToEvent(event) {
                         </div>
                         <div v-else>
                             <h3 class="text-center">
-                                Non è ancora stato completato nessun pomodoro
+                                No pomodoro completed yet
                             </h3>
                             
                         </div>

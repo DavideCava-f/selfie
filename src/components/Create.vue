@@ -12,12 +12,10 @@ const props = defineProps({
 });
 
 onMounted(() => {
-    console.log("mounted create")
     choice.value = true;
     closed.value = false;
 });
 
-watch(() => props.date, () => { console.log(props.date) })
 
 </script>
 

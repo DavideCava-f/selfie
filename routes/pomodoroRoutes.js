@@ -9,7 +9,6 @@ const uri = process.env.MONGODB_DEV;
 
 router.post("/", verifyToken, async function(req, res) {
   try {
-    console.log(req.body);
     await Pomodoro.create({
       userId: req.userId,
       beginDate: req.body.beginDate,
@@ -72,7 +71,6 @@ router.put("/", verifyToken, async function(req, res) {
 router.put("/sweep", verifyToken, async function(req, res) {
   try {
     const ids = req.body.ids;
-    console.log(ids);
     await Pomodoro.updateMany(
       { _id: { $in: ids } },
       [{ $set: { completedCycles: "$cycles" }}]
@@ -104,11 +102,8 @@ router.get("/last", verifyToken, async function(req, res) {
   try {
     const lastPomodoro = await Pomodoro.find({ userId: req.userId }).sort({completedDate: -1 }).limit(1);
     if (lastPomodoro.length === 0) {
-      console.log("No pomodoro found for this user.");
       res.json(null);
     }else{
-      console.log("Last pomodoro found:");
-      console.log(lastPomodoro[0]);
       res.status(200).json(lastPomodoro[0]);
     }
   } catch (error) {

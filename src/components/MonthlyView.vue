@@ -11,18 +11,13 @@ import ActivityModal from "@/components/ActivityModal.vue";
 let weekdays = ref([]);
 let firstDay = computed(() => store.value.simDate.with({ day: 1 }).add({ months: store.value.monthOffset }));
 let dayInMonth = ref([]);
-const giorniSettimana = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
+const giorniSettimana = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 // var MactiveEventId = ref("");
 let selectedDay = ref(null);
 let eventsOfSelectedDay = ref({});
 const activitiesOfSelectedDay = ref({});
 let DayNewEvent = ref(store.value.simDate);
 
-watch(DayNewEvent, () => { console.log(DayNewEvent.value) })
-function reload() {
-    store.value.monthOffset = 0;
-    updateWeekDays(firstDay.value);
-}
 
 function updateWeekDays(day) {
     weekdays.value = [];
@@ -30,7 +25,6 @@ function updateWeekDays(day) {
         weekdays.value.push(giorniSettimana[(day.add({ days: i })).dayOfWeek - 1]);
     }
     dayInMonth.value = day.daysInMonth;
-    console.log(firstDay.toString());
 }
 
 async function changeMonth(direction) {
@@ -78,8 +72,6 @@ function getInvertedColor(hex) {
 }
 
 onMounted(async () => {
-    console.log("Mounted MonthlyView");
-    console.log(firstDay.toString());
     updateWeekDays(firstDay.value);
     getEventsOfMonth();
     getActivitiesOfMonth();
@@ -103,8 +95,8 @@ watch(() => store.value.monthOffset, () => getPomodoros());
             <div class="d-flex flex-row justify-content-center align-items-center w-100">
                 <div class="align-self-center text-dark">
                     {{
-                        (firstDay.toLocaleString("it-IT", { month: "long", year: "numeric" })).charAt(0).toUpperCase() +
-                        firstDay.toLocaleString("it-IT", { month: "long", year: "numeric" }).slice(1)
+                        (firstDay.toLocaleString("en-EN", { month: "long", year: "numeric" })).charAt(0).toUpperCase() +
+                        firstDay.toLocaleString("en-EN", { month: "long", year: "numeric" }).slice(1)
                     }}
                 </div>
             </div>
@@ -134,7 +126,7 @@ watch(() => store.value.monthOffset, () => getPomodoros());
                     </div>
                     <button v-if="store.activitiesOfMonth.find((d) => d.day === i)"
                         class="btn bg-danger activity-button d-flex d-inline-block align-items-center justify-content-center"
-                        @click="activitiesOfSelectedDay = store.activitiesOfMonth.find((d) => d.day === i).activities; console.log(activitiesOfSelectedDay)"
+                        @click="activitiesOfSelectedDay = store.activitiesOfMonth.find((d) => d.day === i).activities; "
                         data-bs-target="#VisualizeActivitiesModal" data-bs-toggle="modal">
                         <img src="@/assets/ActivityLogo.svg" alt="Activities" width="w-100">
                     </button>
@@ -144,7 +136,6 @@ watch(() => store.value.monthOffset, () => getPomodoros());
                         <button @click="() => {
                             store.activeEventId = event._id; store.toggle = !store.toggle;
                             store.activeDate = firstDay.add({ days: i - 1 });
-                            console.log(store.activeDate);
                         }" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal"
                             v-if="store.eventsOfMonth.find((d) => (d.day) === i)"
                             v-for="event in (store.eventsOfMonth.find((d) => (d.day) === i).events).slice(0, 2)"
@@ -166,14 +157,13 @@ watch(() => store.value.monthOffset, () => getPomodoros());
                                 if(conta(i) > 0)
                                     eventsOfSelectedDay = (store.eventsOfMonth.find((d) => (d.day) === i)).events;
                             }" data-bs-target="#AltriEventi" data-bs-toggle="modal">
-                            altri eventi
+                            Other events
                         </button>
                     </div>
                     <div v-else>
                         <button @click="() => {
                             store.activeEventId = event._id; store.toggle = !store.toggle;
                             store.activeDate = firstDay.add({ days: i - 1 });
-                            console.log(store.activeDate);
                         }" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal"
                             v-if="store.eventsOfMonth.find((d) => (d.day) === i)"
                             v-for="event in store.eventsOfMonth.find((d) => (d.day) === i).events" class="btn d-flex d-inline-block align-items-center 
@@ -189,30 +179,18 @@ watch(() => store.value.monthOffset, () => getPomodoros());
                             data-bs-target="#PomodoroEventModal" data-bs-toggle="modal">
                             <span>🍅</span> <span class="d-none d-sm-block">{{ pomodoro.beginDate.split("T")[1].slice(0, 5) }}</span>
                         </button>
-                        <!-- <button v-if="contaPom(i) > 2 - conta(i)"
-                            class="btn event d-flex d-inline-block align-self-center align-items-center text-nowrap"
-                            @click="() => {
-                                selectedDay = i;
-                                eventsOfSelectedDay = store.eventsOfMonth.find((d) => (d.day) === i).events;
-                                store.activeDate = firstDay.add({ days: i - 1 });
-                            }" data-bs-target="#AltriEventi" data-bs-toggle="modal">
-                            altri eventi
-                        </button> -->
                     </div>
                 </div>
 
             </div>
         </div>
     </div>
-    <!-- <div class="modal fade" id="VisualizeEventModalM" data-bs-backdrop="false" tabindex="-1" aria-hidden="true"> -->
-    <!--     <VisualizeEvent /> -->
-    <!-- </div> -->
 
     <div class="modal fade" id="AltriEventi" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Altri eventi</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Other events</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body d-flex flex-column container-fluid">
@@ -226,7 +204,7 @@ watch(() => store.value.monthOffset, () => getPomodoros());
                         v-for="pomodoro in store.pomodoros.filter((p) =>
                             Temporal.PlainDate.compare(Temporal.PlainDate.from(p.beginDate.slice(0, -1)), firstDay.add({ days: selectedDay - 1 })) === 0)"
                         class="btn btn-danger my-1" data-bs-target="#PomodoroEventModal" data-bs-toggle="modal"
-                        @click="store.activePomodoro = pomodoro">
+                        @click="store.activePomodoro = pomodoro; ">
                         🍅 {{ pomodoro.beginDate.split("T")[1].slice(0, 5) }}
                     </button>
                     <button class="btn btn-primary my-1" data-bs-target="#CreateEV" data-bs-toggle="modal">

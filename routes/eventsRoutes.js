@@ -10,8 +10,6 @@ dotenv.config();
 
 router.post("/", verifyToken, async function(req, res) {
   try {
-    console.log("Stampa date:");
-    console.log(req.body.dates);
     await Event.create({
       userId: req.userId,
       dates: req.body.dates,
@@ -51,23 +49,15 @@ router.get("/OneEvent", verifyToken, async function(req, res) {
 
 router.delete("/OneEvent", verifyToken, async function(req, res) {
   try {
-    console.log("inside delete!!!");
-    //  console.log(req.body.idEvent)
-    //console.log(req.body.idOp)
     const activeDate = req.body.date;
-    console.log(activeDate)
-    // console.log(req.body.idOp)
     if (req.body.idOp == 0) {
 
       const ev = await Event.findOne({ _id: req.body.idEvent })
-      console.log(ev);
 
       if (ev.dates.length == 1) {
         const v = await Event.deleteOne({ _id: req.body.idEvent })
-        console.log(v)
       } else {
 
-        console.log("update One!");
         let startOfDay = Temporal.PlainDateTime.from(activeDate);
         let endOfDay = startOfDay.add({ hours: 23, minutes: 59, seconds: 59 });
         startOfDay = startOfDay.toString();
@@ -91,7 +81,6 @@ router.delete("/OneEvent", verifyToken, async function(req, res) {
     //res.status(200).send("aa")
     res.status(200).json({ "a": "a" })
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error: error });
   } finally {
   }
@@ -101,7 +90,6 @@ router.delete("/OneEvent", verifyToken, async function(req, res) {
 
 
 router.put("/OneEvent", verifyToken, async function(req, res) {
-  console.log("inside put!!!");
   try {
     if (req.body.idOp == 0) {
       const event = await Event.updateOne({ _id: req.body.id }, {
@@ -115,7 +103,6 @@ router.put("/OneEvent", verifyToken, async function(req, res) {
     } else {
       const dates = [{ begin: new Date(req.body.beginDate), end: new Date(req.body.endDate) }]
       const details = { text: req.body.text, link: req.body.link }
-      console.log(dates)
       const activeDate = req.body.date
       let startOfDay = Temporal.PlainDateTime.from(activeDate);
       let endOfDay = startOfDay.add({ hours: 23, minutes: 59, seconds: 59 });
@@ -131,7 +118,6 @@ router.put("/OneEvent", verifyToken, async function(req, res) {
           }
         }
       })
-      console.log("putamadre")
       const a = await Event.create({
         userId: req.userId,
         dates: dates,
@@ -142,7 +128,6 @@ router.put("/OneEvent", verifyToken, async function(req, res) {
     res.json({ mess: "ciao" });
     //res.status(200).send("aa")
   } catch (err) {
-    console.log(err);
   } finally {
   }
 });
@@ -151,28 +136,18 @@ router.get("/nearEvents", verifyToken, async function(req, res) {
   try {
     const today = req.query.today;
     const isNotification = req.query.isNotification;
-    console.log("today: " + today);
-    console.log("isNotification: " + isNotification);
     let advance;
     if (!isNotification) {
-      //console.log("sucamelllllo");
       var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString() + "Z" } });
-      //console.log("nearEvents: " + nearEvents);
     }
     else {
-      //console.log("Max:" , req.query.max);
       const max = req.query.max;
-      //console.log("max: " + max.toString());
 
       advance = Temporal.PlainDateTime.from(req.query.today).add(max);
       var nearEvents = await Event.find({ userId: req.userId, "dates.begin": { $gte: today.toString() + "Z", $lte: advance.toString() + "Z" } });
-      //console.log("nearEvents: " + nearEvents);
 
     }
-    //console.log("today: " + today + "  " + typeof today);
-    //console.log("advance: " + advance.toString() + "  " + typeof advance);
 
-    //console.log(nearEvents);
     if (nearEvents) {
       for (let i = 0; i < nearEvents.length; i++) {
         nearEvents[i].dates = nearEvents[i].dates.filter((date) => {
@@ -181,7 +156,6 @@ router.get("/nearEvents", verifyToken, async function(req, res) {
           return Temporal.PlainDateTime.compare(a.begin.toISOString().slice(0, -1), b.begin.toISOString().slice(0, -1));
         });
       }
-      //console.log(nearEvents);
       nearEvents = nearEvents.sort((a, b) => {
         return Temporal.PlainDateTime.compare(a.dates[0].begin.toISOString().slice(0, -1), b.dates[0].begin.toISOString().slice(0, -1));
       });
@@ -219,10 +193,8 @@ router.get("/ofday", verifyToken, async function(req, res) {
         }
       }
     );
-    //console.log(eventsOfDay);
     res.status(200).json(eventsOfDay);
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 });
@@ -307,7 +279,6 @@ router.get("/ofweek", verifyToken, async function(req, res) {
       { $sort: { _id: 1 } }
     ]);
 
-    //console.log(eventsOfWeek);
     res.status(200).json(eventsOfWeek);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -319,8 +290,6 @@ router.get("/eventOfMonth", verifyToken, async function(req, res) {
     const firstday = req.query.firstday;
     let lastDate = Temporal.PlainDate.from(firstday).with({ day: Temporal.PlainDate.from(firstday).daysInMonth }).toString();
 
-    console.log(firstday.toString());
-    console.log(lastDate.toString());
     const eventsOfMonth = await Event.aggregate([
       { $match: { userId: new mongoose.Types.ObjectId(req.userId) } },
       { $unwind: "$dates" },
@@ -395,7 +364,6 @@ router.get("/eventOfMonth", verifyToken, async function(req, res) {
       { $group: { _id: "$day", events: { $push: "$$ROOT" } } },
       { $sort: { _id: 1 } }
     ]);
-    //console.log(eventsOfMonth);
 
     res.status(200).json(eventsOfMonth);
   } catch (err) {

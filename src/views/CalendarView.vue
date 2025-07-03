@@ -35,7 +35,7 @@ const isWeekly = ref(Boolean);
                     </button>
                     <button class="btn btn-outline-dark"
                         @click="isWeekly ? store.weekOffset = 0 : store.monthOffset = 0; store.dayOffset = 0;">
-                        <a href="#daily">Oggi</a>
+                        <a href="#daily">Today</a>
                     </button>
                 </div>
                 <component :is="isWeekly ? WeeklyView : MonthlyView"></component>

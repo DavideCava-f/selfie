@@ -24,7 +24,6 @@ export function CreateNote() {
   var Title = NCtitle.value || "New Note";
   var Content = NCcontent.value || "No Content";
   var creationDate = store.value.simDateTime
-  console.log(creationDate);
   fetch(`${store.value.url}:${store.value.port}/note`, {
     method: "post",
     credentials: "include",
@@ -43,7 +42,6 @@ export function CreateNote() {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       getNotes();
   NCtags.value = "";
   NCtitle.value = "";
@@ -64,9 +62,7 @@ export function DuplicateNote(id) {
   tagsStr = tagsStr.slice(0, -1);
   NCtags.value = tagsStr;
   NCMarkDown.value = elem.markdown 
-  console.log(NCtitle.value);
-  console.log(NCcontent.value);
-  console.log(NCtags.value);
+  
 
   CreateNote();
 
@@ -74,8 +70,7 @@ export function DuplicateNote(id) {
 
 export function DeleteNote(id) {
   //Use marked before writing on NotesArea(markdown)
-  console.log(id)
-  console.log(typeof id);
+
   fetch(`${store.value.url}:${store.value.port}/note`, {
     method: "delete",
     credentials: "include",
@@ -90,12 +85,11 @@ export function DeleteNote(id) {
     }),
   })
     .then((response) => {
-      console.log(response);
       return response.json();
     })
     .then(() => {
      // NotesList.value = NotesList.value.filter((el) => el._id.toString() != id);
-     getNotes() 
+      getNotes() 
      //do something awesome that makes the world a better place
     });
 }
@@ -106,19 +100,16 @@ export function getNotes() {
     credentials: "include",
   })
     .then((response) => {
-      console.log(response);
       return response.json();
     })
     .then((data) => {
       NotesList.value = data;
-      console.log(NotesList.value);
       //do something awesome that makes the world a better place
     });
 }
 
 
 export function UpdateNote(id) {
-  console.log(id);
   let tagsStr = "";
   const Note2Update = NotesList.value.find((el) => el._id.toString() === id);
   NUtitle.value = Note2Update.Title;
@@ -130,22 +121,16 @@ export function UpdateNote(id) {
   NUtags.value = tagsStr.slice(0, -1);
   NUid.value = Note2Update._id;
   NUMarkDown.value = Note2Update.markdown
-  console.log(NUid.value);
-  //console.log(Note2Update)
 }
 
 export function SaveAfterUpdate() {
-  console.log(NUtags.value);
   let tagsArr = NUtags.value.split(",");
   let jsonT = tagsArr.map((el) => {
     return '{"name":"' + el + '"}';
   });
   let UjsonTags = "[" + jsonT.toString() + "]";
 
-  console.log(NUid.value);
-  console.log(NUtitle.value);
-  console.log(NUcontent.value);
-  console.log(UjsonTags);
+
   let lastUpdate = store.value.simDateTime
   fetch(`${store.value.url}:${store.value.port}/note`, {
     method: "put",
@@ -165,7 +150,6 @@ export function SaveAfterUpdate() {
     }),
   })
     .then((response) => {
-      console.log(response);
       return response.json();
     })
     .then(() => {

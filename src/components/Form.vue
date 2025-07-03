@@ -24,29 +24,27 @@ async function validateForm() {
     credentials: "include"
   })
   if (response.status === 401) {
-    alert("Email o password errati");
+    alert("Email or password wrong");
   } else if (response.status === 500) {
-    alert("Errore interno al server");
+    alert("internal server error");
   } else if (response.status === 200) {
-    console.log("Login effettuato");
     router.push("/home");
   } else {
-    alert("Errore generale");
+    alert("Errore");
   }
 }
 
 async function addUser() {
   if (Password.value !== Confirm.value) {
-    alert("Le password non coincidono");
+    alert("passwords does not match");
     return;
   }
   const response = await fetch(`${store.value.url}:${store.value.port}/user/isnew?email=${UserSU.value.username}`)
-  console.log(response.status);
   if (response.status === 400) {
-    alert("Utente già esistente");
+    alert("Username already exists");
     document.getElementById("username").value = "";
   } else if (response.status === 500) {
-    alert("Errore interno al server");
+    alert("internal server error");
   } else if (response.status === 200) {
     await fetch(`${store.value.url}:${store.value.port}/user/register`, {
       method: "POST",
@@ -60,12 +58,11 @@ async function addUser() {
         email: UserSU.value.username,
       }),
     });
-    console.log("Registrazione effettuata");
     router.push('/home');
     // resetValues();
     // SignUp.value = false;
   } else {
-    alert("Errore generale");
+    alert("Errore");
   }
 }
 
@@ -108,7 +105,7 @@ function cseePswd() {
 </script>
 
 <template>
-  <section class="h-100 gradient-form" style="background-color: #eee">
+  <section class="h-100 gradient-form" style="background-color: ">
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-xl-10">
@@ -301,7 +298,7 @@ function cseePswd() {
                       </svg>
                     </li>
                     <li>
-                      Organize your study sessions and use the Pomodoro Timer
+                      Organize your study sessions and use the Pomodoro Timer 🍅
                     </li>
                     <li>Write and share notes with your friends</li>
                   </ul>

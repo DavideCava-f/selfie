@@ -28,12 +28,10 @@ async function logout() {
 }
 
 async function deleteAccount() {
-    console.log("delete dio cane");
     const response = await fetch(`${store.value.url}:${store.value.port}/user`, {
         method: "DELETE",
         credentials: "include"
     });
-    console.log("allora?");
     router.push("/login");
 }
 

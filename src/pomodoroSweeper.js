@@ -9,9 +9,7 @@ async function sweepPomodoros() {
   let pomodorosToSweep = store.value.pomodoros.filter((pomodoro) => {
     if (pomodoro.beginDate) {
       const finishPomodoroDateTime = Temporal.PlainDateTime.from(pomodoro.beginDate.slice(0, -1)).add({ minutes: (pomodoro.studyMins + pomodoro.pauseMins) * pomodoro.cycles });
-      //console.log(pomodoro.beginDate);
-      //console.log(pomodoro.completedCycles < pomodoro.cycles);
-      //console.log(Temporal.PlainDate.compare(store.value.simDate, finishPomodoroDateTime.toPlainDate()));
+      
       const cond = pomodoro.completedCycles < pomodoro.cycles &&
         Temporal.PlainDate.compare(store.value.simDate, finishPomodoroDateTime.toPlainDate()) > 0;
       return cond;
@@ -19,9 +17,7 @@ async function sweepPomodoros() {
       return false;
     }
   }).map(pomodoro => ({ ...pomodoro }));
-  //console.log(pomodorosToSweep);
 
-  console.log("about to sweep");
   await fetch(`${store.value.url}:${store.value.port}/pomodoro/sweep`, {
     credentials: "include",
     method: "PUT",
@@ -33,7 +29,6 @@ async function sweepPomodoros() {
       ids: pomodorosToSweep.map((pomodoro) => pomodoro._id)
     })
   });
-  console.log("sweeped");
 
   pomodorosToSweep.forEach((pomodoro) => {
     const pdate = Temporal.PlainDateTime.from(pomodoro.beginDate.slice(0, -1));
@@ -47,13 +42,9 @@ async function sweepPomodoros() {
     })
     pomodoro.cycles -= pomodoro.completedCycles;
     pomodoro.completedCycles = 0;
-    console.log(typeof pomodoro.beginDate);
   });
-  //console.log("Pomodoros to sweep");
-  //console.log(pomodorosToSweep);
 
   const promiseCreation = pomodorosToSweep.map((pomodoro) => {
-    //console.log(pomodoro.beginDate.toString());
     return fetch(`${store.value.url}:${store.value.port}/pomodoro`, {
       credentials: "include",
       method: "POST",
@@ -69,8 +60,6 @@ async function sweepPomodoros() {
       })
     })
   });
-  //console.log("Pomodoros to create (promises)");
-  //console.log(promiseCreation);
 
   await Promise.all(promiseCreation);
 
