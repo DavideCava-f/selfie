@@ -1,5 +1,4 @@
 <script setup>
-import OpenAI from "openai";
 import { ref, watch, watchEffect, reactive, onMounted } from "vue";
 import { store } from "@/store";
 import { Temporal } from "@js-temporal/polyfill";
@@ -58,10 +57,10 @@ function getEvent() {
       eventTitle.value = data.title
       eventText.value = data.details.text
       eventLink.value = data.details.link
-      if(store.value.activeDate === null) {
+      if (store.value.activeDate === null) {
         store.value.activeDate = data.dates[0].begin.split("T")[0];
       }
-      else{
+      else {
         eventBeginDate.value = store.value.activeDate.toString();
       }
       eventBeginTime.value = data.dates[0].begin.split("T")[1].substring(0, 5) + ":00";
@@ -128,7 +127,7 @@ function canCreateEvent() {
         <h1 class="modal-title fs-4" id="staticBackdropLabel">
           Modify event
         </h1>
-        <button type="button" class="btn-close"  data-bs-dismiss="modal" aria-label="Close"
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
           @click="resetFields"></button>
       </div>
       <div class="modal-body">
@@ -150,16 +149,16 @@ function canCreateEvent() {
         <br />
         <div v-if="datesCount > 1">
 
-        <div class="form-check my-2">
-          <input class="form-check-input" type="checkbox" id="updateOnlyThis" v-model="updateOnlyThis" />
-          <label class="form-check-label" for="updateOnlyThis">Update OnlyThis</label>
-        </div>
+          <div class="form-check my-2">
+            <input class="form-check-input" type="checkbox" id="updateOnlyThis" v-model="updateOnlyThis" />
+            <label class="form-check-label" for="updateOnlyThis">Update OnlyThis</label>
+          </div>
         </div>
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal" :disabled="updateOnlyThis"
           @click="updateEvent(0)">
           Update Event
         </button>
-          <div v-if="datesCount > 1">
+        <div v-if="datesCount > 1">
           <div v-if="updateOnlyThis" class="row my-2">
             <div class="my-2">
               <label>Start</label>
@@ -183,17 +182,14 @@ function canCreateEvent() {
               </button>
             </div>
             <div class="modal-footer d-flex justify-content-end">
-              <button class="btn btn-secondary" :disabled="!eventText" @click="generateDetails">
-                AI
-              </button>
               <button type="button" class="btn btn-primary" data-bs-dismiss="modal" :disabled="!canCreateEvent()"
                 @click="updateEvent(1)">
                 Update This Specific Event
               </button>
             </div>
           </div>
-          </div>
         </div>
+      </div>
     </div>
   </div>
 </template>

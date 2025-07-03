@@ -116,8 +116,8 @@ function getAct() {
 
 watch(hasDeadline, (newVal) => {
   if (!newVal) {
-    ActUpdateDeadlineDate.value = ""
-    ActUpdateDeadlineTime.value = ""
+    ActUpdateDeadlineDate.value = null
+    ActUpdateDeadlineTime.value = null
   }
 })
 
@@ -170,8 +170,9 @@ function SaveUpdateActivity() {
 }
 
 onMounted(() => {
-  getAct()
-})
+  getAct();
+  setDeadlineNow();
+});
 
 </script>
 

@@ -1,5 +1,4 @@
 import { computed, ref } from "vue";
-// import OpenAI from "openai";
 import { Temporal } from "@js-temporal/polyfill";
 import { getEventsOfWeek, getEventsOfDay, getEventsOfMonth } from "@/eventGetter";
 import { getActivitiesOfDay, getActivitiesOfMonth, getActivitiesOfWeek } from "@/activityGetter";
@@ -38,7 +37,6 @@ const store = ref({
   realDay: computed(() => store.value.realDate.dayOfWeek - 1),
   simDay: computed(() => store.value.simDate.dayOfWeek - 1),
 
-
   week: [
     "Monday",
     "Tuesday",
@@ -51,19 +49,10 @@ const store = ref({
 
   timeZone: "Europe/Rome",
 
-  // openai: new OpenAI({
-  // baseURL: "https://openrouter.ai/api/v1",
-  // apiKey: import.meta.env.VITE_OPEN_AI_API_KEY,
-  // defaultHeaders: {},
-  // dangerouslyAllowBrowser: true,
-  // }),
-
-  //SERVER:
-
-  // url: "https://site232465.tw.cs.unibo.it",
-  url: "http://localhost",
-  // port: 443,
-  port: 8000,
+  url: "https://site232465.tw.cs.unibo.it",
+  // url: "http://localhost",
+  port: 443,
+  // port: 8000,
 
   checkAuth: async () => {
     const response = await fetch(`${store.value.url}:${store.value.port}/checkauth`, {

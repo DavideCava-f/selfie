@@ -1,6 +1,5 @@
 <script setup>
-import OpenAI from "openai";
-import { ref, watch, watchEffect, reactive } from "vue";
+import { ref, watch, watchEffect, reactive, onMounted } from "vue";
 import { store } from "@/store";
 import { EventCreator } from "@/eventCreator";
 import { Temporal } from "@js-temporal/polyfill";
@@ -19,7 +18,7 @@ function canCreateActivity() {
     return activityTitle.value && a
 }
 
-watch(hasDeadline, () => { activityDeadlineDate.value = "", activityDeadlineTime.value = "" })
+watch(hasDeadline, (newVal) => { if (!newVal) { activityDeadlineDate.value = null, activityDeadlineTime.value = null } })
 
 function setDeadlineNow() {
     activityDeadlineDate.value = store.value.simDate.toString();
@@ -34,7 +33,7 @@ function resetDeadline() {
 function createActivity() {
     let simDate = store.value.simDateTime.toString().split('.')[0] + '.000Z'
     let DeadlineDate = ""
-    if (!activityDeadlineDate.value || !activityDeadlineTime.value) {
+    if (!hasDeadline.value || !activityDeadlineDate.value || !activityDeadlineTime.value) {
         DeadlineDate = null
     } else {
         DeadlineDate = activityDeadlineDate.value + "T" + activityDeadlineTime.value + ".000Z"
@@ -57,6 +56,7 @@ function createActivity() {
     });
 }
 
+onMounted(() => { setDeadlineNow(); });
 </script>
 
 <template>
