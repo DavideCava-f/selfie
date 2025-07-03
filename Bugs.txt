@@ -7,7 +7,6 @@ POMODORO
 N0TE
 
 CALENDARIO 
-- l'update di un singolo evento di un evento ripetibile non elimina l'evento, ne crea un'altro spostato di data (se modifichi la data)
 
 UTENTE
 
@@ -18,8 +17,6 @@ COSE DA FARE:
 HOMEVIEW:
 
 POMODORO
-- Interfaccia piu leggera e user friendly
-
 
 PER CONSEGNA:
 - breve documentazione/guida del sito

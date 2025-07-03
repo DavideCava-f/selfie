@@ -22,7 +22,7 @@ const selectedYear = computed(() => beginDate.value ? Temporal.PlainDate.from(be
 const size = 300
 const center = size / 2
 
-const months = Array.from({ length: 12 }, (_, i) => ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"][i])
+const months = Array.from({ length: 12 }, (_, i) => ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][i])
 const selectedMonth = ref(months[0])
 const days = computed(() => Array.from({ length: Temporal.PlainDate.from({ year: selectedYear.value, month: months.indexOf(selectedMonth.value) + 1, day: 1 }).daysInMonth }, (_, i) => i + 1));
 const selectedDay = ref(days[0])
