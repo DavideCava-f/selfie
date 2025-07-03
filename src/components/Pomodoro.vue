@@ -41,7 +41,7 @@ const formatTime = computed(() => {
 
 
 function setupTimer() {
-  if ((SetMinutes.value < 1 || !(/^-?[\d.]+(?:e-?\d+)?$/.test(SetMinutes.value)) ) || (SetCycles.value < 1 || !(/^-?[\d.]+(?:e-?\d+)?$/.test(SetCycles.value))) || (relaxingMinutes.value < 0 || !(/^-?[\d.]+(?:e-?\d+)?$/.test(relaxingMinutes.value)))) {
+  if ((SetMinutes.value < 1 || !(/^-?[\d.]+(?:e-?\d+)?$/.test(SetMinutes.value))) || (SetCycles.value < 1 || !(/^-?[\d.]+(?:e-?\d+)?$/.test(SetCycles.value))) || (relaxingMinutes.value < 0 || !(/^-?[\d.]+(?:e-?\d+)?$/.test(relaxingMinutes.value)))) {
     alert("Please set valid values for minutes, cycles, and relaxing minutes.");
     return;
   }
@@ -131,7 +131,7 @@ async function tick() {
         style: {
           backgroundColor: '#000', // soft yellow
           color: '#333',              // dark text for contrast
-            border: '2px solid rgb(255, 128, 0)',
+          border: '2px solid rgb(255, 128, 0)',
           fontWeight: 'bold',
         }
       });
@@ -172,7 +172,7 @@ function startTimer() {
     style: {
       backgroundColor: '#000', // soft yellow
       color: '#333',              // dark text for contrast
-            border: '2px solid rgb(255, 128, 0)',
+      border: '2px solid rgb(255, 128, 0)',
       fontWeight: 'bold',
     }
   });
@@ -229,11 +229,11 @@ async function findFactorsAsync(tot) {
 }
 
 async function CalcTime() {
-  if( TotalTime.value < 1) {
-    alert("Total time must be at least 1 minute.");
+  if (TotalTime.value < 1 || TotalTime.value > 24 * 60) {
+    alert("Total time must be at least 1 minute and less than 24 hours");
     return;
   }
-  
+
   let totalTime = TotalTime.value
   let divis = await findFactorsAsync(totalTime);
   if (divis.length == 0) return;
@@ -310,35 +310,37 @@ onUnmounted(() => {
         <div class="brand">Pomodoro Timer</div>
         <div v-if="!isSet">
           <div class="container">
-            <input v-model="TotalTime" type="number" min="1" />
+            <input v-model="TotalTime" type="number" min="1" class="form-control" />
             <button @click="CalcTime" class="button-style">Generate intervals</button>
             <div class="row">
               <div class="col-4 d-flex flex-column">
                 Study minutes:
-                <input v-model="SetMinutes" style="width: 100%;" />
+                <input class="form-control" v-model="SetMinutes" type="number" style="width: 100%;" />
               </div>
               <div class="col-4 d-flex flex-column">
-                Cycles  
-                <input  v-model="SetCycles" type="number" min="1" max="50" style="width: 100%;"/>
-                  <!-- <select v-model="SetCycles">
+                Cycles
+                <input v-model="SetCycles" class="form-control" type="number" min="1" max="50" style="width: 100%;" />
+                <!-- <select v-model="SetCycles">
                     <option v-for="n in Math.max(SetCycles, 50)" :key="n" :value="n">{{ n }}</option>
-                  </select> -->         
+                  </select> -->
               </div>
               <div class="col-4 d-flex flex-column">
-                  Relax minutes:
-                  <input  v-model="relaxingMinutes" style="width: 100%;"/>
+                Relax minutes:
+                <input v-model="relaxingMinutes" type="number" class="form-control" style="width: 100%;" />
               </div>
             </div>
-            
+
           </div>
         </div>
 
         <div v-if="!isSet">
           <div class="btn-group my-2" role="group" aria-label="button group">
-            <button :class="{ 'active': mode===0, 'btn': true, 'btn-outline-success':true }" @click="mode = 0" style="font-size: 1.5rem;">
+            <button :class="{ 'active': mode === 0, 'btn': true, 'btn-outline-success': true }" @click="mode = 0"
+              style="font-size: 1.5rem;">
               Now
             </button>
-            <button :disabled="isRunning" :class="{'active': mode===1, 'btn': true, 'btn-outline-dark':true }" @click="mode = 1" style="font-size: 1.5rem;">
+            <button :disabled="isRunning" :class="{ 'active': mode === 1, 'btn': true, 'btn-outline-dark': true }"
+              @click="mode = 1" style="font-size: 1.5rem;">
               Plan
             </button>
           </div>
@@ -382,7 +384,7 @@ onUnmounted(() => {
         </div>
         <div v-else>
           <DateTimePicker v-model:date="startDate" v-model:time="startTime" />
-          <button @click="createPomodoroEvent()">Create</button>
+          <button class="button-style" @click="createPomodoroEvent()">Create</button>
         </div>
       </div>
     </div>

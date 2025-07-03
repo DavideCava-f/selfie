@@ -42,11 +42,11 @@ function openDate(date) {
   store.value.monthOffset += Math.round(distance.total({ unit: 'months', relativeTo: store.value.simDateTime }));
 }
 
-function showToast(untilAck, nextDate, event, notificationMessage) {
+function showToast(untilAck, notificationMessage, style) {
   const scheduleReshow = () => {
     // schedule the next one in 5 minutes (300 000 ms)
     setTimeout(() => {
-      showToast(untilAck, nextDate, event, notificationMessage);
+      showToast(untilAck, notificationMessage, style);
     }, 5 * 60 * 1000)
   }
 
@@ -57,10 +57,9 @@ function showToast(untilAck, nextDate, event, notificationMessage) {
     transition: "slide",
     autoClose: untilAck ? false : 5000,
     expandCustomProps: true,
+    style: style,
     contentProps: {
-      event: event,
       message: notificationMessage,
-      nextDate: nextDate,
       onReshow: scheduleReshow
     },
   });
@@ -85,7 +84,7 @@ async function EventNotification(event) {
           !nextDate.noted &&
           Temporal.Duration.compare(distance, duration) <= 0) {
           const notificationMessage = `"${event.title}" is happening in less than ${type}!`;
-          showToast(untilAck, nextDate, event, notificationMessage);
+          showToast(untilAck, notificationMessage, {});
           const notification = new Notification(notificationMessage);
           setNotedTrue(event._id, nextDate._id);
         }
@@ -108,20 +107,11 @@ async function ActivityNotification(act) {
     if (Temporal.PlainDateTime.compare(deadline.add({ weeks: 1 }), now) <= 0) {
 
       notificationMessage.value = `"${act.title}" is One Week`;
-      msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
-      toast(msg.value, {
-        theme: "auto",
-        type: "default",
-        position: "top-left",
-        transition: "slide",
-        autoClose: false,
-        dangerouslyHTMLString: true,
-        style: {
-          backgroundColor: '#000000', // red 
-          color: '#333',              // dark text for contrast
-          border: '2px solid rgb(255, 0, 0)',
-          fontWeight: 'bold',
-        }
+      showToast(false, notificationMessage, {
+        backgroundColor: '#000000', // red 
+        color: '#333',              // dark text for contrast
+        border: '2px solid rgb(255, 0, 0)',
+        fontWeight: 'bold',
       });
       //Tostami
       act.notification.oneWeekLate = true
@@ -130,47 +120,26 @@ async function ActivityNotification(act) {
       isModified = true
     }
   } if (act.notification.oneDayLate == false) {
-
     if (Temporal.PlainDateTime.compare(deadline.add({ days: 1 }), now) <= 0) {
-
       notificationMessage.value = `"${act.title}" is One Day Late`;
-      msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
-      toast(msg.value, {
-        theme: "auto",
-        type: "default",
-        position: "top-left",
-        transition: "slide",
-        autoClose: false,
-        dangerouslyHTMLString: true,
-        style: {
-          backgroundColor: '#000000', // orange 
-          color: '#333',              // dark text for contrast
+      showToast(false, notificationMessage, {
+        backgroundColor: '#000000', // orange 
+        color: '#333',              // dark text for contrast
         border: '2px solid rgb(255, 251, 0)',
-          fontWeight: 'bold',
-        }
+        fontWeight: 'bold',
       });
       //Tostami
       act.notification.oneDayLate = true
       act.notification.isLate = true
       isModified = true
     }
-
   } if (act.notification.isLate == false) { //Se arrivto qui significa scaduto non servono ulteriori controlli
     notificationMessage.value = `"${act.title}" is Expired!`;
-    msg.value = `<strong>${notificationMessage.value}</strong> <br> <button class="btn btn-secondary" onclick="">Snooze</button>`;
-    toast(msg.value, {
-      theme:"auto",
-      type: "default",
-      position: "top-left",
-      transition: "slide",
-      autoClose: false,
-      dangerouslyHTMLString: true,
-      style: {
-        backgroundColor: '#000000', // soft yellow
-        color: '#FFF',              // dark text for contrast
-        border: '2px solid rgb(25, 0, 255)',
-        fontWeight: 'bold',
-      }
+    showToast(false, notificationMessage, {
+      backgroundColor: '#000000', // soft yellow
+      color: '#FFF',              // dark text for contrast
+      border: '2px solid rgb(25, 0, 255)',
+      fontWeight: 'bold',
     });
     //TOSTAMI
     //Metti il noti
@@ -180,8 +149,6 @@ async function ActivityNotification(act) {
 
 
   if (isModified) { //Altrimenti non ce bisogno di fetch
-
-
     await fetch(`${store.value.url}:${store.value.port}/activity/noted`, {
       method: "put",
       credentials: "include",
@@ -222,12 +189,12 @@ async function notipol() {
     let Acts = await activities.json();
     let toReturn = false
     let Expired = Acts.filter((el) => {
-      if(!el.dates[0].deadline){
+      if (!el.dates[0].deadline) {
         toReturn = false;
-      }else{
+      } else {
 
-      let deadline = Temporal.PlainDateTime.from(el.dates[0].deadline.slice(0, -1))
-      toReturn =  el.completed == false && Temporal.PlainDateTime.compare(deadline, now) < 0;
+        let deadline = Temporal.PlainDateTime.from(el.dates[0].deadline.slice(0, -1))
+        toReturn = el.completed == false && Temporal.PlainDateTime.compare(deadline, now) < 0;
       }
       return toReturn
     })

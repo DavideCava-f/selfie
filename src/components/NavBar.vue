@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import TimeMachine from './TimeMachine.vue';
 import Pomodoro from './Pomodoro.vue';
@@ -27,7 +27,17 @@ async function logout() {
     router.push("/login");
 }
 
-setUserPfp();
+async function deleteAccount() {
+    console.log("delete dio cane");
+    const response = await fetch(`${store.value.url}:${store.value.port}/user`, {
+        method: "DELETE",
+        credentials: "include"
+    });
+    console.log("allora?");
+    router.push("/login");
+}
+
+onMounted(() => setUserPfp());
 </script>
 
 
@@ -45,8 +55,8 @@ setUserPfp();
                 <div class="collapse d-md-flex" id="navbar">
                     <ul class="nav d-flex flex-row justify-content-center align-items-center">
                         <li class="nav-item">
-                            <RouterLink v-if="currentRoute !== '/home'" class="nav-link active text-white" to="/home" >
-                                    <img src="@/assets/HomeLogo.svg" alt="Home" width="w-100">
+                            <RouterLink v-if="currentRoute !== '/home'" class="nav-link active text-white" to="/home">
+                                <img src="@/assets/HomeLogo.svg" alt="Home" width="w-100">
                             </RouterLink>
                         </li>
                         <li class="nav-item">
@@ -92,6 +102,7 @@ setUserPfp();
                     <img :src="pfpSrc" class="rounded dropdown-toggle" width="41vh" data-bs-toggle="dropdown">
                     <ul class="dropdown-menu">
                         <li><button class="dropdown-item" @click="logout">Logout</button></li>
+                        <li><button class="dropdown-item" @click="deleteAccount">Delete account</button></li>
                     </ul>
                 </div>
             </div>

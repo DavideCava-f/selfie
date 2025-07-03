@@ -22,7 +22,7 @@ dotenv.config();
 
 // MongoDB & Mongoose
 // Atlas dev database
-//const uri = process.env.MONGODB_PROD;
+// const uri = process.env.MONGODB_PROD;
 const uri = process.env.MONGODB_DEV;
 console.log(uri);
 
@@ -50,18 +50,19 @@ app.get("/checkauth", verifyToken, async function(req, res) {
   res.status(200).send();
 });
 
+/* DEBUGGING */
 app.get("/users", async function(req, res) {
   try {
     const users = await User.find({});
-    res.json(users);
+    res.status(200).json(users);
   } finally {
   }
 });
 
-app.get("/dbdebug", async function(req, res) {
+app.get("/notes", async function(req, res) {
   try {
     const test = await Note.find({});
-    res.json(test);
+    res.status(200).json(test);
   } finally {
   }
 });

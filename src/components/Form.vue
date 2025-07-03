@@ -48,7 +48,7 @@ async function addUser() {
   } else if (response.status === 500) {
     alert("Errore interno al server");
   } else if (response.status === 200) {
-    fetch(`${store.value.url}:${store.value.port}/user/register`, {
+    await fetch(`${store.value.url}:${store.value.port}/user/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -61,8 +61,9 @@ async function addUser() {
       }),
     });
     console.log("Registrazione effettuata");
-    resetValues();
-    SignUp.value = false;
+    router.push('/home');
+    // resetValues();
+    // SignUp.value = false;
   } else {
     alert("Errore generale");
   }
@@ -200,8 +201,8 @@ function cseePswd() {
 
                     <div data-mdb-input-init class="form-outline mb-1">
                       <label class="form-label" for="form2Example11">Username</label>
-                      <input type="text" id="username" class="form-control" placeholder="Email address" name="username"
-                        v-model="UserSU.username" required />
+                      <input type="text" id="username" class="form-control" name="username" v-model="UserSU.username"
+                        required />
                       <div class="invalid-feedback">
                         Please choose a username.
                       </div>

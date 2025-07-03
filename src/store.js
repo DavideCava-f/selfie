@@ -57,12 +57,12 @@ const store = ref({
   // defaultHeaders: {},
   // dangerouslyAllowBrowser: true,
   // }),
-  
+
   //SERVER:
 
-  //url: "https://site232465.tw.cs.unibo.it",
+  // url: "https://site232465.tw.cs.unibo.it",
   url: "http://localhost",
-  //port: 443,
+  // port: 443,
   port: 8000,
 
   checkAuth: async () => {
@@ -90,7 +90,7 @@ const store = ref({
   // POMODORO
   pomodoros: [],
   activePomodoro: null,
-  last_pomodoro:{
+  last_pomodoro: {
     studyTime: 0,
     breakTime: 0,
     cycles: 0,

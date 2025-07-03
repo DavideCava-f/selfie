@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
-import { User } from "../schemas.js";
+import { User, Event, Pomodoro, Note, Activity } from "../schemas.js";
 import verifyToken from "./middleware.js";
 const router = express.Router();
 
@@ -16,8 +16,8 @@ router.post("/register", async function(req, res) {
     });
     res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "Strict" }).status(200).send();
   } catch (error) {
-    res.status(500).json({ error: "Registration failed" });
-  } finally {
+    console.error(error);
+    res.status(500).json({ error: error });
   }
 });
 
@@ -37,14 +37,29 @@ router.get("/login", async function(req, res) {
     res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "Lax" }).status(200).send();
   } catch (error) {
     console.error(error)
-    res.status(500).json({ error: "Login failed" });
-  } finally {
+    res.status(500).json({ error: error });
   }
 });
 
 router.get("/logout", async function(req, res) {
   res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "Strict" });
   res.status(200).send();
+});
+
+router.delete("/", verifyToken, async function(req, res) {
+  try {
+    const userId = req.userId;
+    await Event.deleteMany({ userId: userId });
+    await Pomodoro.deleteMany({ userId: userId });
+    await Note.deleteMany({ userId: userId });
+    await Activity.deleteMany({ userId: userId });
+    await User.deleteMany({ _id: userId });
+    res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "Strict" });
+    res.status(200).send();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error });
+  }
 });
 
 router.get("/isnew", async function(req, res) {
@@ -56,8 +71,8 @@ router.get("/isnew", async function(req, res) {
     }
     res.status(200).send();
   } catch (error) {
-    res.status(500).json({ error: "Server error" });
-  } finally {
+    console.error(error);
+    res.status(500).json({ error: error });
   }
 });
 
@@ -66,8 +81,8 @@ router.get("/info", verifyToken, async function(req, res) {
     const user = await User.findOne({ _id: req.userId });
     res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ error: "Server error" });
-  } finally {
+    console.error(error);
+    res.status(500).json({ error: error });
   }
 })
 
