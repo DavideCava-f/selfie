@@ -38,11 +38,11 @@ onMounted(() => {
   <div class="container  text-white">
     <div class="row align-items-end">
       <div class="col-12 d-flex justify-content-center">
-        <h1>Note</h1>
+        <h1>Notes</h1>
       </div>
       <div class="col-3">
         <div class="col-lg-6 col-12">
-          Data di creazione:
+          Creation Date:
         </div>
         <div class="btn-group col-lg-6 col-12 " role="group" aria-label="Basic radio toggle button group">
           <button class="btn btn-outline-success responsive-button rounded-end my-sm-0" @click="SortByDate(1)">
@@ -59,7 +59,7 @@ onMounted(() => {
       </div>
       <div class="col-3">
         <div class="col-lg-6 col-12">
-          Ultima modifica:
+          Last update:
         </div>
         <div class="btn-group col-lg-6 col-12 " role="group" aria-label="Basic radio toggle button group">
           <button class="btn btn-outline-success responsive-button rounded-end my-sm-0" @click="SortByDate(2)">
@@ -77,7 +77,7 @@ onMounted(() => {
       </div>
       <div class="col-3">
         <div class="col-lg-6 col-12">
-          Titolo:
+          Title:
         </div>
         <div class="btn-group col-lg-6 col-12 " role="group" aria-label="Basic radio toggle button group">
           <button class="btn btn-outline-success responsive-button rounded-end my-sm-0" @click="SortByTitle(0)">
@@ -96,7 +96,7 @@ onMounted(() => {
         </div>
       </div>
       <div class="col-3">
-        <div class="col-lg-6 col-12">Lunghezza:</div>
+        <div class="col-lg-6 col-12">length:</div>
         <div class="btn-group col-lg-6 col-12 " role="group" aria-label="Basic radio toggle button group">
           <button class="btn btn-outline-success responsive-button rounded-end my-sm-0" @click="SortByLength(0)">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
@@ -146,22 +146,22 @@ onMounted(() => {
             <div class="card-footer" style="background-color: #c2c2c2;">
               <div>
                 <span>
-                  Ultima modifica:<b> {{ getVisibleDate(note.lastUpDate) }}</b>
+                  Last Update:<b> {{ getVisibleDate(note.lastUpDate) }}</b>
                 </span>
                 <span>
-                  Creazione:<b> {{ getVisibleDate(note.creationDate) }}</b>
+                  Creation:<b> {{ getVisibleDate(note.creationDate) }}</b>
                 </span>
               </div>
               <div class="btn-group " role="group" aria-label="Basic radio toggle button group" >
                 <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" @click="() => {toDelete = note._id}" data-bs-target="#DeleteNoteModal">
-                    Cancella
+                    Delete
                 </button>
                 <button type="button" class="btn btn-outline-primary" @click="DuplicateNote(note._id)">
-                    Duplica
+                    Duplicate
                 </button>
                 <button type="button" class="btn btn-outline-dark" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasWithBothOptions" @click="UpdateNote(note._id)">
-                    Modifica
+                    Modify
                 </button>
               </div>
             </div>
@@ -302,12 +302,12 @@ onMounted(() => {
     <div class="modal-content">
       
       <div class="modal-header">
-        <h5 class="modal-title" id="confirmDeleteLabel">Conferma eliminazione</h5>
+        <h5 class="modal-title" id="confirmDeleteLabel">Confirm deletion</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
       </div>
       
       <div class="modal-body">
-        Sei sicuro di voler eliminare questo elemento? L'azione non può essere annullata.
+        Are you sure you want to eliminate this element? This action cannot be cancelled.
       </div>
       
       <div class="modal-footer">

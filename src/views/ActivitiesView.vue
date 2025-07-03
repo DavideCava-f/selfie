@@ -137,7 +137,7 @@ function SaveUpdateActivity() {
     if(!ActUpdateDeadlineDate.value || !ActUpdateDeadlineTime.value){
         DeadlineDate = null
     }else{
-       DeadlineDate = ActUpdateDeadlineDate.value + "T" + ActUpdateDeadlineTime.value + ":00.000Z"
+      DeadlineDate = ActUpdateDeadlineDate.value + "T" + ActUpdateDeadlineTime.value + ":00.000Z"
     }
   fetch(`${store.value.url}:${store.value.port}/activity/update`, {
     credentials: "include",
@@ -168,14 +168,14 @@ onMounted(() => {
   <div class="container text-white">
     <div class="row">
       <div class="col">
-        <h1 class="text-center">Attività</h1>
+        <h1 class="text-center">Activities</h1>
       </div>
     </div>
     <div class="row">
       <div class="col-12 col-sm-6">
-        <h2 class="text-center">Attività da completare</h2>
+        <h2 class="text-center">To be completed</h2>
         <div v-if="TODOAct.length == 0">
-          <h4 class="text-center my-3">Nessuna attività da completare</h4>
+          <h4 class="text-center my-3">No activities to complete</h4>
         </div>
         <div class="hover-div m-2" v-else v-for="act in TODOAct">
           <div class="card rounded-3">
@@ -210,9 +210,9 @@ onMounted(() => {
         </div>
       </div>
       <div class="col-12 col-sm-6">
-        <h2 class="text-center text-danger">Attività in ritardo</h2>
+        <h2 class="text-center text-danger">Late activities</h2>
         <div v-if="RetardedAct.length == 0">
-          <h4 class="text-center my-3">Nessuna attività in ritardo</h4>
+          <h4 class="text-center my-3">No Late activities</h4>
         </div>
         <div class="hover-div m-2" v-else v-for="act in RetardedAct">
           <div class="card rounded-3">
@@ -247,9 +247,9 @@ onMounted(() => {
 </div>
 </div>
 <div class="col">
-  <h2 class="text-center text-success">Attività completate</h2>
+  <h2 class="text-center text-success">Completed</h2>
   <div v-if="CompletedAct.length == 0">
-    <h4 class="text-center my-3">Nessuna attività completata</h4>
+    <h4 class="text-center my-3">No completed activities</h4>
   </div>
   <div class="hover-div m-2" v-else v-for="act in CompletedAct">
     <div class="card rounded-3">
@@ -356,17 +356,17 @@ onMounted(() => {
     <div class="modal-content">
       
       <div class="modal-header">
-        <h5 class="modal-title" id="confirmDeleteLabel">Conferma eliminazione</h5>
+        <h5 class="modal-title" id="confirmDeleteLabel">Confirm delete</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
       </div>
       
       <div class="modal-body">
-        Sei sicuro di voler eliminare questo elemento? L'azione non può essere annullata.
+        Are you sure you want to eliminate this element? This action cannot be cancelled.
       </div>
       
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-        <button type="button" @click="deleteAct(selectedCard)" data-bs-dismiss="modal" class="btn btn-danger" id="confirmDeleteBtn">Conferma</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" @click="deleteAct(selectedCard)" data-bs-dismiss="modal" class="btn btn-danger" id="confirmDeleteBtn">Confirm</button>
       </div>
       
     </div>

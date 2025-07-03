@@ -90,7 +90,7 @@ function ToEvent(event) {
 <template>
     <div class="container-fluid">
         <div class="row justify-content-center p-3 ">
-            <div class="col-lg-3 col-12 animate-card-downward"><!-- colonna prossimi eventi -->
+            <div class="col-md-3 col-12 animate-card-downward"><!-- colonna prossimi eventi -->
 
                 <div class="card text-bg-danger mb-3" style="max-height: 80vh;">
                     <div class="card-header d-flex align-items-center ">
@@ -102,31 +102,31 @@ function ToEvent(event) {
                         </div>
                         <div v-else>
                             <button v-for="event in nearEvents" @click="ToEvent(event)"
-                                class="w-100 btn bg-success rounded-3 text-black my-1 align-items-center">
+                                class="d-flex flex-column w-100 btn bg-success rounded-3 text-black my-1 align-items-center">
                                 <h2>{{ event.title }}</h2>
                                 {{ event.details.text }}
-                                <div class="d-flex justify-content-center">
-                                    <table class="table-success">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Start</th>
-                                                <th scope="col">End</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>{{ getVisibleDate(event.dates[0].begin) }}</td>
-                                                <td>{{ getVisibleDate(event.dates[0].end) }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    <div class="d-flex flex-row justify-content-between w-100">
+                                        <div class="col-5">
+                                            Start
+                                        </div>
+                                        <div class="col-5">
+                                            End
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-row justify-content-between w-100">
+                                        <div class="col-5">
+                                            {{ getVisibleDate(event.dates[0].begin) }}
+                                        </div>
+                                        <div class="col-5">
+                                            {{ getVisibleDate(event.dates[0].end) }}
+                                        </div>
+                                    </div>
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-12 animate-card-upward"><!-- colonna ultima nota -->
+            <div class="col-md-3 col-12 animate-card-upward"><!-- colonna ultima nota -->
 
                 <div class="card text-bg-danger mb-3" style="max-height: 80vh;">
                     <div class="card-header d-flex align-items-center">
@@ -157,7 +157,7 @@ function ToEvent(event) {
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-12 animate-card-downward">
+            <div class="col-md-3 col-12 animate-card-downward">
                 <div class="card text-bg-danger mb-3" style="max-height: 80vh;">
                     <div class="card-header d-flex align-items-center justify-content-center text-center">
                         <h2 class="mx-auto">Last pomodoro completed</h2>
