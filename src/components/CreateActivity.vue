@@ -17,7 +17,6 @@ var activityDeadlineTime = ref("");
 function canCreateActivity() {
     let a = ((hasDeadline.value && activityDeadlineDate.value && activityDeadlineTime.value) || !hasDeadline.value)
     return activityTitle.value && a
-
 }
 
 watch(hasDeadline, () => { activityDeadlineDate.value = "", activityDeadlineTime.value = "" })
@@ -33,8 +32,6 @@ function resetDeadline() {
 }
 
 function createActivity() {
-    
-
     let simDate = store.value.simDateTime.toString().split('.')[0] + '.000Z'
     let DeadlineDate = ""
     if (!activityDeadlineDate.value || !activityDeadlineTime.value) {

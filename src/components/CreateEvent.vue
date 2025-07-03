@@ -1,5 +1,4 @@
 <script setup>
-import OpenAI from "openai";
 import { ref, watch, computed, onMounted } from "vue";
 import { store } from "@/store";
 import { EventCreator } from "@/eventCreator";
@@ -41,26 +40,6 @@ const notifyUntilAck = ref(false);
 const eventLink = ref(null);
 
 watch([eventBeginDate, eventEndDate], () => repeatable.value = false)
-async function generateDetails() {
-  const completion = await store.value.openai.chat.completions.create({
-    model: "deepseek/deepseek-r1-distill-llama-70b:free",
-    messages: [
-      {
-        role: "user",
-        content: `Given a description of an event of a calendar app, \
-                  in a language you MUST recognize, produce a \
-                  title that would fit it. The title should indicate the \
-                  action described in the description.
-                  Note: you MUST reply ONLY with the title you've came up with \
-                  (in the recognized language). \
-                  Do NOT add anything else, just the words (i.e. not quotation marks).
-                  The description is: \
-                  ${eventText.value}.`,
-      },
-    ],
-  });
-  eventTitle.value = completion.choices[0].message.content;
-}
 
 function setBeginNow() {
   eventBeginDate.value = store.value.simDate;
@@ -403,9 +382,6 @@ watch(eventBeginDate, setDayOfWeek);
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-end">
-        <button class="btn btn-secondary" :disabled="!eventText" @click="generateDetails">
-          AI
-        </button>
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal" :disabled="!canCreateEvent()"
           @click="createEvent">
           Create

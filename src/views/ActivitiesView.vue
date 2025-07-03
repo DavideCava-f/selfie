@@ -3,6 +3,7 @@ import CreateActivity from '@/components/CreateActivity.vue';
 import { store } from "@/store";
 import { ref, onMounted, watch } from "vue";
 import { Temporal } from '@js-temporal/polyfill';
+import DateTimePicker from '../components/DateTimePicker.vue';
 
 var CompletedAct = ref([])
 var RetardedAct = ref([])
@@ -23,8 +24,18 @@ watch(() => store.value.deltaDateTime, () => {
 
 function canUpdateActivity() {
   let a = ((hasDeadline.value && ActUpdateDeadlineDate.value && ActUpdateDeadlineTime.value) || !hasDeadline.value)
-    return ActUpdateTitle.value && a
-        
+  return ActUpdateTitle.value && a
+
+}
+
+function setDeadlineNow() {
+  ActUpdateDeadlineDate.value = store.value.simDate.toString();
+  ActUpdateDeadlineTime.value = store.value.simTime.toString().slice(0, 5) + ":00";
+}
+
+function resetDeadline() {
+  ActUpdateDeadlineDate.value = null;
+  ActUpdateDeadlineTime.value = null;
 }
 
 function toggleChange(id, compl) {
@@ -78,49 +89,49 @@ function getAct() {
     })
     .then((data) => {
       data.forEach((el) => {
-        if(el.dates[0].deadline){
-        let date = (el.dates[0].deadline).slice(0, -1);
-        if (!el.completed) {
+        if (el.dates[0].deadline) {
+          let date = (el.dates[0].deadline).slice(0, -1);
+          if (!el.completed) {
 
-          if (Temporal.PlainDateTime.compare(store.value.simDateTime, Temporal.PlainDateTime.from(date)) <= 0 || !el.dates[0].deadline) {
-            TODOAct.value.push(el)
+            if (Temporal.PlainDateTime.compare(store.value.simDateTime, Temporal.PlainDateTime.from(date)) <= 0 || !el.dates[0].deadline) {
+              TODOAct.value.push(el)
+            } else {
+              RetardedAct.value.push(el)
+            }
           } else {
-            RetardedAct.value.push(el)
+            CompletedAct.value.push(el)
           }
         } else {
-          CompletedAct.value.push(el)
-        }
-      }else{
-      
-        if (!el.completed) {
+
+          if (!el.completed) {
 
             TODOAct.value.push(el)
           } else {
             CompletedAct.value.push(el)
           }
-        } 
+        }
       })
     });
 }
 
-watch (hasDeadline, (newVal) => {
-  if(!newVal){
-
-  ActUpdateDeadlineDate.value = ""
-  ActUpdateDeadlineTime.value=""
+watch(hasDeadline, (newVal) => {
+  if (!newVal) {
+    ActUpdateDeadlineDate.value = ""
+    ActUpdateDeadlineTime.value = ""
   }
 })
-function updateAct(id, text, title, deadline) {
-  if(deadline){
-    hasDeadline.value = true
-  ActUpdateDeadlineDate.value = deadline.split("T")[0]
-  ActUpdateDeadlineTime.value = deadline.split("T")[1].substring(0, 5)
 
-  }else{
+function updateAct(id, text, title, deadline) {
+  if (deadline) {
+    hasDeadline.value = true
+    ActUpdateDeadlineDate.value = deadline.split("T")[0]
+    ActUpdateDeadlineTime.value = deadline.split("T")[1].substring(0, 5) + ":00"
+
+  } else {
     hasDeadline.value = false //CIPENSAILWATCH
 
   }
-  
+
   ActUpdateId.value = id
   ActUpdateText.value = text
   ActUpdateTitle.value = title
@@ -130,15 +141,15 @@ function SaveUpdateActivity() {
 
   const id = ActUpdateId.value
 
-  
 
-  let DeadlineDate = "" 
 
-    if(!ActUpdateDeadlineDate.value || !ActUpdateDeadlineTime.value){
-        DeadlineDate = null
-    }else{
-      DeadlineDate = ActUpdateDeadlineDate.value + "T" + ActUpdateDeadlineTime.value + ":00.000Z"
-    }
+  let DeadlineDate = ""
+
+  if (!ActUpdateDeadlineDate.value || !ActUpdateDeadlineTime.value) {
+    DeadlineDate = null
+  } else {
+    DeadlineDate = ActUpdateDeadlineDate.value + "T" + ActUpdateDeadlineTime.value + ".000Z"
+  }
   fetch(`${store.value.url}:${store.value.port}/activity/update`, {
     credentials: "include",
     method: "put",
@@ -185,18 +196,21 @@ onMounted(() => {
               {{ act.text }}
               <hr />
               <div>
-                Creation:{{ act.dates[0].creation.toString().split('T')[0] }} , {{ act.dates[0].creation.toString().split('T')[1].slice(0,-5) }} 
+                Creation:{{ act.dates[0].creation.toString().split('T')[0] }} , {{
+                  act.dates[0].creation.toString().split('T')[1].slice(0, -5) }}
                 <span v-if="act.dates[0].deadline">
-                    |
-                Deadline:{{ act.dates[0].deadline.toString().split('T')[0] }} , {{ act.dates[0].deadline.toString().split('T')[1].slice(0,-5) }}
+                  |
+                  Deadline:{{ act.dates[0].deadline.toString().split('T')[0] }} , {{
+                    act.dates[0].deadline.toString().split('T')[1].slice(0, -5) }}
                 </span>
               </div>
               <div>
-                <span><button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#DeleteActModal" @click="selectedCard = act._id">
+                <span><button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#DeleteActModal"
+                    @click="selectedCard = act._id">
                     Delete Act
                   </button>
                 </span>
-  
+
                 <span><button class="btn btn-outline-info" data-bs-target="#updateEventModal" data-bs-toggle="modal"
                     @click="updateAct(act._id, act.text, act.title, act.dates[0].deadline)">
                     Update Act
@@ -222,67 +236,74 @@ onMounted(() => {
               {{ act.text }}
               <hr />
               <div>
-                Creation:{{ act.dates[0].creation.toString().split('T')[0] }} , {{ act.dates[0].creation.toString().split('T')[1].slice(0,-5) }} |
+                Creation:{{ act.dates[0].creation.toString().split('T')[0] }} , {{
+                  act.dates[0].creation.toString().split('T')[1].slice(0, -5) }} |
                 <span v-if="act.dates[0].deadline">
 
-                Deadline:{{ act.dates[0].deadline.toString().split('T')[0] }} , {{ act.dates[0].deadline.toString().split('T')[1].slice(0,-5) }}
+                  Deadline:{{ act.dates[0].deadline.toString().split('T')[0] }} , {{
+                    act.dates[0].deadline.toString().split('T')[1].slice(0, -5) }}
                 </span>
+              </div>
+              <div>
+                <span><button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#DeleteActModal"
+                    @click="selectedCard = act._id">
+                    Delete Act
+                  </button>
+                </span>
+                <span><button class="btn btn-outline-info" data-bs-target="#updateEventModal" data-bs-toggle="modal"
+                    @click="updateAct(act._id, act.text, act.title, act.dates[0].deadline)">
+                    Update Act
+                  </button>
+                </span>
+                <label>Completed</label>
+                <input type="checkbox" @change="toggleChange(act._id, act.completed)" v-model="act.completed">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <h2 class="text-center text-success">Completed</h2>
+      <div v-if="CompletedAct.length == 0">
+        <h4 class="text-center my-3">No completed activities</h4>
+      </div>
+      <div class="hover-div m-2" v-else v-for="act in CompletedAct">
+        <div class="card rounded-3">
+          <div class="card-body">
+            <h1 class="card-title fw-bold">{{ act.title }}</h1>
+            <hr />
+            {{ act.text }}
+            <hr />
+            <div>
+              Creation:{{ act.dates[0].creation.toString().split('T')[0] }} , {{
+                act.dates[0].creation.toString().split('T')[1].slice(0, -5) }} |
+              <span v-if="act.dates[0].deadline">
+
+                Deadline:{{ act.dates[0].deadline.toString().split('T')[0] }} , {{
+                  act.dates[0].deadline.toString().split('T')[1].slice(0, -5) }}
+              </span>
             </div>
             <div>
-              <span><button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#DeleteActModal" @click="selectedCard = act._id">
-                Delete Act
-              </button>
-            </span>
-            <span><button class="btn btn-outline-info" data-bs-target="#updateEventModal" data-bs-toggle="modal"
-              @click="updateAct(act._id, act.text, act.title, act.dates[0].deadline)">
-              Update Act
-            </button>
-          </span>
-          <label>Completed</label>
-          <input type="checkbox" @change="toggleChange(act._id, act.completed)" v-model="act.completed">
+              <span><button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#DeleteActModal"
+                  @click="selectedCard = act._id">
+                  Delete Act
+                </button>
+              </span>
+              <label>Completed</label>
+              <input type="checkbox" @change="toggleChange(act._id, act.completed)" v-model="act.completed">
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-</div>
-<div class="col">
-  <h2 class="text-center text-success">Completed</h2>
-  <div v-if="CompletedAct.length == 0">
-    <h4 class="text-center my-3">No completed activities</h4>
-  </div>
-  <div class="hover-div m-2" v-else v-for="act in CompletedAct">
-    <div class="card rounded-3">
-      <div class="card-body">
-        <h1 class="card-title fw-bold">{{ act.title }}</h1>
-        <hr />
-        {{ act.text }}
-        <hr />
-        <div>
-                Creation:{{ act.dates[0].creation.toString().split('T')[0] }} , {{ act.dates[0].creation.toString().split('T')[1].slice(0,-5) }} |
-                <span v-if="act.dates[0].deadline">
-
-                Deadline:{{ act.dates[0].deadline.toString().split('T')[0] }} , {{ act.dates[0].deadline.toString().split('T')[1].slice(0,-5) }}
-                </span>
-        </div>
-        <div>
-          <span><button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#DeleteActModal" @click="selectedCard = act._id">
-              Delete Act
-            </button>
-          </span>
-          <label>Completed</label>
-          <input type="checkbox" @change="toggleChange(act._id, act.completed)" v-model="act.completed">
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
   <!-- bottone per creare una attività -->
-  <button class="btn btn-primary rounded-circle fx-button d-flex align-items-center justify-content-center hover-div " style="position: fixed; right: 10; bottom: 10"
-    data-bs-target="#createEventModal" data-bs-toggle="modal">
-    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+  <button class="btn btn-primary rounded-circle fx-button d-flex align-items-center justify-content-center hover-div "
+    style="position: fixed; right: 10; bottom: 10" data-bs-target="#createEventModal" data-bs-toggle="modal">
+    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-plus"
+      viewBox="0 0 16 16">
+      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
     </svg>
   </button>
 
@@ -292,6 +313,7 @@ onMounted(() => {
   </div>
   <div class="modal fade" id="updateEventModal" data-bs-backdrop="false" tabindex="-1"
     aria-labelledby="updateEventModal" aria-hidden="true">
+
 
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content">
@@ -316,30 +338,28 @@ onMounted(() => {
 
           <br />
 
-                <div>
+          <div>
 
-                    <label for="title">Set Deadline</label>
-                    <input class="form-check-input" type="checkbox" v-model="hasDeadline"
-                        name="value" />
+            <label for="title">Set Deadline</label>
+            <input class="form-check-input" type="checkbox" v-model="hasDeadline" name="value" />
 
-                </div>
-                <div v-if="hasDeadline">
-          <div class="my-2">
-            <label>Deadline (optional)</label>
-            <div class="d-flex flex-sm-nowrap flex-wrap gap-2">
-              <input class="form-control" type="date" v-model="ActUpdateDeadlineDate" />
-              <input class="form-control" type="time" v-model="ActUpdateDeadlineTime" />
-              <!--<button class="btn btn-outline-primary" @click="setDeadlineNow">
+          </div>
+          <div v-if="hasDeadline">
+            <div class="my-2">
+              <div>
+                <DateTimePicker v-model:date="ActUpdateDeadlineDate" v-model:time="ActUpdateDeadlineTime" />
+              </div>
+              <button class="btn btn-outline-primary" @click="setDeadlineNow()">
                 Now
-                </button>
-                <button class="btn btn-outline-danger" @click="resetDeadline">
+              </button>
+              <button class="btn btn-outline-danger" @click="resetDeadline()">
                 Reset
-                </button>--->
+              </button>
             </div>
           </div>
-          </div>
           <div class="modal-footer d-flex justify-content-end">
-            <button type="button" class="btn btn-primary" :disabled="!canUpdateActivity()" data-bs-dismiss="modal" @click="SaveUpdateActivity()">
+            <button type="button" class="btn btn-primary" :disabled="!canUpdateActivity()" data-bs-dismiss="modal"
+              @click="SaveUpdateActivity()">
               Update
             </button>
           </div>
@@ -350,28 +370,29 @@ onMounted(() => {
 
 
 
-<!-- Modal di conferma -->
-<div class="modal fade" id="DeleteActModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      
-      <div class="modal-header">
-        <h5 class="modal-title" id="confirmDeleteLabel">Confirm delete</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+  <!-- Modal di conferma -->
+  <div class="modal fade" id="DeleteActModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmDeleteLabel">Confirm delete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+        </div>
+
+        <div class="modal-body">
+          Are you sure you want to eliminate this element? This action cannot be cancelled.
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" @click="deleteAct(selectedCard)" data-bs-dismiss="modal" class="btn btn-danger"
+            id="confirmDeleteBtn">Confirm</button>
+        </div>
+
       </div>
-      
-      <div class="modal-body">
-        Are you sure you want to eliminate this element? This action cannot be cancelled.
-      </div>
-      
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" @click="deleteAct(selectedCard)" data-bs-dismiss="modal" class="btn btn-danger" id="confirmDeleteBtn">Confirm</button>
-      </div>
-      
     </div>
   </div>
-</div>
 </template>
 
 <style scoped>

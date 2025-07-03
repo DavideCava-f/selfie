@@ -28,6 +28,7 @@ const uri = process.env.MONGODB_DEV;
 let app = express();
 
 await mongoose.connect(uri);
+console.log("Connected to mongoose: " + uri);
 
 // Routes
 app.use(cors({
@@ -71,7 +72,7 @@ app.get("*", (req, res) => {
 
 app.listen(process.env.PORT_PROD, function() {
   global.startDate = new Date();
-  
+  console.log("Server listening");
 });
 
 process.on('SIGINT', async () => {

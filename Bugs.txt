@@ -1,6 +1,8 @@
 BUGS:
 
 POMODORO
+- cancellazione dei pomodori non va sempre a buon fine (Uncaught (in promise) TypeError: Cannot read properties of null (reading '_id'))
+- i pomodori non diventano "terminati" quando effettivamente li finisco
 
 N0TE
 
