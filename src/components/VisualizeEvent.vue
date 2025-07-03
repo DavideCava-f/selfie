@@ -91,8 +91,8 @@ watch(() => store.value.toggle, () => {
             </thead>
             <tbody>
               <tr v-for="date in event.dates" :key="date.begin">
-                <td>{{ new Date(date.begin).toDateString() }}</td>
-                <td>{{ new Date(date.end).toDateString() }}</td>
+                <td>{{ new Date(date.begin).toDateString() }} at {{ new Date(date.begin).toTimeString().substring(0,5) }}</td>
+                <td>{{ new Date(date.end).toDateString() }} at {{ new Date(date.begin).toTimeString().substring(0,5) }}</td>
               </tr>
             </tbody>
           </table>

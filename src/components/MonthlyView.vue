@@ -209,27 +209,27 @@ watch(() => store.value.monthOffset, () => getPomodoros());
     <!-- </div> -->
 
     <div class="modal fade" id="AltriEventi" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Altri eventi</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body d-flex flex-column">
+                <div class="modal-body d-flex flex-column container-fluid">
                     <button v-for="event in eventsOfSelectedDay" @click="() => {
                         store.activeEventId = event._id; store.toggle = !store.toggle;
-                    }" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal" class="btn"
+                    }" data-bs-target="#VisualizeEventModal" data-bs-toggle="modal" class="btn my-1"
                         :style="{ 'background-color': getColorFromTitle(event.title), 'font-size': '100%', 'color': getInvertedColor(getColorFromTitle(event.title)) }">
                         {{ event.title }}
                     </button>
                     <button
                         v-for="pomodoro in store.pomodoros.filter((p) =>
                             Temporal.PlainDate.compare(Temporal.PlainDate.from(p.beginDate.slice(0, -1)), firstDay.add({ days: selectedDay - 1 })) === 0)"
-                        class="btn btn-danger" data-bs-target="#PomodoroEventModal" data-bs-toggle="modal"
+                        class="btn btn-danger my-1" data-bs-target="#PomodoroEventModal" data-bs-toggle="modal"
                         @click="store.activePomodoro = pomodoro">
                         🍅 {{ pomodoro.beginDate.split("T")[1].slice(0, 5) }}
                     </button>
-                    <button class="btn btn-primary" data-bs-target="#CreateEV" data-bs-toggle="modal">
+                    <button class="btn btn-primary my-1" data-bs-target="#CreateEV" data-bs-toggle="modal">
                         +
                     </button>
                 </div>

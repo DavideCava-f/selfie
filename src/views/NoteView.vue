@@ -114,11 +114,11 @@ onMounted(() => {
   </div>
   <div class="container my-2 d-flex justify-content-center">
     <div class="row">
-      <div class="col-lg-6 col-12 my-lg-3 my-2 hover-div" v-for="note in NotesList" :key="note._id">
+      <div :class="[NotesList.length === 1 ? 'col-lg-12': 'col-lg-6', 'col-12' , 'my-lg-3', 'my-2', 'hover-div']" v-for="note in NotesList" :key="note._id">
         <div class="card">
           <h2 class="card-header fw-bold" style="background-color: #c2c2c2;">{{ note.Title }}</h2>
           <div class="card-body"  style="background-color: #c2c2c2;">
-            <hr />
+            <hr/>
             <div @click="expand(note._id)">
             <div v-if="note.markdown" >
               <p :class="[
@@ -153,17 +153,16 @@ onMounted(() => {
                 </span>
               </div>
               <div class="btn-group " role="group" aria-label="Basic radio toggle button group" >
-                <span><button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" @click="() => {toDelete = note._id}" data-bs-target="#DeleteNoteModal">
+                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" @click="() => {toDelete = note._id}" data-bs-target="#DeleteNoteModal">
                     Cancella
-                  </button>
-                </span>
-                <span><button type="button" class="btn btn-outline-primary" @click="DuplicateNote(note._id)">
+                </button>
+                <button type="button" class="btn btn-outline-primary" @click="DuplicateNote(note._id)">
                     Duplica
-                  </button></span>
-                <span><button type="button" class="btn btn-outline-dark" data-bs-toggle="offcanvas"
+                </button>
+                <button type="button" class="btn btn-outline-dark" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasWithBothOptions" @click="UpdateNote(note._id)">
                     Modifica
-                  </button></span>
+                </button>
               </div>
             </div>
           </div>

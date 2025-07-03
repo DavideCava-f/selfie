@@ -65,7 +65,7 @@ router.get("/last", verifyToken, async function(req, res) {
     const lastnotes = await Note.find({ userId: req.userId }).sort({ lastUpDate: -1 }).limit(1);
     const lastnote = lastnotes[0];
     if (lastnote === undefined)
-      res.sendStatus(404)
+      res.json(null);
     else
       res.json(lastnote);
   }

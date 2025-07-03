@@ -104,11 +104,13 @@ router.get("/last", verifyToken, async function(req, res) {
   try {
     const lastPomodoro = await Pomodoro.find({ userId: req.userId }).sort({completedDate: -1 }).limit(1);
     if (lastPomodoro.length === 0) {
-      return res.status(404).send("No pomodoros found");
+      console.log("No pomodoro found for this user.");
+      res.json(null);
+    }else{
+      console.log("Last pomodoro found:");
+      console.log(lastPomodoro[0]);
+      res.status(200).json(lastPomodoro[0]);
     }
-    console.log("Last pomodoro found:");
-    console.log(lastPomodoro[0]);
-    res.status(200).json(lastPomodoro[0]);
   } catch (error) {
     console.error(error);
     res.status(500).json(error);

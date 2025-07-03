@@ -12,12 +12,8 @@ UTENTE
 COSE DA FARE:
 - Gestire la palette generale del progetto, per i vari modal
 - Migliorare Interfaccia delle notifiche
-- Milgiorare schermata altri eventi
 
 HOMEVIEW:
-- ultima nota modificata, se non ci sono note mostra comunque un coso verde;
-- ultima nota modificata, non mostra markdown (magari mostriamo solo il titolo);
-- ultimo pomodoro completato, se non c'e' un pomodoro mostra lo stesso il pomodoro;
 
 POMODORO
 - Interfaccia piu leggera e user friendly

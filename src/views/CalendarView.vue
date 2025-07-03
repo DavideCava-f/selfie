@@ -16,12 +16,12 @@ const isWeekly = ref(Boolean);
 <template>
     <div class="container-fluid">
         <div class="row bg-dark p-0 h-100">
-            <div id="daily" class="col-lg-3 col-12 order-2 order-lg-1 mt-3 rounded-4 "
+            <div id="daily" class="col-lg-3 col-12 order-2 order-lg-1 mt-3 rounded-4 border border-dark"
                 style="background-color: #d16b7f;">
                 <!-- colonna day-->
                 <DailyView />
             </div>
-            <div class="col-lg-9 col-12 order-1 order-lg-2 mt-3 rounded-4 px-lg-3 p-0"
+            <div class="col-lg-9 col-12 order-1 order-lg-2 mt-3 rounded-4 px-lg-3 p-0 border border-dark"
                 style="position: relative; background-color: #d16b7f;">
                 <!-- colonna calendario -->
                 <div class="p-lg-1 p-0 btn-group my-lg-0 my-1 mx-lg-0 mx-1" role="group">

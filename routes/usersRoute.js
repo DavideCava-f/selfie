@@ -11,7 +11,7 @@ const uri = process.env.MONGODB_DEV;
 router.post("/register", async function(req, res) {
   try {
     const user = await User.create(req.body);
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_KEY, {
+    const token = await jwt.sign({ userId: user._id }, process.env.JWT_KEY, {
       expiresIn: "1h",
     });
     res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "Strict" }).status(200).send();

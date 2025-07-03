@@ -3,6 +3,7 @@ import { store } from "@/store";
 import { ref, onBeforeMount, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { Temporal } from "@js-temporal/polyfill";
+import { marked } from "marked";
 
 let lastnote = ref({});
 let nearEvents = ref([]);
@@ -17,6 +18,9 @@ async function getLastNote() {
     });
     if (!response.ok) return;
     lastnote.value = await response.json();
+    console.log("Ultima nota:", lastnote.value);
+    console.log("Ultima nota:", lastnote.value.Title);
+    console.log("Ultima nota:", lastnote.value.Text);
 }
 
 async function getLastPomodoro() {
@@ -25,8 +29,7 @@ async function getLastPomodoro() {
         credentials: "include",
     });
     if (!response.ok) return;
-    pomodoro.value = await response.json();
-    console.log(pomodoro.value);
+    pomodoro.value = await response.json(); 
 }
 
 async function update() {
@@ -102,7 +105,7 @@ function ToEvent(event) {
                         <h2 class="mx-auto">Eventi prossimi</h2>
                     </div>
                     <div class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center">
-                        <div v-if="nearEvents.length == 0">
+                        <div v-if="nearEvents.length == 0" class="text-center">
                             <h1>Non ci sono eventi prossimi</h1>
                         </div>
                         <div v-else>
@@ -137,32 +140,38 @@ function ToEvent(event) {
                     <div class="card-header d-flex align-items-center">
                         <h2 class="mx-auto">Ultima nota modificata</h2>
                     </div>
-                    <div class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center ">
-                        <button @click="router.push('/notes');" class="w-100 btn bg-success rounded-3 text-black my-1">
-                            <h1 v-if="loaded">
-                                {{ lastnote?.Title }}
+                    <div   v-if="lastnote!==null" class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center ">
+                        <button v-if="lastnote.markdown" @click="router.push('/notes');" class="w-100 btn bg-success rounded-3 text-black my-1">
+                            <h1 v-html="marked.parse(lastnote.Title)">
+                                
                             </h1>
-                            <h1 v-else>
-                                caricamento in corso...
-                            </h1>
-                            <p v-if="loaded">
-                                {{ lastnote?.Text }}
+                            <p v-html="marked.parse(lastnote.Text)">
+                                
                             </p>
-                            <p v-else>
-                                caricamento in corso...
-                            </p>
-
                         </button>
+                        <button v-else @click="router.push('/notes');" class="w-100 btn bg-success rounded-3 text-black my-1">
+                            <h1>
+                                {{ lastnote.Title }}
+                            </h1>
+                            <p>
+                                {{ lastnote.Text }}
+                            </p>
+                        </button>
+                    </div>
+                    <div v-else class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center ">
+                        <h2 class="text-center">
+                            nessuna nota trovata...
+                        </h2>
                     </div>
                 </div>
             </div>
             <div class="col-lg-3 col-12 animate-card-downward">
                 <div class="card text-bg-danger mb-3" style="max-height: 80vh;">
                     <div class="card-header d-flex align-items-center justify-content-center text-center">
-                        <h1 class="mx-auto">Utlimo pomodoro completato</h1>
+                        <h2 class="mx-auto">Utlimo pomodoro completato</h2>
                     </div>
                     <div class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center">
-                        <div v-if="!pomodoro.value" class="rounded" style="background-color: #f383a5;">
+                        <div v-if="pomodoro !== null" class="rounded" style="background-color: #f383a5;">
                             <div class="row g-0 text-dark">
                                 <div class="col-12 d-flex flex-column align-items-center">
                                     Durata
@@ -214,7 +223,10 @@ function ToEvent(event) {
                             </div>
                         </div>
                         <div v-else>
-                            Non è ancora stato completato nessun pomodoro
+                            <h3 class="text-center">
+                                Non è ancora stato completato nessun pomodoro
+                            </h3>
+                            
                         </div>
                     </div>
                 </div>
