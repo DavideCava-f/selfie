@@ -98,7 +98,9 @@ function ToEvent(event) {
                     </div>
                     <div class="card-body overflow-scroll rounded-4 overflow-x-hidden align-items-center">
                         <div v-if="nearEvents.length == 0" class="text-center">
-                            <h1>There are no near events</h1>
+                            <button class="w-100 btn bg-warning rounded-3 text-black my-1" @click="router.push('/calendar')">
+                                <h1>There are no near events</h1>
+                            </button>
                         </div>
                         <div v-else>
                             <button v-for="event in nearEvents" @click="ToEvent(event)"

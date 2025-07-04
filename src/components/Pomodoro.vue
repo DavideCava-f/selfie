@@ -380,9 +380,9 @@ onUnmounted(() => {
           <button @click="pauseTimer" :disabled="!isRunning" class="pause-button button-style">Pause</button>
           <button @click="forceCycle" :disabled="!isRunning" class="pause-button button-style">Next</button>
         </div>
-        <div v-else>
+        <div v-else class="d-flex flex-column align-items-center">
           <DateTimePicker v-model:date="startDate" v-model:time="startTime" />
-          <button class="button-style" @click="createPomodoroEvent()">Create</button>
+          <button class="button-style" @click="createPomodoroEvent()" data-bs-dismiss="modal">Create</button>
         </div>
       </div>
     </div>

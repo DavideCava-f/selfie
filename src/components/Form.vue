@@ -264,7 +264,7 @@ function cseePswd() {
                     <div class="text-center pt-1 mb-5 pb-1">
                       <button data-mdb-button-init data-mdb-ripple-init
                         class="btn btn-danger btn-block fa-lg gradient-custom-2 mb-3" type="submit"
-                        @click.prevent="addUser">
+                        @click.prevent="addUser" :disabled="!UserSU.name || !UserSU.surname || !UserSU.username || !Password || !Confirm">
                         Sign up
                       </button>
                     </div>
