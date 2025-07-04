@@ -3,7 +3,6 @@ import { useRouter } from "vue-router";
 import { ref } from "vue";
 import { store } from "@/store";
 
-var pswdStatus = ref(null);
 var User = ref("");
 var Password = ref("");
 var Confirm = ref("");
@@ -20,8 +19,16 @@ function resetValues() {
 }
 
 async function validateForm() {
-  const response = await fetch(`${store.value.url}:${store.value.port}/user/login?email=${User.value}&password=${Password.value}`, {
-    credentials: "include"
+  const response = await fetch(`${store.value.url}:${store.value.port}/user/login`, {
+    credentials: "include",
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: User.value,
+      password: Password.value
+    })
   })
   if (response.status === 401) {
     alert("Email or password wrong");
@@ -67,12 +74,11 @@ async function addUser() {
 }
 
 function seePswd() {
-  if (pswdStatus === false) {
-    pswdStatus = true;
+  let status = document.getElementById("see").style.display;
+  if (status === "none") {
     document.getElementById("see").style.display = "block";
     document.getElementById("notsee").style.display = "none";
   } else {
-    pswdStatus = false;
     document.getElementById("see").style.display = "none";
     document.getElementById("notsee").style.display = "block";
   }
@@ -264,7 +270,8 @@ function cseePswd() {
                     <div class="text-center pt-1 mb-5 pb-1">
                       <button data-mdb-button-init data-mdb-ripple-init
                         class="btn btn-danger btn-block fa-lg gradient-custom-2 mb-3" type="submit"
-                        @click.prevent="addUser" :disabled="!UserSU.name || !UserSU.surname || !UserSU.username || !Password || !Confirm">
+                        @click.prevent="addUser"
+                        :disabled="!UserSU.name || !UserSU.surname || !UserSU.username || !Password || !Confirm">
                         Sign up
                       </button>
                     </div>

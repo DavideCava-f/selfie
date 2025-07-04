@@ -21,9 +21,9 @@ router.post("/register", async function(req, res) {
   }
 });
 
-router.get("/login", async function(req, res) {
+router.post("/login", async function(req, res) {
   try {
-    const { email, password } = req.query;
+    const { email, password } = req.body;
     const user = await User.findOne({ email: email });
     if (!user) {
       return res.status(401).json({ error: "Authentication failed" });
