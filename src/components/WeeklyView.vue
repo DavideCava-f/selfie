@@ -32,14 +32,14 @@ function getColorFromTitle(title) {
 
 function getInvertedColor(hex) {
   const clean = hex.replace(/^#/, '');
-    const bigint = parseInt(clean, 16);
-    const r = (bigint >> 16) & 255;
-    const g = (bigint >> 8) & 255;
-    const b = bigint & 255;
+  const bigint = parseInt(clean, 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
 
-    const luminance =  0.299 * r + 0.587 * g + 0.114 * b;
-    luminance <128 ? hex = '#ffffff' : hex = '#000000';
-    return hex;
+  const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+  luminance < 128 ? hex = '#ffffff' : hex = '#000000';
+  return hex;
 }
 
 function nextWeek() {
@@ -81,13 +81,13 @@ watch(() => store.value.weekOffset, () => getPomodoros());
     </div>
 
     <div class="container-fluid d-flex flex-column justify-content-center my-2 w-100 p-0" style="min-height: 70vh;">
-      <div v-for="day in store.week" class="row w-100 border fillable align-self-center align-items-center p-0">
+      <div v-for="day in store.week" class="row w-100 border fillable align-self-center align-items-center p-0"
+        data-bs-target="#CreateEV" data-bs-toggle="modal" @click="() => {
+          DayNewEvent = thisMonday.add({ days: store.week.indexOf(day) }).toString()
+        }">
         <div class="h-100 p-0 d-flex flex-column flex-lg-row flex-fill justify-content-center align-items-center "
           style="width: 12%; max-width: 12%;">
-          <div class="d-flex flex-column align-items-center text-white rounded-circle text-wrap position-static"
-            data-bs-target="#CreateEV" data-bs-toggle="modal" @click="() => {
-              DayNewEvent = thisMonday.add({ days: store.week.indexOf(day) }).toString()
-            }">
+          <div class="d-flex flex-column align-items-center text-white rounded-circle text-wrap position-static">
             <div class="fw-bold fs-6">
               {{ day.slice(0, 3) }}
             </div>
@@ -106,7 +106,7 @@ watch(() => store.value.weekOffset, () => getPomodoros());
           </div>
           <button v-if="store.activitiesOfWeek.find((d) => d.day === store.week.indexOf(day))"
             class="btn bg-danger activity-button d-flex d-inline-block align-items-center justify-content-center"
-            @click="activitiesOfSelectedDay = store.activitiesOfWeek.find((d) => d.day === store.week.indexOf(day)).activities; "
+            @click="activitiesOfSelectedDay = store.activitiesOfWeek.find((d) => d.day === store.week.indexOf(day)).activities;"
             data-bs-target="#VisualizeActivitiesModal" data-bs-toggle="modal">
             <img src="@/assets/ActivityLogo.svg" alt="Activities" width="w-100">
           </button>
@@ -161,7 +161,7 @@ watch(() => store.value.weekOffset, () => getPomodoros());
   <div class="modal fade" id="VisualizeActivitiesModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
     <ActivityModal :activities="activitiesOfSelectedDay" />
   </div>
-  <div class=" modal fade" id="CreateEV" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
+  <div class="modal fade" id="CreateEV" data-bs-backdrop="false" tabindex="-1" aria-hidden="true">
     <Create :date="DayNewEvent" />
   </div>
 </template>
