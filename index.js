@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import { User, Event, Note } from "./schemas.js";
+import { User, Event, Note, Pomodoro } from "./schemas.js";
 import notesRoutes from "./routes/notesRoutes.js";
 import eventsRoutes from "./routes/eventsRoutes.js";
 import pomodoroRoutes from "./routes/pomodoroRoutes.js";
@@ -61,6 +61,14 @@ app.get("/users", async function(req, res) {
 app.get("/notes", async function(req, res) {
   try {
     const test = await Note.find({});
+    res.status(200).json(test);
+  } finally {
+  }
+});
+
+app.get("/pomodoros", async function(req, res) {
+  try {
+    const test = await Pomodoro.find({});
     res.status(200).json(test);
   } finally {
   }

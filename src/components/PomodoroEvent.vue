@@ -131,7 +131,7 @@ async function tick() {
           Accept: "application/json",
           'Content-Type': 'application/json',
         },
-      })
+      }).then(() => store.value.update());
       alert('Time is up!');
     }
   }
@@ -188,13 +188,13 @@ async function resetTimerCycle() {
   barTime.value = INITIAL_TIME.value;
   cycles.value = SetCycles.value;
   isSet.value = false;
-  if(lancetta.value){
+  if (lancetta.value) {
     lancetta.value.style.transform = "rotate(0deg)";
     pomodoro.value.style.backgroundColor = "hsl(92, 99%, 37%)";
   }
 }
 
-function deletePomodoroEvent() {
+async function deletePomodoroEvent() {
   fetch(`${store.value.url}:${store.value.port}/pomodoro?id=${store.value.activePomodoro._id}`, {
     credentials: "include",
     method: "DELETE",
@@ -208,7 +208,7 @@ function deletePomodoroEvent() {
   });
 }
 
-function updateCompletedCycles() {
+async function updateCompletedCycles() {
   fetch(`${store.value.url}:${store.value.port}/pomodoro?id=${store.value.activePomodoro._id}`, {
     credentials: "include",
     method: "PUT",
@@ -221,7 +221,7 @@ function updateCompletedCycles() {
   })
 }
 
-function resetCycles() {
+async function resetCycles() {
   fetch(`${store.value.url}:${store.value.port}/pomodoro/reset?id=${store.value.activePomodoro._id}`, {
     credentials: "include",
     method: "PUT",
@@ -234,19 +234,20 @@ function resetCycles() {
   })
 }
 
-watch(() => store.value.activePomodoro?._id, () => {
-    if (store.value.activePomodoro) {
+watch(() => store.value.togglePomodoro || store.value.activePomodoro?._id, () => {
+  if (store.value.activePomodoro) {
     SetMinutes.value = store.value.activePomodoro.studyMins;
     SetCycles.value = store.value.activePomodoro.cycles;
     relaxingMinutes.value = store.value.activePomodoro.pauseMins;
-    }
+  } else {
     time.value = 0;
     cycles.value = 0;
     isSet.value = false;
     relaxing.value = false;
     pauseTimer();
-    resetTimerCycle();
-  
+  }
+  // resetTimerCycle();
+  console.log("cambio pomodoro")
 });
 
 </script>

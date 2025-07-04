@@ -9,7 +9,7 @@ async function sweepPomodoros() {
   let pomodorosToSweep = store.value.pomodoros.filter((pomodoro) => {
     if (pomodoro.beginDate) {
       const finishPomodoroDateTime = Temporal.PlainDateTime.from(pomodoro.beginDate.slice(0, -1)).add({ minutes: (pomodoro.studyMins + pomodoro.pauseMins) * pomodoro.cycles });
-      
+
       const cond = pomodoro.completedCycles < pomodoro.cycles &&
         Temporal.PlainDate.compare(store.value.simDate, finishPomodoroDateTime.toPlainDate()) > 0;
       return cond;
@@ -57,6 +57,7 @@ async function sweepPomodoros() {
         cycles: pomodoro.cycles,
         studyMins: pomodoro.studyMins,
         pauseMins: pomodoro.pauseMins,
+        completedCycles: pomodoro.completedCycles
       })
     })
   });

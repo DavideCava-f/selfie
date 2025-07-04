@@ -88,6 +88,7 @@ const store = ref({
 
   //UTILITIES
   toggle: false,
+  togglePomodoro: false,
 
   update: async () => {
     await getEventsOfDay();
@@ -98,6 +99,7 @@ const store = ref({
     await getActivitiesOfWeek();
     await getPomodoros();
     store.value.toggle = !store.value.toggle;
+    store.value.togglePomodoro = !store.value.togglePomodoro;
   },
 
   //NOTIFICHE

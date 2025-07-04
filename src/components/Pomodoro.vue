@@ -269,7 +269,7 @@ function reset() {
   }
 }
 
-function createPomodoroEvent() {
+async function createPomodoroEvent() {
   fetch(`${store.value.url}:${store.value.port}/pomodoro`, {
     credentials: "include",
     method: "POST",
