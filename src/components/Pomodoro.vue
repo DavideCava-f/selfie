@@ -97,7 +97,7 @@ async function tick() {
         relaxing.value = true
       } else {
         AdvanceCycle();
-        let notificationMessage = "Ricominciato ciclo n:" + cycles.value
+        let notificationMessage = "Begin cycle n:" + cycles.value
         toast(notificationMessage, {
           theme: "auto",
           type: "default",
@@ -118,7 +118,7 @@ async function tick() {
     } else {
       cycles.value = 0;
       pauseTimer();
-      let notificationMessage = "FINITOOOOOO"
+      let notificationMessage = "Pomodoro Timer completed!";
       toast(notificationMessage, {
         theme: "auto",
         type: "default",
@@ -159,7 +159,7 @@ function forceCycle() {
 
 function startTimer() {
   isRunning.value = true;
-  let notificationMessage = "INIZIATOOOOO"
+  let notificationMessage = "Pomodoro timer started";
   toast(notificationMessage, {
     theme: "auto",
     type: "default",

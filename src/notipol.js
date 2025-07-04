@@ -99,7 +99,7 @@ async function ActivityNotification(act) {
 
     if (Temporal.PlainDateTime.compare(deadline.add({ weeks: 1 }), now) <= 0) {
 
-      notificationMessage.value = `"${act.title}" is One Week`;
+      notificationMessage.value = `"${act.title}" is One Week late`;
       showToast(false, notificationMessage, {
         backgroundColor: '#000000', // red 
         color: '#333',              // dark text for contrast
