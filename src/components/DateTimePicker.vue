@@ -81,7 +81,7 @@ watch(
 </script>
 
 <template>
-    <div class="d-flex flex-row justify-content-lg-between justify-content-center align-items-center flex-wrap gap-2">
+    <div class="d-flex flex-row justify-content-lg-evenly justify-content-center align-items-center flex-wrap gap-2">
         <div v-if="!dateDisabled">
             <div>
                 <svg :width="size" :height="size" :viewBox="`0 0 ${size} ${size}`">
@@ -100,15 +100,13 @@ watch(
             </div>
         </div>
         <div>
-            <div>
-                <svg :width="size" :height="size" :viewBox="`0 0 ${size} ${size}`">
-                    <g :transform="`translate(${center}, ${center})`">
-                        <OrbitalSelector :items="hours" :radius="120" color="#BC544B" v-model:selected="selectedHour" />
-                        <OrbitalSelector :items="minutes" :radius="60" color="#87A96B"
-                            v-model:selected="selectedMinute" />
-                    </g>
-                </svg>
-            </div>
+            <svg :width="size" :height="size" :viewBox="`0 0 ${size} ${size}`">
+                <g :transform="`translate(${center}, ${center})`">
+                    <OrbitalSelector :items="hours" :radius="120" color="#BC544B" v-model:selected="selectedHour" />
+                    <OrbitalSelector :items="minutes" :radius="60" color="#87A96B"
+                        v-model:selected="selectedMinute" />
+                </g>
+            </svg>
             <div>
                 <input class="form-control" type="time" v-model="beginTime" />
             </div>
