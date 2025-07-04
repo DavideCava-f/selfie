@@ -247,7 +247,6 @@ watch(() => store.value.togglePomodoro || store.value.activePomodoro?._id, () =>
     pauseTimer();
   }
   // resetTimerCycle();
-  console.log("cambio pomodoro")
 });
 
 </script>
