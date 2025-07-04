@@ -104,9 +104,11 @@ function ToEvent(event) {
                         </div>
                         <div v-else>
                             <button v-for="event in nearEvents" @click="ToEvent(event)"
-                                class="d-flex flex-column w-100 btn bg-success rounded-3 text-black my-1 align-items-center">
-                                <h2>{{ event.title }}</h2>
-                                {{ event.details.text }}
+                                class="d-flex flex-column w-100 btn bg-success rounded-3 text-black  my-1 align-items-center" >
+                                <div class="container-fluid">
+                                    <h2 >{{ event.title }}</h2>
+                                    {{ event.details.text }}
+                                </div>
                                     <div class="d-flex flex-row justify-content-between w-100">
                                         <div class="col-5">
                                             Start
