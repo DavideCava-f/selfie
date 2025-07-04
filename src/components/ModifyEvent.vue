@@ -230,7 +230,7 @@ function canCreateEvent() {
             </div>
             <div class="modal-footer d-flex justify-content-end">
               <button v-if="!updateOnlyThis" type="button" class="btn btn-primary" data-bs-dismiss="modal"
-                :disabled="!canCreateEvent()" @click="updateEvent(0)">
+                :disabled="!canCreateEvent()" @click="updateEvent(2)">
                 Update event
               </button>
             </div>

@@ -9,10 +9,8 @@ CALENDARIO
 UTENTE
 
 COSE DA FARE:
-- Gestire la palette generale del progetto, per i vari modal
-- Migliorare Interfaccia delle notifiche
 
-HOMEVIEW:
+HOMEVIEW
 
 POMODORO
 

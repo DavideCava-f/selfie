@@ -101,7 +101,7 @@ router.put("/OneEvent", verifyToken, async function(req, res) {
           "dates.0.end": req.body.endDate,
         }
       });
-    } else {
+    } else if (req.body.idOp == 1) {
       const dates = [{ begin: new Date(req.body.beginDate), end: new Date(req.body.endDate) }]
       const details = { text: req.body.text, link: req.body.link }
       const activeDate = req.body.date
@@ -124,6 +124,37 @@ router.put("/OneEvent", verifyToken, async function(req, res) {
         dates: dates,
         title: req.body.title,
         details: details
+      });
+    } else {
+      console.log("update 2");
+      const eventDates = (await Event.findById(req.body.id)).dates;
+      console.log(eventDates)
+
+      const beginTime = new Date(req.body.beginDate);
+      const endTime = new Date(req.body.endDate);
+
+      console.log(beginTime)
+      console.log(endTime)
+
+      const updatedDates = eventDates.map(({ begin, end }) => {
+        const updatedBegin = new Date(begin);
+        updatedBegin.setHours(beginTime.getHours(), beginTime.getMinutes(), 0, 0);
+
+        const updatedEnd = new Date(end);
+        updatedEnd.setHours(endTime.getHours(), endTime.getMinutes(), 0, 0);
+
+        return { begin: updatedBegin, end: updatedEnd };
+      })
+
+      console.log(updatedDates)
+
+      const event = await Event.updateOne({ _id: req.body.id }, {
+        $set: {
+          "title": req.body.title,
+          "details.text": req.body.text,
+          "details.link": req.body.link,
+          "dates": updatedDates
+        }
       });
     }
     res.json({ mess: "ciao" });

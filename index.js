@@ -22,8 +22,8 @@ dotenv.config({ path: `${global.rootDir}/.env` });
 
 // MongoDB & Mongoose
 // Atlas dev database
-// const uri = process.env.MONGODB_PROD;
-const uri = process.env.MONGODB_DEV;
+const uri = process.env.MONGODB_PROD;
+// const uri = process.env.MONGODB_DEV;
 
 let app = express();
 
