@@ -10,6 +10,7 @@ N0TE
 CALENDARIO 
 
 UTENTE
+- sign up non dev'essere cliccabile quando non e' compilato il modal
 
 COSE DA FARE:
 - Gestire la palette generale del progetto, per i vari modal
