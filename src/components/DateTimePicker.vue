@@ -4,7 +4,15 @@ import "vue3-toastify/dist/index.css";
 import { Temporal } from "@js-temporal/polyfill";
 import OrbitalSelector from './OrbitalSelector.vue'
 
-const props = defineProps(["date", "time", "min"]);
+const props = defineProps({
+    date: String,
+    time: String,
+    min: String,
+    dateDisabled: {
+        type: Boolean,
+        default: false
+    }
+});
 const emit = defineEmits(["update:date", "update:time"]);
 
 const beginDate = computed({
@@ -74,7 +82,7 @@ watch(
 
 <template>
     <div class="d-flex flex-row justify-content-lg-between justify-content-center align-items-center flex-wrap gap-2">
-        <div>
+        <div v-if="!dateDisabled">
             <div>
                 <svg :width="size" :height="size" :viewBox="`0 0 ${size} ${size}`">
                     <g :transform="`translate(${center}, ${center})`">

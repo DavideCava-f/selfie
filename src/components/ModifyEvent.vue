@@ -147,19 +147,42 @@ function canCreateEvent() {
           <input class="form-control" type="text" placeholder="Luogo fisico o virtuale" v-model="eventLink" />
         </div>
         <br />
-        <div v-if="datesCount > 1">
 
-          <div class="form-check my-2">
-            <input class="form-check-input" type="checkbox" id="updateOnlyThis" v-model="updateOnlyThis" />
-            <label class="form-check-label" for="updateOnlyThis">Update OnlyThis</label>
+        <div v-if="datesCount == 1">
+          <div class="my-2">
+            <label>Start</label>
+            <br>
+            <button class="btn btn-outline-primary" @click="setBeginNow">
+              Now
+            </button>
+            <DateTimePicker v-model:date="eventBeginDate" v-model:time="eventBeginTime" />
+          </div>
+          <div class="my-2">
+            <label>End</label>
+            <br />
+            <button class="btn btn-outline-primary" @click="setEndNow">
+              Now
+            </button>
+            <DateTimePicker v-model:date="eventEndDate" v-model:time="eventEndTime" :min="eventBeginDate" />
+          </div>
+          <div class="my-2">
+            <button class="btn btn-outline-success" type="button" id="tuttoIlGiorno" @click="allDay">
+              All day
+            </button>
+          </div>
+          <div class="modal-footer d-flex justify-content-end">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" :disabled="!canCreateEvent()"
+              @click="updateEvent(0)">
+              Update event
+            </button>
           </div>
         </div>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" :disabled="updateOnlyThis"
-          @click="updateEvent(0)">
-          Update Event
-        </button>
-        <div v-if="datesCount > 1">
-          <div v-if="updateOnlyThis" class="row my-2">
+        <div v-else>
+          <div class="form-check my-2">
+            <input class="form-check-input" type="checkbox" id="updateOnlyThis" v-model="updateOnlyThis" />
+            <label class="form-check-label" for="updateOnlyThis">Update only this</label>
+          </div>
+          <div v-if="updateOnlyThis">
             <div class="my-2">
               <label>Start</label>
               <br>
@@ -184,7 +207,31 @@ function canCreateEvent() {
             <div class="modal-footer d-flex justify-content-end">
               <button type="button" class="btn btn-primary" data-bs-dismiss="modal" :disabled="!canCreateEvent()"
                 @click="updateEvent(1)">
-                Update This Specific Event
+                Update this specific event
+              </button>
+            </div>
+          </div>
+          <div v-else>
+            <div class="my-2">
+              <label>Start</label>
+              <br />
+              <button class="btn btn-outline-primary" @click="setBeginNow">
+                Now
+              </button>
+              <DateTimePicker v-model:time="eventBeginTime" :dateDisabled="true" />
+            </div>
+            <div class="my-2">
+              <label>End</label>
+              <br />
+              <button class="btn btn-outline-primary" @click="setEndNow">
+                Now
+              </button>
+              <DateTimePicker v-model:time="eventEndTime" :min="eventBeginDate" :dateDisabled="true" />
+            </div>
+            <div class="modal-footer d-flex justify-content-end">
+              <button v-if="!updateOnlyThis" type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                :disabled="!canCreateEvent()" @click="updateEvent(0)">
+                Update event
               </button>
             </div>
           </div>

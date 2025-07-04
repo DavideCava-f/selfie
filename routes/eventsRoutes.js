@@ -96,9 +96,10 @@ router.put("/OneEvent", verifyToken, async function(req, res) {
         $set: {
           "title": req.body.title,
           "details.text": req.body.text,
-          "details.link": req.body.link
+          "details.link": req.body.link,
+          "dates.0.begin": req.body.beginDate,
+          "dates.0.end": req.body.endDate,
         }
-
       });
     } else {
       const dates = [{ begin: new Date(req.body.beginDate), end: new Date(req.body.endDate) }]
