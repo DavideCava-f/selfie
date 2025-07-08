@@ -408,6 +408,20 @@ onMounted(() => {
   /*Cerchio*/
 }
 
+@media (max-width: 400px) {
+    .fx-button {
+        position: fixed;
+        /* Posiziona l'elemento in modo fisso */
+        bottom: 10vh;
+        /* Distanza dal bordo inferiore */
+        right: 15vw;
+        width: 10vh;
+        aspect-ratio: 1/1;
+        /*Cerchio*/
+        width: 15%;
+        height: auto;
+  }
+}
 
 .hover-div {
   transition: transform 0.3s ease, box-shadow 0.3s ease;

@@ -42,10 +42,12 @@ onMounted(() => setUserPfp());
 <template>
     <div class="container-fluid " style="background: #6F0D31;">
         <div class="row g-0 d-flex justify-content-between">
-            <div class="col-1 my-1">
-                <button class="btn btn-primary navbar-toggler d-md-none" type="button" data-bs-toggle="collapse"
+            <div class="col-1 my-1 d-flex align-items-center ">
+                <button class="d-flex align-self-center btn btn-primary navbar-toggler d-md-none w-100" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <img src="@/assets/HamburgerLogo.svg" alt="Menu" class="w-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="white" class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                    </svg>
                 </button>
             </div>
 

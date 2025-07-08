@@ -40,7 +40,7 @@ const isWeekly = ref(Boolean);
                 </div>
                 <component :is="isWeekly ? WeeklyView : MonthlyView"></component>
                 <button
-                    class="btn btn-primary rounded-circle fx-button d-flex align-items-center justify-content-center hover-div "
+                    class="btn btn-primary rounded-circle fx-button d-flex align-items-center justify-content-center hover-div"
                     style="position:fixed; right: 10; bottom: 10; z-index: 10" data-bs-target="#createEventModal"
                     data-bs-toggle="modal">
                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
@@ -83,6 +83,23 @@ const isWeekly = ref(Boolean);
     /*Cerchio*/
 
 }
+
+@media (max-width: 400px) {
+    .fx-button {
+        position: fixed;
+        /* Posiziona l'elemento in modo fisso */
+        bottom: 10vh;
+        /* Distanza dal bordo inferiore */
+        right: 15vw;
+        width: 10vh;
+        aspect-ratio: 1/1;
+        /*Cerchio*/
+        width: 15%;
+        height: auto;
+
+    }
+}
+
 
 .hover-div {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
