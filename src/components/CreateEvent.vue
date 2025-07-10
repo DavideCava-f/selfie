@@ -63,6 +63,7 @@ function resetFields() {
 }
 
 function allDay() {
+  eventEndDate.value = eventBeginDate.value
   eventBeginTime.value = "00:00:00";
   eventEndTime.value = "23:59:00";
 }
@@ -283,6 +284,12 @@ watch(eventBeginDate, setDayOfWeek);
           <DateTimePicker v-model:date="eventBeginDate" v-model:time="eventBeginTime" />
         </div>
         <div class="my-2">
+          <div class="w-100 d-flex justify-content-center">
+
+          <button class="btn btn-outline-success mx-auto w-25" type="button" id="tuttoIlGiorno" @click="allDay">
+            All day
+          </button>
+          </div>
           <label>End</label>
           <br />
           <button class="btn btn-outline-primary" @click="setEndNow">
@@ -291,9 +298,6 @@ watch(eventBeginDate, setDayOfWeek);
           <DateTimePicker v-model:date="eventEndDate" v-model:time="eventEndTime" :min="eventBeginDate" />
         </div>
         <div class="my-2">
-          <button class="btn btn-outline-success" type="button" id="tuttoIlGiorno" @click="allDay">
-            All day
-          </button>
         </div>
         <div class="form-check my-2">
           <input class="form-check-input" type="checkbox" id="repeatable" :disabled="!eventBeginDate || eventBeginDate?.toString() !== eventEndDate?.toString()
